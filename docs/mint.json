@@ -1,0 +1,48 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Station",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#AD72FF",
+    "light": "#B889FA",
+    "dark": "#8B38FF",
+    "background": {
+      "dark": "#000"
+    },
+    "anchors": {
+      "from": "#8B38FF",
+      "to": "#AD72FF"
+    }
+  },
+  "topbarLinks": [
+  ],
+  "topbarCtaButton": {
+    "name": "Launch App",
+    "url": "https://app.station.express"
+  },
+  "anchors": [
+    {
+      "name": "Changelog",
+      "icon": "list",
+      "url": "https://station.express/changelog"
+    },
+    {
+      "name": "Contact Us",
+      "icon": "twitter",
+      "url": "https://twitter.com/0xstation"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Documentation",
+      "pages": ["placeholder"]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/0xstation"
+  }
+}
