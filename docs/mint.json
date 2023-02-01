@@ -22,6 +22,7 @@
     "default": "dark",
     "isHidden": true
   },
+  "hideFeedbackButtons": true,
   "topbarLinks": [
   ],
   "topbarCtaButton": {
