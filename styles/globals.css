@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: "#FFFFFF";
+  color: #f2efef;
+  font-family: "Favorit Pro";
+}
