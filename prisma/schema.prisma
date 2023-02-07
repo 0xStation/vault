@@ -18,17 +18,20 @@ model Terminal {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   requests    Request[]
+
+  @@unique([chainId, safeAddress])
 }
 
 model Account {
-  id        String      @id @default(uuid())
-  address   String
-  chainId   Int?
+  id        String     @id @default(uuid())
+  address   String     @unique
+  chainId   Int        @default(0)
   data      Json
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   Activity  Activity[]
-  Signature Signature[]
+
+  @@unique([chainId, address])
 }
 
 model Subscription {
@@ -63,13 +66,14 @@ model Activity {
 }
 
 model Action {
-  id        String  @id @default(uuid())
-  requestId String
-  request   Request @relation(fields: [requestId], references: [id])
-  chainId   Int
-  nonce     Int
-  data      Json
-  proofs    Proof[]
+  id          String  @id @default(uuid())
+  requestId   String
+  request     Request @relation(fields: [requestId], references: [id])
+  safeAddress String
+  chainId     Int
+  nonce       Int
+  data        Json
+  proofs      Proof[]
 }
 
 model Proof {
@@ -82,10 +86,10 @@ model Proof {
 }
 
 model Signature {
-  id        String  @id @default(uuid())
-  signerId  String
-  signer    Account @relation(fields: [signerId], references: [id])
-  proofs    Proof[]
+  id            String  @id @default(uuid())
+  signerAddress String
+  data          Json
+  proofs        Proof[]
 }
 
 enum ActivityVariant {
