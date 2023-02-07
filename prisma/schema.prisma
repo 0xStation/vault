@@ -36,6 +36,7 @@ model Account {
 
 model Subscription {
   id        String  @id @default(uuid())
+  address   String
   requestId String
   request   Request @relation(fields: [requestId], references: [id])
 }
