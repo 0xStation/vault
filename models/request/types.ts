@@ -5,7 +5,7 @@ import { Token } from "../token/types";
 
 export type Request = PrismaRequest & {
   data: RequestMetadata;
-  activity: Activity[];
+  activities: Activity[];
   actions: Action[];
 };
 
