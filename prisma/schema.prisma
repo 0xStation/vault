@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Terminal {
+  id          String    @id @default(uuid())
+  chainId     Int
+  safeAddress String
+  data        Json
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  requests    Request[]
+
+  @@unique([chainId, safeAddress])
+}
+
+model Account {
+  id        String     @id @default(uuid())
+  address   String     @unique
+  chainId   Int        @default(0)
+  data      Json
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  activities  Activity[]
+
+  @@unique([chainId, address])
+}
+
+model Subscription {
+  id        String  @id @default(uuid())
+  address   String
+  requestId String
+  request   Request @relation(fields: [requestId], references: [id])
+}
+
+model Request {
+  id           String         @id @default(uuid())
+  terminalId   String
+  terminal     Terminal       @relation(fields: [terminalId], references: [id])
+  data         Json
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  subscriptions Subscription[]
+  activities    Activity[]
+  actions       Action[]
+}
+
+model Activity {
+  id        String          @id @default(uuid())
+  requestId String
+  request   Request         @relation(fields: [requestId], references: [id])
+  address   String
+  variant   ActivityVariant
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  data      Json
+  accountId String
+  account   Account         @relation(fields: [accountId], references: [id])
+}
+
+model Action {
+  id          String  @id @default(uuid())
+  requestId   String
+  request     Request @relation(fields: [requestId], references: [id])
+  safeAddress String
+  chainId     Int
+  nonce       Int
+  data        Json
+  proofs      Proof[]
+}
+
+model Proof {
+  id          String    @id @default(uuid())
+  signatureId String
+  signature   Signature @relation(fields: [signatureId], references: [id])
+  actionId    String
+  action      Action    @relation(fields: [actionId], references: [id])
+  path        String[]
+}
+
+model Signature {
+  id            String  @id @default(uuid())
+  signerAddress String
+  data          Json
+  proofs        Proof[]
+}
+
+enum ActivityVariant {
+  CREATE_REQUEST
+  CREATE_AND_APPROVE_REQUEST
+  APPROVE_REQUEST
+  REJECT_REQUEST
+  EXECUTE_REQUEST
+  COMMENT_ON_REQUEST
+}
