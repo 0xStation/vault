@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors")
+const fontFamily = require("tailwindcss/defaultTheme")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -9,6 +10,9 @@ module.exports = {
       slate: colors.slate,
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-favoritpro)", fontFamily.sans],
+      },
       colors: {
         transparent: "transparent",
         current: "currentColor",
