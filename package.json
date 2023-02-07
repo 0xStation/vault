@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.14",
     "@next/font": "^13.1.6",
     "@prisma/client": "^4.9.0",
     "@rainbow-me/rainbowkit": "^0.8.1",
