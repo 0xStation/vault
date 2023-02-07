@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next lint --fix && next build",
+    "build": "next lint --fix && npm run prisma-deploy && next build",
     "start": "next start",
+    "prisma-dev": "npx prisma migrate dev",
+    "prisma-deploy": "npx prisma migrate deploy",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "prepare": "husky install"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@next/font": "^13.1.6",
