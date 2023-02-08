@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run format:fix && next lint --fix && npm run prisma-deploy && next build",
+    "build": "next lint --fix && npm run prisma-deploy && next build",
     "start": "next start",
     "prisma-dev": "npx prisma migrate dev",
     "prisma-deploy": "npx prisma migrate deploy",
