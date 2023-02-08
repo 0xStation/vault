@@ -1,5 +1,5 @@
-const colors = require("tailwindcss/colors")
-const fontFamily = require("tailwindcss/defaultTheme")
+const colors = require("tailwindcss/colors");
+const fontFamily = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -18,6 +18,9 @@ module.exports = {
         current: "currentColor",
         black: {
           100: "#212121",
+        },
+        slate: {
+          DEFAULT: "#F1F5F9",
         },
         violet: {
           DEFAULT: "#AD72FF",
@@ -47,4 +50,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
