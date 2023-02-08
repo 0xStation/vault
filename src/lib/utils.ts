@@ -1,3 +1,10 @@
+import { ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs))
+}
+
 export const truncateString = (
   inputString = "",
   numberOfLettersOnEachSide = 3,
@@ -17,3 +24,5 @@ export const truncateString = (
   }
   return inputString
 }
+
+export default truncateString

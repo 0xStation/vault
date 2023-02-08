@@ -55,9 +55,13 @@ export const Button = ({
   fullWidth = false,
   disabled = false,
   loading = false,
+  ...props
 }: ButtonProps) => {
   return (
-    <button className={button({ variant, size, fullWidth, disabled })}>
+    <button
+      className={button({ variant, size, fullWidth, disabled })}
+      {...props}
+    >
       <>
         <span className={loading ? "text-transparent" : ""}>{children}</span>
         {loading && (

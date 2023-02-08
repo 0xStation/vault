@@ -1,21 +1,33 @@
+import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
-import "../styles/globals.css"
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import type { AppProps } from "next/app"
 import NextHead from "next/head"
-import * as React from "react"
+import { useEffect, useState } from "react"
 import { WagmiConfig } from "wagmi"
+import "../styles/globals.css"
 
 import { chains, client } from "../src/wagmi"
 
 function App({ Component, pageProps }: AppProps) {
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => setMounted(true), [])
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
   return (
     <WagmiConfig client={client}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider
+        appInfo={{
+          appName: "Station",
+        }}
+        chains={chains}
+        theme={lightTheme({
+          accentColor: "#AD72FF",
+          accentColorForeground: "white",
+          borderRadius: "small",
+          fontStack: "system",
+          overlayBlur: "small",
+        })}
+      >
         <NextHead>
-          <title>My wagmi + RainbowKit App</title>
+          <title>Station</title>
         </NextHead>
 
         {mounted && <Component {...pageProps} />}
