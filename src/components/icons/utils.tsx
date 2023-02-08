@@ -1,4 +1,4 @@
-import { VariantProps, cva } from "class-variance-authority";
+import { VariantProps, cva } from "class-variance-authority"
 
 export const icon = cva("", {
   variants: {
@@ -9,6 +9,6 @@ export const icon = cva("", {
       XL: "h-12 w-12",
     },
   },
-});
+})
 
 export interface IconProps extends VariantProps<typeof icon> {}

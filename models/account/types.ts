@@ -1,11 +1,11 @@
-import { Account as PrismaAccount } from "@prisma/client";
+import { Account as PrismaAccount } from "@prisma/client"
 
 export type Account = PrismaAccount & {
-  data: AccountMetadata;
-};
+  data: AccountMetadata
+}
 
 type AccountMetadata = {
-  pfpUrl: string;
-  hasSavedEmail?: boolean;
-  hasVerifedEmail?: boolean;
-};
+  pfpUrl: string
+  hasSavedEmail?: boolean
+  hasVerifedEmail?: boolean
+}

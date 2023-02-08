@@ -23,8 +23,7 @@
     "isHidden": true
   },
   "hideFeedbackButtons": true,
-  "topbarLinks": [
-  ],
+  "topbarLinks": [],
   "topbarCtaButton": {
     "name": "Launch App",
     "url": "https://app.station.express"
