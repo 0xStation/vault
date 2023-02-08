@@ -1,4 +1,4 @@
-import { icon, IconProps } from "./utils";
+import { icon, IconProps } from "./utils"
 
 export const CheckIcon = ({ size = "BASE" }: IconProps) => {
   return (
@@ -14,5 +14,5 @@ export const CheckIcon = ({ size = "BASE" }: IconProps) => {
         clipRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}

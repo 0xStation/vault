@@ -1,4 +1,4 @@
-import { icon, IconProps } from "./utils";
+import { icon, IconProps } from "./utils"
 
 // right points right >>>
 export const ChevronRight = ({ size = "BASE" }: IconProps) => {
@@ -15,5 +15,5 @@ export const ChevronRight = ({ size = "BASE" }: IconProps) => {
         clipRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}

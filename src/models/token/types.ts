@@ -1,4 +1,4 @@
 // improve
 export type Token = {
-  value: number;
-};
+  value: number
+}

@@ -1,5 +1,5 @@
-import { VariantProps, cva } from "class-variance-authority";
-import { ArrowUpRight, ChevronRight, CheckIcon } from "./Icons";
+import { VariantProps, cva } from "class-variance-authority"
+import { ArrowUpRight, ChevronRight, CheckIcon } from "@icons"
 
 const toast = cva(
   "flex w-full justify-between items-center rounded-full py-2 px-3",
@@ -11,11 +11,11 @@ const toast = cva(
         loading: "text-black bg-slate",
       },
     },
-  }
-);
+  },
+)
 
 interface ToastProps extends VariantProps<typeof toast> {
-  copy: string;
+  copy: string
 }
 
 export const Toast = ({ variant = "success", copy }: ToastProps) => {
@@ -36,10 +36,10 @@ export const Toast = ({ variant = "success", copy }: ToastProps) => {
       {variant === "error" && <ChevronRight />}
       {variant === "loading" && (
         <div className="flex cursor-pointer items-center space-x-2 border-b border-dotted">
-          <span>View on etherscan</span>
+          <span>View on Etherscan</span>
           <ArrowUpRight size="SM" />
         </div>
       )}
     </div>
-  );
-};
+  )
+}
