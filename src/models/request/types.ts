@@ -1,6 +1,6 @@
 import { Request as PrismaRequest } from "@prisma/client"
-import { Activity } from "../activity/types"
 import { Action } from "../action/types"
+import { Activity } from "../activity/types"
 import { Token } from "../token/types"
 
 export type Request = PrismaRequest & {
@@ -23,7 +23,7 @@ type SignerQuorumVariant = {
   setQuorum: number
 }
 
-type TokenTransferVariant = FrequencyMixin & {
+export type TokenTransferVariant = FrequencyMixin & {
   recipient: string
   transfers: {
     token: Token
@@ -52,7 +52,7 @@ type FrequencyMixin = {
   maxOccurences?: number
 }
 
-enum FrequencyType {
+export enum FrequencyType {
   NONE,
   WEEKLY,
   BIWEEKLY,
@@ -60,14 +60,20 @@ enum FrequencyType {
   CUSTOM,
 }
 
-enum FrequencyUnit {
+export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
 }
 
-enum RequestVariantType {
+export enum RequestVariantType {
   SIGNER_QUORUM,
   TOKEN_TRANSFER,
   SPLIT_TOKEN_TRANSFER,
+}
+
+type TokenTransferMeta = RequestMetadata & TokenTransferVariant
+
+interface TokenTransferRequest extends TokenTransferMeta {
+  variant: RequestVariantType.TOKEN_TRANSFER
 }
