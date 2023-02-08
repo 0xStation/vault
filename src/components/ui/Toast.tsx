@@ -1,5 +1,5 @@
 import { VariantProps, cva } from "class-variance-authority";
-import { ArrowUpRight, ChevronRight, CheckIcon } from "./Icons";
+import { ArrowUpRight, ChevronRight, CheckIcon } from "../icons";
 
 const toast = cva(
   "flex w-full justify-between items-center rounded-full py-2 px-3",
