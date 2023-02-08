@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   ClipboardDocumentCheckIcon,
   ClipboardIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/outline"
 
 export const CopyToClipboard = ({
   className = "",
   text,
   children,
 }: {
-  className?: string;
-  text: string;
-  children?: any;
+  className?: string
+  text: string
+  children?: any
 }) => {
   const [isClipboardAddressCopied, setIsClipboardAddressCopied] =
-    useState<boolean>(false);
+    useState<boolean>(false)
 
   return (
     <div>
@@ -22,11 +22,11 @@ export const CopyToClipboard = ({
         type="button"
         className={className}
         onClick={(e) => {
-          e.preventDefault();
+          e.preventDefault()
           navigator.clipboard.writeText(text).then(() => {
-            setIsClipboardAddressCopied(true);
-            setTimeout(() => setIsClipboardAddressCopied(false), 3000);
-          });
+            setIsClipboardAddressCopied(true)
+            setTimeout(() => setIsClipboardAddressCopied(false), 3000)
+          })
         }}
       >
         {children}
@@ -39,7 +39,7 @@ export const CopyToClipboard = ({
         )}
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default CopyToClipboard;
+export default CopyToClipboard

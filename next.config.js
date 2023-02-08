@@ -15,6 +15,6 @@ const nextConfig = {
       exclude: ["error"],
     },
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
