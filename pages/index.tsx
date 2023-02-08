@@ -1,11 +1,7 @@
-import { NavBar } from "../src/components/NavBar";
+import { AccountNavBar } from "../src/components/core/AccountNavBar"
 
 function Page() {
-  return (
-    <>
-      <NavBar />
-    </>
-  );
+  return <AccountNavBar />
 }
 
-export default Page;
+export default Page

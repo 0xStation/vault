@@ -1,5 +1,5 @@
-import { VariantProps, cva } from "class-variance-authority";
-import { ButtonHTMLAttributes } from "react";
+import { VariantProps, cva } from "class-variance-authority"
+import { ButtonHTMLAttributes } from "react"
 
 const button = cva("relative font-medium border rounded", {
   variants: {
@@ -39,13 +39,13 @@ const button = cva("relative font-medium border rounded", {
       class: "hover:bg-gray/80",
     },
   ],
-});
+})
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
     VariantProps<typeof button> {
-  children: React.ReactNode;
-  loading?: boolean;
+  children: React.ReactNode
+  loading?: boolean
 }
 
 export const Button = ({
@@ -82,5 +82,5 @@ export const Button = ({
         )}
       </>
     </button>
-  );
-};
+  )
+}

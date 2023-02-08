@@ -1,16 +1,16 @@
-import { ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export const cn = (...inputs: ClassValue[]) => {
-  return twMerge(clsx(inputs));
-};
+  return twMerge(clsx(inputs))
+}
 
 export const truncateString = (
   inputString = "",
-  numberOfLettersOnEachSide = 3
+  numberOfLettersOnEachSide = 3,
 ) => {
   if (numberOfLettersOnEachSide > 10) {
-    numberOfLettersOnEachSide = 3;
+    numberOfLettersOnEachSide = 3
   }
   if (inputString.length > 20) {
     return (
@@ -18,11 +18,11 @@ export const truncateString = (
       "..." +
       inputString.substr(
         inputString.length - numberOfLettersOnEachSide,
-        inputString.length
+        inputString.length,
       )
-    );
+    )
   }
-  return inputString;
-};
+  return inputString
+}
 
-export default truncateString;
+export default truncateString

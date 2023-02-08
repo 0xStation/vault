@@ -1,16 +1,16 @@
-import Image from "next/image";
+import Image from "next/image"
 
 interface AvatarProps {
-  size?: "sm" | "md" | "lg";
-  pfpUrl: string;
-  className?: string;
+  size?: "sm" | "md" | "lg"
+  pfpUrl: string
+  className?: string
 }
 
 const heightWidthMap: { [key: string]: number } = {
   ["sm"]: 24,
   ["md"]: 42,
   ["lg"]: 60,
-};
+}
 
 export const Avatar = ({ size = "md", pfpUrl, className }: AvatarProps) => {
   return (
@@ -21,5 +21,5 @@ export const Avatar = ({ size = "md", pfpUrl, className }: AvatarProps) => {
       width={heightWidthMap[size]}
       className={`rounded-full ${className}`}
     />
-  );
-};
+  )
+}

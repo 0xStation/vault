@@ -19,6 +19,9 @@ module.exports = {
         black: {
           100: "#212121",
         },
+        slate: {
+          DEFAULT: "#F1F5F9",
+        },
         violet: {
           DEFAULT: "#AD72FF",
           100: "#AD72FF",

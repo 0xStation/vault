@@ -1,12 +1,12 @@
-import { Activity as PrismaActivity } from "@prisma/client";
+import { Activity as PrismaActivity } from "@prisma/client"
 
 export type Activity = PrismaActivity & {
-  data: ActivityMetadata;
-};
+  data: ActivityMetadata
+}
 
 type ActivityMetadata = {
-  comment?: string;
-};
+  comment?: string
+}
 
 // prisma schema
 enum ActivityVariant {
