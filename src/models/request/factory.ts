@@ -1,7 +1,12 @@
 import { faker } from "@faker-js/faker"
 import { createToken } from "../token/factory"
 import { Token } from "../token/types"
-import { FrequencyType, Request, RequestVariantType, Transfer } from "./types"
+import {
+  FrequencyType,
+  FrequencyUnit,
+  RequestVariantType,
+  Transfer,
+} from "./types"
 
 export const createTransfer = ({
   token,
@@ -25,6 +30,9 @@ export const createRequestInput = ({
   variant,
   frequency,
   startsAt,
+  frequencyValue,
+  frequencyUnit,
+  maxOccurences,
   recipient,
   transfers,
   rejectionActionIds,
@@ -38,6 +46,9 @@ export const createRequestInput = ({
   variant?: RequestVariantType
   frequency?: FrequencyType
   startsAt?: Date
+  frequencyValue?: number
+  frequencyUnit?: FrequencyUnit
+  maxOccurences?: number
   recipient?: string
   transfers?: Transfer[]
   rejectionActionIds?: string[]
@@ -68,11 +79,16 @@ export const createRequestInput = ({
   return {
     terminalId: terminalId ?? "1",
     data: {
-      note: note ?? faker.internet.domainWord(),
+      note: note ?? faker.lorem.sentence(),
       createdBy: createdBy ?? faker.finance.ethereumAddress(),
       variant,
       meta: {
+        // maybe make a frequency factory?
         frequency: frequency ?? FrequencyType.NONE,
+        startsAt: startsAt ?? new Date(),
+        frequencyValue: frequencyValue ?? 1,
+        frequencyUnit: frequencyUnit ?? FrequencyUnit.DAY,
+        maxOccurences: maxOccurences ?? 1,
         ...(variant === RequestVariantType.TOKEN_TRANSFER &&
           tokenTransferVariant),
         ...(variant === RequestVariantType.SIGNER_QUORUM &&
@@ -81,73 +97,4 @@ export const createRequestInput = ({
       rejectionActionIds: rejectionActionIds ?? [],
     },
   }
-}
-
-export const createRequest = ({
-  note,
-  createdBy,
-  variant,
-  frequency,
-  startsAt,
-  recipient,
-  transfers,
-  rejectionActionIds,
-  terminalId,
-  quorum,
-  add,
-  remove,
-}: {
-  note?: string
-  createdBy?: string
-  variant?: RequestVariantType
-  frequency?: FrequencyType
-  startsAt?: Date
-  recipient?: string
-  transfers?: Transfer[]
-  rejectionActionIds?: string[]
-  terminalId?: string
-  quorum?: number
-  add?: string[]
-  remove?: string[]
-}) => {
-  // choosing a random variant for this request if none is specified
-  if (!variant) {
-    const values = Object.values(RequestVariantType)
-    variant = values[
-      Math.floor(Math.random() * values.length)
-    ] as RequestVariantType
-  }
-
-  const tokenTransferVariant = {
-    recipient: recipient ?? faker.finance.ethereumAddress(),
-    transfers: transfers ?? [createTransfer({})],
-  }
-
-  const signerQuorumVariant = {
-    add: add ?? [],
-    remove: remove ?? [],
-    setQuorum: quorum ?? Math.floor(Math.random() * 5),
-  }
-
-  return {
-    id: "1",
-    terminalId: terminalId ?? 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    activities: [],
-    actions: [],
-    data: {
-      note: note ?? faker.internet.domainWord(),
-      createdBy: createdBy ?? faker.finance.ethereumAddress(),
-      variant,
-      meta: {
-        frequency: frequency ?? FrequencyType.NONE,
-        ...(variant === RequestVariantType.TOKEN_TRANSFER &&
-          tokenTransferVariant),
-        ...(variant === RequestVariantType.SIGNER_QUORUM &&
-          signerQuorumVariant),
-      },
-      rejectionActionIds: rejectionActionIds ?? [],
-    },
-  } as Request
 }

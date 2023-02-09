@@ -5,7 +5,7 @@ const button = cva("relative font-medium border rounded", {
   variants: {
     variant: {
       primary: "bg-slate-900 border-slate-900 text-white",
-      secondary: "text-violet border-violet bg-transparent",
+      secondary: "text-black border-slate-200 bg-white hover:bg-slate-100",
       unemphasized: "text-white border-white bg-black",
     },
     size: {
