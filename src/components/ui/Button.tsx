@@ -1,4 +1,4 @@
-import { VariantProps, cva } from "class-variance-authority"
+import { cva, VariantProps } from "class-variance-authority"
 import { ButtonHTMLAttributes } from "react"
 
 const button = cva("relative font-medium border rounded", {
@@ -10,7 +10,7 @@ const button = cva("relative font-medium border rounded", {
     },
     size: {
       sm: "px-3 py-1 text-sm",
-      md: "font-medium px-3 py-1 text-base",
+      base: "font-medium px-3 py-1 text-base",
       lg: "font-bold px-5 py-2 text-base",
     },
     fullWidth: {
@@ -23,19 +23,19 @@ const button = cva("relative font-medium border rounded", {
   compoundVariants: [
     {
       variant: ["primary"],
-      size: ["sm", "md", "lg"],
+      size: ["sm", "base", "lg"],
       disabled: false,
       class: "hover:bg-black/80",
     },
     {
       variant: ["primary", "secondary", "unemphasized"],
-      size: ["sm", "md", "lg"],
+      size: ["sm", "base", "lg"],
       disabled: true,
       class: "hover:bg-border-slate-300",
     },
     {
       variant: ["secondary", "unemphasized"],
-      size: ["sm", "md", "lg"],
+      size: ["sm", "base", "lg"],
       class: "hover:bg-gray/80",
     },
   ],

@@ -1,6 +1,6 @@
 import { icon, IconProps } from "./utils"
 
-export const ArrowUpRight = ({ size = "BASE" }: IconProps) => {
+export const ArrowUpRight = ({ size = "base" }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

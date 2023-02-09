@@ -1,6 +1,6 @@
 import { icon, IconProps } from "./utils"
 
-export const CheckIcon = ({ size = "BASE" }: IconProps) => {
+export const CheckIcon = ({ size = "base" }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
