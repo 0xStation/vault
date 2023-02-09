@@ -27,7 +27,7 @@ const NavigationMenuList = React.forwardRef<
   <NavigationMenuPrimitive.List
     ref={ref}
     className={cn(
-      "group flex list-none items-center justify-center",
+      "group flex flex-1 list-none items-center justify-center",
       className,
     )}
     {...props}
@@ -38,12 +38,12 @@ NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 const NavigationMenuItem = NavigationMenuPrimitive.Item
 
 const navigationMenuTriggerStyle = cva(
-  "inline-flex items-center justify-center text-sm focus:font-medium hover:font-medium transition-colors focus:outline-none focus:bg-black focus:text-white hover:text-white disabled:opacity-50 disabled:pointer-events-none bg-transparent hover:bg-black data-[state=open]:bg-black h-10 py-2 px-4 group w-max",
+  "h-fit w-full inline-flex items-center justify-center text-sm focus:font-medium hover:font-medium transition-colors focus:outline-none focus:bg-black focus:text-white hover:text-white disabled:opacity-50 disabled:pointer-events-none bg-transparent hover:bg-black data-[state=open]:bg-black h-10 py-2 px-4 group",
   {
     variants: {
       position: {
-        left: "focus:rounded-l hover:rounded-l",
-        right: "focus:rounded-r hover:rounded-r",
+        left: "focus:rounded-l hover:rounded-l border-r border-black",
+        right: "focus:rounded-r hover:rounded-r border-l border-black",
       },
     },
   },

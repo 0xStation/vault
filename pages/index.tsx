@@ -11,29 +11,21 @@ function Page() {
   return (
     <>
       <AccountNavBar />
-      <NavigationMenu className="">
-        <NavigationMenuList className="rounded-lg border border-black">
-          <NavigationMenuItem className="border-r border-black">
-            {/* <Link href="/docs" legacyBehavior passHref> */}
-            <NavigationMenuLink
-              className={navigationMenuTriggerStyle({ position: "left" })}
-            >
-              Terminal
-            </NavigationMenuLink>
+      <NavigationMenu>
+        <NavigationMenuList className="mx-4 w-[calc(100vw-32px)] justify-evenly rounded-lg border border-black">
+          <NavigationMenuItem
+            className={navigationMenuTriggerStyle({ position: "left" })}
+          >
+            <NavigationMenuLink>Terminal</NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Requests
-            </NavigationMenuLink>
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink>Requests</NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem className="border-l border-black">
-            <NavigationMenuLink
-              className={navigationMenuTriggerStyle({ position: "right" })}
-            >
-              Activities
-            </NavigationMenuLink>
+          <NavigationMenuItem
+            className={navigationMenuTriggerStyle({ position: "right" })}
+          >
+            <NavigationMenuLink>Activities</NavigationMenuLink>
           </NavigationMenuItem>
-          {/* </Link> */}
         </NavigationMenuList>
       </NavigationMenu>
     </>
