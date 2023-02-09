@@ -1,17 +1,25 @@
 import { Avatar } from "@ui/Avatar"
 import prisma from "../../prisma/client"
 import { ArrowUpRight, ChatBubble } from "../../src/components/icons/"
-import { Request, TokenTransferVariant } from "../../src/models/request/types"
+import {
+  Request,
+  RequestVariantType,
+  TokenTransferVariant,
+} from "../../src/models/request/types"
 
 const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   return (
-    <div className="divide-y">
+    <div className="divide-y divide-slate-200">
       {requests.map((request, idx) => {
-        let transfer = (request.data.meta as TokenTransferVariant).transfers[0]
+        let transfer = (request.data.meta as TokenTransferVariant)
+          .transfers?.[0]
         let transferCount = (request.data.meta as TokenTransferVariant)
-          .transfers.length
+          .transfers?.length
         return (
-          <div key={`request-${idx}`} className="w-full p-4">
+          <div
+            key={`request-${idx}`}
+            className="last:border-black w-full p-4 last:border-b"
+          >
             <div className="flex flex-col space-y-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center space-x-3">
@@ -29,14 +37,35 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
               </div>
               <div className="flex flex-row items-center space-x-2 text-slate-500">
                 <span className="text-sm text-slate-500"># {idx + 1}</span>
-                <ArrowUpRight size={"SM"} />
-                <span className="text-sm text-slate-500">
-                  {transfer.amount} {transfer.token.symbol}{" "}
-                  {transferCount > 1 && `and ${transferCount - 1} others`}
-                </span>
+                {request.data.variant === RequestVariantType.TOKEN_TRANSFER && (
+                  <>
+                    <ArrowUpRight size={"SM"} />
+                    <span className="text-sm text-slate-500">
+                      {transfer.amount} {transfer.token.symbol}{" "}
+                      {transferCount > 1 && `and ${transferCount - 1} others`}
+                    </span>
+                  </>
+                )}
+                {request.data.variant === RequestVariantType.SIGNER_QUORUM && (
+                  <>
+                    <ArrowUpRight size={"SM"} />
+                    <span className="text-sm text-slate-500">
+                      Add {1} contributor and change quorum.
+                    </span>
+                  </>
+                )}
+                {request.data.variant ===
+                  RequestVariantType.SPLIT_TOKEN_TRANSFER && (
+                  <>
+                    <ArrowUpRight size={"SM"} />
+                    <span className="text-sm text-slate-500">
+                      Split token stuff
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex flex-row items-center justify-between text-sm text-slate-500">
-                <span>Created by {"name.eth"}</span>
+                <span>Created by {request.data.createdBy}</span>
                 <div className="flex flex-row items-center space-x-1">
                   <ChatBubble size={"SM"} />
                   <span>0</span>

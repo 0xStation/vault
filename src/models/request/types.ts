@@ -25,11 +25,13 @@ type SignerQuorumVariant = {
 
 export type TokenTransferVariant = FrequencyMixin & {
   recipient: string
-  transfers: {
-    token: Token
-    amount?: number // ERC20 & ERC1155
-    tokenId?: number // ERC721 & ERC1155
-  }[]
+  transfers: Transfer[]
+}
+
+export type Transfer = {
+  token: Token
+  amount?: number // ERC20 & ERC1155
+  tokenId?: number // ERC721 & ERC1155
 }
 
 type SplitTokenTransferVariant = FrequencyMixin & {
@@ -37,11 +39,7 @@ type SplitTokenTransferVariant = FrequencyMixin & {
     recipient: string
     percent: number // percent
   }[]
-  transfers: {
-    token: Token
-    amount?: number // ERC20 & ERC1155
-    tokenId?: number // ERC721 & ERC1155
-  }[]
+  transfers: Transfer[]
 }
 
 type FrequencyMixin = {
@@ -70,10 +68,4 @@ export enum RequestVariantType {
   SIGNER_QUORUM,
   TOKEN_TRANSFER,
   SPLIT_TOKEN_TRANSFER,
-}
-
-type TokenTransferMeta = RequestMetadata & TokenTransferVariant
-
-interface TokenTransferRequest extends TokenTransferMeta {
-  variant: RequestVariantType.TOKEN_TRANSFER
 }
