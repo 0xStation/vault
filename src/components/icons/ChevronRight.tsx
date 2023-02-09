@@ -1,7 +1,7 @@
 import { icon, IconProps } from "./utils"
 
 // right points right >>>
-export const ChevronRight = ({ size = "BASE" }: IconProps) => {
+export const ChevronRight = ({ size = "base" }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
