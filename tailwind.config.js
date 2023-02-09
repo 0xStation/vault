@@ -17,6 +17,7 @@ module.exports = {
         transparent: "transparent",
         current: "currentColor",
         black: {
+          DEFAULT: "#212121",
           100: "#212121",
         },
         slate: {
