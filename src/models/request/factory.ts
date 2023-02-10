@@ -45,7 +45,7 @@ export const createRequestInput = ({
   createdBy?: string
   variant?: RequestVariantType
   frequency?: FrequencyType
-  startsAt?: Date
+  startsAt?: number
   frequencyValue?: number
   frequencyUnit?: FrequencyUnit
   maxOccurences?: number
@@ -76,6 +76,11 @@ export const createRequestInput = ({
     setQuorum: quorum ?? Math.floor(Math.random() * 5),
   }
 
+  const variantMeta =
+    variant === RequestVariantType.TOKEN_TRANSFER
+      ? tokenTransferVariant
+      : signerQuorumVariant
+
   return {
     terminalId: terminalId ?? "1",
     data: {
@@ -85,14 +90,11 @@ export const createRequestInput = ({
       meta: {
         // maybe make a frequency factory?
         frequency: frequency ?? FrequencyType.NONE,
-        startsAt: startsAt ?? new Date(),
+        startsAt: startsAt ?? +new Date(),
         frequencyValue: frequencyValue ?? 1,
         frequencyUnit: frequencyUnit ?? FrequencyUnit.DAY,
         maxOccurences: maxOccurences ?? 1,
-        ...(variant === RequestVariantType.TOKEN_TRANSFER &&
-          tokenTransferVariant),
-        ...(variant === RequestVariantType.SIGNER_QUORUM &&
-          signerQuorumVariant),
+        ...variantMeta,
       },
       rejectionActionIds: rejectionActionIds ?? [],
     },

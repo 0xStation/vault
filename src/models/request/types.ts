@@ -44,7 +44,7 @@ type SplitTokenTransferVariant = FrequencyMixin & {
 
 type FrequencyMixin = {
   frequency: FrequencyType
-  startsAt?: Date
+  startsAt?: number // JSON cannot serialize dates, so this is ISO formatted date
   frequencyValue?: number
   frequencyUnit?: FrequencyUnit
   maxOccurences?: number
