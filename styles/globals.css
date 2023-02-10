@@ -7,3 +7,38 @@ body {
   color: #212121;
   font-family: "Favorit Pro";
 }
+
+input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: #687385;
+  width: 1.15em;
+  height: 1.15em;
+  border: 1px solid #687385;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.7em;
+  height: 0.7em;
+  transform: scale(0);
+  /* transition: 120ms transform ease-in-out; */
+  box-shadow: inset 1em 1em #687385;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:disabled {
+  --form-control-color: gray;
+  color: gray;
+  cursor: not-allowed;
+}

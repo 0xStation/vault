@@ -5,6 +5,7 @@ import {
   TokenTransferVariant,
 } from "../../models/request/types"
 import ActionPrompt from "../core/ActionPrompt"
+import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
 
 const RequestCard = ({
@@ -40,7 +41,7 @@ const RequestCard = ({
         />
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-3">
-            <input type="checkbox" />
+            <Checkbox name={`request-${index}`} />
             <span className="h-4 w-4 rounded-full bg-violet"></span>
             <Avatar
               size="sm"
