@@ -11,9 +11,11 @@ import { ArrowUpRight, ChatBubble } from "../icons"
 const RequestCard = ({
   request,
   index,
+  formRegister,
 }: {
   request: Request
   index: number
+  formRegister: any
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -41,7 +43,7 @@ const RequestCard = ({
         />
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-3">
-            <Checkbox name={`request-${index}`} />
+            <Checkbox name={`request-${index}`} formRegister={formRegister} />
             <span className="h-4 w-4 rounded-full bg-violet"></span>
             <Avatar
               size="sm"

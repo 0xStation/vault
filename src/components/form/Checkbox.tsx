@@ -3,15 +3,17 @@ const Checkbox = ({
   value,
   checked,
   defaultChecked,
+  formRegister,
 }: {
   name: string
   value?: string
   checked?: boolean
   defaultChecked?: boolean
-  className?: string
+  formRegister: any
 }) => {
   return (
     <input
+      {...formRegister(name)}
       name={name}
       value={value}
       defaultChecked={defaultChecked}
