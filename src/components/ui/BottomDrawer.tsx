@@ -6,12 +6,14 @@ interface BottomDrawerProps {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   children?: ReactNode
+  size?: "base" | "lg"
 }
 
 export const BottomDrawer = ({
   isOpen,
   setIsOpen,
   children,
+  size = "base",
 }: BottomDrawerProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -38,12 +40,19 @@ export const BottomDrawer = ({
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="translate-y-full"
-              enterTo="translate-y-[15%]"
+              enterTo={
+                size === "base" ? "translate-y-[15%]" : "translate-y-[4%]"
+              }
               leave="ease-in duration-200"
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              <div className="pointer-events-auto h-4/5 w-full">
+              {/* "pointer-events-auto h-4/5 w-full" */}
+              <div
+                className={`pointer-events-auto ${
+                  size === "base" ? "h-[80%]" : "h-[95%]"
+                } w-full`}
+              >
                 <div className="flex h-full w-full flex-col items-center overflow-y-scroll rounded-t-lg border-r border-slate bg-white">
                   <div className="flex w-full justify-end pt-3 pr-3">
                     <button onClick={() => setIsOpen(false)}>
