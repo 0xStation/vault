@@ -47,7 +47,6 @@ export const BottomDrawer = ({
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              {/* "pointer-events-auto h-4/5 w-full" */}
               <div
                 className={`pointer-events-auto ${
                   size === "base" ? "h-[80%]" : "h-[95%]"
