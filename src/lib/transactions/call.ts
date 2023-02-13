@@ -1,13 +1,5 @@
 import { pack } from "@ethersproject/solidity"
-import { FunctionFragment, hexDataLength } from "ethers/lib/utils.js"
-
-export type FunctionCall = {
-  to: string
-  value: string
-  fragment: FunctionFragment
-  args: any[]
-  operation: number // 0 for call, 1 for delegatecall
-}
+import { hexDataLength } from "ethers/lib/utils.js"
 
 export type RawCall = {
   to: string

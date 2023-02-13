@@ -1,5 +1,5 @@
 import { safeEnableModule } from "lib/encodings/fragments"
-import { encodeFunctionData } from "lib/encodings/function"
+import { encodeFunctionData } from "lib/encodings/utils"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "../constants"
 import { EIP712Message } from "./utils"
 

@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "lib/encodings/function"
+import { encodeFunctionData } from "lib/encodings/utils"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
 import { multiSend } from "../encodings/fragments"

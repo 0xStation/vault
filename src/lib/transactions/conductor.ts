@@ -1,6 +1,6 @@
 import { BigNumber } from "@ethersproject/bignumber"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
-import { encodeFunctionData } from "lib/encodings/function"
+import { encodeFunctionData } from "lib/encodings/utils"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
 import { conductorExecute } from "../encodings/fragments"

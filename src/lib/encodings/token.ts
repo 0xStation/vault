@@ -2,7 +2,7 @@ import { RawCall } from "lib/transactions/call"
 import { TokenTransferVariant } from "../../models/request/types"
 import { Token, TokenType } from "../../models/token/types"
 import { erc20Transfer, erc721SafeTransferFrom } from "./fragments"
-import { encodeFunctionData } from "./function"
+import { encodeFunctionData } from "./utils"
 
 /**
  * Create the RawCall's representing a TokenTransfer Request

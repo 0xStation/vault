@@ -1,5 +1,9 @@
 import { FunctionFragment } from "ethers/lib/utils.js"
 
+const fn = (fn: string): FunctionFragment => {
+  return FunctionFragment.from("function " + fn)
+}
+
 /**
  * Conventions:
  *  - link source code
@@ -8,8 +12,8 @@ import { FunctionFragment } from "ethers/lib/utils.js"
  */
 
 // https://github.com/0xStation/checkbook-contracts/blob/main/src/contracts/FlexSigning.sol#L93
-export const conductorExecute = FunctionFragment.from(
-  `function execute(
+export const conductorExecute = fn(
+  `execute(
     address safe,
     uint256 nonce,
     address executor,
@@ -26,8 +30,8 @@ export const conductorExecute = FunctionFragment.from(
 )
 
 // https://github.com/safe-global/safe-contracts/blob/main/contracts/Safe.sol#L111
-export const safeExecTransaction = FunctionFragment.from(
-  `function execTransaction(
+export const safeExecTransaction = fn(
+  `execTransaction(
     address to,
     uint256 value,
     bytes calldata data,
@@ -42,21 +46,15 @@ export const safeExecTransaction = FunctionFragment.from(
 )
 
 // https://github.com/safe-global/safe-contracts/blob/main/contracts/base/ModuleManager.sol#L34
-export const safeEnableModule = FunctionFragment.from(
-  "function enableModule(address module)",
-)
+export const safeEnableModule = fn("enableModule(address module)")
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L113
-export const erc20Transfer = FunctionFragment.from(
-  "function transfer(address to, uint256 amount)",
-)
+export const erc20Transfer = fn("transfer(address to, uint256 amount)")
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol#L167
-export const erc721SafeTransferFrom = FunctionFragment.from(
-  "function safeTransferFrom(address from, address to, uint256 tokenId)",
+export const erc721SafeTransferFrom = fn(
+  "safeTransferFrom(address from, address to, uint256 tokenId)",
 )
 
 // https://github.com/safe-global/safe-contracts/blob/main/contracts/libraries/MultiSend.sol#L26
-export const multiSend = FunctionFragment.from(
-  "function multiSend(bytes memory transactions)",
-)
+export const multiSend = fn("multiSend(bytes memory transactions)")

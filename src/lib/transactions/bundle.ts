@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "lib/encodings/function"
+import { encodeFunctionData } from "lib/encodings/utils"
 import { multiSend } from "../encodings/fragments"
 import { packCalls, RawCall } from "./call"
 
