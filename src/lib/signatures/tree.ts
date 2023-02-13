@@ -60,7 +60,7 @@ export const newActionTree = (
  * @param root
  * @returns an EIP712Message ready to sign
  */
-const treeMessage = (root: string): EIP712Message => {
+export const treeMessage = (root: string): EIP712Message => {
   return {
     domain: conductorDomain(),
     types: {
