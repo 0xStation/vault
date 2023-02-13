@@ -80,7 +80,7 @@ export const createRequestInput = ({
   return {
     terminalId: terminalId ?? "1",
     variant,
-    number: Math.floor(Math.random() * 10000000000),
+    number: Math.floor(Math.random() * 10000000),
     data: {
       note: note ?? faker.lorem.sentence(),
       createdBy: createdBy ?? faker.finance.ethereumAddress(),

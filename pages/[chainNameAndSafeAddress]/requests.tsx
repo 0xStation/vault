@@ -1,11 +1,13 @@
 import { Transition } from "@headlessui/react"
 import { Button } from "@ui/Button"
+import { TabsContent } from "@ui/Tabs"
+import { GetServerSidePropsContext } from "next"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestCard from "../../src/components/core/RequestCard"
-import TerminalNavBar from "../../src/components/core/TerminalNavBar"
+import RequestsNavBar from "../../src/components/core/RequestsNavbar"
 import { Request } from "../../src/models/request/types"
 
 const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
@@ -29,21 +31,24 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   return (
     <>
       <AccountNavBar />
-      <TerminalNavBar />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="divide-y divide-slate-200">
-          {requests.map((request, idx) => {
-            return (
-              <RequestCard
-                key={`request-${idx}`}
-                index={idx}
-                request={request}
-                formRegister={register}
-              />
-            )
-          })}
-        </div>
-      </form>
+      <RequestsNavBar>
+        <TabsContent value="needs_attention">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="divide-y divide-slate-200">
+              {requests.map((request, idx) => {
+                return (
+                  <RequestCard
+                    key={`request-${idx}`}
+                    index={idx}
+                    request={request}
+                    formRegister={register}
+                  />
+                )
+              })}
+            </div>
+          </form>
+        </TabsContent>
+      </RequestsNavBar>
 
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
@@ -67,7 +72,27 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   )
 }
 
-export async function getServerSideProps() {
+// todo: type context properly
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // url params
+  const chainNameAndSafeAddress = context?.params?.chainNameAndSafeAddress
+
+  if (typeof chainNameAndSafeAddress !== "string") {
+    // Throw a 404 error if the `myParam` query parameter is missing or is string[]
+    return {
+      notFound: true,
+    }
+  }
+
+  const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
+  if (!chainName || !safeAddress) {
+    // Throw a 404 error if chainName or safeAddress are not found
+    // (invalid format... should be gor:0x...)
+    return {
+      notFound: true,
+    }
+  }
+
   let requests = await prisma.request.findMany()
   requests = JSON.parse(JSON.stringify(requests))
   return {
