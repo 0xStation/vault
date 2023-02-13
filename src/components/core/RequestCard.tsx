@@ -6,10 +6,12 @@ import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
 
 const RequestCard = ({
+  disabled,
   request,
   index,
   formRegister,
 }: {
+  disabled?: boolean
   request: Request
   index: number
   formRegister: any
@@ -18,7 +20,7 @@ const RequestCard = ({
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
     ?.length
   return (
-    <div className="w-full p-4">
+    <div className={`w-full p-4 ${disabled && "opacity-30"}`}>
       <div className="flex flex-col space-y-2">
         <ActionPrompt
           prompt="test"
@@ -40,7 +42,7 @@ const RequestCard = ({
         />
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-3">
-            <Checkbox name={`request-${index}`} formRegister={formRegister} />
+            <Checkbox name={request.id} formRegister={formRegister} />
             <span className="h-4 w-4 rounded-full bg-violet"></span>
             <Avatar
               size="sm"

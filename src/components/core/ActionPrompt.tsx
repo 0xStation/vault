@@ -23,9 +23,14 @@ const ActionPrompt = ({
           <h4 className="text-sm">{prompt}</h4>
         </div>
         <div className="flex flex-row space-x-2">
-          {actions?.map((action) => {
+          {actions?.map((action, idx) => {
             return (
-              <Button size="sm" variant="secondary" onClick={action.onClick}>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={action.onClick}
+                key={`action-${idx}`}
+              >
                 {action.label}
               </Button>
             )

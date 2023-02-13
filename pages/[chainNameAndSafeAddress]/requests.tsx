@@ -2,7 +2,7 @@ import { Transition } from "@headlessui/react"
 import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
@@ -11,7 +11,7 @@ import RequestsNavBar from "../../src/components/core/RequestsNavbar"
 import { Request } from "../../src/models/request/types"
 
 const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
-  const [selectedCount, setSelectedCount] = useState<number>(0)
+  const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const {
     register,
     handleSubmit,
@@ -19,15 +19,19 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
     formState: { errors },
   } = useForm()
 
-  const watchAll = watch()
+  // watches form data and responds on change
+  watch((data) => {
+    const checkBoxEntries = Object.entries(data)
+    const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)
+    setSelectedRequests(checkedBoxes)
+  })
 
-  useEffect(() => {
-    const checkBoxValues = Object.values(watchAll)
-    const checkedBoxes = checkBoxValues.filter((v) => v)
-    setSelectedCount(checkedBoxes.length)
-  }, [watchAll])
+  const requestIsSelected = (id: string) => {
+    return selectedRequests.find(([rId, _v]: [string, boolean]) => rId === id)
+  }
 
   const onSubmit = (data: any) => console.log(data)
+
   return (
     <>
       <AccountNavBar />
@@ -38,6 +42,10 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
               {requests.map((request, idx) => {
                 return (
                   <RequestCard
+                    disabled={
+                      selectedRequests.length > 0 &&
+                      !requestIsSelected(request.id)
+                    }
                     key={`request-${idx}`}
                     index={idx}
                     request={request}
@@ -52,7 +60,7 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
 
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
-          show={selectedCount > 0}
+          show={selectedRequests.length > 0}
           enter="transform transition ease-in-out duration-500 sm:duration-700"
           enterFrom="translate-y-[200%]"
           enterTo="translate-y-0"
@@ -61,7 +69,9 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
           leaveTo="translate-y-[200%]"
         >
           <div className="flex w-full flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
-            <p className="text-sm text-white">{selectedCount} selected</p>
+            <p className="text-sm text-white">
+              {selectedRequests.length} selected
+            </p>
             <Button size="sm" variant="secondary" onClick={() => {}}>
               Cancel
             </Button>
@@ -72,7 +82,6 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   )
 }
 
-// todo: type context properly
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // url params
   const chainNameAndSafeAddress = context?.params?.chainNameAndSafeAddress
@@ -92,6 +101,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       notFound: true,
     }
   }
+
+  // todo:
+  // 1. find the chainId by chainName
+  // 2. find the terminal by chainId and safeAddress
+  // 3. return terminal as prop or throw notFound
 
   let requests = await prisma.request.findMany()
   requests = JSON.parse(JSON.stringify(requests))
