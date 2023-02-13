@@ -48,13 +48,14 @@ model Request {
   data         Json
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  index        Int
+  number        Int
   variant       RequestVariantType
   subscriptions Subscription[]
   activities    Activity[]
   actions       Action[]
 
-  @@unique([terminalId, index])
+  @@index([number(sort: Desc)])
+  @@unique([terminalId, number])
 }
 
 model Activity {

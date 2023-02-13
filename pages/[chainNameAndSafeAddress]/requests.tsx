@@ -3,7 +3,9 @@ import { Button } from "@ui/Button"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import prisma from "../../prisma/client"
+import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestCard from "../../src/components/core/RequestCard"
+import TerminalNavBar from "../../src/components/core/TerminalNavBar"
 import { Request } from "../../src/models/request/types"
 
 const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
@@ -26,6 +28,8 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   const onSubmit = (data: any) => console.log(data)
   return (
     <>
+      <AccountNavBar />
+      <TerminalNavBar />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="divide-y divide-slate-200">
           {requests.map((request, idx) => {

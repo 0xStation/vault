@@ -1,9 +1,6 @@
+import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
-import {
-  Request,
-  RequestVariantType,
-  TokenTransferVariant,
-} from "../../models/request/types"
+import { Request, TokenTransferVariant } from "../../models/request/types"
 import ActionPrompt from "../core/ActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
@@ -57,26 +54,26 @@ const RequestCard = ({
         </div>
         <div className="flex flex-row items-center space-x-2 text-slate-500">
           <span className="text-sm text-slate-500"># {index + 1}</span>
-          {request.data.variant === RequestVariantType.TOKEN_TRANSFER && (
+          {request.variant === RequestVariantType.TOKEN_TRANSFER && (
             <>
-              <ArrowUpRight size={"SM"} />
+              <ArrowUpRight size={"sm"} />
               <span className="text-sm text-slate-500">
                 {transfer.amount} {transfer.token.symbol}{" "}
                 {transferCount > 1 && `and ${transferCount - 1} others`}
               </span>
             </>
           )}
-          {request.data.variant === RequestVariantType.SIGNER_QUORUM && (
+          {request.variant === RequestVariantType.SIGNER_QUORUM && (
             <>
-              <ArrowUpRight size={"SM"} />
+              <ArrowUpRight size={"sm"} />
               <span className="text-sm text-slate-500">
                 Add {1} contributor and change quorum.
               </span>
             </>
           )}
-          {request.data.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
+          {request.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
             <>
-              <ArrowUpRight size={"SM"} />
+              <ArrowUpRight size={"sm"} />
               <span className="text-sm text-slate-500">Split token stuff</span>
             </>
           )}
@@ -84,7 +81,7 @@ const RequestCard = ({
         <div className="flex flex-row items-center justify-between text-sm text-slate-500">
           <span>Created by {request.data.createdBy}</span>
           <div className="flex cursor-pointer flex-row items-center space-x-1">
-            <ChatBubble size={"SM"} />
+            <ChatBubble size={"sm"} />
             <span>0</span>
           </div>
         </div>

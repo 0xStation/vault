@@ -1,12 +1,8 @@
 import { faker } from "@faker-js/faker"
+import { RequestVariantType } from "@prisma/client"
 import { createToken } from "../token/factory"
 import { Token } from "../token/types"
-import {
-  FrequencyType,
-  FrequencyUnit,
-  RequestVariantType,
-  Transfer,
-} from "./types"
+import { FrequencyType, FrequencyUnit, Transfer } from "./types"
 
 export const createTransfer = ({
   token,
@@ -83,10 +79,11 @@ export const createRequestInput = ({
 
   return {
     terminalId: terminalId ?? "1",
+    variant,
+    number: Math.floor(Math.random() * 10000000000),
     data: {
       note: note ?? faker.lorem.sentence(),
       createdBy: createdBy ?? faker.finance.ethereumAddress(),
-      variant,
       meta: {
         // maybe make a frequency factory?
         frequency: frequency ?? FrequencyType.NONE,
