@@ -1,4 +1,3 @@
-import { Interface } from "@ethersproject/abi"
 import { pack } from "@ethersproject/solidity"
 import { FunctionFragment, hexDataLength } from "ethers/lib/utils.js"
 
@@ -27,23 +26,6 @@ export type ActionCall = RawCall & {
 export type ConductorCall = ActionCall & {
   proofs: { path: string[]; signature: string }[]
   note: string
-}
-
-export const encodeFunctionData = (
-  fragment: FunctionFragment,
-  args: any[],
-): string => {
-  const functionInterface = new Interface([fragment.format("full")])
-  return functionInterface.encodeFunctionData(fragment.name, args)
-}
-
-export const functionToRawCall = (call: FunctionCall): RawCall => {
-  return {
-    to: call.to,
-    value: call.value,
-    data: encodeFunctionData(call.fragment, call.args),
-    operation: call.operation,
-  }
 }
 
 export const packCalls = (calls: RawCall[]): string => {

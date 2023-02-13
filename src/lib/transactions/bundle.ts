@@ -1,5 +1,5 @@
+import { multiSend } from "../encodings/fragments"
 import { encodeFunctionData, packCalls, RawCall } from "./call"
-import { multiSend } from "./fragments"
 
 export const MULTI_SEND_ADDRESS = "0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761" // normal, NOT call-only
 

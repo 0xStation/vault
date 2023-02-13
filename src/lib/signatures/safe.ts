@@ -1,4 +1,5 @@
-import { Interface } from "ethers/lib/utils.js"
+import { safeEnableModule } from "lib/encodings/fragments"
+import { encodeFunctionData } from "lib/encodings/function"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "../constants"
 import { EIP712Message } from "./utils"
 
@@ -17,8 +18,7 @@ export const addConductorMessage = ({
   const value = "0"
   const operation = 0 // call
 
-  const safe = new Interface(["function enableModule(address module)"])
-  const data = safe.encodeFunctionData("enableModule", [CONDUCTOR_ADDRESS])
+  const data = encodeFunctionData(safeEnableModule, [CONDUCTOR_ADDRESS])
 
   return safeMessage({
     chainId,

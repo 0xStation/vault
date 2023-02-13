@@ -1,10 +1,11 @@
 import { BigNumber } from "@ethersproject/bignumber"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
+import { encodeFunctionData } from "lib/encodings/function"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
+import { conductorExecute } from "../encodings/fragments"
 import { bundleCalls } from "./bundle"
-import { ConductorCall, encodeFunctionData, RawCall } from "./call"
-import { execute } from "./fragments"
+import { ConductorCall, RawCall } from "./call"
 
 export const callAction = ({
   action,
@@ -41,7 +42,7 @@ export const callAction = ({
 }
 
 const callConductor = (call: ConductorCall): RawCall => {
-  const conductorData = encodeFunctionData(execute, [
+  const conductorData = encodeFunctionData(conductorExecute, [
     call.safe,
     call.nonce,
     call.executor,

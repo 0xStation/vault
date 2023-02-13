@@ -1,6 +1,6 @@
 import { Request as PrismaRequest } from "@prisma/client"
-import { Activity } from "../activity/types"
 import { Action } from "../action/types"
+import { Activity } from "../activity/types"
 import { Token } from "../token/types"
 
 export type Request = PrismaRequest & {
@@ -23,24 +23,16 @@ type SignerQuorumVariant = {
   setQuorum: number
 }
 
-type TokenTransferVariant = FrequencyMixin & {
-  recipient: string
-  transfers: {
-    token: Token
-    amount?: number // ERC20 & ERC1155
-    tokenId?: number // ERC721 & ERC1155
-  }[]
-}
-
-type SplitTokenTransferVariant = FrequencyMixin & {
-  splits: {
+export type TokenTransferVariant = TokenTransfersMixin &
+  FrequencyMixin & {
     recipient: string
-    percent: number // percent
-  }[]
+  }
+
+type TokenTransfersMixin = {
   transfers: {
     token: Token
-    amount?: number // ERC20 & ERC1155
-    tokenId?: number // ERC721 & ERC1155
+    amount?: string // ERC20 & ERC1155
+    tokenId?: string // ERC721 & ERC1155
   }[]
 }
 
