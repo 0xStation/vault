@@ -12,7 +12,6 @@ export type Request = PrismaRequest & {
 type RequestMetadata = {
   note: string
   createdBy: string // address
-  variant: RequestVariantType
   meta: TokenTransferVariant | SignerQuorumVariant
   rejectionActionIds: string[]
 }
