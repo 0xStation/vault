@@ -10,14 +10,14 @@ import RequestCard from "../../src/components/core/RequestCard"
 import RequestsNavBar from "../../src/components/core/RequestsNavbar"
 import { Request } from "../../src/models/request/types"
 
+const chainNameToChainId: Record<string, number | undefined> = {
+  eth: 1,
+  gor: 5,
+}
+
 const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm()
+  const { register, handleSubmit, watch } = useForm()
 
   // watches form data and responds on change
   watch((data) => {
@@ -61,10 +61,10 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
           show={selectedRequests.length > 0}
-          enter="transform transition ease-in-out duration-500 sm:duration-700"
+          enter="transform transition ease-in-out duration-300 sm:duration-500"
           enterFrom="translate-y-[200%]"
           enterTo="translate-y-0"
-          leave="transform transition ease-in-out duration-500 sm:duration-700"
+          leave="transform transition ease-in-out duration-300 sm:duration-500"
           leaveFrom="translate-y-0"
           leaveTo="translate-y-[200%]"
         >
@@ -102,12 +102,33 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  // todo:
-  // 1. find the chainId by chainName
-  // 2. find the terminal by chainId and safeAddress
-  // 3. return terminal as prop or throw notFound
+  const chainId = chainNameToChainId[chainName]
+  if (!chainId) {
+    // Throw a 404 error if chainName is not recognized
+    return {
+      notFound: true,
+    }
+  }
 
-  let requests = await prisma.request.findMany()
+  const terminal = await prisma.terminal.findFirst({
+    where: {
+      chainId,
+      safeAddress,
+    },
+  })
+
+  if (!terminal) {
+    // Throw a 404 error if terminal is not found
+    return {
+      notFound: true,
+    }
+  }
+
+  let requests = await prisma.request.findMany({
+    where: {
+      terminalId: terminal.id,
+    },
+  })
   requests = JSON.parse(JSON.stringify(requests))
   return {
     props: {
