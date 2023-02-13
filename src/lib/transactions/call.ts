@@ -28,6 +28,12 @@ export type ConductorCall = ActionCall & {
   note: string
 }
 
+/**
+ * Pack multiple calls into one bytes string to be used in a MultiSend contract
+ * Intended use for preparing bundle and batch calls
+ * @param calls
+ * @returns bytes string including multiple calls parseable by MultiSend
+ */
 export const packCalls = (calls: RawCall[]): string => {
   return (
     "0x" +
@@ -38,13 +44,14 @@ export const packCalls = (calls: RawCall[]): string => {
   )
 }
 
-/// Encodes the transaction as packed bytes of:
-/// - `operation` as a `uint8` with `0` for a `call` or `1` for a `delegatecall` (=> 1 byte),
-/// - `to` as an `address` (=> 20 bytes),
-/// - `value` as a `uint256` (=> 32 bytes),
-/// -  length of `data` as a `uint256` (=> 32 bytes),
-/// - `data` as `bytes`.
-export const encodePacked = (call: RawCall) => {
+/**
+ * Encode multiple parameters of a RawCall into one bytes string
+ * Intended use when packing calls for MultiSend operations like bundling and batching
+ * MultiSend args documentation here: https://github.com/safe-global/safe-contracts/blob/main/contracts/libraries/MultiSend.sol#L17-L23
+ * @param call to, value, data, operation call object
+ * @returns singular string representation of the call parseable by MultiSend
+ */
+const encodePacked = (call: RawCall): string => {
   return pack(
     ["uint8", "address", "uint256", "uint256", "bytes"],
     [call.operation, call.to, call.value, hexDataLength(call.data), call.data],

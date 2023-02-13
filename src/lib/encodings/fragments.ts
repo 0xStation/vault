@@ -46,11 +46,6 @@ export const safeEnableModule = FunctionFragment.from(
   "function enableModule(address module)",
 )
 
-// https://github.com/safe-global/safe-contracts/blob/main/contracts/libraries/MultiSend.sol#L26
-export const multiSend = FunctionFragment.from(
-  "function multiSend(bytes memory transactions)",
-)
-
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L113
 export const erc20Transfer = FunctionFragment.from(
   "function transfer(address to, uint256 amount)",
@@ -59,4 +54,9 @@ export const erc20Transfer = FunctionFragment.from(
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol#L167
 export const erc721SafeTransferFrom = FunctionFragment.from(
   "function safeTransferFrom(address from, address to, uint256 tokenId)",
+)
+
+// https://github.com/safe-global/safe-contracts/blob/main/contracts/libraries/MultiSend.sol#L26
+export const multiSend = FunctionFragment.from(
+  "function multiSend(bytes memory transactions)",
 )

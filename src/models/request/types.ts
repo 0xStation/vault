@@ -31,7 +31,7 @@ export type TokenTransferVariant = TokenTransfersMixin &
 type TokenTransfersMixin = {
   transfers: {
     token: Token
-    amount?: string // ERC20 & ERC1155
+    value?: string // ERC20 & ERC1155
     tokenId?: string // ERC721 & ERC1155
   }[]
 }

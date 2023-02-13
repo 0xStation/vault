@@ -3,18 +3,25 @@ import { encodeFunctionData } from "lib/encodings/function"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "../constants"
 import { EIP712Message } from "./utils"
 
+/**
+ * Create an EIP712-ready message to add the Conductor module to a Safe
+ * Intended use when importing an existing Safe in onboarding and
+ * handling cases where existing users disable the Conductor Module
+ * @param args
+ * @returns an EIP712Message encoded to call enableModule on the Safe
+ */
 export const addConductorMessage = ({
   chainId,
-  address,
+  safeAddress,
   nonce,
   contractVersion,
 }: {
   chainId: number
-  address: string
+  safeAddress: string
   nonce: number
   contractVersion: string
 }) => {
-  const to = address
+  const to = safeAddress
   const value = "0"
   const operation = 0 // call
 
@@ -22,7 +29,7 @@ export const addConductorMessage = ({
 
   return safeMessage({
     chainId,
-    address,
+    safeAddress,
     to,
     value,
     data,
@@ -32,9 +39,15 @@ export const addConductorMessage = ({
   })
 }
 
+/**
+ * Create an EIP712-ready message for a Safe to make an arbitrary contract call
+ * Intended use when making calls through the existing Safe transaction service & nonce system
+ * @param args
+ * @returns an EIP712Message to make a call from a Safe
+ */
 export const safeMessage = ({
   chainId,
-  address,
+  safeAddress,
   to,
   value,
   data,
@@ -43,7 +56,7 @@ export const safeMessage = ({
   contractVersion,
 }: {
   chainId: number
-  address: string
+  safeAddress: string
   to: string
   value: string
   data: string
@@ -53,7 +66,7 @@ export const safeMessage = ({
 }): EIP712Message => {
   return {
     domain: {
-      verifyingContract: address,
+      verifyingContract: safeAddress,
       // only Safe contracts from version 1.3.0 contain a chainId in the signature domain -> https://github.com/safe-global/safe-contracts/blob/186a21a74b327f17fc41217a927dea7064f74604/CHANGELOG.md#add-chainid-to-transaction-hash
       // note that most recent version strings come in as "1.3.0+L2" which is still parseable by parseFloat by taking the first compatible float
       ...(parseFloat(contractVersion) >= 1.3 && { chainId: chainId }),

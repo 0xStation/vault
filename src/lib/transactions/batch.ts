@@ -8,9 +8,16 @@ import { callAction } from "./conductor"
 // batch executions are meant to come from EOAs, which cannot delegate call
 // the normal MultiSend contract requires you to delegatecall it though,
 // so therefore we use the MultiSendCallOnly contract
-export const MULTI_SEND_CALL_ONLY_ADDRESS =
+// https://github.com/safe-global/safe-contracts/blob/main/contracts/libraries/MultiSendCallOnly.sol
+const MULTI_SEND_CALL_ONLY_ADDRESS =
   "0x40A2aCCbd92BCA938b02010E17A5b8929b49130D"
 
+/**
+ * Convert an array of actions and their proofs into a singular call
+ * Intended use when preparing any Action execution, automatically batches if needed
+ * @param actions
+ * @returns to, value, data, operation for the call
+ */
 export const batchActions = (
   actions: { action: Action; proofs: Proof[] }[],
 ): RawCall => {
@@ -18,6 +25,11 @@ export const batchActions = (
   return batchCalls(callsToConductor)
 }
 
+/**
+ * Convert multiple calls to a singular call to MultiSendCallOnly if needed
+ * @param calls
+ * @returns original call if only one present or a single call to MultiSendCallOnly
+ */
 export const batchCalls = (calls: RawCall[]): RawCall => {
   if (calls.length === 0) throw Error("no calls provided")
   else if (calls.length === 1) {

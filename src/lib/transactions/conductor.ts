@@ -7,13 +7,18 @@ import { conductorExecute } from "../encodings/fragments"
 import { bundleCalls } from "./bundle"
 import { ConductorCall, RawCall } from "./call"
 
+/**
+ * Prepare an Action and its Proofs into a call to the Conductor module
+ * @param payload
+ * @returns to, value, data, operation for a raw call
+ */
 export const callAction = ({
   action,
   proofs,
 }: {
   action: Action
   proofs: Proof[]
-}) => {
+}): RawCall => {
   const formattedProofs = proofs
     .sort((a, b) => {
       const addressA = BigNumber.from(a.signature.signerAddress)
@@ -41,6 +46,11 @@ export const callAction = ({
   })
 }
 
+/**
+ * Encode the arguments needed for execution into a call to Conductor
+ * @param call function parameters for Conductor's `execute`
+ * @returns a call to the Conductor module
+ */
 const callConductor = (call: ConductorCall): RawCall => {
   const conductorData = encodeFunctionData(conductorExecute, [
     call.safe,

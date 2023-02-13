@@ -4,6 +4,12 @@ import { Action } from "../../models/action/types"
 import { ZERO_ADDRESS } from "../constants"
 import { conductorDomain, EIP712Message, getHash } from "./utils"
 
+/**
+ * Hash an Action object using EIP712.
+ * Intended use when constructing Trees for signing already-created actions
+ * @param action
+ * @returns actionHash
+ */
 export const hashAction = (action: Action): string => {
   const { operation, to, value, data } = bundleCalls(action.data.calls)
 
@@ -19,6 +25,12 @@ export const hashAction = (action: Action): string => {
   })
 }
 
+/**
+ * Hash an Action provided its values using EIP712.
+ * Intended use when creating new actions by signing action's metadata
+ * @param args
+ * @returns actionHash
+ */
 export const hashActionValues = ({
   chainId,
   safe,
