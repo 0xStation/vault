@@ -17,6 +17,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@ethersproject/hash": "^5.7.0",
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.14",
     "@next/font": "^13.1.6",
@@ -31,6 +32,7 @@
     "clsx": "^1.2.1",
     "eslint-config-next": "13.0.7",
     "ethers": "^5.7.2",
+    "merkletreejs": "^0.3.9",
     "next": "^13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -52,6 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "autoprefixer": "^10.4.13",
+    "eslint": "^8.33.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.1.1",

@@ -11,86 +11,94 @@ datasource db {
 }
 
 model Terminal {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   chainId     Int
   safeAddress String
   data        Json
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  requests    Request[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  requests Request[]
 
   @@unique([chainId, safeAddress])
 }
 
 model Account {
-  id        String     @id @default(uuid())
-  address   String     @unique
-  chainId   Int        @default(0)
+  id        String   @id @default(uuid())
+  address   String   @unique
+  chainId   Int      @default(0)
   data      Json
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  activities  Activity[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activities Activity[]
 
   @@unique([chainId, address])
 }
 
 model Subscription {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   address   String
   requestId String
-  request   Request @relation(fields: [requestId], references: [id])
+
+  request Request @relation(fields: [requestId], references: [id])
 }
 
 model Request {
-  id           String         @id @default(uuid())
-  terminalId   String
-  terminal     Terminal       @relation(fields: [terminalId], references: [id])
-  data         Json
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  subscriptions Subscription[]
+  id         String   @id @default(uuid())
+  terminalId String
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  terminal      Terminal       @relation(fields: [terminalId], references: [id])
   activities    Activity[]
   actions       Action[]
+  subscriptions Subscription[]
 }
 
 model Activity {
   id        String          @id @default(uuid())
   requestId String
-  request   Request         @relation(fields: [requestId], references: [id])
   address   String
   variant   ActivityVariant
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   data      Json
   accountId String
-  account   Account         @relation(fields: [accountId], references: [id])
+
+  request Request @relation(fields: [requestId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
 }
 
 model Action {
-  id          String  @id @default(uuid())
+  id          String @id @default(uuid())
   requestId   String
-  request     Request @relation(fields: [requestId], references: [id])
   safeAddress String
   chainId     Int
   nonce       Int
   data        Json
-  proofs      Proof[]
+
+  request Request @relation(fields: [requestId], references: [id])
+  proofs  Proof[]
 }
 
 model Proof {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   signatureId String
-  signature   Signature @relation(fields: [signatureId], references: [id])
   actionId    String
-  action      Action    @relation(fields: [actionId], references: [id])
   path        String[]
+
+  action    Action    @relation(fields: [actionId], references: [id])
+  signature Signature @relation(fields: [signatureId], references: [id])
 }
 
 model Signature {
-  id            String  @id @default(uuid())
+  id            String @id @default(uuid())
   signerAddress String
   data          Json
-  proofs        Proof[]
+
+  proofs Proof[]
 }
 
 enum ActivityVariant {
