@@ -1,15 +1,14 @@
-import React from "react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { Avatar } from "@ui/Avatar"
-import { useAccount, useDisconnect } from "wagmi"
-import { Account } from "../Account"
+import { Button } from "@ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
-import { Button } from "@ui/Button"
+import { useAccount, useDisconnect } from "wagmi"
+import { Account } from "../Account"
 
 export const AccountNavBar = () => {
   const { openConnectModal } = useConnectModal()
@@ -21,7 +20,7 @@ export const AccountNavBar = () => {
         <>
           <DropdownMenuTrigger>
             <Avatar
-              size="md"
+              size="base"
               pfpUrl={
                 "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
               }

@@ -1,18 +1,18 @@
 import Image from "next/image"
 
 interface AvatarProps {
-  size?: "sm" | "md" | "lg"
+  size?: "sm" | "base" | "lg"
   pfpUrl: string
   className?: string
 }
 
 const heightWidthMap: { [key: string]: number } = {
   ["sm"]: 24,
-  ["md"]: 42,
+  ["base"]: 42,
   ["lg"]: 60,
 }
 
-export const Avatar = ({ size = "md", pfpUrl, className }: AvatarProps) => {
+export const Avatar = ({ size = "base", pfpUrl, className }: AvatarProps) => {
   return (
     <Image
       src={pfpUrl}
