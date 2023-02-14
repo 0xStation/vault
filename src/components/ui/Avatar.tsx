@@ -1,12 +1,13 @@
 import Image from "next/image"
 
 interface AvatarProps {
-  size?: "sm" | "base" | "lg"
+  size?: "xs" | "sm" | "base" | "lg"
   pfpUrl: string
   className?: string
 }
 
 const heightWidthMap: { [key: string]: number } = {
+  ["xs"]: 12,
   ["sm"]: 24,
   ["base"]: 42,
   ["lg"]: 60,

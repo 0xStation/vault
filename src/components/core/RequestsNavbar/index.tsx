@@ -5,6 +5,7 @@ export const RequestsNavBar = ({ children }: { children: React.ReactNode }) => {
     <Tabs className="w-full" defaultValue="needs_attention">
       <TabsList>
         <TabsTrigger value="needs_attention">Needs attention</TabsTrigger>
+        <TabsTrigger value="awaiting_others">Awaiting others</TabsTrigger>
         <TabsTrigger value="closed">Closed</TabsTrigger>
         <TabsTrigger value="all">All</TabsTrigger>
       </TabsList>

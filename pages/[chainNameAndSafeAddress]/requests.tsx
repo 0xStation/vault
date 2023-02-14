@@ -1,4 +1,5 @@
 import { Transition } from "@headlessui/react"
+import { ActivityVariant } from "@prisma/client"
 import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
@@ -47,7 +48,6 @@ const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
                       !requestIsSelected(request.id)
                     }
                     key={`request-${idx}`}
-                    index={idx}
                     request={request}
                     formRegister={register}
                   />
@@ -123,6 +123,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       notFound: true,
     }
   }
+
+  const activities = await prisma.activity.findMany({
+    where: {
+      requestId: "e5b7bf74-3a37-4fc3-a3ee-a96a0bc8912b",
+      variant: {
+        in: [ActivityVariant.APPROVE_REQUEST, ActivityVariant.REJECT_REQUEST],
+      },
+    },
+    distinct: ["accountId"],
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+
+  console.log(activities)
 
   let requests = await prisma.request.findMany({
     where: {
