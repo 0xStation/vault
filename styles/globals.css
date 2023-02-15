@@ -7,3 +7,12 @@ body {
   color: #212121;
   font-family: "Favorit Pro";
 }
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+}
