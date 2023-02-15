@@ -3,6 +3,11 @@ import { Action } from "../action/types"
 import { Activity } from "../activity/types"
 import { Token } from "../token/types"
 
+export type RequestFrob = Request & {
+  approveActivities: Activity[]
+  rejectActivities: Activity[]
+}
+
 export type Request = PrismaRequest & {
   data: RequestMetadata
   activities: Activity[]

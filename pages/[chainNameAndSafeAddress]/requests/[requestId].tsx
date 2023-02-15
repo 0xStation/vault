@@ -1,25 +1,30 @@
 import { Avatar } from "@ui/Avatar"
 import { MediaCard } from "@ui/MediaCard"
 import { GetServerSidePropsContext } from "next"
+import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
+import ActivityItem from "../../../src/components/core/ActivityItem"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
-import { Request } from "../../../src/models/request/types"
+import { getRequestById } from "../../../src/models/request/requests"
+import { RequestFrob } from "../../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
 }
 
-const TerminalRequestIdPage = ({ request }: { request: Request }) => {
-  console.log(request)
+const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
+  const router = useRouter()
   return (
     <>
       <div className="fixed w-full bg-white">
         <AccountNavBar />
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-slate-200 py-2 px-4">
-          <ArrowLeft />
+          <button onClick={() => router.back()}>
+            <ArrowLeft />
+          </button>
           <h4 className="text-xs text-slate-500">#{request.number}</h4>
           <Copy />
         </div>
@@ -63,30 +68,44 @@ const TerminalRequestIdPage = ({ request }: { request: Request }) => {
               <span className="font-bold">Quorum:</span> 2
             </span>
           </div>
-          <h4 className="mt-2 text-xs font-bold">Approved (x)</h4>
-          <MediaCard
-            className="mt-1"
-            size="sm"
-            pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-            accountAddress={"0x"}
-          />
-          <h4 className="mt-2 text-xs font-bold">Rejected (x)</h4>
-          <MediaCard
-            className="mt-1"
-            size="sm"
-            pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-            accountAddress={"0x"}
-          />
+          <h4 className="mt-2 text-xs font-bold">
+            Approved ({request.approveActivities.length})
+          </h4>
+          {request.approveActivities.map((activity, idx) => {
+            return (
+              <MediaCard
+                key={`approval-mediacard-${idx}`}
+                className="mt-1"
+                size="sm"
+                pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
+                accountAddress={activity.address}
+              />
+            )
+          })}
+
+          <h4 className="mt-2 text-xs font-bold">
+            Rejected ({request.rejectActivities.length})
+          </h4>
+          {request.rejectActivities.map((activity, idx) => {
+            return (
+              <MediaCard
+                key={`rejection-mediacard-${idx}`}
+                className="mt-1"
+                size="sm"
+                pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
+                accountAddress={activity.address}
+              />
+            )
+          })}
           <h4 className="mt-2 text-xs font-bold">Has not voted (x)</h4>
-          <MediaCard
-            className="mt-1"
-            size="sm"
-            pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-            accountAddress={"0x"}
-          />
+          {/* TODO */}
         </section>
         <section className="p-4">
-          <h3>Timeline</h3>
+          <h3 className="mb-4">Timeline</h3>
+          <ActivityItem
+            pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
+            accountAddress={"0x"}
+          />
         </section>
       </div>
     </>
@@ -142,13 +161,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // requestId should be enough on it's own
   // but if it doesn't share the proper terminalId
   // then the URL shouldn't be considered valid
-  // hence, we add terminalId
-  let request = await prisma.request.findFirst({
-    where: {
-      id: requestId,
-      terminalId: terminal.id,
-    },
-  })
+  // hence, we might add terminalId
+  let request = await getRequestById({ requestId })
 
   if (!request) {
     return {

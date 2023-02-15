@@ -1,5 +1,4 @@
 import { Transition } from "@headlessui/react"
-import { ActivityVariant } from "@prisma/client"
 import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
@@ -9,14 +8,15 @@ import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestCard from "../../src/components/core/RequestCard"
 import RequestsNavBar from "../../src/components/core/RequestsNavbar"
-import { Request } from "../../src/models/request/types"
+import { getRequestsByTerminal } from "../../src/models/request/requests"
+import { RequestFrob } from "../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
 }
 
-const TerminalRequestsPage = ({ requests }: { requests: Request[] }) => {
+const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch } = useForm()
 
@@ -124,26 +124,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  const activities = await prisma.activity.findMany({
-    where: {
-      requestId: "e5b7bf74-3a37-4fc3-a3ee-a96a0bc8912b",
-      variant: {
-        in: [ActivityVariant.APPROVE_REQUEST, ActivityVariant.REJECT_REQUEST],
-      },
-    },
-    distinct: ["accountId"],
-    orderBy: {
-      createdAt: "desc",
-    },
-  })
-
-  console.log(activities)
-
-  let requests = await prisma.request.findMany({
-    where: {
-      terminalId: terminal.id,
-    },
-  })
+  let requests = await getRequestsByTerminal({ terminalId: terminal.id })
   requests = JSON.parse(JSON.stringify(requests))
   return {
     props: {

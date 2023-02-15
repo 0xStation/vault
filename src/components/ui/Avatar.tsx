@@ -7,7 +7,7 @@ interface AvatarProps {
 }
 
 const heightWidthMap: { [key: string]: number } = {
-  ["xs"]: 12,
+  ["xs"]: 16,
   ["sm"]: 24,
   ["base"]: 42,
   ["lg"]: 60,

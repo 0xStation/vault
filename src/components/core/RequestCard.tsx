@@ -3,7 +3,7 @@ import { Avatar } from "@ui/Avatar"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { timeSince } from "../../lib/utils"
-import { Request, TokenTransferVariant } from "../../models/request/types"
+import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import ActionPrompt from "../core/ActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
@@ -14,7 +14,7 @@ const RequestCard = ({
   formRegister,
 }: {
   disabled?: boolean
-  request: Request
+  request: RequestFrob
   formRegister: any
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
@@ -94,11 +94,15 @@ const RequestCard = ({
           <div className="flex flex-row items-center justify-between text-sm text-slate-500">
             <div className="flex flex-row space-x-4 text-sm">
               <div className="space-x-1">
-                <span className="font-bold text-black">0</span>
+                <span className="font-bold text-black">
+                  {request.approveActivities.length}
+                </span>
                 <span className="text-slate-500">Approved</span>
               </div>
               <div className="space-x-1">
-                <span className="font-bold text-black">0</span>
+                <span className="font-bold text-black">
+                  {request.rejectActivities.length}
+                </span>
                 <span className="text-slate-500">Rejected</span>
               </div>
             </div>
