@@ -48,6 +48,8 @@ model Request {
   id         String   @id @default(uuid())
   terminalId String
   data       Json
+  number        Int
+  variant       RequestVariantType
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -55,6 +57,9 @@ model Request {
   activities    Activity[]
   actions       Action[]
   subscriptions Subscription[]
+  
+  @@index([number(sort: Desc)])
+  @@unique([terminalId, number])
 }
 
 model Activity {
@@ -108,4 +113,10 @@ enum ActivityVariant {
   REJECT_REQUEST
   EXECUTE_REQUEST
   COMMENT_ON_REQUEST
+}
+
+enum RequestVariantType {
+  SIGNER_QUORUM
+  TOKEN_TRANSFER
+  SPLIT_TOKEN_TRANSFER
 }

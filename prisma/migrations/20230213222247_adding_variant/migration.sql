@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "ActivityVariant" AS ENUM ('CREATE_REQUEST', 'CREATE_AND_APPROVE_REQUEST', 'APPROVE_REQUEST', 'REJECT_REQUEST', 'EXECUTE_REQUEST', 'COMMENT_ON_REQUEST');
 
+-- CreateEnum
+CREATE TYPE "RequestVariantType" AS ENUM ('SIGNER_QUORUM', 'TOKEN_TRANSFER', 'SPLIT_TOKEN_TRANSFER');
+
 -- CreateTable
 CREATE TABLE "Terminal" (
     "id" TEXT NOT NULL,
@@ -41,6 +44,8 @@ CREATE TABLE "Request" (
     "data" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "number" INTEGER NOT NULL,
+    "variant" "RequestVariantType" NOT NULL,
 
     CONSTRAINT "Request_pkey" PRIMARY KEY ("id")
 );
@@ -98,6 +103,12 @@ CREATE UNIQUE INDEX "Account_address_key" ON "Account"("address");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_chainId_address_key" ON "Account"("chainId", "address");
+
+-- CreateIndex
+CREATE INDEX "Request_number_idx" ON "Request"("number" DESC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Request_terminalId_number_key" ON "Request"("terminalId", "number");
 
 -- AddForeignKey
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_requestId_fkey" FOREIGN KEY ("requestId") REFERENCES "Request"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -16,6 +16,30 @@ export const addressesAreEqual = (
     : address1.toLowerCase() === address2.toLowerCase()
 }
 
+export const timeSince = (date: Date) => {
+  const now = new Date()
+  const dateObject = new Date(date)
+  const secondsPast = (now.getTime() - dateObject.getTime()) / 1000
+  if (secondsPast < 60) {
+    return (secondsPast | 0) + "s"
+  }
+  if (secondsPast < 3600) {
+    return ((secondsPast / 60) | 0) + "m"
+  }
+  if (secondsPast <= 86400) {
+    return ((secondsPast / 3600) | 0) + "h"
+  }
+  if (secondsPast > 86400) {
+    const day = dateObject.getDate()
+    const month = dateObject.toDateString().split(" ")[1]
+    const year =
+      dateObject.getFullYear() === now.getFullYear()
+        ? ""
+        : dateObject.getFullYear()
+    return day + " " + month + " " + year
+  }
+}
+
 // Addresses are case-insensitive unique, but a "checksum" represents an algorithmic
 // way to determine the proper casing of an address. All wallet providers leverage
 // this checksum algorithm from EIP-55 for determining their address casing.
