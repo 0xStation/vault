@@ -10,11 +10,11 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
-  compiler: {
-    removeConsole: {
-      exclude: ["error"],
-    },
-  },
+  // compiler: {
+  //   removeConsole: {
+  //     exclude: ["error"],
+  //   },
+  // },
 }
 
 module.exports = nextConfig

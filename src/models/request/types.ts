@@ -3,6 +3,11 @@ import { Action } from "../action/types"
 import { Activity } from "../activity/types"
 import { Token } from "../token/types"
 
+export type RequestFrob = Request & {
+  approveActivities: Activity[]
+  rejectActivities: Activity[]
+}
+
 export type Request = PrismaRequest & {
   data: RequestMetadata
   activities: Activity[]
@@ -12,8 +17,7 @@ export type Request = PrismaRequest & {
 type RequestMetadata = {
   note: string
   createdBy: string // address
-  variant: RequestVariantType
-  meta: TokenTransferVariant | SignerQuorumVariant
+  meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
   rejectionActionIds: string[]
 }
 
@@ -21,6 +25,20 @@ type SignerQuorumVariant = {
   add: string[]
   remove: string[]
   setQuorum: number
+}
+
+export type Transfer = {
+  token: Token
+  amount?: number // ERC20 & ERC1155
+  tokenId?: number // ERC721 & ERC1155
+}
+
+type SplitTokenTransferVariant = FrequencyMixin & {
+  splits: {
+    recipient: string
+    percent: number // percent
+  }[]
+  transfers: Transfer[]
 }
 
 export type TokenTransferVariant = TokenTransfersMixin &
@@ -38,13 +56,13 @@ type TokenTransfersMixin = {
 
 type FrequencyMixin = {
   frequency: FrequencyType
-  startsAt?: Date
+  startsAt?: number // JSON cannot serialize dates, so this is ISO formatted date
   frequencyValue?: number
   frequencyUnit?: FrequencyUnit
   maxOccurences?: number
 }
 
-enum FrequencyType {
+export enum FrequencyType {
   NONE,
   WEEKLY,
   BIWEEKLY,
@@ -52,13 +70,13 @@ enum FrequencyType {
   CUSTOM,
 }
 
-enum FrequencyUnit {
+export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
 }
 
-enum RequestVariantType {
+export enum RequestVariantType {
   SIGNER_QUORUM,
   TOKEN_TRANSFER,
   SPLIT_TOKEN_TRANSFER,

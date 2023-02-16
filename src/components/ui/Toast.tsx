@@ -8,7 +8,7 @@ const toast = cva(
       variant: {
         success: "bg-violet text-white",
         error: "bg-red text-white",
-        loading: "text-black bg-slate",
+        loading: "text-black bg-slate-100",
       },
     },
   },
