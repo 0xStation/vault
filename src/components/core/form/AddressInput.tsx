@@ -52,6 +52,7 @@ export const AddressInput = ({
         placeholder={placeholder}
         errors={errors}
         className={className}
+        required
         registerOptions={{
           validate: {
             isValid: (v: any) => {

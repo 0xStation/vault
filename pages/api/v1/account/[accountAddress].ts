@@ -24,10 +24,11 @@ export default async function handler(
       }
 
       if (!account) {
-        return null
+        res.statusCode = 404
+        return res.end(JSON.stringify("Account not found"))
       }
 
-      res.status(200).json(account)
+      return res.status(200).json(account)
       break
     case "PUT":
       const { address, pfpUrl, chainId } = body
@@ -57,10 +58,10 @@ export default async function handler(
         res.statusCode = 500
         return res.end(JSON.stringify(`Internal error: ${err}`))
       }
-      res.status(200).json(account)
+      return res.status(200).json(account)
       break
     default:
       res.setHeader("Allow", ["GET", "PUT"])
-      res.status(405).end(`Method ${method} Not Allowed`)
+      return res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

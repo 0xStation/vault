@@ -13,7 +13,7 @@ import { addressesAreEqual } from "../../lib/utils"
 import { InputWithLabel, SelectWithLabel } from "../core/form"
 import { AddressInput } from "../core/form/AddressInput"
 import { QuorumInput } from "../core/form/QuorumInput"
-import Selector from "../core/Selector"
+import Selector from "../core/SelectorCard"
 
 enum CREATE_TERMINAL_VIEW {
   DETAILS = "details",
@@ -253,7 +253,10 @@ export const MembersView = ({
                   <div key={item.id} className="mb-1 rounded bg-slate-200 p-3">
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
-                        Member {index + 1}
+                        {/* we need to add 2 to the index since the index is 0-indexed and 
+                        the owner is the first member, but is not included as a member until
+                        form submission.*/}
+                        Member {index + 2}
                       </p>
                       <button type="button" onClick={() => remove(index)}>
                         <XMarkIcon className="h-5 w-5 fill-slate-500" />
@@ -301,17 +304,22 @@ export const MembersView = ({
           register={register}
           name="quorum"
           errors={errors}
-          // TODO: abstract validation logic
+          required
           registerOptions={{
             max: {
               value: memberFields?.length + 1,
               message: "Quorum cannot be greater than the number of members.",
             },
+            min: {
+              value: 1,
+              message: "Quorum must be at least 1 member.",
+            },
+            valueAsNumber: true,
           }}
-          quorumSize={memberFields?.length + 1 || 1}
+          quorumSize={(memberFields?.length || 0) + 1}
         />
       </div>
-      <div className="mb-3 flex w-full flex-col pt-4 text-center">
+      <div className="mt-4 flex w-full flex-col pb-3 text-center">
         <Button type="submit" fullWidth={true}>
           Create Terminal
         </Button>
