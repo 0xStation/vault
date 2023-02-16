@@ -6,6 +6,7 @@ import { Token } from "../token/types"
 export type RequestFrob = Request & {
   approveActivities: Activity[]
   rejectActivities: Activity[]
+  quorum: number
 }
 
 export type Request = PrismaRequest & {

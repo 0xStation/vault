@@ -3,6 +3,10 @@ import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
 const toFrob = async (request: Request) => {
+  // TODO:
+  // get the quorum of the terminal
+  const quorum = 2
+
   const votingActivities = (await prisma.activity.findMany({
     where: {
       requestId: request.id,
@@ -38,7 +42,14 @@ const toFrob = async (request: Request) => {
   return {
     ...request,
     ...sortedVotingActivities,
+    quorum: quorum,
   } as RequestFrob
+}
+
+enum VotingStatus {
+  VOTING,
+  READY_TO_EXECUTE,
+  EXECUCTED,
 }
 
 export default toFrob

@@ -20,7 +20,6 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch } = useForm()
 
-  // watches form data and responds on change
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
     const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
-import ActionPrompt from "../core/ActionPrompt"
+import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
 
@@ -27,42 +27,27 @@ const RequestCard = ({
     <Link href={`${router.asPath}/${request.id}`}>
       <div className={`w-full max-w-[100vw] p-4 ${disabled && "opacity-30"}`}>
         <div className="flex flex-col space-y-3">
-          <ActionPrompt
-            prompt="test"
-            hasIndicator={true}
-            actions={[
-              {
-                label: "Approve",
-                onClick: () => {
-                  console.log("approved")
-                },
-              },
-              {
-                label: "Reject",
-                onClick: () => {
-                  console.log("rejected")
-                },
-              },
-            ]}
-          />
-          <div className="flex flex-row items-center justify-between">
-            <div className="flex flex-row items-center space-x-3">
-              <Checkbox name={request.id} formRegister={formRegister} />
-              <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
-              <Avatar
-                size="sm"
-                pfpUrl={
-                  "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-                }
-              />
-              <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
+          <RequestActionPrompt request={request} />
+          <div className="flex w-full items-center space-x-2">
+            <Checkbox name={request.id} formRegister={formRegister} />
+            <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
+            <Avatar
+              size="sm"
+              pfpUrl={
+                "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
+              }
+            />
+
+            <div className="min-w-0 grow">
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {request.data.note}
-              </h3>
+              </div>
             </div>
-            <span className="ml-3 shrink-0 self-start text-xs text-slate-500">
+            <span className="ml-1 shrink-0 text-right text-xs text-slate-500">
               {timeSince(request.createdAt)}
             </span>
           </div>
+
           <div className="flex flex-row items-center space-x-2 text-slate-500">
             <span className="text-sm text-slate-500">#{request.number}</span>
             {request.variant === RequestVariantType.TOKEN_TRANSFER && (
