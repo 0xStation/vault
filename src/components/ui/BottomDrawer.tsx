@@ -1,12 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Dispatch, Fragment, ReactNode, SetStateAction } from "react"
 
 interface BottomDrawerProps {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   children?: ReactNode
-  size?: "base" | "lg"
+  size?: "sm" | "base" | "lg"
 }
 
 export const BottomDrawer = ({
@@ -15,6 +14,17 @@ export const BottomDrawer = ({
   children,
   size = "base",
 }: BottomDrawerProps) => {
+  const transitionChildStyles = {
+    ["sm"]: "translate-y-[35%]",
+    ["base"]: "translate-y-[15%]",
+    ["lg"]: "translate-y-[4%]",
+  }
+
+  const modalBodyStyles = {
+    ["sm"]: "h-[60%]",
+    ["base"]: "h-[80%]",
+    ["lg"]: "h-[95%]",
+  }
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -34,31 +44,28 @@ export const BottomDrawer = ({
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed inset-0">
           <div className="flex h-full items-center justify-center text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="translate-y-full"
-              enterTo={
-                size === "base" ? "translate-y-[15%]" : "translate-y-[4%]"
-              }
+              enterTo={transitionChildStyles[size]}
               leave="ease-in duration-200"
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
               <div
-                className={`pointer-events-auto ${
-                  size === "base" ? "h-[80%]" : "h-[95%]"
-                } w-full`}
+                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full`}
               >
-                <div className="flex h-full w-full flex-col items-center overflow-y-scroll rounded-t-lg border-r border-slate bg-white">
-                  <div className="flex w-full justify-end pt-3 pr-3">
-                    <button onClick={() => setIsOpen(false)}>
-                      <XMarkIcon className="h-5 w-5" />
-                    </button>
+                <div className="border-slate flex h-full w-full flex-col rounded-t-lg border-r bg-white px-5 pt-3">
+                  <div className="mb-6 flex w-full justify-center">
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="h-1 w-5 rounded bg-slate-300"
+                    />
                   </div>
-                  {children}
+                  <div className={"h-full overflow-y-scroll"}>{children}</div>
                 </div>
               </div>
             </Transition.Child>

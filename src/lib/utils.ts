@@ -6,6 +6,16 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
+export const addressesAreEqual = (
+  address1: string | undefined | null,
+  address2: string | undefined | null,
+) => {
+  // addresses may be in different casing, so lower both to compare
+  return !address1 || !address2
+    ? false
+    : address1.toLowerCase() === address2.toLowerCase()
+}
+
 export const timeSince = (date: Date) => {
   const now = new Date()
   const dateObject = new Date(date)
