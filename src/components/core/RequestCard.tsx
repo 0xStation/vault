@@ -69,7 +69,7 @@ const RequestCard = ({
               <>
                 <ArrowUpRight size={"sm"} />
                 <span className="text-base text-slate-500">
-                  {transfer.amount} {transfer.token.symbol}{" "}
+                  {transfer.value} {transfer.token.symbol}{" "}
                   {transferCount > 1 && `and ${transferCount - 1} others`}
                 </span>
               </>
