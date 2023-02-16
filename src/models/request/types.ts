@@ -17,7 +17,7 @@ export type Request = PrismaRequest & {
 type RequestMetadata = {
   note: string
   createdBy: string // address
-  meta: TokenTransferVariant | SignerQuorumVariant
+  meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
   rejectionActionIds: string[]
 }
 
@@ -39,7 +39,6 @@ type SplitTokenTransferVariant = FrequencyMixin & {
     percent: number // percent
   }[]
   transfers: Transfer[]
-  }
 }
 
 export type TokenTransferVariant = TokenTransfersMixin &
