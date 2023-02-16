@@ -26,7 +26,7 @@ model Terminal {
 model Account {
   id        String   @id @default(uuid())
   address   String   @unique
-  chainId   Int      @default(0)
+  chainId   Int      @default(0) // 0 is for wallets
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

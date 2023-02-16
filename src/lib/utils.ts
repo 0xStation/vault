@@ -6,6 +6,16 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
+export const addressesAreEqual = (
+  address1: string | undefined,
+  address2: string | undefined,
+) => {
+  // addresses may be in different casing, so lower both to compare
+  return !address1 || !address2
+    ? false
+    : address1.toLowerCase() === address2.toLowerCase()
+}
+
 // Addresses are case-insensitive unique, but a "checksum" represents an algorithmic
 // way to determine the proper casing of an address. All wallet providers leverage
 // this checksum algorithm from EIP-55 for determining their address casing.

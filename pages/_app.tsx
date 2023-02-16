@@ -3,10 +3,19 @@ import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import NextHead from "next/head"
 import { useEffect, useState } from "react"
+import { QueryClient, QueryClientProvider } from "react-query"
 import { WagmiConfig } from "wagmi"
 import "../styles/globals.css"
 
 import { chains, client } from "../src/wagmi"
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false)
@@ -29,8 +38,9 @@ function App({ Component, pageProps }: AppProps) {
         <NextHead>
           <title>Station</title>
         </NextHead>
-
-        {mounted && <Component {...pageProps} />}
+        <QueryClientProvider client={queryClient}>
+          {mounted && <Component {...pageProps} />}
+        </QueryClientProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )

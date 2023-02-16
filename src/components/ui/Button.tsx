@@ -1,12 +1,14 @@
 import { cva, VariantProps } from "class-variance-authority"
 import { ButtonHTMLAttributes } from "react"
 
-const button = cva("relative font-medium border rounded", {
+const button = cva("relative font-medium rounded", {
   variants: {
     variant: {
-      primary: "bg-slate-900 border-slate-900 text-white",
-      secondary: "text-violet border-violet bg-transparent",
-      unemphasized: "text-white border-white bg-black",
+      primary: "border bg-slate-900 border-slate-900 text-white",
+      secondary:
+        "border text-black border-slate-200 bg-white hover:bg-slate-100",
+      unemphasized: "border text-white border-white bg-black",
+      tertiary: "bg-slate-200 text-slate-500",
     },
     size: {
       sm: "px-3 py-1 text-sm",
@@ -51,7 +53,7 @@ interface ButtonProps
 export const Button = ({
   children,
   variant = "primary",
-  size = "lg",
+  size = "base",
   fullWidth = false,
   disabled = false,
   loading = false,
