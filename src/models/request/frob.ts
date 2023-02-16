@@ -1,11 +1,26 @@
 import { ActivityVariant } from "@prisma/client"
+import { getGnosisSafeDetails } from "../../lib/utils/getGnosisSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
 const toFrob = async (request: Request) => {
-  // TODO:
-  // get the quorum of the terminal
-  const quorum = 2
+  const terminal = await prisma.terminal.findFirst({
+    where: {
+      id: request.terminalId,
+    },
+  })
+
+  if (!terminal) {
+    // error?
+    return
+  }
+
+  const safeDetails = await getGnosisSafeDetails(
+    terminal.chainId,
+    terminal.safeAddress,
+  )
+
+  const quorum = safeDetails?.quorum
 
   const votingActivities = (await prisma.activity.findMany({
     where: {

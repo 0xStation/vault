@@ -21,8 +21,8 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
   }`
 
   const actionState =
-    request.approveActivities.length > request.quorum ||
-    request.rejectActivities.length > request.quorum
+    request.approveActivities.length >= request.quorum ||
+    request.rejectActivities.length >= request.quorum
       ? "EXECUTE"
       : "VOTE"
 
