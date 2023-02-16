@@ -8,8 +8,8 @@ export type Token = {
 }
 
 export enum TokenType {
-  COIN,
-  ERC20,
-  ERC721,
-  ERC1155,
+  COIN = "COIN",
+  ERC20 = "ERC20",
+  ERC721 = "ERC721",
+  ERC1155 = "ERC1155",
 }

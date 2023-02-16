@@ -17,8 +17,8 @@ module.exports = {
         transparent: "transparent",
         current: "currentColor",
         black: {
-          DEFAULT: "#212121",
-          100: "#212121",
+          DEFAULT: "#0D0E11",
+          100: "#0D0E11",
         },
         slate: {
           100: "#F1F5F9",
@@ -48,6 +48,9 @@ module.exports = {
         yellow: {
           DEFAULT: "#F9C81B",
           100: "#F9C81B",
+        },
+        slate: {
+          800: "#15181C",
         },
       },
     },
