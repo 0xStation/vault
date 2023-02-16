@@ -1,26 +1,36 @@
 import Image from "next/image"
+import { useEnsAvatar } from "wagmi"
+import defaultPfp from "../../../public/defaultPfp.svg"
 
 interface AvatarProps {
   size?: "xs" | "sm" | "base" | "lg"
-  pfpUrl: string
+  address: string
   className?: string
 }
 
-const heightWidthMap: { [key: string]: number } = {
-  ["xs"]: 16,
-  ["sm"]: 24,
-  ["base"]: 42,
-  ["lg"]: 60,
+const sizeMap: { [key: string]: string } = {
+  ["xs"]: "h-[16px] w-[16px]",
+  ["sm"]: "h-[24px] w-[24px]",
+  ["base"]: "h-[34px] w-[34px]",
+  ["lg"]: "h-[45px] w-[45px]",
 }
 
-export const Avatar = ({ size = "base", pfpUrl, className }: AvatarProps) => {
+export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
+  const { data: ensAvatar } = useEnsAvatar({
+    address: address as `0x${string}`,
+    chainId: 1,
+  })
+
   return (
-    <Image
-      src={pfpUrl}
-      alt="Account profile picture. If no profile picture is set, there is a linear gradient."
-      height={heightWidthMap[size]}
-      width={heightWidthMap[size]}
-      className={`rounded-full ${className}`}
-    />
+    // wrapped in div with relative to handle non-square images via cropping
+    // https://nextjs.org/docs/api-reference/next/image#fill
+    <div className={`relative ${sizeMap[size]}`}>
+      <Image
+        src={ensAvatar ?? defaultPfp}
+        alt="Account profile picture. If no profile picture is set, there is a linear gradient."
+        fill={true}
+        className={`rounded-full object-cover ${className}`}
+      />
+    </div>
   )
 }

@@ -241,7 +241,7 @@ export const MembersView = ({
         <div className="mb-6">
           <label className="text-sm font-bold">Members*</label>
           <div className="mt-3 mb-6 flex flex-row">
-            <Avatar size="sm" pfpUrl={activeUser?.data?.pfpUrl || ""} />
+            <Avatar size="sm" address={activeUser?.address!} />
             <p className="ml-2">You</p>
           </div>
           <div className="w-full">

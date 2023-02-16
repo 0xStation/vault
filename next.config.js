@@ -7,6 +7,7 @@ const nextConfig = {
       "station-images.nyc3.digitaloceanspaces.com",
       "cdn.discordapp.com",
       "avatar.tobi.sh",
+      "gateway.ipfs.io",
     ],
   },
   reactStrictMode: true,

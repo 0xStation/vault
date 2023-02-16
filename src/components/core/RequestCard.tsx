@@ -31,12 +31,7 @@ const RequestCard = ({
           <div className="flex w-full items-center space-x-2">
             <Checkbox name={request.id} formRegister={formRegister} />
             <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
-            <Avatar
-              size="sm"
-              pfpUrl={
-                "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-              }
-            />
+            <Avatar size="sm" address={request.data.createdBy} />
 
             <div className="min-w-0 grow">
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">
