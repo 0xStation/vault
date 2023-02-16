@@ -246,6 +246,7 @@ export const MembersView = ({
           </div>
           <div className="w-full">
             {memberFields
+              // @ts-ignore
               .filter((item) => item.address !== activeUser?.address)
               .map((item, index) => {
                 return (

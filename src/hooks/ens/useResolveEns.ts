@@ -4,7 +4,7 @@ import { useProvider } from "wagmi"
 export const useResolveEnsAddress = () => {
   const provider = useProvider({ chainId: 1 }) // hardcoded to ethereum mainnet
 
-  const resolveEnsAddress = async (address) => {
+  const resolveEnsAddress = async (address: string) => {
     if (isAddress(address)) {
       return address
     } else {

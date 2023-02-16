@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.get": "^4.4.7",
     "@typescript-eslint/eslint-plugin": "^5.51.0",

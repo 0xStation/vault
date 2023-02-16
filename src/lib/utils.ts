@@ -7,8 +7,8 @@ export const cn = (...inputs: ClassValue[]) => {
 }
 
 export const addressesAreEqual = (
-  address1: string | undefined,
-  address2: string | undefined,
+  address1: string | undefined | null,
+  address2: string | undefined | null,
 ) => {
   // addresses may be in different casing, so lower both to compare
   return !address1 || !address2

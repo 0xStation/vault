@@ -41,7 +41,11 @@ export const AccountNavBar = () => {
           )
           account = response.data
         } catch (err) {
-          console.log("no account!", err?.response?.data)
+          if (axios.isAxiosError(err)) {
+            console.log("no account!", err?.response?.data)
+          } else {
+            console.log("err:", err)
+          }
         }
 
         if (!account) {
