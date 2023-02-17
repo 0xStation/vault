@@ -1,3 +1,4 @@
+import { RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
@@ -7,11 +8,51 @@ import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
 import { getRequestById } from "../../../src/models/request/requests"
-import { RequestFrob } from "../../../src/models/request/types"
+import {
+  RequestFrob,
+  SignerQuorumVariant,
+} from "../../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
+}
+
+const TokenTransferRequestContent = () => {
+  return (
+    <>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Recipient(s)</span>
+        <span>xxx</span>
+      </div>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Token(s)</span>
+        <span>xxx</span>
+      </div>
+    </>
+  )
+}
+
+const AddMemberRequestContent = ({ request }: { request: RequestFrob }) => {
+  let signerQuorumMeta = request.data.meta as SignerQuorumVariant
+  return (
+    <>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Members</span>
+        <span>Adding new members</span>
+      </div>
+      <div className="p2- space-y-2 rounded-md bg-slate-100 p-3">
+        <h5 className="text-xs font-bold text-slate-500">Add</h5>
+        {signerQuorumMeta.add.map((address, idx) => {
+          return <p key={`address-${idx}`}>{address}</p>
+        })}
+      </div>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Quorum</span>
+        <span>{signerQuorumMeta.setQuorum}</span>
+      </div>
+    </>
+  )
 }
 
 const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
@@ -42,21 +83,18 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
             {request.data.note}
           </h3>
-          {/* TODO -- it's possible the request isn't a recipient/token type  */}
-          <div className="flex flex-row justify-between">
-            <span className="text-slate-500">Recipient(s)</span>
-            <span>xxx</span>
-          </div>
-          <div className="flex flex-row justify-between">
-            <span className="text-slate-500">Token(s)</span>
-            <span>xxx</span>
-          </div>
+          {request.variant === RequestVariantType.TOKEN_TRANSFER && (
+            <TokenTransferRequestContent />
+          )}
+          {request.variant === RequestVariantType.ADD_MEMBER && (
+            <AddMemberRequestContent request={request} />
+          )}
         </section>
         <section className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
             <span className="rounded-full bg-slate-100 px-2 py-1 text-sm">
-              <span className="font-bold">Quorum:</span> 2
+              <span className="font-bold">Quorum:</span> {request.quorum}
             </span>
           </div>
           <h4 className="mt-2 text-xs font-bold">

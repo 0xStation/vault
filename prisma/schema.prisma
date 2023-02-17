@@ -57,7 +57,7 @@ model Request {
   activities    Activity[]
   actions       Action[]
   subscriptions Subscription[]
-  
+
   @@index([number(sort: Desc)])
   @@unique([terminalId, number])
 }
@@ -117,6 +117,8 @@ enum ActivityVariant {
 
 enum RequestVariantType {
   SIGNER_QUORUM
+  ADD_MEMBER
+  REMOVE_MEMBER
   TOKEN_TRANSFER
   SPLIT_TOKEN_TRANSFER
 }

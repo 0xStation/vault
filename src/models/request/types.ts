@@ -24,7 +24,7 @@ type RequestMetadata = {
   rejectionActionIds: string[]
 }
 
-type SignerQuorumVariant = {
+export type SignerQuorumVariant = {
   add: string[]
   remove: string[]
   setQuorum: number
@@ -77,10 +77,4 @@ export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
-}
-
-export enum RequestVariantType {
-  SIGNER_QUORUM,
-  TOKEN_TRANSFER,
-  SPLIT_TOKEN_TRANSFER,
 }
