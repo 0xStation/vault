@@ -4,6 +4,7 @@ import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import ProfileNavBar from "../../../src/components/core/ProfileNavBar"
+import ProfileRequestsNavBar from "../../../src/components/core/ProfileRequestsNavBar"
 import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
 import { Account } from "../../../src/models/account/types"
 import { Terminal } from "../../../src/models/terminal/types"
@@ -28,7 +29,9 @@ const ProfilePage = ({
           </ul>
         </TabsContent>
         <TabsContent value="requests">
-          <div>Requests</div>
+          <ProfileRequestsNavBar className="mt-3">
+            <div>Requests</div>
+          </ProfileRequestsNavBar>
         </TabsContent>
       </ProfileNavBar>
     </>
