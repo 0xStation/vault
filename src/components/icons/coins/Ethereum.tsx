@@ -10,17 +10,17 @@ export const Ethereum = ({}: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M14 28C21.732 28 28 21.732 28 14C28 6.26802 21.732 0 14 0C6.26802 0 0 6.26802 0 14C0 21.732 6.26802 28 14 28Z"
         fill="#25292E"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M14 28C21.732 28 28 21.732 28 14C28 6.26802 21.732 0 14 0C6.26802 0 0 6.26802 0 14C0 21.732 6.26802 28 14 28Z"
         fill="url(#paint0_linear_1403_19607)"
-        fill-opacity="0.3"
+        fillOpacity="0.3"
       />
       <path
         d="M8.19006 14.7708L14.0001 18.2081L19.8089 14.7708L14.0001 22.9592L8.19006 14.7708Z"
@@ -39,8 +39,8 @@ export const Ethereum = ({}: IconProps) => {
           y2="28"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_1403_19607"
@@ -50,8 +50,8 @@ export const Ethereum = ({}: IconProps) => {
           y2="22.9592"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0.9" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0.9" />
         </linearGradient>
       </defs>
     </svg>

@@ -15,7 +15,7 @@ export const Optimism = ({}: IconProps) => {
         height="28"
         rx="14"
         fill="url(#paint0_linear_1403_19605)"
-        fill-opacity="0.3"
+        fillOpacity="0.3"
       />
       <path
         d="M9.21826 18.3538C11.9253 18.3538 14.0786 16.1513 14.0786 12.9705C14.0786 10.7803 12.6144 9.16835 10.0981 9.16835C7.38486 9.16835 5.25 11.377 5.25 14.5517C5.25 16.748 6.75117 18.3538 9.21826 18.3538ZM10.0488 11.0017C11.107 11.0017 11.7899 11.8139 11.7899 13.0997C11.7899 14.9946 10.6764 16.5204 9.27979 16.5204C8.22158 16.5204 7.54483 15.696 7.54483 14.4225C7.54483 12.5337 8.65225 11.0017 10.0488 11.0017Z"
@@ -34,8 +34,8 @@ export const Optimism = ({}: IconProps) => {
           y2="28"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>

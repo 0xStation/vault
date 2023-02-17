@@ -10,17 +10,17 @@ export const Testnet = ({}: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M14 28C21.732 28 28 21.732 28 14C28 6.26802 21.732 0 14 0C6.268 0 -1.52588e-05 6.26802 -1.52588e-05 14C-1.52588e-05 21.732 6.268 28 14 28Z"
         fill="#64748B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M14 28C21.732 28 28 21.732 28 14C28 6.26802 21.732 0 14 0C6.268 0 -1.52588e-05 6.26802 -1.52588e-05 14C-1.52588e-05 21.732 6.268 28 14 28Z"
         fill="url(#paint0_linear_1103_44554)"
-        fill-opacity="0.3"
+        fillOpacity="0.3"
       />
       <path
         d="M8.19 14.7695L14 18.2068L19.8089 14.7695L14 22.9579L8.19 14.7695Z"
@@ -39,8 +39,8 @@ export const Testnet = ({}: IconProps) => {
           y2="28"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_1103_44554"
@@ -50,8 +50,8 @@ export const Testnet = ({}: IconProps) => {
           y2="22.9579"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0.9" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0.9" />
         </linearGradient>
       </defs>
     </svg>

@@ -17,7 +17,7 @@ export const Arbitrum = ({}: IconProps) => {
         rx="13.3"
         fill="#2D374B"
         stroke="#96BEDC"
-        stroke-width="1.4"
+        strokeWidth="1.4"
       />
       <mask
         id="mask0_1403_19604"
@@ -46,9 +46,9 @@ export const Arbitrum = ({}: IconProps) => {
           height="25.9"
           rx="12.95"
           fill="url(#paint0_linear_1403_19604)"
-          fill-opacity="0.3"
+          fillOpacity="0.3"
           stroke="#96BEDC"
-          stroke-width="2.1"
+          strokeWidth="2.1"
         />
         <path
           d="M0.363451 28.2207L-2.70657 26.4533L-2.94055 25.62L7.74613 9.01936C8.47595 7.82809 10.0658 7.4444 11.5418 7.46528L13.2741 7.51103L0.363451 28.2207Z"
@@ -68,8 +68,8 @@ export const Arbitrum = ({}: IconProps) => {
           y2="28"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>

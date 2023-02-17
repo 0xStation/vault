@@ -9,10 +9,10 @@ interface AvatarProps {
 }
 
 const sizeMap: { [key: string]: string } = {
-  ["xs"]: "h-[16px] w-[16px]",
-  ["sm"]: "h-[24px] w-[24px]",
-  ["base"]: "h-[34px] w-[34px]",
-  ["lg"]: "h-[45px] w-[45px]",
+  ["xs"]: "min-h-[16px] min-w-[16px]",
+  ["sm"]: "min-h-[24px] min-w-[24px]",
+  ["base"]: "min-h-[34px] min-w-[34px]",
+  ["lg"]: "min-h-[45px] min-w-[45px]",
 }
 
 export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
