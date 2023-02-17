@@ -9,7 +9,6 @@ import { globalId } from "../../models/terminal/utils"
 import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
-import RequestTerminalLink from "./RequestTerminalLink"
 
 const RequestCard = ({
   disabled,
@@ -41,7 +40,8 @@ const RequestCard = ({
         }`}
       >
         <div className="flex flex-col space-y-3">
-          {showTerminal && <RequestTerminalLink terminal={showTerminal} />}
+          {/* might deprecate, keeping here for now */}
+          {/* {showTerminal && <RequestTerminalLink terminal={showTerminal} />} */}
           <RequestActionPrompt request={request} />
           <div className="flex w-full items-center space-x-2">
             <Checkbox name={request.id} formRegister={formRegister} />
@@ -73,7 +73,7 @@ const RequestCard = ({
               <>
                 <ArrowUpRight size={"sm"} />
                 <span className="text-base text-slate-500">
-                  Add {1} contributor and change quorum.
+                  Add {1} member and change quorum.
                 </span>
               </>
             )}

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Terminal } from "../../models/terminal/types"
 import { globalId } from "../../models/terminal/utils"
 
+// recently deprecated, keeping here just in case
 const RequestTerminalLink = ({ terminal }: { terminal: Terminal }) => {
   return (
     <div className="flex flex-row items-center">
