@@ -82,7 +82,7 @@ export const AccountNavBar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2">
             <DropdownMenuItem className="focus:bg-white">
-              <User address={address as string} size="sm" />
+              <User address={address as string} size="sm" interactive={false} />
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href={`/u/${address}/profile`}>Profile</Link>

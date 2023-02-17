@@ -64,14 +64,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const terminals = await prisma.terminal.findMany()
 
-  //   let requests = await getRequestsByTerminal({ terminalId: terminal.id })
-  // requests = JSON.parse(JSON.stringify(requests))
   return {
     props: {
       account: JSON.parse(JSON.stringify(account)),
-      terminals: JSON.parse(
-        JSON.stringify(terminals.map((t) => ({ ...t, chainId: 5 }))),
-      ),
+      terminals: JSON.parse(JSON.stringify(terminals)),
     },
   }
 }
