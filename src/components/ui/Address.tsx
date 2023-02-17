@@ -28,6 +28,7 @@ export const Address = ({
     <div
       className="group cursor-pointer"
       onClick={
+        // if address is interactive, enable copy on click
         interactive
           ? (e) => {
               e.preventDefault()
@@ -44,6 +45,7 @@ export const Address = ({
         <>
           <span
             className={`flex flex-row items-center ${
+              // if interactive, hide ENS name on hover
               interactive ? "group-hover:hidden" : ""
             } ${textSizeMap[size]}`}
           >
@@ -51,9 +53,8 @@ export const Address = ({
           </span>
           {interactive && (
             <span
-              className={`${
-                ensName ? "hidden group-hover:block" : ""
-              } flex flex-row items-center ${textSizeMap[size]}`}
+              // show on hover
+              className={`flex hidden flex-row items-center group-hover:block ${textSizeMap[size]}`}
             >
               {truncateString(address)}
             </span>
