@@ -1,11 +1,16 @@
 import { PillTabsContent } from "@ui/PillTabs"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
+import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import ProfileNavBar from "../../../src/components/core/ProfileNavBar"
-import ProfileRequestsNavBar from "../../../src/components/core/ProfileRequestsNavBar"
+import ProfileNavBar, {
+  ProfileTab,
+} from "../../../src/components/core/ProfileNavBar"
+import ProfileRequestsNavBar, {
+  ProfileRequestPill,
+} from "../../../src/components/core/ProfileRequestsNavBar"
 import RequestListForm from "../../../src/components/request/RequestListForm"
 import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
 import { Account } from "../../../src/models/account/types"
@@ -22,22 +27,32 @@ const ProfilePage = ({
   terminals: Terminal[]
   requests: RequestFrob[]
 }) => {
+  const router = useRouter()
+  const tab = router.query.tab as ProfileTab
+  const pill = router.query.pill as ProfileRequestPill
+
   return (
     <>
       <AccountNavBar />
       <AvatarAddress address={account.address} size="lg" className="px-4" />
-      <ProfileNavBar className="mt-4">
-        <TabsContent value="terminals">
+      <ProfileNavBar className="mt-4" value={tab}>
+        <TabsContent value={ProfileTab.TERMINALS}>
           <ul className="mt-6">
             {terminals.map((terminal) => (
               <TerminalListItem terminal={terminal} key={terminal.id} />
             ))}
           </ul>
         </TabsContent>
-        <TabsContent value="requests">
-          <ProfileRequestsNavBar className="mt-3">
-            <PillTabsContent value="claim">
+        <TabsContent value={ProfileTab.REQUESTS}>
+          <ProfileRequestsNavBar className="mt-3" defaultValue={pill}>
+            <PillTabsContent value={ProfileRequestPill.CLAIM}>
               <RequestListForm requests={requests} />
+            </PillTabsContent>
+            <PillTabsContent value={ProfileRequestPill.CREATED}>
+              <RequestListForm requests={requests.slice(0, 2)} />
+            </PillTabsContent>
+            <PillTabsContent value={ProfileRequestPill.CLAIMED}>
+              <RequestListForm requests={[]} />
             </PillTabsContent>
           </ProfileRequestsNavBar>
         </TabsContent>

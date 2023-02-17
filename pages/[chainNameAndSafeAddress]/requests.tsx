@@ -1,11 +1,12 @@
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
-import RequestsNavBar from "../../src/components/core/RequestsNavbar"
+import RequestsNavBar, {
+  RequestNavPill,
+} from "../../src/components/core/RequestsNavbar"
 import RequestListForm from "../../src/components/request/RequestListForm"
 import { getRequestsByTerminal } from "../../src/models/request/requests"
 import { RequestFrob } from "../../src/models/request/types"
@@ -16,9 +17,11 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
+  const router = useRouter()
+
+  // console.log(router.query.pill)
+
   const { address } = useAccount()
-  const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const { register, handleSubmit, watch, reset } = useForm()
 
   // I'd like to nest these as their own routes but I don't think it will work until
   // next beta releases...
@@ -49,11 +52,17 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   return (
     <>
       <AccountNavBar />
-      <RequestsNavBar>
-        {requestContentForTab("needs_attention", needsAttentionRequests)}
-        {requestContentForTab("awaiting_others", awaitingOthersRequests)}
-        {requestContentForTab("closed", closedRequests)}
-        {requestContentForTab("all", allRequests)}
+      <RequestsNavBar value={router.query.pill as RequestNavPill}>
+        {requestContentForTab(
+          RequestNavPill.NEEDS_ATTENTION,
+          needsAttentionRequests,
+        )}
+        {requestContentForTab(
+          RequestNavPill.AWAITING_OTHERS,
+          awaitingOthersRequests,
+        )}
+        {requestContentForTab(RequestNavPill.CLOSED, closedRequests)}
+        {requestContentForTab(RequestNavPill.ALL, allRequests)}
       </RequestsNavBar>
     </>
   )
