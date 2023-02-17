@@ -24,7 +24,7 @@ const PillTabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     className={cn(
-      "mb-[-4px] inline-flex items-center justify-center rounded-md border border-slate-200 px-3 py-1 text-xs text-black disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-slate-100 data-[state=active]:font-medium",
+      "mb-4 inline-flex items-center justify-center rounded-md border border-slate-200 px-3 py-1 text-xs text-black disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-slate-100 data-[state=active]:font-medium",
       className,
     )}
     {...props}

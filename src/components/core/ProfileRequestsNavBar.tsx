@@ -9,7 +9,7 @@ export const ProfileRequestsNavBar = ({
 }) => {
   return (
     <PillTabs className={`w-full ${className}`} defaultValue="claim">
-      <PillTabsList className="px-4">
+      <PillTabsList className="h-fit px-4">
         <PillTabsTrigger value="claim">For you to claim</PillTabsTrigger>
         <PillTabsTrigger value="created">Created by you</PillTabsTrigger>
         <PillTabsTrigger value="claimed">Claimed</PillTabsTrigger>
