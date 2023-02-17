@@ -99,7 +99,14 @@ export const AccountNavBar = () => {
             </DropdownMenuItem>
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>
-              <button onClick={() => disconnect()}>Disconnect</button>
+              <button
+                onClick={() => {
+                  disconnect()
+                  setActiveUser(null)
+                }}
+              >
+                Disconnect
+              </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </>

@@ -1,5 +1,6 @@
 import BottomDrawer from "@ui/BottomDrawer"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useStore } from "../../hooks/stores/useStore"
 import Selector from "../core/SelectorCard"
 import { TerminalCreationForm } from "./create"
 
@@ -39,6 +40,12 @@ export const TerminalCreationDrawer = ({
   const [view, setView] = useState<VIEW.CREATION_OPTIONS | VIEW.CREATE_FORM>(
     VIEW.CREATION_OPTIONS,
   )
+  const activeUser = useStore((state) => state.activeUser)
+  useEffect(() => {
+    if (!activeUser) {
+      setIsOpen(false)
+    }
+  })
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen} size="lg">
