@@ -1,3 +1,5 @@
+import { RequestVariantType } from "@prisma/client"
+import { Address } from "@ui/Address"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
@@ -7,11 +9,76 @@ import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
 import { getRequestById } from "../../../src/models/request/requests"
-import { RequestFrob } from "../../../src/models/request/types"
+
+import {
+  RequestFrob,
+  SignerQuorumVariant,
+  TokenTransferVariant,
+} from "../../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
+}
+
+const TokenTransferRequestContent = ({ request }: { request: RequestFrob }) => {
+  let tokenTransferMeta = request.data.meta as TokenTransferVariant
+  return (
+    <>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Recipient(s)</span>
+        <span>xxx</span>
+      </div>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Token(s)</span>
+        <span>xxx</span>
+      </div>
+    </>
+  )
+}
+
+const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
+  let signerQuorumMeta = request.data.meta as SignerQuorumVariant
+
+  const membersAdded = signerQuorumMeta.add.length
+  const membersRemoved = signerQuorumMeta.remove.length
+
+  const prompt = `${[
+    ...(membersAdded > 0 ? [`adding ${membersAdded}`] : []),
+    ...(membersRemoved > 0 ? [`removing ${membersRemoved}`] : []),
+  ].join(", ")} ${membersAdded + membersRemoved > 1 ? "members" : "member"}`
+
+  // should never happen but just in case...
+  if (membersAdded + membersRemoved === 0) {
+    return <></>
+  }
+
+  return (
+    <>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Members</span>
+        <span>{prompt}</span>
+      </div>
+      <div className="p2- space-y-2 rounded-md bg-slate-100 p-3">
+        {signerQuorumMeta.add.length > 0 && (
+          <h5 className="text-xs font-bold text-slate-500">Add</h5>
+        )}
+        {signerQuorumMeta.add.map((address, idx) => {
+          return <Address key={`address-${idx}`} address={address} />
+        })}
+        {signerQuorumMeta.remove.length > 0 && (
+          <h5 className="text-xs font-bold text-slate-500">Remove</h5>
+        )}
+        {signerQuorumMeta.remove.map((address, idx) => {
+          return <Address key={`address-${idx}`} address={address} />
+        })}
+      </div>
+      <div className="flex flex-row justify-between">
+        <span className="text-slate-500">Quorum</span>
+        <span>{signerQuorumMeta.setQuorum}</span>
+      </div>
+    </>
+  )
 }
 
 const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
@@ -42,21 +109,18 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
             {request.data.note}
           </h3>
-          {/* TODO -- it's possible the request isn't a recipient/token type  */}
-          <div className="flex flex-row justify-between">
-            <span className="text-slate-500">Recipient(s)</span>
-            <span>xxx</span>
-          </div>
-          <div className="flex flex-row justify-between">
-            <span className="text-slate-500">Token(s)</span>
-            <span>xxx</span>
-          </div>
+          {request.variant === RequestVariantType.TOKEN_TRANSFER && (
+            <TokenTransferRequestContent request={request} />
+          )}
+          {request.variant === RequestVariantType.SIGNER_QUORUM && (
+            <SignerQuorumRequestContent request={request} />
+          )}
         </section>
         <section className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
             <span className="rounded-full bg-slate-100 px-2 py-1 text-sm">
-              <span className="font-bold">Quorum:</span> 2
+              <span className="font-bold">Quorum:</span> {request.quorum}
             </span>
           </div>
           <h4 className="mt-2 text-xs font-bold">
@@ -73,7 +137,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
             )
           })}
 
-          <h4 className="mt-2 text-xs font-bold">
+          <h4 className="mt-3 text-xs font-bold">
             Rejected ({request.rejectActivities.length})
           </h4>
           {request.rejectActivities.map((activity, idx) => {
@@ -86,8 +150,17 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
               />
             )
           })}
-          <h4 className="mt-2 text-xs font-bold">Has not voted (x)</h4>
-          {/* TODO */}
+          <h4 className="mt-3 text-xs font-bold">Has not voted (x)</h4>
+          {request.addressesThatHaveNotSigned.map((address, idx) => {
+            return (
+              <AvatarAddress
+                key={`waiting-signature-from-${idx}`}
+                className="mt-1"
+                size="sm"
+                address={address}
+              />
+            )
+          })}
         </section>
         <section className="p-4">
           <h3 className="mb-4">Timeline</h3>

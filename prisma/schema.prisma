@@ -57,7 +57,7 @@ model Request {
   activities    Activity[]
   actions       Action[]
   subscriptions Subscription[]
-  
+
   @@index([number(sort: Desc)])
   @@unique([terminalId, number])
 }

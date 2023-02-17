@@ -9,6 +9,8 @@ export type RequestFrob = Request & {
   commentActivities: Activity[]
   isExecuted: boolean
   quorum: number
+  signers: string[]
+  addressesThatHaveNotSigned: string[]
 }
 
 export type Request = PrismaRequest & {
@@ -24,7 +26,7 @@ type RequestMetadata = {
   rejectionActionIds: string[]
 }
 
-type SignerQuorumVariant = {
+export type SignerQuorumVariant = {
   add: string[]
   remove: string[]
   setQuorum: number
@@ -77,10 +79,4 @@ export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
-}
-
-export enum RequestVariantType {
-  SIGNER_QUORUM,
-  TOKEN_TRANSFER,
-  SPLIT_TOKEN_TRANSFER,
 }
