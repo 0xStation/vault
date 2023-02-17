@@ -39,7 +39,9 @@ export const AccountNavBar = () => {
           const response = await axios.get<AccountType>(
             `/api/v1/account/${address}/`,
           )
-          account = response.data
+          if (response.status === 200) {
+            account = response.data
+          }
         } catch (err) {
           if (axios.isAxiosError(err)) {
             console.log("no account!", err?.response?.data)
@@ -50,15 +52,12 @@ export const AccountNavBar = () => {
 
         if (!account) {
           try {
-            const response = await axios.put<AccountType>(
-              `/api/v1/account/${address}/`,
-              {
-                chainId: 0,
-                pfpUrl:
-                  "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7",
-                address,
-              },
-            )
+            const response = await axios.put<AccountType>("/api/v1/account/", {
+              chainId: 0,
+              pfpUrl:
+                "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7",
+              address,
+            })
             account = response.data
           } catch (err) {
             console.log("could not create account!")
