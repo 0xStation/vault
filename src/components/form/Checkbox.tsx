@@ -13,6 +13,7 @@ const Checkbox = ({
 }) => {
   return (
     <input
+      onClick={(e) => e.stopPropagation()}
       {...formRegister(name)}
       name={name}
       value={value}

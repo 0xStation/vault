@@ -1,8 +1,45 @@
 import { ActivityVariant } from "@prisma/client"
+import { getGnosisSafeDetails } from "../../lib/utils/getGnosisSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
 const toFrob = async (request: Request) => {
+  const terminal = await prisma.terminal.findFirst({
+    where: {
+      id: request.terminalId,
+    },
+  })
+
+  if (!terminal) {
+    // error?
+    return
+  }
+
+  const safeDetails = await getGnosisSafeDetails(
+    terminal.chainId,
+    terminal.safeAddress,
+  )
+
+  const quorum = safeDetails?.quorum
+
+  const executingActivites = await prisma.activity.findMany({
+    where: {
+      requestId: request.id,
+      variant: {
+        in: [ActivityVariant.EXECUTE_REQUEST],
+      },
+    },
+  })
+
+  const commentActivities = await prisma.activity.findMany({
+    where: {
+      requestId: request.id,
+      variant: {
+        in: [ActivityVariant.COMMENT_ON_REQUEST],
+      },
+    },
+  })
+
   const votingActivities = (await prisma.activity.findMany({
     where: {
       requestId: request.id,
@@ -38,7 +75,16 @@ const toFrob = async (request: Request) => {
   return {
     ...request,
     ...sortedVotingActivities,
+    commentActivities,
+    isExecuted: executingActivites.length > 0,
+    quorum: quorum,
   } as RequestFrob
+}
+
+enum VotingStatus {
+  VOTING,
+  READY_TO_EXECUTE,
+  EXECUCTED,
 }
 
 export default toFrob
