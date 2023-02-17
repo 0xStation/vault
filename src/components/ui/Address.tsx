@@ -26,7 +26,7 @@ export const Address = ({
 
   return (
     <div
-      className="group"
+      className="group cursor-pointer"
       onClick={
         interactive
           ? (e) => {
@@ -36,7 +36,6 @@ export const Address = ({
           : () => {}
       }
     >
-      {/* // TODO: add hover on ENS Address and click to copy */}
       {!ensName ? (
         <span className={`flex flex-row items-center ${textSizeMap[size]}`}>
           {truncateString(address)}

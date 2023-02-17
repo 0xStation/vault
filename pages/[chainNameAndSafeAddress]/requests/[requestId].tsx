@@ -1,4 +1,3 @@
-import { Avatar } from "@ui/Avatar"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
@@ -34,10 +33,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
-              <Avatar size="sm" address={request.data.createdBy} />
-              <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
-                {request.data.createdBy}
-              </h3>
+              <AvatarAddress size="sm" address={request.data.createdBy} />
             </div>
             <span className="ml-3 shrink-0 self-start text-xs text-slate-500">
               {timeSince(request.createdAt)}
