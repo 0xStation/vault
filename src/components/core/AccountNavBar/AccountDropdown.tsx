@@ -8,11 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
 import axios from "axios"
+import Link from "next/link"
 import { useEffect } from "react"
 import { useAccount, useDisconnect } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
 import { Account as AccountType } from "../../../models/account/types"
-import { Account } from "../Account"
+import { AvatarAddress } from "../AvatarAddress"
 
 export const AccountNavBar = () => {
   const { openConnectModal } = useConnectModal()
@@ -77,27 +78,19 @@ export const AccountNavBar = () => {
       {isConnected ? (
         <>
           <DropdownMenuTrigger>
-            <Avatar
-              size="base"
-              pfpUrl={
-                "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-              }
-            />
+            <Avatar size="base" address={address as string} />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2">
             <DropdownMenuItem className="focus:bg-white">
-              <div className="flex flex-row items-center">
-                <Avatar
-                  size="sm"
-                  pfpUrl={
-                    "https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-                  }
-                  className="mr-2"
-                />
-                <Account />
-              </div>
+              <AvatarAddress
+                address={address as string}
+                size="sm"
+                interactive={false}
+              />
             </DropdownMenuItem>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/u/${address}/profile`}>Profile</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <button onClick={() => disconnect()}>Disconnect</button>
             </DropdownMenuItem>

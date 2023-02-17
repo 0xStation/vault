@@ -1,9 +1,9 @@
-import { MediaCard } from "@ui/MediaCard"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
+import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
 import { getRequestById } from "../../../src/models/request/requests"
@@ -33,12 +33,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
-              <MediaCard
-                className="mt-1"
-                size="sm"
-                pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-                accountAddress={request.data.createdBy}
-              />
+              <AvatarAddress size="sm" address={request.data.createdBy} />
             </div>
             <span className="ml-3 shrink-0 self-start text-xs text-slate-500">
               {timeSince(request.createdAt)}
@@ -69,12 +64,11 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           </h4>
           {request.approveActivities.map((activity, idx) => {
             return (
-              <MediaCard
-                key={`approval-mediacard-${idx}`}
+              <AvatarAddress
+                key={`approval-Account-${idx}`}
                 className="mt-1"
                 size="sm"
-                pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-                accountAddress={activity.address}
+                address={activity.address}
               />
             )
           })}
@@ -84,12 +78,11 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           </h4>
           {request.rejectActivities.map((activity, idx) => {
             return (
-              <MediaCard
-                key={`rejection-mediacard-${idx}`}
+              <AvatarAddress
+                key={`rejection-Account-${idx}`}
                 className="mt-1"
                 size="sm"
-                pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-                accountAddress={activity.address}
+                address={activity.address}
               />
             )
           })}
@@ -98,10 +91,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
         </section>
         <section className="p-4">
           <h3 className="mb-4">Timeline</h3>
-          <ActivityItem
-            pfpUrl="https://station-images.nyc3.digitaloceanspaces.com/e164bac8-0bc5-40b1-a15f-d948ddd4aba7"
-            accountAddress={"0x"}
-          />
+          <ActivityItem accountAddress={"0x"} />
         </section>
       </div>
     </>
