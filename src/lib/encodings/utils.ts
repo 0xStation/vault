@@ -12,6 +12,6 @@ export const encodeFunctionData = (
   fragment: FunctionFragment,
   args: any[],
 ): string => {
-  const functionInterface = new Interface([fragment.format("full")])
-  return functionInterface.encodeFunctionData(fragment.name, args)
+  const functionInterface = new Interface([fragment])
+  return functionInterface.encodeFunctionData(fragment, args)
 }

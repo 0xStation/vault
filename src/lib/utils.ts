@@ -6,6 +6,11 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
+export const isEns = (v: string) => {
+  const domain = v?.split(".").slice(-1)[0] // grab last substring after period
+  return Boolean(domain && ["xyz", "eth"].includes(domain))
+}
+
 export const addressesAreEqual = (
   address1: string | undefined | null,
   address2: string | undefined | null,

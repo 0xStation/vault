@@ -1,4 +1,5 @@
 import { isAddress as ethersIsAddress } from "@ethersproject/address"
+import { isEns } from "lib/utils"
 import { FieldValues, UseFormRegister } from "react-hook-form"
 import useEnsInput from "../../../hooks/ens/useEnsInput"
 import InputWithLabel from "./InputWithLabel"
@@ -56,11 +57,9 @@ export const AddressInput = ({
         registerOptions={{
           validate: {
             isValid: (v: any) => {
-              const domain = v?.split(".").slice(-1)[0] // grab last substring after period
-              const isEns = Boolean(domain && ["xyz", "eth"].includes(domain))
               return (
                 !v ||
-                isEns ||
+                isEns(v) ||
                 ethersIsAddress(v) ||
                 "Not a valid ENS name or address."
               )

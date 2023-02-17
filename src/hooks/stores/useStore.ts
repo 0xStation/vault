@@ -6,7 +6,7 @@ interface StoreState {
   setActiveUser: (user: undefined | Account | null) => void
 }
 
-const useStore = create<StoreState>((set) => ({
+export const useStore = create<StoreState>((set) => ({
   activeUser: undefined, // undefined on start, Account if found, null if not found
   setActiveUser: (user: undefined | Account | null) =>
     set(() => {
