@@ -30,7 +30,7 @@ export const TextareaWithLabel = ({
         {label}
       </label>
       <textarea
-        className="h-[25px] max-h-[150px] border-b border-b-slate-300 placeholder:text-slate-400"
+        className="h-[26px] max-h-[150px] border-b border-b-slate-300 placeholder:text-slate-400"
         placeholder={placeholder}
         {...register(name, { ...registerOptions, ...requiredMessage })}
         {...rest}

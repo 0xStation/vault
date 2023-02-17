@@ -58,7 +58,7 @@ export const MembersView = ({
     setFormData({
       ...formData,
       quorum: data.quorum,
-      members: [activeUser?.address, ...members],
+      members: [...members],
     })
 
     const transactionData = encodeSafeSetup({
@@ -86,8 +86,10 @@ export const MembersView = ({
     control,
   } = useForm({
     defaultValues: {
-      quorum: quorum + 1,
-      members: members?.length + 1,
+      quorum: members?.length + 1,
+      members: formData?.members?.length
+        ? formData.members
+        : [{ address: activeUser?.address }],
     } as FieldValues,
   })
 
@@ -107,23 +109,21 @@ export const MembersView = ({
       <div className="flex grow flex-col overflow-scroll">
         <div className="mb-6">
           <label className="text-sm font-bold">Members*</label>
-          <div className="mt-3 mb-6 flex flex-row">
-            <Avatar size="sm" pfpUrl={activeUser?.data?.pfpUrl || ""} />
-            <p className="ml-2">You</p>
-          </div>
           <div className="w-full">
-            {memberFields
-              // @ts-ignore
-              .filter((item) => item.address !== activeUser?.address)
-              .map((item, index) => {
-                return (
+            {(memberFields as unknown as [{ id: string; address: string }]).map(
+              (item, index) => {
+                return item.address === activeUser?.address ? (
+                  <div className="mt-3 mb-6 flex flex-row">
+                    <Avatar size="sm" pfpUrl={activeUser?.data?.pfpUrl || ""} />
+                    <p className="ml-2">You</p>
+                  </div>
+                ) : (
                   <div key={item.id} className="mb-1 rounded bg-slate-200 p-3">
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
                         {/* we need to add 2 to the index since the index is 0-indexed and 
-                          the owner is the first member, but is not included as a member until
-                          form submission.*/}
-                        Member {index + 2}
+                          the owner is the first member, so increase the # by 1*/}
+                        Member {index + 1}
                       </p>
                       <button type="button" onClick={() => remove(index)}>
                         <XMarkIcon className="h-5 w-5 fill-slate-500" />
@@ -154,7 +154,8 @@ export const MembersView = ({
                     />
                   </div>
                 )
-              })}
+              },
+            )}
             <Button
               variant="tertiary"
               fullWidth={true}
@@ -174,7 +175,7 @@ export const MembersView = ({
           required
           registerOptions={{
             max: {
-              value: memberFields?.length + 1,
+              value: memberFields?.length,
               message: "Quorum cannot be greater than the number of members.",
             },
             min: {
@@ -183,7 +184,7 @@ export const MembersView = ({
             },
             valueAsNumber: true,
           }}
-          quorumSize={(memberFields?.length || 0) + 1}
+          quorumSize={memberFields?.length || 1} // default to 1 since activeUser is a member
         />
       </div>
       <div className="mt-4 flex w-full flex-col pb-3 text-center">

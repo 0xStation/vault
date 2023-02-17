@@ -1,7 +1,7 @@
 import { Button } from "@ui/Button"
 import { SUPPORTED_CHAINS } from "lib/constants"
 import { isValidUrl } from "lib/validations"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import { useNetwork, useSwitchNetwork } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
@@ -16,18 +16,30 @@ export const TerminalDetailsForm = ({
     SetStateAction<CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS>
   >
 }) => {
-  const { switchNetwork, isError, error } = useSwitchNetwork()
+  const { switchNetwork, error: networkError } = useSwitchNetwork()
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
   const [unfinishedForm, setUnfinishedForm] = useState<boolean>(false)
   const { chain } = useNetwork()
   const { name, chainId, about, url } = formData
 
+  useEffect(() => {
+    if (networkError) {
+      setError("chainId", {
+        type: "wrongNetwork",
+        message: "Please switch network to specified chain.",
+      })
+    } else {
+      clearErrors("chainId")
+    }
+  }, [networkError])
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm({
     defaultValues: {
       name,
