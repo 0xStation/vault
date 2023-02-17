@@ -1,4 +1,5 @@
 import { RequestVariantType } from "@prisma/client"
+import { Address } from "@ui/Address"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
@@ -8,9 +9,11 @@ import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
 import { getRequestById } from "../../../src/models/request/requests"
+
 import {
   RequestFrob,
   SignerQuorumVariant,
+  TokenTransferVariant,
 } from "../../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
@@ -18,7 +21,8 @@ const chainNameToChainId: Record<string, number | undefined> = {
   gor: 5,
 }
 
-const TokenTransferRequestContent = () => {
+const TokenTransferRequestContent = ({ request }: { request: RequestFrob }) => {
+  let tokenTransferMeta = request.data.meta as TokenTransferVariant
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -33,18 +37,40 @@ const TokenTransferRequestContent = () => {
   )
 }
 
-const AddMemberRequestContent = ({ request }: { request: RequestFrob }) => {
+const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
   let signerQuorumMeta = request.data.meta as SignerQuorumVariant
+
+  const membersAdded = signerQuorumMeta.add.length
+  const membersRemoved = signerQuorumMeta.remove.length
+
+  const prompt = `${[
+    ...(membersAdded > 0 ? [`adding ${membersAdded}`] : []),
+    ...(membersRemoved > 0 ? [`removing ${membersRemoved}`] : []),
+  ].join(", ")} ${membersAdded + membersRemoved > 1 ? "members" : "member"}`
+
+  // should never happen but just in case...
+  if (membersAdded + membersRemoved === 0) {
+    return <></>
+  }
+
   return (
     <>
       <div className="flex flex-row justify-between">
         <span className="text-slate-500">Members</span>
-        <span>Adding new members</span>
+        <span>{prompt}</span>
       </div>
       <div className="p2- space-y-2 rounded-md bg-slate-100 p-3">
-        <h5 className="text-xs font-bold text-slate-500">Add</h5>
+        {signerQuorumMeta.add.length > 0 && (
+          <h5 className="text-xs font-bold text-slate-500">Add</h5>
+        )}
         {signerQuorumMeta.add.map((address, idx) => {
-          return <p key={`address-${idx}`}>{address}</p>
+          return <Address key={`address-${idx}`} address={address} />
+        })}
+        {signerQuorumMeta.remove.length > 0 && (
+          <h5 className="text-xs font-bold text-slate-500">Remove</h5>
+        )}
+        {signerQuorumMeta.remove.map((address, idx) => {
+          return <Address key={`address-${idx}`} address={address} />
         })}
       </div>
       <div className="flex flex-row justify-between">
@@ -84,10 +110,10 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
             {request.data.note}
           </h3>
           {request.variant === RequestVariantType.TOKEN_TRANSFER && (
-            <TokenTransferRequestContent />
+            <TokenTransferRequestContent request={request} />
           )}
-          {request.variant === RequestVariantType.ADD_MEMBER && (
-            <AddMemberRequestContent request={request} />
+          {request.variant === RequestVariantType.SIGNER_QUORUM && (
+            <SignerQuorumRequestContent request={request} />
           )}
         </section>
         <section className="p-4">
@@ -111,7 +137,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
             )
           })}
 
-          <h4 className="mt-2 text-xs font-bold">
+          <h4 className="mt-3 text-xs font-bold">
             Rejected ({request.rejectActivities.length})
           </h4>
           {request.rejectActivities.map((activity, idx) => {
@@ -124,8 +150,17 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
               />
             )
           })}
-          <h4 className="mt-2 text-xs font-bold">Has not voted (x)</h4>
-          {/* TODO */}
+          <h4 className="mt-3 text-xs font-bold">Has not voted (x)</h4>
+          {request.addressesThatHaveNotSigned.map((address, idx) => {
+            return (
+              <AvatarAddress
+                key={`waiting-signature-from-${idx}`}
+                className="mt-1"
+                size="sm"
+                address={address}
+              />
+            )
+          })}
         </section>
         <section className="p-4">
           <h3 className="mb-4">Timeline</h3>

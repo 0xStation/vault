@@ -117,8 +117,6 @@ enum ActivityVariant {
 
 enum RequestVariantType {
   SIGNER_QUORUM
-  ADD_MEMBER
-  REMOVE_MEMBER
   TOKEN_TRANSFER
   SPLIT_TOKEN_TRANSFER
 }

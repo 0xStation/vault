@@ -9,6 +9,8 @@ export type RequestFrob = Request & {
   commentActivities: Activity[]
   isExecuted: boolean
   quorum: number
+  signers: string[]
+  addressesThatHaveNotSigned: string[]
 }
 
 export type Request = PrismaRequest & {
