@@ -4,6 +4,7 @@ import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestCard from "../../src/components/core/RequestCard"
@@ -17,8 +18,27 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
+  const { address } = useAccount()
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch, reset } = useForm()
+
+  // I'd like to nest these as their own routes but I don't think it will work until
+  // next beta releases...
+  const needsAttentionRequests = requests.filter(
+    (r) =>
+      !(
+        r.approveActivities.some((a) => a.address === address) ||
+        r.rejectActivities.some((a) => a.address === address)
+      ),
+  )
+  const awaitingOthersRequests = requests.filter(
+    (r) =>
+      // need to check if ready to execute because then this should go in "needs attention"
+      r.approveActivities.some((a) => a.address === address) ||
+      r.rejectActivities.some((a) => a.address === address),
+  )
+  const closedRequests = requests.filter((r) => r.isExecuted)
+  const allRequests = requests
 
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
@@ -32,31 +52,39 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
 
   const onSubmit = (data: any) => console.log(data)
 
+  const requestContentForTab = (tab: string, requests: RequestFrob[]) => {
+    return (
+      <TabsContent value={tab}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="divide-y divide-slate-200">
+            {requests.map((request, idx) => {
+              return (
+                <RequestCard
+                  disabled={
+                    selectedRequests.length > 0 &&
+                    !requestIsSelected(request.id)
+                  }
+                  key={`request-${idx}`}
+                  request={request}
+                  formRegister={register}
+                />
+              )
+            })}
+          </div>
+        </form>
+      </TabsContent>
+    )
+  }
+
   return (
     <>
       <AccountNavBar />
       <RequestsNavBar>
-        <TabsContent value="needs_attention">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="divide-y divide-slate-200">
-              {requests.map((request, idx) => {
-                return (
-                  <RequestCard
-                    disabled={
-                      selectedRequests.length > 0 &&
-                      !requestIsSelected(request.id)
-                    }
-                    key={`request-${idx}`}
-                    request={request}
-                    formRegister={register}
-                  />
-                )
-              })}
-            </div>
-          </form>
-        </TabsContent>
+        {requestContentForTab("needs_attention", needsAttentionRequests)}
+        {requestContentForTab("awaiting_others", awaitingOthersRequests)}
+        {requestContentForTab("closed", closedRequests)}
+        {requestContentForTab("all", allRequests)}
       </RequestsNavBar>
-
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
           show={selectedRequests.length > 0}
@@ -71,7 +99,7 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
             <p className="text-sm text-white">
               {selectedRequests.length} selected
             </p>
-            <Button size="sm" variant="secondary" onClick={() => {}}>
+            <Button size="sm" variant="secondary" onClick={() => reset()}>
               Cancel
             </Button>
           </div>

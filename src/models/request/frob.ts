@@ -22,6 +22,24 @@ const toFrob = async (request: Request) => {
 
   const quorum = safeDetails?.quorum
 
+  const executingActivites = await prisma.activity.findMany({
+    where: {
+      requestId: request.id,
+      variant: {
+        in: [ActivityVariant.EXECUTE_REQUEST],
+      },
+    },
+  })
+
+  const commentActivities = await prisma.activity.findMany({
+    where: {
+      requestId: request.id,
+      variant: {
+        in: [ActivityVariant.COMMENT_ON_REQUEST],
+      },
+    },
+  })
+
   const votingActivities = (await prisma.activity.findMany({
     where: {
       requestId: request.id,
@@ -57,6 +75,8 @@ const toFrob = async (request: Request) => {
   return {
     ...request,
     ...sortedVotingActivities,
+    commentActivities,
+    isExecuted: executingActivites.length > 0,
     quorum: quorum,
   } as RequestFrob
 }
