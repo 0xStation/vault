@@ -1,7 +1,7 @@
 import { isAddress as ethersIsAddress } from "@ethersproject/address"
 import { isEns } from "lib/utils"
 import { FieldValues, UseFormRegister } from "react-hook-form"
-import useEnsInput from "../../../hooks/ens/useEnsInput"
+import useEnsInput from "../../hooks/ens/useEnsInput"
 import InputWithLabel from "./InputWithLabel"
 
 // TODO: extend native html props
@@ -12,10 +12,8 @@ export const AddressInput = ({
   name,
   required = false,
   errors,
-  type = "text",
   className = "",
   validations,
-  ...rest
 }: {
   label: string
   register: UseFormRegister<FieldValues>
@@ -27,10 +25,7 @@ export const AddressInput = ({
   type?: string
   validations?: any
 }) => {
-  const {
-    setAddressInputVal: setClientAddressInputVal,
-    ensAddressResult: clientEnsAddressResult,
-  } = useEnsInput()
+  const { setAddressInputVal } = useEnsInput()
 
   const handleEnsAddressInputValOnChange = (
     val: any,
@@ -53,7 +48,7 @@ export const AddressInput = ({
         placeholder={placeholder}
         errors={errors}
         className={className}
-        required
+        required={required}
         registerOptions={{
           validate: {
             isValid: (v: any) => {
@@ -69,7 +64,7 @@ export const AddressInput = ({
           onChange: (e: any) =>
             handleEnsAddressInputValOnChange(
               e.target.value,
-              setClientAddressInputVal,
+              setAddressInputVal,
             ),
         }}
       />

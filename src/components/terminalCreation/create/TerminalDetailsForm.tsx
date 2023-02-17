@@ -3,9 +3,11 @@ import { SUPPORTED_CHAINS } from "lib/constants"
 import { isValidUrl } from "lib/validations"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
+import { useNetwork, useSwitchNetwork } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
-import { InputWithLabel, SelectWithLabel } from "../../core/form"
+import { InputWithLabel, SelectWithLabel } from "../../form"
+import TextareaWithLabel from "../../form/TextareaWithLabel"
 
 export const TerminalDetailsForm = ({
   setCreateTerminalView,
@@ -14,11 +16,35 @@ export const TerminalDetailsForm = ({
     SetStateAction<CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS>
   >
 }) => {
+  const { switchNetwork, isError, error } = useSwitchNetwork()
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
   const [unfinishedForm, setUnfinishedForm] = useState<boolean>(false)
+  const { chain } = useNetwork()
   const { name, chainId, about, url } = formData
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm({
+    defaultValues: {
+      name,
+      chainId,
+      about,
+      url,
+    } as FieldValues,
+  })
+
   const onSubmit = (data: any) => {
+    if (chain?.id !== parseInt(data.chainId)) {
+      setError("chainId", {
+        type: "wrongNetwork",
+        message: "Please switch network to specified chain.",
+      })
+      return
+    }
     setFormData({
       ...formData,
       ...data,
@@ -28,19 +54,6 @@ export const TerminalDetailsForm = ({
   const onError = (errors: any) => {
     setUnfinishedForm(true)
   }
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name,
-      chainId,
-      about,
-      url,
-    } as FieldValues,
-  })
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <div className="flex-col">
@@ -53,7 +66,10 @@ export const TerminalDetailsForm = ({
           required
           errors={errors}
           registerOptions={{
-            maxLength: 60,
+            maxLength: {
+              value: 60,
+              message: "Exceeded max length of 60 characters.",
+            },
           }}
         />
         <SelectWithLabel
@@ -63,6 +79,11 @@ export const TerminalDetailsForm = ({
           required
           register={register}
           errors={errors}
+          registerOptions={{
+            onChange: (e) => {
+              switchNetwork?.(parseInt(e.target.value))
+            },
+          }}
         >
           <option value="">Choose option</option>
           {SUPPORTED_CHAINS?.map((chain, idx) => {
@@ -73,7 +94,7 @@ export const TerminalDetailsForm = ({
             )
           })}
         </SelectWithLabel>
-        <InputWithLabel
+        <TextareaWithLabel
           className="mb-3"
           label="About"
           register={register}
@@ -81,7 +102,10 @@ export const TerminalDetailsForm = ({
           placeholder="What does this group do?"
           errors={errors}
           registerOptions={{
-            maxLength: 400,
+            maxLength: {
+              value: 400,
+              message: "Exceed max length of 400 characters.",
+            },
           }}
         />
         <InputWithLabel

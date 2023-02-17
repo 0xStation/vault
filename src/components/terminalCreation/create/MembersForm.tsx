@@ -11,8 +11,8 @@ import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import { encodeSafeSetup } from "../../../lib/encodings/setup"
-import AddressInput from "../../core/form/AddressInput"
-import QuorumInput from "../../core/form/QuorumInput"
+import AddressInput from "../../form/AddressInput"
+import QuorumInput from "../../form/QuorumInput"
 
 export const MembersView = ({
   setCreateTerminalView,

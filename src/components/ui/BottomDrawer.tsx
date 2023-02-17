@@ -14,6 +14,7 @@ export const BottomDrawer = ({
   children,
   size = "base",
 }: BottomDrawerProps) => {
+  // TODO: add cva
   const transitionChildStyles = {
     ["sm"]: "translate-y-[35%]",
     ["base"]: "translate-y-[15%]",
