@@ -78,6 +78,7 @@ const toFrob = async (request: Request) => {
     commentActivities,
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
+    terminal,
   } as RequestFrob
 }
 
