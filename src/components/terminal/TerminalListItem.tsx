@@ -1,4 +1,4 @@
-import { Name } from "@ui/Name"
+import { Address } from "@ui/Address"
 import { RoundedPill } from "@ui/RoundedPill"
 import Link from "next/link"
 import { Terminal } from "../../models/terminal/types"
@@ -14,7 +14,7 @@ const TerminalListItem = ({ terminal }: { terminal: Terminal }) => {
         <p className="font-bold">{terminal.data.name}</p>
         <div className="flex flex-row space-x-2">
           <RoundedPill>
-            <Name size="xs" address={terminal.safeAddress} />
+            <Address size="xs" address={terminal.safeAddress} />
           </RoundedPill>
           <ChainPill chainId={terminal.chainId} />
         </div>

@@ -1,7 +1,7 @@
 import truncateString from "lib/utils"
 import { useEnsName } from "wagmi"
 
-interface NameProps {
+interface AddressProps {
   size?: "xs" | "sm" | "base" | "lg"
   address: string
   interactive?: boolean
@@ -14,11 +14,11 @@ const textSizeMap: { [key: string]: string } = {
   ["lg"]: "text-lg font-bold",
 }
 
-export const Name = ({
+export const Address = ({
   size = "base",
   address,
   interactive = true,
-}: NameProps) => {
+}: AddressProps) => {
   let { data: ensName } = useEnsName({
     address: address as `0x${string}`,
     chainId: 1,
@@ -36,7 +36,7 @@ export const Name = ({
           : () => {}
       }
     >
-      {/* // TODO: add hover on ENS name and click to copy */}
+      {/* // TODO: add hover on ENS Address and click to copy */}
       {!ensName ? (
         <span className={`flex flex-row items-center ${textSizeMap[size]}`}>
           {truncateString(address)}

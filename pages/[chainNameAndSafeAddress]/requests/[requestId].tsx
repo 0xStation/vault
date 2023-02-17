@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
-import { User } from "../../../src/components/core/User"
+import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
 import { getRequestById } from "../../../src/models/request/requests"
@@ -68,7 +68,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           </h4>
           {request.approveActivities.map((activity, idx) => {
             return (
-              <User
+              <AvatarAddress
                 key={`approval-Account-${idx}`}
                 className="mt-1"
                 size="sm"
@@ -82,7 +82,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           </h4>
           {request.rejectActivities.map((activity, idx) => {
             return (
-              <User
+              <AvatarAddress
                 key={`rejection-Account-${idx}`}
                 className="mt-1"
                 size="sm"

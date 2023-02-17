@@ -2,8 +2,8 @@ import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
+import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import ProfileNavBar from "../../../src/components/core/ProfileNavBar"
-import { User } from "../../../src/components/core/User"
 import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
 import { Account } from "../../../src/models/account/types"
 import { Terminal } from "../../../src/models/terminal/types"
@@ -18,7 +18,7 @@ const ProfilePage = ({
   return (
     <>
       <AccountNavBar />
-      <User address={account.address} size="lg" className="px-4" />
+      <AvatarAddress address={account.address} size="lg" className="px-4" />
       <ProfileNavBar className="mt-4">
         <TabsContent value="terminals">
           <ul className="mt-6">

@@ -1,23 +1,23 @@
-import { Name } from "@ui/Name"
+import { Address } from "@ui/Address"
 import { Avatar } from "../ui/Avatar"
 
-interface UserProps {
+interface AvatarAddressProps {
   size?: "xs" | "sm" | "base" | "lg"
   address: string
   className?: string
   interactive?: boolean
 }
 
-export const User = ({
+export const AvatarAddress = ({
   size = "base",
   address,
   className,
   interactive = true,
-}: UserProps) => {
+}: AvatarAddressProps) => {
   return (
     <div className={`flex flex-row items-center space-x-2 ${className}`}>
       <Avatar address={address} size={size} />
-      <Name address={address} size={size} interactive={interactive} />
+      <Address address={address} size={size} interactive={interactive} />
     </div>
   )
 }

@@ -13,7 +13,7 @@ import { useEffect } from "react"
 import { useAccount, useDisconnect } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
 import { Account as AccountType } from "../../../models/account/types"
-import { User } from "../User"
+import { AvatarAddress } from "../AvatarAddress"
 
 export const AccountNavBar = () => {
   const { openConnectModal } = useConnectModal()
@@ -82,7 +82,11 @@ export const AccountNavBar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2">
             <DropdownMenuItem className="focus:bg-white">
-              <User address={address as string} size="sm" interactive={false} />
+              <AvatarAddress
+                address={address as string}
+                size="sm"
+                interactive={false}
+              />
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href={`/u/${address}/profile`}>Profile</Link>
