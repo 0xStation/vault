@@ -7,13 +7,6 @@ interface UserProps {
   className?: string
 }
 
-const textSizeMap: { [key: string]: string } = {
-  ["xs"]: "text-xs",
-  ["sm"]: "text-base",
-  ["base"]: "text-base",
-  ["lg"]: "text-lg",
-}
-
 export const User = ({ size = "base", address, className }: UserProps) => {
   return (
     <div className={`flex flex-row items-center space-x-2 ${className}`}>

@@ -4,23 +4,33 @@ import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ProfileNavBar from "../../../src/components/core/ProfileNavBar"
 import { User } from "../../../src/components/core/User"
+import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
 import { Account } from "../../../src/models/account/types"
+import { Terminal } from "../../../src/models/terminal/types"
 
-const ProfilePage = ({ account }: { account: Account }) => {
+const ProfilePage = ({
+  account,
+  terminals,
+}: {
+  account: Account
+  terminals: Terminal[]
+}) => {
   return (
     <>
       <AccountNavBar />
-      <div className="space-y-4 px-4">
-        <User address={account.address} size="lg" />
-        <ProfileNavBar>
-          <TabsContent value="terminals">
-            <div>Terminals</div>
-          </TabsContent>
-          <TabsContent value="requests">
-            <div>Requests</div>
-          </TabsContent>
-        </ProfileNavBar>
-      </div>
+      <User address={account.address} size="lg" className="px-4" />
+      <ProfileNavBar className="mt-4">
+        <TabsContent value="terminals">
+          <ul className="mt-6">
+            {terminals.map((terminal) => (
+              <TerminalListItem terminal={terminal} key={terminal.id} />
+            ))}
+          </ul>
+        </TabsContent>
+        <TabsContent value="requests">
+          <div>Requests</div>
+        </TabsContent>
+      </ProfileNavBar>
     </>
   )
 }
@@ -45,8 +55,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   })
 
-  console.log("account", account)
-
   if (!account) {
     // Throw a 404 error if terminal is not found
     return {
@@ -54,11 +62,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
+  const terminals = await prisma.terminal.findMany()
+
   //   let requests = await getRequestsByTerminal({ terminalId: terminal.id })
   // requests = JSON.parse(JSON.stringify(requests))
   return {
     props: {
       account: JSON.parse(JSON.stringify(account)),
+      terminals: JSON.parse(
+        JSON.stringify(terminals.map((t) => ({ ...t, chainId: 5 }))),
+      ),
     },
   }
 }
