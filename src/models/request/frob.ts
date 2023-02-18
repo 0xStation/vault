@@ -55,7 +55,7 @@ const toFrob = async (request: Request) => {
   })) as Activity[]
 
   const addressesThatHaveSigned = votingActivities.map((a) => a.address)
-  const addressesThatHaveNotSigned = signers.filter(
+  const addressesThatHaveNotSigned = signers?.filter(
     (a: string) => !addressesThatHaveSigned.includes(a),
   )
 
@@ -82,7 +82,7 @@ const toFrob = async (request: Request) => {
     ...request,
     ...sortedVotingActivities,
     commentActivities,
-    addressesThatHaveNotSigned: addressesThatHaveNotSigned,
+    addressesThatHaveNotSigned: addressesThatHaveNotSigned || [],
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
     terminal,

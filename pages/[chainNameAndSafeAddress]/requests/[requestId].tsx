@@ -164,7 +164,9 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
         </section>
         <section className="p-4">
           <h3 className="mb-4">Timeline</h3>
-          <ActivityItem accountAddress={"0x"} />
+          <ActivityItem
+            accountAddress={"0x4D75d85D37170A5f9D47275dAF250459D965dff1"}
+          />
         </section>
       </div>
     </>
