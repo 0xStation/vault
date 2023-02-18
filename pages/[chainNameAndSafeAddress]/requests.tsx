@@ -4,9 +4,9 @@ import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
-import RequestsNavBar, {
-  RequestNavPill,
-} from "../../src/components/core/RequestsNavbar"
+import TerminalRequestsFilterBar, {
+  TerminalRequestsFilter,
+} from "../../src/components/core/TabBars/TerminalRequestsFilterBar"
 import RequestListForm from "../../src/components/request/RequestListForm"
 import { getRequestsByTerminal } from "../../src/models/request/requests"
 import { RequestFrob } from "../../src/models/request/types"
@@ -52,18 +52,20 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   return (
     <>
       <AccountNavBar />
-      <RequestsNavBar value={router.query.pill as RequestNavPill}>
+      <TerminalRequestsFilterBar
+        value={router.query.filter as TerminalRequestsFilter}
+      >
         {requestContentForTab(
-          RequestNavPill.NEEDS_ATTENTION,
+          TerminalRequestsFilter.NEEDS_ATTENTION,
           needsAttentionRequests,
         )}
         {requestContentForTab(
-          RequestNavPill.AWAITING_OTHERS,
+          TerminalRequestsFilter.AWAITING_OTHERS,
           awaitingOthersRequests,
         )}
-        {requestContentForTab(RequestNavPill.CLOSED, closedRequests)}
-        {requestContentForTab(RequestNavPill.ALL, allRequests)}
-      </RequestsNavBar>
+        {requestContentForTab(TerminalRequestsFilter.CLOSED, closedRequests)}
+        {requestContentForTab(TerminalRequestsFilter.ALL, allRequests)}
+      </TerminalRequestsFilterBar>
     </>
   )
 }

@@ -1,16 +1,15 @@
-import { PillTabsContent } from "@ui/PillTabs"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import ProfileNavBar, {
+import ProfileRequestsFilterBar, {
+  ProfileRequestsFilter,
+} from "../../../src/components/core/TabBars/ProfileRequestsFilterBar"
+import ProfileTabBar, {
   ProfileTab,
-} from "../../../src/components/core/ProfileNavBar"
-import ProfileRequestsNavBar, {
-  ProfileRequestPill,
-} from "../../../src/components/core/ProfileRequestsNavBar"
+} from "../../../src/components/core/TabBars/ProfileTabBar"
 import RequestListForm from "../../../src/components/request/RequestListForm"
 import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
 import { Account } from "../../../src/models/account/types"
@@ -28,14 +27,12 @@ const ProfilePage = ({
   requests: RequestFrob[]
 }) => {
   const router = useRouter()
-  const tab = router.query.tab as ProfileTab
-  const pill = router.query.pill as ProfileRequestPill
 
   return (
     <>
       <AccountNavBar />
       <AvatarAddress address={account.address} size="lg" className="px-4" />
-      <ProfileNavBar className="mt-4" value={tab}>
+      <ProfileTabBar className="mt-4" value={router.query.tab as ProfileTab}>
         <TabsContent value={ProfileTab.TERMINALS}>
           <ul className="mt-6">
             {terminals.map((terminal) => (
@@ -44,19 +41,22 @@ const ProfilePage = ({
           </ul>
         </TabsContent>
         <TabsContent value={ProfileTab.REQUESTS}>
-          <ProfileRequestsNavBar className="mt-3" defaultValue={pill}>
-            <PillTabsContent value={ProfileRequestPill.CLAIM}>
+          <ProfileRequestsFilterBar
+            className="mt-3"
+            value={router.query.filter as ProfileRequestsFilter}
+          >
+            <TabsContent value={ProfileRequestsFilter.CLAIM}>
               <RequestListForm requests={requests} />
-            </PillTabsContent>
-            <PillTabsContent value={ProfileRequestPill.CREATED}>
+            </TabsContent>
+            <TabsContent value={ProfileRequestsFilter.CREATED}>
               <RequestListForm requests={requests.slice(0, 2)} />
-            </PillTabsContent>
-            <PillTabsContent value={ProfileRequestPill.CLAIMED}>
+            </TabsContent>
+            <TabsContent value={ProfileRequestsFilter.CLAIMED}>
               <RequestListForm requests={[]} />
-            </PillTabsContent>
-          </ProfileRequestsNavBar>
+            </TabsContent>
+          </ProfileRequestsFilterBar>
         </TabsContent>
-      </ProfileNavBar>
+      </ProfileTabBar>
     </>
   )
 }
