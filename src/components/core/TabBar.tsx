@@ -10,7 +10,6 @@ import { useRouter } from "next/router"
 export const TabBar = ({
   className = "",
   style,
-  value,
   defaultValue,
   options,
   shallowRoute,
@@ -18,7 +17,6 @@ export const TabBar = ({
 }: {
   className?: string
   style: "tab" | "filter"
-  value?: string
   defaultValue: string
   options: { value: string; label: string }[]
   shallowRoute: (value: string) => string
@@ -29,7 +27,11 @@ export const TabBar = ({
   return (
     <Tabs
       className={`w-full ${className}`}
-      value={value ?? defaultValue}
+      value={
+        (style === "tab"
+          ? (router.query.tab as string)
+          : (router.query.filter as string)) ?? defaultValue
+      }
       onValueChange={(value) => {
         router.push(shallowRoute(value), undefined, {
           shallow: true,

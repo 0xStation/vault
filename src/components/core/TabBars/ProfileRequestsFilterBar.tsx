@@ -10,11 +10,9 @@ export enum ProfileRequestsFilter {
 
 export const ProfileRequestsFilterBar = ({
   className = "",
-  value,
   children,
 }: {
   className?: string
-  value: ProfileRequestsFilter
   children: React.ReactNode
 }) => {
   const router = useRouter()
@@ -32,7 +30,6 @@ export const ProfileRequestsFilterBar = ({
     <TabBar
       className={className}
       style="filter"
-      value={value}
       defaultValue={ProfileRequestsFilter.CLAIM}
       options={options}
       shallowRoute={shallowRoute}

@@ -1,6 +1,5 @@
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
-import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
@@ -26,13 +25,15 @@ const ProfilePage = ({
   terminals: Terminal[]
   requests: RequestFrob[]
 }) => {
-  const router = useRouter()
-
   return (
     <>
+      {/* NAV */}
       <AccountNavBar />
+      {/* ACCOUNT */}
       <AvatarAddress address={account.address} size="lg" className="px-4" />
-      <ProfileTabBar className="mt-4" value={router.query.tab as ProfileTab}>
+      {/* TABS */}
+      <ProfileTabBar className="mt-4">
+        {/* TERMINALS */}
         <TabsContent value={ProfileTab.TERMINALS}>
           <ul className="mt-6">
             {terminals.map((terminal) => (
@@ -40,17 +41,19 @@ const ProfilePage = ({
             ))}
           </ul>
         </TabsContent>
+        {/* REQUESTS */}
         <TabsContent value={ProfileTab.REQUESTS}>
-          <ProfileRequestsFilterBar
-            className="mt-3"
-            value={router.query.filter as ProfileRequestsFilter}
-          >
+          {/* FILTERS */}
+          <ProfileRequestsFilterBar className="mt-3">
+            {/* CLAIM */}
             <TabsContent value={ProfileRequestsFilter.CLAIM}>
               <RequestListForm requests={requests} />
             </TabsContent>
+            {/* CREATED */}
             <TabsContent value={ProfileRequestsFilter.CREATED}>
               <RequestListForm requests={requests.slice(0, 2)} />
             </TabsContent>
+            {/* CLAIMED */}
             <TabsContent value={ProfileRequestsFilter.CLAIMED}>
               <RequestListForm requests={[]} />
             </TabsContent>

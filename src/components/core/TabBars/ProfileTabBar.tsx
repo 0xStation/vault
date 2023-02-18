@@ -10,10 +10,8 @@ export enum ProfileTab {
 export const ProfileTabBar = ({
   className = "",
   children,
-  value,
 }: {
   className?: string
-  value: ProfileTab
   children: React.ReactNode
 }) => {
   const router = useRouter()
@@ -35,7 +33,6 @@ export const ProfileTabBar = ({
     <TabBar
       className={className}
       style="tab"
-      value={value}
       defaultValue={ProfileTab.TERMINALS}
       options={options}
       shallowRoute={shallowRoute}

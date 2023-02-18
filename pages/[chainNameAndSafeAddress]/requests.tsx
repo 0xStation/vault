@@ -1,6 +1,5 @@
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
-import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
@@ -17,10 +16,6 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
-  const router = useRouter()
-
-  // console.log(router.query.pill)
-
   const { address } = useAccount()
 
   // I'd like to nest these as their own routes but I don't think it will work until
@@ -52,9 +47,7 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   return (
     <>
       <AccountNavBar />
-      <TerminalRequestsFilterBar
-        value={router.query.filter as TerminalRequestsFilter}
-      >
+      <TerminalRequestsFilterBar>
         {requestContentForTab(
           TerminalRequestsFilter.NEEDS_ATTENTION,
           needsAttentionRequests,

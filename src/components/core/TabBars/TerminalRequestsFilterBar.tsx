@@ -10,11 +10,9 @@ export enum TerminalRequestsFilter {
 
 export const TerminalRequestsFilterBar = ({
   className = "",
-  value,
   children,
 }: {
   className?: string
-  value: TerminalRequestsFilter
   children: React.ReactNode
 }) => {
   const router = useRouter()
@@ -33,7 +31,6 @@ export const TerminalRequestsFilterBar = ({
     <TabBar
       className={className}
       style="filter"
-      value={value}
       defaultValue={TerminalRequestsFilter.NEEDS_ATTENTION}
       options={options}
       shallowRoute={shallowRoute}
