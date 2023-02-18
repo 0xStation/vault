@@ -40,7 +40,7 @@ const config: Record<number, any> = {
 export const ChainPill = ({ chainId }: ChainPillProps) => {
   return (
     <RoundedPill>
-      <div className="flex flex-row items-center space-x-1">
+      <div className="flex flex-row items-center space-x-1.5">
         {config[chainId].icon}
         <span className="text-xs">{config[chainId].name}</span>
       </div>

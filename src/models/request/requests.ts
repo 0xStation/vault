@@ -32,3 +32,12 @@ export const getRequestById = async ({ requestId }: { requestId: string }) => {
   const requestFrob = await toFrob(request)
   return requestFrob
 }
+
+export const getRequests = async ({}) => {
+  const requests = (await prisma.request.findMany()) as Request[]
+
+  const requestFrobs = await Promise.all(
+    requests.map(async (r: Request) => toFrob(r)),
+  )
+  return requestFrobs
+}

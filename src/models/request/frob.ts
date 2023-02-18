@@ -85,6 +85,7 @@ const toFrob = async (request: Request) => {
     addressesThatHaveNotSigned: addressesThatHaveNotSigned,
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
+    terminal,
   } as RequestFrob
 }
 
