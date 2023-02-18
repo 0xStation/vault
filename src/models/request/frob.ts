@@ -21,6 +21,7 @@ const toFrob = async (request: Request) => {
   )
 
   const quorum = safeDetails?.quorum
+  const signers = safeDetails?.signers
 
   const executingActivites = await prisma.activity.findMany({
     where: {
@@ -53,6 +54,11 @@ const toFrob = async (request: Request) => {
     },
   })) as Activity[]
 
+  const addressesThatHaveSigned = votingActivities.map((a) => a.address)
+  const addressesThatHaveNotSigned = signers.filter(
+    (a: string) => !addressesThatHaveSigned.includes(a),
+  )
+
   type VoteActivityMap = {
     approveActivities: Activity[]
     rejectActivities: Activity[]
@@ -76,16 +82,11 @@ const toFrob = async (request: Request) => {
     ...request,
     ...sortedVotingActivities,
     commentActivities,
+    addressesThatHaveNotSigned: addressesThatHaveNotSigned,
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
     terminal,
   } as RequestFrob
-}
-
-enum VotingStatus {
-  VOTING,
-  READY_TO_EXECUTE,
-  EXECUCTED,
 }
 
 export default toFrob
