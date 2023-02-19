@@ -1,5 +1,6 @@
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
+import useSWR from "swr"
 import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
@@ -15,8 +16,13 @@ const chainNameToChainId: Record<string, number | undefined> = {
   gor: 5,
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   const { address } = useAccount()
+
+  const { data, error, isLoading } = useSWR("/api/fake/requestAll", fetcher)
+  console.log(data)
 
   // I'd like to nest these as their own routes but I don't think it will work until
   // next beta releases...

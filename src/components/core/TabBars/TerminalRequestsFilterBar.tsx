@@ -24,7 +24,8 @@ export const TerminalRequestsFilterBar = ({
     { value: TerminalRequestsFilter.ALL, label: "All" },
   ]
   const shallowRoute = (filter: string) => {
-    return `/${router.query.chainNameAndSafeAddress}/requests/?filter=${filter}`
+    return `${router.pathname}/?filter=${filter}`
+    // return `/${router.query.chainNameAndSafeAddress}/requests/?filter=${filter}`
   }
 
   return (
