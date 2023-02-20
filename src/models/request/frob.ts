@@ -1,5 +1,5 @@
 import { ActivityVariant } from "@prisma/client"
-import { getGnosisSafeDetails } from "../../lib/utils/getGnosisSafeDetails"
+import { getSafeDetails } from "../../lib/api/safe/getSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
@@ -15,7 +15,7 @@ const toFrob = async (request: Request) => {
     return
   }
 
-  const safeDetails = await getGnosisSafeDetails(
+  const safeDetails = await getSafeDetails(
     terminal.chainId,
     terminal.safeAddress,
   )

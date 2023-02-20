@@ -1,4 +1,4 @@
-import { getSupportedSafesForSigner } from "lib/api/safe"
+import { getSupportedSafesBySigner } from "lib/api/safe/getSafesBySigner"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
 
@@ -22,7 +22,7 @@ export default async function handler(
 
   let safes
   try {
-    safes = await getSupportedSafesForSigner(accountAddress)
+    safes = await getSupportedSafesBySigner(accountAddress)
   } catch {
     res.statusCode = 500
     return res.end(JSON.stringify("Failure fetching signer's supported Safes"))
