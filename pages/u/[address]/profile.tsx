@@ -10,19 +10,16 @@ import ProfileTabBar, {
   ProfileTab,
 } from "../../../src/components/core/TabBars/ProfileTabBar"
 import RequestListForm from "../../../src/components/request/RequestListForm"
-import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
+import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
 import { Account } from "../../../src/models/account/types"
 import { getRequests } from "../../../src/models/request/requests"
 import { RequestFrob } from "../../../src/models/request/types"
-import { Terminal } from "../../../src/models/terminal/types"
 
 const ProfilePage = ({
   account,
-  terminals,
   requests,
 }: {
   account: Account
-  terminals: Terminal[]
   requests: RequestFrob[]
 }) => {
   return (
@@ -33,14 +30,7 @@ const ProfilePage = ({
       <AvatarAddress address={account.address} size="lg" className="px-4" />
       {/* TABS */}
       <ProfileTabBar className="mt-4">
-        {/* TERMINALS */}
-        <TabsContent value={ProfileTab.TERMINALS}>
-          <ul className="mt-6">
-            {terminals.map((terminal) => (
-              <TerminalListItem terminal={terminal} key={terminal.id} />
-            ))}
-          </ul>
-        </TabsContent>
+        <ProfileTerminalsList address={account.address} />
         {/* REQUESTS */}
         <TabsContent value={ProfileTab.REQUESTS}>
           {/* FILTERS */}
