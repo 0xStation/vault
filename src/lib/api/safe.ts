@@ -1,32 +1,43 @@
 import { SUPPORTED_CHAIN_IDS } from "lib/constants"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 
-export const getSupportedSafesForSigner = async (address: string) => {
+export const getSupportedSafesForSigner = async (signerAddress: string) => {
   const safeCalls = await Promise.all(
-    SUPPORTED_CHAIN_IDS.map((chainId) => getSafesForSigner(chainId, address)),
+    SUPPORTED_CHAIN_IDS.map((chainId) =>
+      getSafesForSigner(chainId, signerAddress),
+    ),
   )
+  // merge lists
   const safes = safeCalls.reduce((acc, v) => [...acc, ...v], [])
 
   return safes
 }
 
-const getSafesForSigner = async (chainId: number, address: string) => {
+const getSafesForSigner = async (
+  chainId: number,
+  signerAddress: string,
+): Promise<{ address: string; chainId: number }[]> => {
   const url = `${safeEndpoint(chainId)}/owners/${toChecksumAddress(
-    address,
+    signerAddress,
   )}/safes`
   let data
   try {
     const response = await fetch(url)
+    if (response.status !== 200) {
+      throw Error(
+        `failed to fetch safes for signer: ${chainId} - ${signerAddress}`,
+      )
+    }
+
     data = await response.json()
-    console.log(response)
-    console.log(data)
-    // check for 200 status code
     return data.safes.map((safeAddress: string) => ({
       address: safeAddress,
       chainId,
     }))
   } catch (err) {
-    throw Error(`failed to fetch safes for signer: ${chainId} - ${address}`)
+    throw Error(
+      `failed to fetch safes for signer: ${chainId} - ${signerAddress}`,
+    )
   }
 }
 
