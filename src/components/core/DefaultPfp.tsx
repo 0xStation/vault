@@ -23,8 +23,8 @@ export const DefaultPfp = ({ size }: { size: "xs" | "sm" | "base" | "lg" }) => {
           y2="360"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#AD72FF" />
-          <stop offset="1" stop-color="#FF9956" />
+          <stop stopColor="#AD72FF" />
+          <stop offset="1" stopColor="#FF9956" />
         </linearGradient>
       </defs>
     </svg>
