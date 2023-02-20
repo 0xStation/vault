@@ -9,6 +9,7 @@ import ProfileRequestsFilterBar, {
 import ProfileTabBar, {
   ProfileTab,
 } from "../../../src/components/core/TabBars/ProfileTabBar"
+import { ProfileRequestsClaimList } from "../../../src/components/request/ProfileRequestsClaimList"
 import { ProfileRequestsCreatedList } from "../../../src/components/request/ProfileRequestsCreatedList"
 import RequestListForm from "../../../src/components/request/RequestListForm"
 import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
@@ -37,9 +38,7 @@ const ProfilePage = ({
           {/* FILTERS */}
           <ProfileRequestsFilterBar className="mt-3">
             {/* CLAIM */}
-            <TabsContent value={ProfileRequestsFilter.CLAIM}>
-              <RequestListForm requests={requests} />
-            </TabsContent>
+            <ProfileRequestsClaimList address={account.address} />
             {/* CREATED */}
             <ProfileRequestsCreatedList address={account.address} />
             {/* CLAIMED */}
