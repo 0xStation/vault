@@ -1,10 +1,11 @@
 import { SUPPORTED_CHAIN_IDS } from "lib/constants"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
+import { safeEndpoint } from "./utils"
 
-export const getSupportedSafesForSigner = async (signerAddress: string) => {
+export const getSupportedSafesBySigner = async (signerAddress: string) => {
   const safeCalls = await Promise.all(
     SUPPORTED_CHAIN_IDS.map((chainId) =>
-      getSafesForSigner(chainId, signerAddress),
+      getSafesBySigner(chainId, signerAddress),
     ),
   )
   // merge lists
@@ -13,7 +14,7 @@ export const getSupportedSafesForSigner = async (signerAddress: string) => {
   return safes
 }
 
-const getSafesForSigner = async (
+const getSafesBySigner = async (
   chainId: number,
   signerAddress: string,
 ): Promise<{ address: string; chainId: number }[]> => {
@@ -39,16 +40,4 @@ const getSafesForSigner = async (
       `failed to fetch safes for signer: ${chainId} - ${signerAddress}`,
     )
   }
-}
-
-const safeEndpoint = (chainId: number) => {
-  const networkMap: Record<number, string> = {
-    1: "mainnet",
-    5: "goerli",
-    137: "polygon",
-  }
-  if (!networkMap[chainId])
-    throw Error(`invalid chainId for safeEndpoint: ${chainId}`)
-
-  return `https://safe-transaction-${networkMap[chainId]}.safe.global/api/v1`
 }
