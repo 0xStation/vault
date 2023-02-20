@@ -1,16 +1,16 @@
 import { TabsContent } from "@ui/Tabs"
-import { useRequestsCreatedByAccount } from "../../models/request/queries/useRequestsCreatedByAccount"
+import { useRequestsClaimedByAccount } from "../../models/request/queries/useRequestsClaimedByAccount"
 import { ProfileRequestsFilter } from "../core/TabBars/ProfileRequestsFilterBar"
 import RequestListForm from "./RequestListForm"
 
-export const ProfileRequestsCreatedList = ({
+export const ProfileRequestsClaimedList = ({
   address,
 }: {
   address: string
 }) => {
-  const { requests } = useRequestsCreatedByAccount(address)
+  const { requests } = useRequestsClaimedByAccount(address)
   return (
-    <TabsContent value={ProfileRequestsFilter.CREATED}>
+    <TabsContent value={ProfileRequestsFilter.CLAIMED}>
       <RequestListForm requests={requests ?? []} />
     </TabsContent>
   )

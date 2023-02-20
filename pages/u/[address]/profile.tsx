@@ -3,15 +3,13 @@ import { GetServerSidePropsContext } from "next"
 import prisma from "../../../prisma/client"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import ProfileRequestsFilterBar, {
-  ProfileRequestsFilter,
-} from "../../../src/components/core/TabBars/ProfileRequestsFilterBar"
+import ProfileRequestsFilterBar from "../../../src/components/core/TabBars/ProfileRequestsFilterBar"
 import ProfileTabBar, {
   ProfileTab,
 } from "../../../src/components/core/TabBars/ProfileTabBar"
+import { ProfileRequestsClaimedList } from "../../../src/components/request/ProfileRequestsClaimedList"
 import { ProfileRequestsClaimList } from "../../../src/components/request/ProfileRequestsClaimList"
 import { ProfileRequestsCreatedList } from "../../../src/components/request/ProfileRequestsCreatedList"
-import RequestListForm from "../../../src/components/request/RequestListForm"
 import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
 import { Account } from "../../../src/models/account/types"
 import { getRequests } from "../../../src/models/request/requests"
@@ -37,14 +35,9 @@ const ProfilePage = ({
         <TabsContent value={ProfileTab.REQUESTS}>
           {/* FILTERS */}
           <ProfileRequestsFilterBar className="mt-3">
-            {/* CLAIM */}
             <ProfileRequestsClaimList address={account.address} />
-            {/* CREATED */}
             <ProfileRequestsCreatedList address={account.address} />
-            {/* CLAIMED */}
-            <TabsContent value={ProfileRequestsFilter.CLAIMED}>
-              <RequestListForm requests={[]} />
-            </TabsContent>
+            <ProfileRequestsClaimedList address={account.address} />
           </ProfileRequestsFilterBar>
         </TabsContent>
       </ProfileTabBar>

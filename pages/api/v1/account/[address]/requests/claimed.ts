@@ -40,10 +40,10 @@ export default async function handler(
               },
             },
           },
-          // only include requests where execution txnHash **IS NOT** recorded
+          // only include requests where execution txnHash **IS** recorded
           {
             txnHash: {
-              equals: null,
+              not: null,
             },
           },
         ],
