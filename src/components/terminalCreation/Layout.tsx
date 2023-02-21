@@ -1,24 +1,25 @@
-import { ArrowLeftIcon } from "@heroicons/react/24/solid"
+import { ArrowLeftIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { ReactNode } from "react"
 
 export const Layout = ({
   children,
   backFunc,
-  header,
+  isCloseIcon = false,
 }: {
-  header: string
   children: ReactNode
   backFunc: () => void
+  isCloseIcon?: boolean
 }) => {
   return (
-    <div className={"flex h-full flex-col"}>
+    <div className="mx-4 mt-[60px] flex h-screen flex-col">
       <button role="button" onClick={() => backFunc()}>
-        <ArrowLeftIcon className="h-6 w-6" />
+        {isCloseIcon ? (
+          <XMarkIcon className="h-6 w-6" />
+        ) : (
+          <ArrowLeftIcon className="h-6 w-6" />
+        )}
       </button>
-      <div className="my-7">
-        <h1 className="font-bold">{header}</h1>
-      </div>
-      {children}
+      <div className="mt-6 h-full">{children}</div>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
+import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
@@ -12,6 +13,7 @@ import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
+import { globalId } from "../../../models/terminal/utils"
 import AddressInput from "../../form/AddressInput"
 import QuorumInput from "../../form/QuorumInput"
 import Layout from "../Layout"
@@ -28,7 +30,7 @@ const LoadingScreen = ({
   setCreateTerminalView: Dispatch<SetStateAction<CREATE_TERMINAL_VIEW>>
 }) => {
   return (
-    <div className="flex h-full flex-col items-center justify-center text-center">
+    <div className="flex h-screen flex-col items-center justify-center text-center">
       {terminalCreationError ? (
         <>
           <p className="text-red">{terminalCreationError}</p>
@@ -76,6 +78,7 @@ export const MembersView = ({
   }>({ isError: false, message: "" })
   const [terminalCreationError, setTerminalCreationError] = useState<string>("")
   const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
+  const router = useRouter()
 
   useWaitForTransaction({
     confirmations: 1,
@@ -89,7 +92,7 @@ export const MembersView = ({
       })
       const proxyAddress = decodedProxyEvent?.[0]
       try {
-        await createTerminal({
+        const terminal = await createTerminal({
           safeAddress: proxyAddress,
           name: formData.name,
           chainId: formData.chainId as number,
@@ -99,6 +102,12 @@ export const MembersView = ({
         setShowLoadingScreen(false)
         setTxnHash(undefined)
         setTerminalCreationError("")
+        router.push(
+          `/${globalId(
+            terminal.chainId,
+            terminal.safeAddress,
+          )}/getting-started`,
+        )
       } catch (err) {
         setTerminalCreationError("Failed to create Terminal.")
         setTxnHash(undefined)
@@ -109,8 +118,6 @@ export const MembersView = ({
       setTxnHash(undefined)
     },
   })
-  console.log("terminalloadingscreen", showLoadingScreen)
-  console.log("terminalCreationError", terminalCreationError)
 
   const { sendTransactionAsync } = useSendTransaction({
     mode: "recklesslyUnprepared",
@@ -209,13 +216,13 @@ export const MembersView = ({
       backFunc={() => {
         setCreateTerminalView(CREATE_TERMINAL_VIEW.DETAILS)
       }}
-      header="Add members"
     >
+      <h2 className="mb-[30px] font-bold">Add members</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
-        className="flex h-[calc(100%-100px)] flex-col"
+        className="flex h-[calc(100%-120px)] flex-col"
       >
-        <div className="flex grow flex-col overflow-scroll">
+        <div className="flex max-h-[420px] grow flex-col overflow-scroll">
           <div className="mb-6">
             <label className="text-sm font-bold">Members*</label>
             <div className="w-full">
@@ -223,16 +230,16 @@ export const MembersView = ({
                 memberFields as unknown as [{ id: string; address: string }]
               ).map((item, index) => {
                 return item.address === activeUser?.address ? (
-                  <div className="mt-3 mb-6 flex flex-row">
-                    <Avatar size="sm" pfpUrl={activeUser?.data?.pfpUrl || ""} />
+                  <div className="mt-3 mb-6 flex flex-row" key={item.id}>
+                    <Avatar size="sm" address={activeUser?.address || ""} />
                     <p className="ml-2">You</p>
                   </div>
                 ) : (
                   <div key={item.id} className="mb-1 rounded bg-slate-200 p-3">
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
-                        {/* we need to add 2 to the index since the index is 0-indexed and 
-                          the owner is the first member, so increase the # by 1*/}
+                        {/* we need to add 2 to the index since the index is 0-indexed and
+                            the owner is the first member, so increase the # by 1*/}
                         Member {index + 1}
                       </p>
                       <button type="button" onClick={() => remove(index)}>
@@ -296,7 +303,8 @@ export const MembersView = ({
             quorumSize={memberFields?.length || 1} // default to 1 since activeUser is a member
           />
         </div>
-        <div className="mt-4 flex w-full flex-col pb-3 text-center">
+        {/* <div className="mt-4 flex w-full flex-col pb-3 text-center"> */}
+        <div className='absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center'>
           <Button type="submit" fullWidth={true}>
             Create Terminal
           </Button>

@@ -70,91 +70,94 @@ export const TerminalDetailsForm = ({
   const onError = (errors: any) => {
     setFormMessage({
       isError: false,
-      message: "Complete the required fields to continue",
+      message: "Complete the required fields to continue.",
     })
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit, onError)}>
-      <div className="flex-col">
-        <InputWithLabel
-          className="mb-3"
-          label="Name*"
-          register={register}
-          name="name"
-          placeholder="e.g. ChatGPT Discord Bot Project"
-          required
-          errors={errors}
-          registerOptions={{
-            maxLength: {
-              value: 60,
-              message: "Exceeded max length of 60 characters.",
-            },
-          }}
-        />
-        <SelectWithLabel
-          className="mb-3"
-          label="Chain*"
-          name="chainId"
-          required
-          register={register}
-          errors={errors}
-          registerOptions={{
-            onChange: (e) => {
-              switchNetwork?.(parseInt(e.target.value))
-            },
-          }}
-        >
-          <option value="">Choose option</option>
-          {SUPPORTED_CHAINS?.map((chain, idx) => {
-            return (
-              <option key={chain.id} value={chain.id}>
-                {chain.name}
-              </option>
-            )
-          })}
-        </SelectWithLabel>
-        <TextareaWithLabel
-          className="mb-3"
-          label="About"
-          register={register}
-          name="about"
-          placeholder="What does this group do?"
-          errors={errors}
-          registerOptions={{
-            maxLength: {
-              value: 400,
-              message: "Exceed max length of 400 characters.",
-            },
-          }}
-        />
-        <InputWithLabel
-          className="mb-3"
-          label="URL"
-          register={register}
-          name="url"
-          placeholder="Enter a link to your project"
-          errors={errors}
-          // TODO: abstract validation logic
-          registerOptions={{
-            validate: (v) =>
-              !v ||
-              isValidUrl(v) ||
-              "Invalid URL. Please enter a url in the format https://example.xyz.",
-          }}
-        />
-      </div>
-      <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
-        <Button type="submit" fullWidth={true}>
-          Next
-        </Button>
-        <p
-          className={`mt-1 text-sm  ${
-            formMessage?.isError ? "text-red" : "text-slate-500"
-          } ${formMessage.message || "text-transparent"}`}
-        >
-          {formMessage.message || "Complete the required fields to continue."}
-        </p>
-      </div>
-    </form>
+    <>
+      <h2 className="mb-[30px] font-bold">New Terminal</h2>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <div className="flex-col">
+          <InputWithLabel
+            className="mb-3"
+            label="Name*"
+            register={register}
+            name="name"
+            placeholder="e.g. ChatGPT Discord Bot Project"
+            required
+            errors={errors}
+            registerOptions={{
+              maxLength: {
+                value: 60,
+                message: "Exceeded max length of 60 characters.",
+              },
+            }}
+          />
+          <SelectWithLabel
+            className="mb-3"
+            label="Chain*"
+            name="chainId"
+            required
+            register={register}
+            errors={errors}
+            registerOptions={{
+              onChange: (e) => {
+                switchNetwork?.(parseInt(e.target.value))
+              },
+            }}
+          >
+            <option value="">Choose option</option>
+            {SUPPORTED_CHAINS?.map((chain, idx) => {
+              return (
+                <option key={chain.id} value={chain.id}>
+                  {chain.name}
+                </option>
+              )
+            })}
+          </SelectWithLabel>
+          <TextareaWithLabel
+            className="mb-3"
+            label="About"
+            register={register}
+            name="about"
+            placeholder="What does this group do?"
+            errors={errors}
+            registerOptions={{
+              maxLength: {
+                value: 400,
+                message: "Exceed max length of 400 characters.",
+              },
+            }}
+          />
+          <InputWithLabel
+            className="mb-3"
+            label="URL"
+            register={register}
+            name="url"
+            placeholder="Enter a link to your project"
+            errors={errors}
+            // TODO: abstract validation logic
+            registerOptions={{
+              validate: (v) =>
+                !v ||
+                isValidUrl(v) ||
+                "Invalid URL. Please enter a url in the format https://example.xyz.",
+            }}
+          />
+        </div>
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
+          <Button type="submit" fullWidth={true}>
+            Next
+          </Button>
+          <p
+            className={`mt-1 text-sm  ${
+              formMessage?.isError ? "text-red" : "text-slate-500"
+            } ${formMessage.message || "text-transparent"}`}
+          >
+            {formMessage.message || "Complete the required fields to continue."}
+          </p>
+        </div>
+      </form>
+    </>
   )
 }

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { WagmiConfig } from "wagmi"
 import "../styles/globals.css"
 
+import AppLayout from "../src/components/core/AppLayout"
 import { chains, client } from "../src/wagmi"
 
 const queryClient = new QueryClient({
@@ -39,7 +40,11 @@ function App({ Component, pageProps }: AppProps) {
           <title>Station</title>
         </NextHead>
         <QueryClientProvider client={queryClient}>
-          {mounted && <Component {...pageProps} />}
+          {mounted && (
+            <AppLayout>
+              <Component {...pageProps} />
+            </AppLayout>
+          )}
         </QueryClientProvider>
       </RainbowKitProvider>
     </WagmiConfig>

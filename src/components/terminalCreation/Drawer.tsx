@@ -1,17 +1,24 @@
 import BottomDrawer from "@ui/BottomDrawer"
+import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useStore } from "../../hooks/stores/useStore"
 import Selector from "../core/SelectorCard"
 import { TerminalCreationForm } from "./create"
+import Layout from "./Layout"
 
 export const TerminalCreationOptionsView = ({
   setView,
 }: {
   setView: Dispatch<SetStateAction<VIEW.CREATION_OPTIONS | VIEW.CREATE_FORM>>
 }) => {
+  const router = useRouter()
+  const activeUser = useStore((state) => state.activeUser)
   return (
-    <div>
-      <h1 className="font-bold">New Terminal</h1>
+    <Layout
+      backFunc={() => router.push(`/u/${activeUser?.address}/profile`)}
+      isCloseIcon={true}
+    >
+      <h2 className="font-bold">New Terminal</h2>
       <p className="mt-3 text-slate-500">
         Use an existing Safe, or create Terminal with a new address.
       </p>
@@ -21,7 +28,7 @@ export const TerminalCreationOptionsView = ({
         className="mt-7"
         onClick={() => setView(VIEW.CREATE_FORM)}
       />
-    </div>
+    </Layout>
   )
 }
 

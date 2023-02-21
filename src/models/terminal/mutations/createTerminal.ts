@@ -18,7 +18,7 @@ export const createTerminal = async ({
     throw Error(
       `Missing args in "createTerminal". Args specified - safeAddress: ${safeAddress}, chainId: ${chainId}, name: ${name} `,
     )
-  const terminal = await axios.put<Terminal>("/api/v1/terminal", {
+  const response = await axios.put<Terminal>("/api/v1/terminal", {
     safeAddress,
     name,
     chainId,
@@ -26,5 +26,5 @@ export const createTerminal = async ({
     url,
   })
 
-  return terminal
+  return response.data
 }

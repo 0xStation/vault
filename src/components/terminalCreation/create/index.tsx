@@ -25,7 +25,6 @@ export const TerminalCreationForm = ({
           backFunc={() => {
             setView(VIEW.CREATION_OPTIONS)
           }}
-          header="New Terminal"
         >
           <TerminalDetailsForm setCreateTerminalView={setCreateTerminalView} />
         </Layout>
