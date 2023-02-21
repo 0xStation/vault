@@ -19,7 +19,10 @@ export const TerminalDetailsForm = ({
   const { switchNetwork, error: networkError } = useSwitchNetwork()
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
-  const [unfinishedForm, setUnfinishedForm] = useState<boolean>(false)
+  const [formMessage, setFormMessage] = useState<{
+    isError: boolean
+    message: string
+  }>({ isError: false, message: "" })
   const { chain } = useNetwork()
   const { name, chainId, about, url } = formData
 
@@ -27,7 +30,7 @@ export const TerminalDetailsForm = ({
     if (networkError) {
       setError("chainId", {
         type: "wrongNetwork",
-        message: "Please switch network to specified chain.",
+        message: "Please check your wallet to switch to specified chain.",
       })
     } else {
       clearErrors("chainId")
@@ -43,7 +46,7 @@ export const TerminalDetailsForm = ({
   } = useForm({
     defaultValues: {
       name,
-      chainId,
+      chainId: chainId || chain?.id,
       about,
       url,
     } as FieldValues,
@@ -60,11 +63,15 @@ export const TerminalDetailsForm = ({
     setFormData({
       ...formData,
       ...data,
+      chainId: parseInt(data.chainId),
     })
     setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
   }
   const onError = (errors: any) => {
-    setUnfinishedForm(true)
+    setFormMessage({
+      isError: false,
+      message: "Complete the required fields to continue",
+    })
   }
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -129,7 +136,10 @@ export const TerminalDetailsForm = ({
           errors={errors}
           // TODO: abstract validation logic
           registerOptions={{
-            validate: (v) => !v || isValidUrl(v) || "Invalid URL.",
+            validate: (v) =>
+              !v ||
+              isValidUrl(v) ||
+              "Invalid URL. Please enter a url in the format https://example.com.",
           }}
         />
       </div>
@@ -139,10 +149,10 @@ export const TerminalDetailsForm = ({
         </Button>
         <p
           className={`mt-1 text-sm  ${
-            unfinishedForm ? "text-slate-500" : "text-transparent"
-          }`}
+            formMessage?.isError ? "text-red" : "text-slate-500"
+          } ${formMessage.message || "text-transparent"}`}
         >
-          Complete the required fields to continue.
+          {formMessage.message || "Complete the required fields to continue."}
         </p>
       </div>
     </form>

@@ -1,7 +1,11 @@
-import { FunctionFragment } from "ethers/lib/utils.js"
+import { EventFragment, FunctionFragment } from "@ethersproject/abi"
 
 const fn = (arg: string): FunctionFragment => {
   return FunctionFragment.fromString(arg)
+}
+
+const ev = (arg: string): EventFragment => {
+  return EventFragment.fromString(arg)
 }
 
 /**
@@ -47,4 +51,8 @@ export const createProxyWithNonce = fn(
 // https://github.com/safe-global/safe-contracts/blob/761f6782b327493bc9869b0754471824e2a6635f/contracts/Safe.sol#L75
 export const safeSetup = fn(
   "setup(address[] calldata _owners,uint256 _threshold,address to,bytes calldata data,address fallbackHandler,address paymentToken,uint256 payment,address payable paymentReceiver)",
+)
+
+export const proxyCreation = ev(
+  "ProxyCreation(address proxy, address singleton)",
 )

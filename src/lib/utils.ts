@@ -1,5 +1,5 @@
+import { keccak256 } from "@ethersproject/keccak256"
 import { ClassValue, clsx } from "clsx"
-import { keccak256 } from "ethers/lib/utils.js"
 import { twMerge } from "tailwind-merge"
 
 export const cn = (...inputs: ClassValue[]) => {

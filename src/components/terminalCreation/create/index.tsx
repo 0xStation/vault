@@ -31,14 +31,7 @@ export const TerminalCreationForm = ({
         </Layout>
       )}
       {createTerminalView === CREATE_TERMINAL_VIEW.MEMBERS && (
-        <Layout
-          backFunc={() => {
-            setCreateTerminalView(CREATE_TERMINAL_VIEW.DETAILS)
-          }}
-          header="Add members"
-        >
-          <MembersView setCreateTerminalView={setCreateTerminalView} />
-        </Layout>
+        <MembersView setCreateTerminalView={setCreateTerminalView} />
       )}
     </>
   )

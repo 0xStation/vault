@@ -3,9 +3,10 @@ import { RawCall } from "lib/transactions/call"
 import {
   createProxyWithNonce,
   enableModuleWithinDeploy,
+  proxyCreation,
   safeSetup,
-} from "./fragments"
-import { encodeFunctionData } from "./utils"
+} from "../fragments"
+import { decodeEventData, encodeFunctionData } from "../utils"
 
 export const encodeSafeSetup = ({
   owners,
@@ -46,4 +47,14 @@ export const encodeSafeSetup = ({
     value: "0",
     data,
   }
+}
+
+export const decodeProxyEvent = ({
+  data,
+  topics,
+}: {
+  data: string
+  topics: string[]
+}) => {
+  return decodeEventData(proxyCreation, data, topics)
 }

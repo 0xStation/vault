@@ -11,6 +11,7 @@ export type Terminal = PrismaTerminal & {
 type TerminalMetadata = {
   name: string
   description: string
+  url: string
 }
 
 type Asset = {
