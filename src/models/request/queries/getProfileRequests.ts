@@ -1,68 +1,40 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActivityVariant, Prisma } from "@prisma/client"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
-import { NextApiRequest, NextApiResponse } from "next"
-import db from "../../../../../../prisma/client"
-import { Activity } from "../../../../../../src/models/activity/types"
-import { Request } from "../../../../../../src/models/request/types"
-import { Terminal } from "../../../../../../src/models/terminal/types"
+import db from "../../../../prisma/client"
+import { Activity } from "../../activity/types"
+import { Terminal } from "../../terminal/types"
+import { Request, RequestFrob } from "../types"
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { method, query } = req
+const safeKey = (chainId: number, address: string) => `${chainId}-${address}`
 
-  if (method !== "GET") {
-    res.setHeader("Allow", ["GET"])
-    res.status(405).end(`Method ${method} Not Allowed`)
-  }
-
-  if (!query.address) {
-    res.statusCode = 404
-    return res.end(JSON.stringify("No address provided"))
-  }
-
-  const accountAddress = query.address as string
+// FROB for fetching requests for the purpose of a profile page
+export const getProfileRequests = async ({
+  where,
+}: {
+  where: Prisma.RequestWhereInput
+}): Promise<RequestFrob[]> => {
+  // 1. fetch requests from db with terminals and sorted activities included
 
   let requests
   try {
     requests = (await db.request.findMany({
-      where: {
-        AND: [
-          // find all requests where this user is subscribing to it
-          // relies on us properly creating subscriptions when creating requests
-          {
-            subscriptions: {
-              some: {
-                address: {
-                  equals: accountAddress,
-                },
-              },
-            },
-          },
-          // only include requests where execution txnHash **IS** recorded
-          {
-            txnHash: {
-              not: null,
-            },
-          },
-        ],
-      },
+      where,
       include: {
+        // profiles aggregate requests from many terminals, so include on query
         terminal: true,
+        // activites needed for counts of votes and comments
         activities: {
           orderBy: {
-            createdAt: "desc",
+            createdAt: "desc", // sort to determine most recent vote per signer
           },
         },
       },
     })) as unknown as (Request & { terminal: Terminal })[]
   } catch {
-    res.statusCode = 500
-    return res.end(
-      JSON.stringify("Failure fetching account's created requests"),
-    )
+    throw Error("Failure fetching account's created requests")
   }
+
+  // 2. fetch safe details for each unique terminal included in a request
 
   const uniqueTerminals = requests
     .map((request) => request.terminal)
@@ -77,8 +49,10 @@ export default async function handler(
 
   const safeDetails: Record<string, any> = {}
   safeCalls.forEach((details) => {
-    safeDetails[`${details.chainId}-${details.address}`] = details
+    safeDetails[safeKey(details.chainId, details.address)] = details
   })
+
+  // 3. construct FROBs
 
   const frobRequests = requests.map((request) => {
     const signatureAccounted: Record<string, boolean> = {}
@@ -91,25 +65,35 @@ export default async function handler(
       switch (activity.variant) {
         case ActivityVariant.COMMENT_ON_REQUEST:
           commentActivities.push(activity)
+          break
         case ActivityVariant.EXECUTE_REQUEST:
           isExecuted = true
+          break
         case ActivityVariant.APPROVE_REQUEST:
           if (!signatureAccounted[activity.address]) {
             signatureAccounted[activity.address] = true
             approveActivities.push(activity)
           }
+          break
         case ActivityVariant.REJECT_REQUEST:
           if (!signatureAccounted[activity.address]) {
             signatureAccounted[activity.address] = true
             rejectActivities.push(activity)
           }
+          break
         case ActivityVariant.CREATE_AND_APPROVE_REQUEST:
           if (!signatureAccounted[activity.address]) {
             signatureAccounted[activity.address] = true
             approveActivities.push(activity)
           }
+          break
       }
     })
+
+    const { quorum, signers } =
+      safeDetails[
+        safeKey(request.terminal.chainId, request.terminal.safeAddress)
+      ]
 
     return {
       ...request,
@@ -117,15 +101,13 @@ export default async function handler(
       approveActivities,
       rejectActivities,
       commentActivities,
-      quorum:
-        safeDetails[
-          `${request.terminal.chainId}-${request.terminal.safeAddress}`
-        ].quorum,
-      addressesThatHaveNotSigned: safeDetails[
-        `${request.terminal.chainId}-${request.terminal.safeAddress}`
-      ]?.signers.filter((address: string) => !signatureAccounted[address]),
+      quorum,
+      signers,
+      addressesThatHaveNotSigned: signers.filter(
+        (address: string) => !signatureAccounted[address],
+      ),
     }
   })
 
-  res.status(200).json(frobRequests)
+  return frobRequests
 }

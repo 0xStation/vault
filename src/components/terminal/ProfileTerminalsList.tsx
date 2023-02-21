@@ -8,7 +8,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
 
   return (
     <TabsContent value={ProfileTab.TERMINALS}>
-      <ul className="mt-6">
+      <ul>
         {terminals?.map((terminal) => (
           <TerminalListItem terminal={terminal} key={terminal.id} />
         ))}

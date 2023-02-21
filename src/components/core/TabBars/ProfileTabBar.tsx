@@ -1,6 +1,5 @@
 import { useRouter } from "next/router"
 import { TabBar } from "../TabBar"
-import { ProfileRequestsFilter } from "./ProfileRequestsFilterBar"
 
 export enum ProfileTab {
   TERMINALS = "terminals",
@@ -21,12 +20,7 @@ export const ProfileTabBar = ({
     { value: ProfileTab.REQUESTS, label: "Requests" },
   ]
   const shallowRoute = (tab: string) => {
-    return (
-      `/u/${router.query.address}/profile/?tab=${tab}` +
-      (tab === ProfileTab.REQUESTS
-        ? `&filter=${ProfileRequestsFilter.CLAIM}`
-        : "")
-    )
+    return `/u/${router.query.address}/profile/?tab=${tab}`
   }
 
   return (
