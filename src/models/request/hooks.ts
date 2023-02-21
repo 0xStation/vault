@@ -17,7 +17,7 @@ export const useRequestsCreatedByAccount = (
   address: string,
 ): { isLoading: boolean; requests: RequestFrob[] | undefined } => {
   const { isLoading, data: requests } = useSWR(
-    `/api/v1/account/${address}/requests/created`,
+    address ? `/api/v1/account/${address}/requests/created` : null,
     fetcher,
   )
 
