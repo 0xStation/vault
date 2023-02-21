@@ -13,22 +13,13 @@ const fetcher = async (url: string) => {
   }
 }
 
-export const useRequestsClaimByAccount = (address: string) => {
-  const { data: requests } = useSWR(
-    `/api/v1/account/${address}/requests/claim`,
-    fetcher,
-  )
-
-  return { requests }
-}
-
 export const useRequestsCreatedByAccount = (
   address: string,
-): { requests: RequestFrob[] | undefined } => {
-  const { data: requests } = useSWR(
+): { isLoading: boolean; requests: RequestFrob[] | undefined } => {
+  const { isLoading, data: requests } = useSWR(
     `/api/v1/account/${address}/requests/created`,
     fetcher,
   )
 
-  return { requests }
+  return { isLoading, requests }
 }
