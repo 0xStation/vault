@@ -1,13 +1,12 @@
-import { Transition } from "@headlessui/react"
-import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
-import RequestCard from "../../src/components/core/RequestCard"
-import RequestsNavBar from "../../src/components/core/RequestsNavbar"
+import TerminalRequestsFilterBar, {
+  TerminalRequestsFilter,
+} from "../../src/components/core/TabBars/TerminalRequestsFilterBar"
+import RequestListForm from "../../src/components/request/RequestListForm"
 import { getRequestsByTerminal } from "../../src/models/request/requests"
 import { RequestFrob } from "../../src/models/request/types"
 
@@ -17,67 +16,49 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
-  const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const { register, handleSubmit, watch } = useForm()
+  const { address } = useAccount()
 
-  // watches form data and responds on change
-  watch((data) => {
-    const checkBoxEntries = Object.entries(data)
-    const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)
-    setSelectedRequests(checkedBoxes)
-  })
+  // I'd like to nest these as their own routes but I don't think it will work until
+  // next beta releases...
+  const needsAttentionRequests = requests.filter(
+    (r) =>
+      !(
+        r.approveActivities.some((a) => a.address === address) ||
+        r.rejectActivities.some((a) => a.address === address)
+      ),
+  )
+  const awaitingOthersRequests = requests.filter(
+    (r) =>
+      // need to check if ready to execute because then this should go in "needs attention"
+      r.approveActivities.some((a) => a.address === address) ||
+      r.rejectActivities.some((a) => a.address === address),
+  )
+  const closedRequests = requests.filter((r) => r.isExecuted)
+  const allRequests = requests
 
-  const requestIsSelected = (id: string) => {
-    return selectedRequests.find(([rId, _v]: [string, boolean]) => rId === id)
+  const requestContentForTab = (tab: string, requests: RequestFrob[]) => {
+    return (
+      <TabsContent value={tab}>
+        <RequestListForm requests={requests} />
+      </TabsContent>
+    )
   }
-
-  const onSubmit = (data: any) => console.log(data)
 
   return (
     <>
       <AccountNavBar />
-      <RequestsNavBar>
-        <TabsContent value="needs_attention">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="divide-y divide-slate-200">
-              {requests.map((request, idx) => {
-                return (
-                  <RequestCard
-                    disabled={
-                      selectedRequests.length > 0 &&
-                      !requestIsSelected(request.id)
-                    }
-                    key={`request-${idx}`}
-                    request={request}
-                    formRegister={register}
-                  />
-                )
-              })}
-            </div>
-          </form>
-        </TabsContent>
-      </RequestsNavBar>
-
-      <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
-        <Transition
-          show={selectedRequests.length > 0}
-          enter="transform transition ease-in-out duration-300 sm:duration-500"
-          enterFrom="translate-y-[200%]"
-          enterTo="translate-y-0"
-          leave="transform transition ease-in-out duration-300 sm:duration-500"
-          leaveFrom="translate-y-0"
-          leaveTo="translate-y-[200%]"
-        >
-          <div className="flex w-full flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
-            <p className="text-sm text-white">
-              {selectedRequests.length} selected
-            </p>
-            <Button size="sm" variant="secondary" onClick={() => {}}>
-              Cancel
-            </Button>
-          </div>
-        </Transition>
-      </div>
+      <TerminalRequestsFilterBar>
+        {requestContentForTab(
+          TerminalRequestsFilter.NEEDS_ATTENTION,
+          needsAttentionRequests,
+        )}
+        {requestContentForTab(
+          TerminalRequestsFilter.AWAITING_OTHERS,
+          awaitingOthersRequests,
+        )}
+        {requestContentForTab(TerminalRequestsFilter.CLOSED, closedRequests)}
+        {requestContentForTab(TerminalRequestsFilter.ALL, allRequests)}
+      </TerminalRequestsFilterBar>
     </>
   )
 }

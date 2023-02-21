@@ -139,7 +139,7 @@ export const TerminalDetailsForm = ({
             validate: (v) =>
               !v ||
               isValidUrl(v) ||
-              "Invalid URL. Please enter a url in the format https://example.com.",
+              "Invalid URL. Please enter a url in the format https://example.xyz.",
           }}
         />
       </div>

@@ -12,10 +12,7 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
-    className={cn(
-      "flex w-full items-center space-x-3 border-b border-b-slate-200 p-1",
-      className,
-    )}
+    className={cn("flex w-full items-center space-x-3 p-1", className)}
     {...props}
   />
 ))
@@ -27,7 +24,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     className={cn(
-      "mb-[-4px] inline-flex items-center justify-center pb-1 text-sm text-black disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b data-[state=active]:font-bold",
+      "mb-[-4px] inline-flex items-center justify-center pb-1 text-xs text-black disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b data-[state=active]:font-bold",
       className,
     )}
     {...props}
@@ -35,6 +32,35 @@ const TabsTrigger = React.forwardRef<
   />
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
+
+const FilterTabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn("flex w-full items-center space-x-2", className)}
+    {...props}
+  />
+))
+FilterTabsList.displayName = TabsPrimitive.List.displayName
+
+const FilterTabsTrigger = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+>(({ className, ...props }, ref) => {
+  return (
+    <TabsPrimitive.Trigger
+      className={cn(
+        "mb-4 inline-flex items-center justify-center rounded-md border border-slate-200 px-3 py-1 text-xs text-black disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-slate-100 data-[state=active]:font-medium",
+        className,
+      )}
+      {...props}
+      ref={ref}
+    />
+  )
+})
+FilterTabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
@@ -44,4 +70,11 @@ const TabsContent = React.forwardRef<
 ))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  FilterTabsList,
+  FilterTabsTrigger,
+  TabsContent,
+}

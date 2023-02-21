@@ -1,11 +1,18 @@
 import { Request as PrismaRequest } from "@prisma/client"
 import { Action } from "../action/types"
 import { Activity } from "../activity/types"
+import { Terminal } from "../terminal/types"
 import { Token } from "../token/types"
 
 export type RequestFrob = Request & {
   approveActivities: Activity[]
   rejectActivities: Activity[]
+  commentActivities: Activity[]
+  isExecuted: boolean
+  quorum: number
+  terminal: Terminal
+  signers: string[]
+  addressesThatHaveNotSigned: string[]
 }
 
 export type Request = PrismaRequest & {
@@ -21,7 +28,7 @@ type RequestMetadata = {
   rejectionActionIds: string[]
 }
 
-type SignerQuorumVariant = {
+export type SignerQuorumVariant = {
   add: string[]
   remove: string[]
   setQuorum: number
@@ -74,10 +81,4 @@ export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
-}
-
-export enum RequestVariantType {
-  SIGNER_QUORUM,
-  TOKEN_TRANSFER,
-  SPLIT_TOKEN_TRANSFER,
 }

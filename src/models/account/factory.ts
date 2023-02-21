@@ -15,7 +15,7 @@ export const createAccount = ({
   hasVerifedEmail?: boolean
 }) => {
   return {
-    chainId: chainId ?? 5,
+    chainId: chainId ?? 0,
     address: address ?? faker.finance.ethereumAddress(),
     data: {
       pfpUrl:
