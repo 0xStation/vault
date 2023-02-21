@@ -7,7 +7,8 @@ const nextConfig = {
       "station-images.nyc3.digitaloceanspaces.com",
       "cdn.discordapp.com",
       "avatar.tobi.sh",
-      "gateway.ipfs.io", // ENS avatars
+      "gateway.ipfs.io", // ENS avatars,
+      "i.seadn.io", // ENS avatars
     ],
   },
   reactStrictMode: true,

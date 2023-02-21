@@ -1,18 +1,43 @@
+import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
-import { useTerminalsBySigner } from "../../models/terminal/queries/getTerminalsBySignerAddress"
+import { useRouter } from "next/router"
+import { useTerminalsBySigner } from "../../models/terminal/hooks"
+import { EmptyList } from "../core/EmptyList"
 import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 import TerminalListItem from "./TerminalListItem"
 
 export const ProfileTerminalsList = ({ address }: { address: string }) => {
-  const { terminals } = useTerminalsBySigner(address)
+  const { isLoading, terminals } = useTerminalsBySigner(address)
+  const router = useRouter()
 
   return (
     <TabsContent value={ProfileTab.TERMINALS}>
-      <ul className="mt-6">
-        {terminals?.map((terminal) => (
-          <TerminalListItem terminal={terminal} key={terminal.id} />
-        ))}
-      </ul>
+      {isLoading ? (
+        <></>
+      ) : terminals?.length === 0 ? (
+        <EmptyList
+          title="No Terminals"
+          subtitle="Something delightful & not cringey."
+        >
+          <div className="mt-3">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                router.push("/terminal/new")
+              }}
+            >
+              + New Terminal
+            </Button>
+          </div>
+        </EmptyList>
+      ) : (
+        <ul>
+          {terminals?.map((terminal) => (
+            <TerminalListItem terminal={terminal} key={terminal.id} />
+          ))}
+        </ul>
+      )}
     </TabsContent>
   )
 }

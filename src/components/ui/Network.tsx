@@ -4,9 +4,8 @@ import { Ethereum } from "@icons/coins/Ethereum"
 import { Optimism } from "@icons/coins/Optimism"
 import { Polygon } from "@icons/coins/Polygon"
 import { Testnet } from "@icons/coins/Testnet"
-import { RoundedPill } from "@ui/RoundedPill"
 
-interface ChainPillProps {
+interface NetworkProps {
   chainId: number
 }
 
@@ -37,13 +36,11 @@ const config: Record<number, any> = {
   },
 }
 
-export const ChainPill = ({ chainId }: ChainPillProps) => {
+export const Network = ({ chainId }: NetworkProps) => {
   return (
-    <RoundedPill>
-      <div className="flex flex-row items-center space-x-1.5">
-        {config[chainId].icon}
-        <span className="text-xs">{config[chainId].name}</span>
-      </div>
-    </RoundedPill>
+    <div className="flex flex-row items-center space-x-1.5">
+      {config[chainId].icon}
+      <span className="text-xs">{config[chainId].name}</span>
+    </div>
   )
 }

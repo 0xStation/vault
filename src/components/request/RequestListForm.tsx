@@ -5,7 +5,13 @@ import { useForm } from "react-hook-form"
 import { RequestFrob } from "../../models/request/types"
 import RequestCard from "../core/RequestCard"
 
-const RequestListForm = ({ requests }: { requests: RequestFrob[] }) => {
+const RequestListForm = ({
+  requests,
+  isProfile = false,
+}: {
+  requests: RequestFrob[]
+  isProfile?: boolean
+}) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch, reset } = useForm()
 
@@ -34,6 +40,7 @@ const RequestListForm = ({ requests }: { requests: RequestFrob[] }) => {
                 key={`request-${idx}`}
                 request={request}
                 formRegister={register}
+                showTerminal={isProfile ? request.terminal : undefined}
               />
             )
           })}

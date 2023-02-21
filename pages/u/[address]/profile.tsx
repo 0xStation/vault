@@ -1,40 +1,42 @@
-import { TabsContent } from "@ui/Tabs"
+import { Address } from "@ui/Address"
+import { Avatar } from "@ui/Avatar"
 import { useRouter } from "next/router"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
-import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import ProfileRequestsFilterBar from "../../../src/components/core/TabBars/ProfileRequestsFilterBar"
-import ProfileTabBar, {
-  ProfileTab,
-} from "../../../src/components/core/TabBars/ProfileTabBar"
-import { ProfileRequestsClaimedList } from "../../../src/components/request/ProfileRequestsClaimedList"
-import { ProfileRequestsClaimList } from "../../../src/components/request/ProfileRequestsClaimList"
-import { ProfileRequestsCreatedList } from "../../../src/components/request/ProfileRequestsCreatedList"
+import ProfileTabBar from "../../../src/components/core/TabBars/ProfileTabBar"
+import { ProfileRequestsList } from "../../../src/components/request/ProfileRequestsList"
 import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
-import useStore from "../../../src/hooks/stores/useStore"
+import { useTerminalsBySigner } from "../../../src/models/terminal/hooks"
 
 const ProfilePage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
-  const activeUser = useStore((state) => state.activeUser)
+  const { isLoading, count } = useTerminalsBySigner(accountAddress)
 
   return (
     <>
       {/* NAV */}
       <AccountNavBar />
       {/* ACCOUNT */}
-      <AvatarAddress address={accountAddress} size="lg" className="px-4" />
+      <div className="flex flex-row items-center space-x-3 px-4">
+        <Avatar address={accountAddress} size="lg" />
+        <div className="items-left flex flex-col">
+          <Address address={accountAddress} size="lg" />
+          {isLoading ? (
+            <div className="h-4 w-20 animate-pulse rounded-md bg-slate-200"></div>
+          ) : (
+            <div className="text-xs">
+              <span className="font-bold">{count}</span>{" "}
+              <span className="text-slate-500">
+                Terminal{count === 1 ? "" : "s"}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
       {/* TABS */}
       <ProfileTabBar className="mt-4">
         <ProfileTerminalsList address={accountAddress} />
-        {/* REQUESTS */}
-        <TabsContent value={ProfileTab.REQUESTS}>
-          {/* FILTERS */}
-          <ProfileRequestsFilterBar className="mt-3">
-            <ProfileRequestsClaimList address={accountAddress} />
-            <ProfileRequestsCreatedList address={accountAddress} />
-            <ProfileRequestsClaimedList address={accountAddress} />
-          </ProfileRequestsFilterBar>
-        </TabsContent>
+        <ProfileRequestsList address={accountAddress} />
       </ProfileTabBar>
     </>
   )
