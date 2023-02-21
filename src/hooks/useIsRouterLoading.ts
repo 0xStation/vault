@@ -7,8 +7,8 @@ export const useIsRouterLoading = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const handleStart = (url: string) => {
-      url !== router.asPath && setLoading(true)
+    const handleStart = (url: string, { shallow }: { shallow: boolean }) => {
+      url !== router.asPath && !shallow && setLoading(true)
     }
     const handleComplete = (url: string) => {
       // timeout is used to prevent glitching from loading to page
