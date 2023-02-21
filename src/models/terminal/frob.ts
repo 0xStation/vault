@@ -1,8 +1,8 @@
-import { getGnosisSafeDetails } from "../../lib/utils/getGnosisSafeDetails"
+import { getSafeDetails } from "../../lib/api/safe/getSafeDetails"
 import { Terminal } from "./types"
 
 const toFrob = async (terminal: Terminal) => {
-  const safeDetails = await getGnosisSafeDetails(
+  const safeDetails = await getSafeDetails(
     terminal.chainId,
     terminal.safeAddress,
   )
