@@ -1,5 +1,5 @@
 import { ActivityVariant } from "@prisma/client"
-import { getGnosisSafeDetails } from "../../lib/utils/getGnosisSafeDetails"
+import { getSafeDetails } from "../../lib/api/safe/getSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
@@ -15,7 +15,7 @@ const toFrob = async (request: Request) => {
     return
   }
 
-  const safeDetails = await getGnosisSafeDetails(
+  const safeDetails = await getSafeDetails(
     terminal.chainId,
     terminal.safeAddress,
   )
@@ -55,7 +55,7 @@ const toFrob = async (request: Request) => {
   })) as Activity[]
 
   const addressesThatHaveSigned = votingActivities.map((a) => a.address)
-  const addressesThatHaveNotSigned = signers.filter(
+  const addressesThatHaveNotSigned = signers?.filter(
     (a: string) => !addressesThatHaveSigned.includes(a),
   )
 
@@ -82,9 +82,10 @@ const toFrob = async (request: Request) => {
     ...request,
     ...sortedVotingActivities,
     commentActivities,
-    addressesThatHaveNotSigned: addressesThatHaveNotSigned,
+    addressesThatHaveNotSigned: addressesThatHaveNotSigned || [],
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
+    terminal,
   } as RequestFrob
 }
 

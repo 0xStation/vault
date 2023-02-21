@@ -1,5 +1,5 @@
 import { recoverAddress } from "ethers/lib/utils.js"
-import { checksumAddress } from "lib/utils"
+import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { Action } from "../../models/action/types"
 import { actionsTree, treeMessage } from "./tree"
 import { getHash } from "./utils"
@@ -32,7 +32,7 @@ export const verifyTree = (
 ) => {
   const digest = getHash(treeMessage(root))
   const signer = recoverAddress(digest, signature)
-  if (checksumAddress(address) !== checksumAddress(signer)) {
+  if (toChecksumAddress(address) !== toChecksumAddress(signer)) {
     throw Error(
       `signature creator (${signer}) is different than provided address (${address})`,
     )

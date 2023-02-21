@@ -11,7 +11,7 @@ const button = cva("relative font-medium rounded", {
       tertiary: "bg-slate-200 text-slate-500",
     },
     size: {
-      sm: "px-3 py-1 text-sm",
+      sm: "px-3 py-1 text-xs font-medium",
       base: "font-medium px-3 py-1 text-base",
       lg: "font-bold px-5 py-2 text-base",
     },

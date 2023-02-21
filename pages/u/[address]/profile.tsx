@@ -1,75 +1,43 @@
 import { TabsContent } from "@ui/Tabs"
-import { GetServerSidePropsContext } from "next"
-import prisma from "../../../prisma/client"
+import { useRouter } from "next/router"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import ProfileNavBar from "../../../src/components/core/ProfileNavBar"
-import TerminalListItem from "../../../src/components/terminal/TerminalListItem"
-import { Account } from "../../../src/models/account/types"
-import { Terminal } from "../../../src/models/terminal/types"
+import ProfileRequestsFilterBar from "../../../src/components/core/TabBars/ProfileRequestsFilterBar"
+import ProfileTabBar, {
+  ProfileTab,
+} from "../../../src/components/core/TabBars/ProfileTabBar"
+import { ProfileRequestsClaimedList } from "../../../src/components/request/ProfileRequestsClaimedList"
+import { ProfileRequestsClaimList } from "../../../src/components/request/ProfileRequestsClaimList"
+import { ProfileRequestsCreatedList } from "../../../src/components/request/ProfileRequestsCreatedList"
+import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
+import useStore from "../../../src/hooks/stores/useStore"
 
-const ProfilePage = ({
-  account,
-  terminals,
-}: {
-  account: Account
-  terminals: Terminal[]
-}) => {
+const ProfilePage = ({}: {}) => {
+  const router = useRouter()
+  const accountAddress = router.query.address as string
+  const activeUser = useStore((state) => state.activeUser)
+
   return (
     <>
+      {/* NAV */}
       <AccountNavBar />
-      <AvatarAddress address={account.address} size="lg" className="px-4" />
-      <ProfileNavBar className="mt-4">
-        <TabsContent value="terminals">
-          <ul className="mt-6">
-            {terminals.map((terminal) => (
-              <TerminalListItem terminal={terminal} key={terminal.id} />
-            ))}
-          </ul>
+      {/* ACCOUNT */}
+      <AvatarAddress address={accountAddress} size="lg" className="px-4" />
+      {/* TABS */}
+      <ProfileTabBar className="mt-4">
+        <ProfileTerminalsList address={accountAddress} />
+        {/* REQUESTS */}
+        <TabsContent value={ProfileTab.REQUESTS}>
+          {/* FILTERS */}
+          <ProfileRequestsFilterBar className="mt-3">
+            <ProfileRequestsClaimList address={accountAddress} />
+            <ProfileRequestsCreatedList address={accountAddress} />
+            <ProfileRequestsClaimedList address={accountAddress} />
+          </ProfileRequestsFilterBar>
         </TabsContent>
-        <TabsContent value="requests">
-          <div>Requests</div>
-        </TabsContent>
-      </ProfileNavBar>
+      </ProfileTabBar>
     </>
   )
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // url params
-  const address = context?.params?.address
-
-  if (typeof address !== "string") {
-    // Throw a 404 error if the `myParam` query parameter is missing or is string[]
-    return {
-      notFound: true,
-    }
-  }
-
-  const account = await prisma.account.findUnique({
-    where: {
-      chainId_address: {
-        chainId: 0,
-        address,
-      },
-    },
-  })
-
-  if (!account) {
-    // Throw a 404 error if terminal is not found
-    return {
-      notFound: true,
-    }
-  }
-
-  const terminals = await prisma.terminal.findMany()
-
-  return {
-    props: {
-      account: JSON.parse(JSON.stringify(account)),
-      terminals: JSON.parse(JSON.stringify(terminals)),
-    },
-  }
 }
 
 export default ProfilePage

@@ -4,6 +4,8 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
+import { Terminal } from "../../models/terminal/types"
+import { globalId } from "../../models/terminal/utils"
 import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
@@ -12,10 +14,12 @@ const RequestCard = ({
   disabled,
   request,
   formRegister,
+  showTerminal,
 }: {
   disabled?: boolean
   request: RequestFrob
   formRegister: any
+  showTerminal?: Terminal
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -24,9 +28,20 @@ const RequestCard = ({
   const router = useRouter()
 
   return (
-    <Link href={`${router.asPath}/${request.id}`}>
-      <div className={`w-full max-w-[100vw] p-4 ${disabled && "opacity-30"}`}>
+    <Link
+      href={`/${globalId(
+        request.terminal.chainId,
+        request.terminal.safeAddress,
+      )}/requests/${request.id}`}
+    >
+      <div
+        className={`w-full max-w-[100vw] border-t  border-slate-200 p-4 ${
+          disabled && "opacity-30"
+        }`}
+      >
         <div className="flex flex-col space-y-3">
+          {/* might deprecate, keeping here for now */}
+          {/* {showTerminal && <RequestTerminalLink terminal={showTerminal} />} */}
           <RequestActionPrompt request={request} />
           <div className="flex w-full items-center space-x-2">
             <Checkbox name={request.id} formRegister={formRegister} />
@@ -58,7 +73,7 @@ const RequestCard = ({
               <>
                 <ArrowUpRight size={"sm"} />
                 <span className="text-base text-slate-500">
-                  Add {1} contributor and change quorum.
+                  Add {1} member and change quorum.
                 </span>
               </>
             )}

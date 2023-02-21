@@ -1,6 +1,7 @@
 import { Request as PrismaRequest } from "@prisma/client"
 import { Action } from "../action/types"
 import { Activity } from "../activity/types"
+import { Terminal } from "../terminal/types"
 import { Token } from "../token/types"
 
 export type RequestFrob = Request & {
@@ -9,6 +10,7 @@ export type RequestFrob = Request & {
   commentActivities: Activity[]
   isExecuted: boolean
   quorum: number
+  terminal: Terminal
   signers: string[]
   addressesThatHaveNotSigned: string[]
 }

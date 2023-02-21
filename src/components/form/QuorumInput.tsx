@@ -30,8 +30,6 @@ export const QuorumInput = ({
       <div className="flex flex-row justify-between border-b border-b-slate-300">
         <input
           type="number"
-          min="1"
-          step="1" // TODO: fix step
           className="placeholder:text-slate-400"
           placeholder={placeholder}
           {...register(name, { ...registerOptions, ...requiredMessage })}

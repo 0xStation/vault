@@ -14,6 +14,7 @@ export const BottomDrawer = ({
   children,
   size = "base",
 }: BottomDrawerProps) => {
+  // TODO: add cva
   const transitionChildStyles = {
     ["sm"]: "translate-y-[35%]",
     ["base"]: "translate-y-[15%]",
@@ -65,7 +66,7 @@ export const BottomDrawer = ({
                       className="h-1 w-5 rounded bg-slate-300"
                     />
                   </div>
-                  <div className={"h-full overflow-y-scroll"}>{children}</div>
+                  <div className={"h-[calc(100%-50px)] "}>{children}</div>
                 </div>
               </div>
             </Transition.Child>

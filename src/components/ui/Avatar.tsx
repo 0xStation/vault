@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useEnsAvatar } from "wagmi"
-import defaultPfp from "../../../public/defaultPfp.svg"
+import { DefaultPfp } from "../core/DefaultPfp"
 
 interface AvatarProps {
   size?: "xs" | "sm" | "base" | "lg"
@@ -25,12 +25,16 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
     // wrapped in div with relative to handle non-square images via cropping
     // https://nextjs.org/docs/api-reference/next/image#fill
     <div className={`relative ${sizeMap[size]}`}>
-      <Image
-        src={ensAvatar ?? defaultPfp}
-        alt="Account profile picture. If no profile picture is set, there is a linear gradient."
-        fill={true}
-        className={`rounded-full object-cover ${className}`}
-      />
+      {ensAvatar ? (
+        <Image
+          src={ensAvatar}
+          alt="Account profile picture. If no profile picture is set, there is a linear gradient."
+          fill={true}
+          className={`rounded-full object-cover ${className}`}
+        />
+      ) : (
+        <DefaultPfp size={size} />
+      )}
     </div>
   )
 }

@@ -24,6 +24,7 @@ module.exports = {
           100: "#F1F5F9",
           200: "#E2E8F0",
           500: "#64748B",
+          800: "#15181C",
         },
         violet: {
           DEFAULT: "#AD72FF",
@@ -48,9 +49,6 @@ module.exports = {
         yellow: {
           DEFAULT: "#F9C81B",
           100: "#F9C81B",
-        },
-        slate: {
-          800: "#15181C",
         },
       },
     },
