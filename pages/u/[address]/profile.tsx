@@ -10,10 +10,12 @@ import { ProfileRequestsClaimedList } from "../../../src/components/request/Prof
 import { ProfileRequestsClaimList } from "../../../src/components/request/ProfileRequestsClaimList"
 import { ProfileRequestsCreatedList } from "../../../src/components/request/ProfileRequestsCreatedList"
 import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
+import useStore from "../../../src/hooks/stores/useStore"
 
 const ProfilePage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
+  const activeUser = useStore((state) => state.activeUser)
 
   return (
     <>

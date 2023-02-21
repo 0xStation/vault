@@ -1,5 +1,9 @@
-import { Interface } from "@ethersproject/abi"
-import { FunctionFragment } from "ethers/lib/utils.js"
+import {
+  EventFragment,
+  FunctionFragment,
+  Interface,
+  Result,
+} from "@ethersproject/abi"
 
 /**
  * Encode a solidity function with arguments into a single bytes string
@@ -12,6 +16,15 @@ export const encodeFunctionData = (
   fragment: FunctionFragment,
   args: any[],
 ): string => {
-  const functionInterface = new Interface([fragment.format("full")])
-  return functionInterface.encodeFunctionData(fragment.name, args)
+  const functionInterface = new Interface([fragment])
+  return functionInterface.encodeFunctionData(fragment, args)
+}
+
+export const decodeEventData = (
+  fragment: EventFragment,
+  data: string,
+  topics: string[],
+): Result => {
+  const eventInterface = new Interface([fragment])
+  return eventInterface.decodeEventLog(fragment, data, topics)
 }

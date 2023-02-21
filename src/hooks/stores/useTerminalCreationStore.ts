@@ -2,11 +2,11 @@ import { create } from "zustand"
 
 type TerminalCreationFormData = {
   name: string
-  chainId: number
+  chainId: undefined | number
   about: string
   url: string
   members: { address: string }[]
-  quorum: number
+  quorum: undefined | number
 }
 
 interface TerminalCreationFormState {
@@ -18,11 +18,11 @@ export const useTerminalCreationStore = create<TerminalCreationFormState>(
   (set) => ({
     formData: {
       name: "",
-      chainId: 1,
+      chainId: undefined,
       about: "",
       url: "",
       members: [],
-      quorum: 0,
+      quorum: undefined,
     },
     setFormData: (formData: TerminalCreationFormData) => {
       set(() => {

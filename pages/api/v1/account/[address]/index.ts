@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { method, body, query } = req
+  const { method, query } = req
 
   let account
   switch (method) {
@@ -28,10 +28,10 @@ export default async function handler(
         return res.end(JSON.stringify("Account not found"))
       }
 
-      res.status(200).json(account)
+      return res.status(200).json(account)
       break
     default:
       res.setHeader("Allow", ["GET", "PUT"])
-      res.status(405).end(`Method ${method} Not Allowed`)
+      return res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
