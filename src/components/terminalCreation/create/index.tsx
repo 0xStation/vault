@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react"
-import { VIEW } from "../Drawer"
 import Layout from "../Layout"
+import { VIEW } from "../TerminalCreationOptionsView"
 import { MembersView } from "./MembersForm"
 import { TerminalDetailsForm } from "./TerminalDetailsForm"
 

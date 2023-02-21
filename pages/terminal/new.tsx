@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import TerminalCreationForm from "../../src/components/terminalCreation/create"
-import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/Drawer"
+import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/TerminalCreationOptionsView"
 import useStore from "../../src/hooks/stores/useStore"
 
 export enum VIEW {

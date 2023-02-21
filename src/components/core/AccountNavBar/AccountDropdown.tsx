@@ -20,16 +20,6 @@ export const AccountNavBar = () => {
   const setActiveUser = useStore((state) => state.setActiveUser)
   const router = useRouter()
 
-  // Queries
-  // const { status, data: account } = useQuery(
-  //   ["getAccountByAddress", address],
-  //   () => getAccountByAddress({ address: address as string }),
-  //   {
-  //     enabled: !!address,
-  //     onError: (error) => console.log("ahhh!"),
-  //   },
-  // )
-
   return (
     <DropdownMenu>
       {isConnected ? (
