@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { useAccount, useDisconnect } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
 import { AvatarAddress } from "../AvatarAddress"
@@ -17,6 +18,7 @@ export const AccountNavBar = () => {
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const setActiveUser = useStore((state) => state.setActiveUser)
+  const router = useRouter()
 
   // Queries
   // const { status, data: account } = useQuery(
@@ -31,8 +33,17 @@ export const AccountNavBar = () => {
   return (
     <DropdownMenu>
       {isConnected ? (
-        <>
-          <DropdownMenuTrigger>
+        <div className="flex flex-row">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              router.push("/terminal/new")
+            }}
+          >
+            + New Terminal
+          </Button>
+          <DropdownMenuTrigger className="ml-2">
             <Avatar size="base" address={address as string} />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2">
@@ -57,7 +68,7 @@ export const AccountNavBar = () => {
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </>
+        </div>
       ) : (
         <>
           {openConnectModal && (
