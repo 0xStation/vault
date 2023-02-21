@@ -5,13 +5,11 @@ import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ProfileTabBar from "../../../src/components/core/TabBars/ProfileTabBar"
 import { ProfileRequestsList } from "../../../src/components/request/ProfileRequestsList"
 import { ProfileTerminalsList } from "../../../src/components/terminal/ProfileTerminalsList"
-import useStore from "../../../src/hooks/stores/useStore"
 import { useTerminalsBySigner } from "../../../src/models/terminal/hooks"
 
 const ProfilePage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
-  const activeUser = useStore((state) => state.activeUser)
   const { isLoading, count } = useTerminalsBySigner(accountAddress)
 
   return (
