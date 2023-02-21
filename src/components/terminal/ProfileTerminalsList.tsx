@@ -1,5 +1,5 @@
 import { TabsContent } from "@ui/Tabs"
-import { useTerminalsBySigner } from "../../models/terminal/queries/getTerminalsBySignerAddress"
+import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 import TerminalListItem from "./TerminalListItem"
 

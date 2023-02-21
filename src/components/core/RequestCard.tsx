@@ -1,7 +1,6 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { Terminal } from "../../models/terminal/types"
@@ -9,6 +8,7 @@ import { globalId } from "../../models/terminal/utils"
 import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
+import RequestTerminalLink from "./RequestTerminalLink"
 
 const RequestCard = ({
   disabled,
@@ -18,14 +18,12 @@ const RequestCard = ({
 }: {
   disabled?: boolean
   request: RequestFrob
-  formRegister: any
+  formRegister?: any
   showTerminal?: Terminal
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
     ?.length
-
-  const router = useRouter()
 
   return (
     <Link
@@ -36,15 +34,19 @@ const RequestCard = ({
     >
       <div
         className={`w-full max-w-[100vw] border-t border-slate-200 p-4 last:border-b ${
-          disabled && "opacity-30"
+          disabled ? "opacity-30" : "hover:bg-slate-50"
         }`}
       >
         <div className="flex flex-col space-y-3">
-          {/* might deprecate, keeping here for now */}
-          {/* {showTerminal && <RequestTerminalLink terminal={showTerminal} />} */}
-          <RequestActionPrompt request={request} />
+          {showTerminal ? (
+            <RequestTerminalLink terminal={showTerminal} />
+          ) : (
+            <RequestActionPrompt request={request} />
+          )}
           <div className="flex w-full items-center space-x-2">
-            <Checkbox name={request.id} formRegister={formRegister} />
+            {!showTerminal && (
+              <Checkbox name={request.id} formRegister={formRegister} />
+            )}
             <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
             <Avatar size="sm" address={request.data.createdBy} />
 
@@ -53,7 +55,7 @@ const RequestCard = ({
                 {request.data.note}
               </div>
             </div>
-            <span className="ml-1 shrink-0 text-right text-xs text-slate-500">
+            <span className="shrink-0 pl-6 text-right text-xs text-slate-500">
               {timeSince(request.createdAt)}
             </span>
           </div>
@@ -103,7 +105,7 @@ const RequestCard = ({
             </div>
             <div className="flex cursor-pointer flex-row items-center space-x-1">
               <ChatBubble size={"sm"} />
-              <span>0</span>
+              <span>{request.commentActivities.length}</span>
             </div>
           </div>
         </div>
