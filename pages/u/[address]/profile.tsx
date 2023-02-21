@@ -27,7 +27,7 @@ const ProfilePage = ({}: {}) => {
             <div className="text-xs">
               <span className="font-bold">{count}</span>{" "}
               <span className="text-slate-500">
-                Terminal{count && count > 1 ? "s" : ""}
+                Terminal{count === 1 ? "" : "s"}
               </span>
             </div>
           )}
