@@ -53,6 +53,11 @@ export const safeSetup = fn(
   "setup(address[] calldata _owners,uint256 _threshold,address to,bytes calldata data,address fallbackHandler,address paymentToken,uint256 payment,address payable paymentReceiver)",
 )
 
+// https://github.com/safe-global/safe-contracts/blob/6b3784f10a7262d3b857139914aaa33082990435/contracts/base/OwnerManager.sol#L119
+export const changeThreshold = fn("changeThreshold(uint256 _threshold)")
+
+// EVENTS
+
 export const proxyCreation = ev(
   "ProxyCreation(address proxy, address singleton)",
 )

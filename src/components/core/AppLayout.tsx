@@ -4,7 +4,7 @@ import { useAccount, useDisconnect } from "wagmi"
 import { useSetActiveUser } from "../../hooks/account/useSetActiveUser"
 import useStore from "../../hooks/stores/useStore"
 
-const Layout = ({
+export const AppLayout = ({
   title,
   children,
 }: {
@@ -57,4 +57,4 @@ const Layout = ({
   )
 }
 
-export default Layout
+export default AppLayout
