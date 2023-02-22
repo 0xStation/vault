@@ -35,7 +35,11 @@ const TerminalRequestsPage = () => {
   const requestContentForFilterAndTab = (filter: string, tab: string) => {
     return (
       <TabsContent value={filter}>
-        <RequestListByFilterAndTab filter={filter} tab={tab} />
+        <RequestListByFilterAndTab
+          filter={filter}
+          tab={tab}
+          terminalId={"65b5c63d-db77-4b64-a10e-0127adb779f8"}
+        />
       </TabsContent>
     )
   }

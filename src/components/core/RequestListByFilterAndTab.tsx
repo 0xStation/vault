@@ -1,14 +1,21 @@
+import { useRequests } from "../../hooks/useRequests"
+import RequestListForm from "../request/RequestListForm"
 import LoadingCardList from "./LoadingCardList"
+
 const RequestListByFilterAndTab = ({
+  terminalId,
   filter,
   tab,
 }: {
+  terminalId: string
   filter: string
   tab: string
 }) => {
-  // 1. make CSR to fetch requests by the given filter + tab combo
-  // 2. can use SWR + a custom hook
-  return <LoadingCardList />
+  const { data: requests, error } = useRequests(terminalId, { filter, tab })
+
+  if (!requests) return <LoadingCardList />
+
+  return <RequestListForm requests={requests} />
 }
 
 export default RequestListByFilterAndTab

@@ -12,110 +12,110 @@ export const Empty = ({ size = "base" }: IconProps) => {
       <path
         d="M48 95C73.9574 95 95 73.9574 95 48C95 22.0426 73.9574 1 48 1C22.0426 1 1 22.0426 1 48C1 73.9574 22.0426 95 48 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 85.5999C73.9574 85.5999 95 68.7658 95 47.9999C95 27.234 73.9574 10.3999 48 10.3999C22.0426 10.3999 1 27.234 1 47.9999C1 68.7658 22.0426 85.5999 48 85.5999Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 76.2001C73.9574 76.2001 95 63.5745 95 48C95 32.4256 73.9574 19.8 48 19.8C22.0426 19.8 1 32.4256 1 48C1 63.5745 22.0426 76.2001 48 76.2001Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 66.7999C73.9574 66.7999 95 58.3829 95 48C95 37.617 73.9574 29.2 48 29.2C22.0426 29.2 1 37.617 1 48C1 58.3829 22.0426 66.7999 48 66.7999Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 57.4001C73.9574 57.4001 95 53.1916 95 48.0001C95 42.8086 73.9574 38.6001 48 38.6001C22.0426 38.6001 1 42.8086 1 48.0001C1 53.1916 22.0426 57.4001 48 57.4001Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M1 48H95"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 95C73.9574 95 95 73.9574 95 48C95 22.0426 73.9574 1 48 1C22.0426 1 1 22.0426 1 48C1 73.9574 22.0426 95 48 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M47.9998 95C68.7657 95 85.5998 73.9574 85.5998 48C85.5998 22.0426 68.7657 1 47.9998 1C27.2339 1 10.3998 22.0426 10.3998 48C10.3998 73.9574 27.2339 95 47.9998 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M47.9999 95C63.5744 95 76.1999 73.9574 76.1999 48C76.1999 22.0426 63.5744 1 47.9999 1C32.4255 1 19.7999 22.0426 19.7999 48C19.7999 73.9574 32.4255 95 47.9999 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48.0001 95C58.383 95 66.8001 73.9574 66.8001 48C66.8001 22.0426 58.383 1 48.0001 1C37.6171 1 29.2001 22.0426 29.2001 48C29.2001 73.9574 37.6171 95 48.0001 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48.0002 95C53.1916 95 57.4002 73.9574 57.4002 48C57.4002 22.0426 53.1916 1 48.0002 1C42.8087 1 38.6002 22.0426 38.6002 48C38.6002 73.9574 42.8087 95 48.0002 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 95V1"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 95C73.9574 95 95 73.9574 95 48C95 22.0426 73.9574 1 48 1C22.0426 1 1 22.0426 1 48C1 73.9574 22.0426 95 48 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M47.9998 95C68.7657 95 85.5998 73.9574 85.5998 48C85.5998 22.0426 68.7657 1 47.9998 1C27.2339 1 10.3998 22.0426 10.3998 48C10.3998 73.9574 27.2339 95 47.9998 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M47.9999 95C63.5744 95 76.1999 73.9574 76.1999 48C76.1999 22.0426 63.5744 1 47.9999 1C32.4255 1 19.7999 22.0426 19.7999 48C19.7999 73.9574 32.4255 95 47.9999 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48.0001 95C58.383 95 66.8001 73.9574 66.8001 48C66.8001 22.0426 58.383 1 48.0001 1C37.6171 1 29.2001 22.0426 29.2001 48C29.2001 73.9574 37.6171 95 48.0001 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48.0002 95C53.1916 95 57.4002 73.9574 57.4002 48C57.4002 22.0426 53.1916 1 48.0002 1C42.8087 1 38.6002 22.0426 38.6002 48C38.6002 73.9574 42.8087 95 48.0002 95Z"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
       <path
         d="M48 95V1"
         stroke="black"
-        stroke-width="0.916667"
-        stroke-miterlimit="10"
+        strokeWidth="0.916667"
+        strokeMiterlimit="10"
       />
     </svg>
   )
