@@ -8,13 +8,16 @@ import { Request } from "./types"
  */
 
 export const getRequestsByTerminal = async ({
-  terminalId,
+  address,
+  chainId,
 }: {
-  terminalId: string
+  address: string
+  chainId: number
 }) => {
   const requests = (await prisma.request.findMany({
     where: {
-      terminalId,
+      terminalAddress: address,
+      chainId,
     },
   })) as Request[]
 

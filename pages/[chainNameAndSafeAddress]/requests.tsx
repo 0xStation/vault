@@ -105,7 +105,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  let requests = await getRequestsByTerminal({ terminalId: terminal.id })
+  let requests = await getRequestsByTerminal({ chainId, address: safeAddress })
   requests = JSON.parse(JSON.stringify(requests))
   return {
     props: {
