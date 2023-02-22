@@ -4,13 +4,11 @@ import { Activity } from "./types"
 
 export const createActivity = ({
   requestId,
-  accountId,
   address,
   variant,
   comment,
 }: {
   requestId?: string
-  accountId?: string
   variant?: ActivityVariant
   address?: string
   comment?: string
@@ -24,7 +22,6 @@ export const createActivity = ({
 
   return {
     requestId: requestId ?? "1",
-    accountId: accountId ?? "1",
     variant: variant,
     address: address ?? faker.finance.ethereumAddress(),
     data: {

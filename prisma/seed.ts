@@ -45,7 +45,6 @@ const actionOnRequestMock = async ({
   const activity = await prisma.activity.create({
     data: createActivity({
       requestId: request.id,
-      accountId: account.id,
       variant: isRejection
         ? ActivityVariant.REJECT_REQUEST
         : ActivityVariant.APPROVE_REQUEST,
