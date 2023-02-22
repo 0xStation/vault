@@ -1,6 +1,9 @@
 import { GetServerSidePropsContext } from "next"
 import Image from "next/image"
-import TerminalLayout from "../../src/components/core/TerminalLayout"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { AccountNavBar } from "../../src/components/core/AccountNavBar"
+import { ArrowLeft } from "../../src/components/icons"
 import LabelCard from "../../src/components/ui/LabelCard"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import useNFTAssetData from "../../src/hooks/useNFTAssetData"
@@ -8,17 +11,41 @@ import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/termina
 import { Terminal } from "../../src/models/terminal/types"
 
 const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
+  const router = useRouter()
+
   const { data: nftData } = useNFTAssetData(terminal.safeAddress, 1)
   const { data: tokenData } = useFungibleTokenData()
-  console.log(tokenData)
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubi54eXoiLCJzdWIiOiJiZDI1YTVmMS1mM2EyLTQ5ZWYtODgwMy0xM2FmOGY1NmJlZGEiLCJhdWQiOlsiYXBpLm4ueHl6Il0sImlhdCI6MTY3NzA3OTI5MX0.td_dhwMIBxg4N2gWjYNLUsc3RgyYH4kW_89NV1_EC14cxoENmMcAP0cxsYjFhybCkFNtK5AOjgkWotJLN-_zzA",
+    },
+  }
 
-  const totalAssetValue = tokenData.reduce((sum, token: any) => {
+  fetch(
+    "https://api.n.xyz/api/v1/address/0x65A3870F48B5237f27f674Ec42eA1E017E111D63/balances/fungibles?chainID=ethereum&filterDust=false&apikey=bd25a5f1-f3a2-49ef-8803-13af8f56beda",
+    options,
+  )
+    .then((response) => response.json())
+    .then((response) => console.log(response))
+    .catch((err) => console.error(err))
+
+  const totalAssetValue = tokenData.reduce((sum: number, token: any) => {
     if (token.fiat) sum += token.fiat?.[0].tokenValue
     return sum
   }, 0)
 
   return (
-    <TerminalLayout terminal={terminal}>
+    <>
+      <AccountNavBar />
+      <Link
+        href={`/${router.query.chainNameAndSafeAddress}`}
+        className="block px-4"
+      >
+        <ArrowLeft />
+      </Link>
       <div>
         <section className="mt-4 px-4">
           <h3 className="mb-2 text-lg font-bold">Assets</h3>
@@ -81,7 +108,7 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
           })}
         </section>
       </div>
-    </TerminalLayout>
+    </>
   )
 }
 

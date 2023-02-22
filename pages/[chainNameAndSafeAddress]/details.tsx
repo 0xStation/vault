@@ -1,13 +1,15 @@
+import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
-import { AvatarAddress } from "../../src/components/core/AvatarAddress"
+import CopyToClipboard from "../../src/components/core/CopyToClipboard"
+import { ChainPill } from "../../src/components/core/Pills/ChainPill"
 import { ArrowLeft } from "../../src/components/icons"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
 
-const TerminalMembersPage = ({ terminal }: { terminal: Terminal }) => {
+const TerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
   const router = useRouter()
   return (
     <div>
@@ -18,22 +20,17 @@ const TerminalMembersPage = ({ terminal }: { terminal: Terminal }) => {
       >
         <ArrowLeft />
       </Link>
-      <section className="mt-6 px-4">
-        <h3 className="mb-2 text-lg font-bold">Members</h3>
-        {terminal.signers.map((address: string, idx: number) => {
-          return (
-            <AvatarAddress
-              address={address}
-              size="sm"
-              className="mt-3"
-              key={`member-${idx}`}
-            />
-          )
-        })}
-        <h4 className="mt-6 text-xs font-bold">Quorum</h4>
-        <p className="mt-2">
-          {terminal.quorum}/{terminal.signers.length}
-        </p>
+      <section className="px-4">
+        <h1 className="text-[20px]">{terminal.data.name}</h1>
+        <div className="mt-2 flex flex-row items-center space-x-1">
+          {/* TODO: the chain pill in the mocks has no background color on the terminal page but not sure if it would mess up other uses of chainpill if I take that out... leaving the bg color for now */}
+          <ChainPill chainId={terminal.chainId} />
+          <span className="text-xs">
+            {truncateString(terminal.safeAddress)}
+          </span>
+          <CopyToClipboard text={terminal.safeAddress} />
+        </div>
+        <p className="mt-4">{terminal.data.description}</p>
       </section>
     </div>
   )
@@ -60,4 +57,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 }
 
-export default TerminalMembersPage
+export default TerminalDetailsPage
