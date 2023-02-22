@@ -86,7 +86,9 @@ const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
 const TerminalRequestIdPage = () => {
   const router = useRouter()
 
-  const { isLoading, request } = useRequest(router.query.requestId as string)
+  const { isLoading, request, mutate } = useRequest(
+    router.query.requestId as string,
+  )
 
   return (
     <>
@@ -171,19 +173,30 @@ const TerminalRequestIdPage = () => {
             )
           })}
         </section>
-        <section className="p-4">
+        <section className="mb-24 p-4">
           <h3 className="mb-4">Timeline</h3>
           <ul className="space-y-3">
-            {request?.activities?.map((activity) => (
+            {request?.activities?.map((activity, idx) => (
               <ActivityItem
                 accountAddress={activity.address}
                 variant={activity.variant}
                 comment={activity.data.comment}
-                key={`activity-${activity.id}`}
+                key={`activity-${idx}`}
               />
             ))}
           </ul>
-          <NewCommentForm />
+          <NewCommentForm
+            optimisticAddComment={(commentActivity) => {
+              mutate({
+                ...request!,
+                activities: [...request!.activities, commentActivity],
+                commentActivities: [
+                  commentActivity,
+                  ...request!.commentActivities,
+                ],
+              })
+            }}
+          />
         </section>
       </div>
     </>

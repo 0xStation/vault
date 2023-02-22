@@ -1,13 +1,20 @@
 import { Transition } from "@headlessui/react"
+import { ActivityVariant } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import { useCreateComment } from "../../models/activity/hooks"
 
-export const NewCommentForm = () => {
+export const NewCommentForm = ({
+  optimisticAddComment,
+}: {
+  optimisticAddComment: (commentActivity: any) => void
+}) => {
   const activeUser = useStore((state) => state.activeUser)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const router = useRouter()
   const { createComment } = useCreateComment(router.query.requestId as string)
@@ -15,10 +22,21 @@ export const NewCommentForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isDirty, dirtyFields },
+    resetField,
+    formState: { isDirty },
   } = useForm()
-  const onSubmit = (data: any) =>
-    createComment({ ...data, address: activeUser?.address as string })
+  const onSubmit = async (data: any) => {
+    setLoading(true)
+    await createComment({ ...data, address: activeUser?.address as string })
+    const commentActivity = {
+      requestId: router.query.requestId as string,
+      variant: ActivityVariant.COMMENT_ON_REQUEST,
+      address: activeUser?.address,
+      data,
+    }
+    optimisticAddComment(commentActivity)
+    setLoading(false)
+  }
 
   return (
     <>
@@ -39,14 +57,19 @@ export const NewCommentForm = () => {
                 // https://stackoverflow.com/questions/7745741/auto-expanding-textarea
                 onInput={(e) => {
                   // @ts-ignore
-                  e.target?.style?.height = ""
+                  e.target.style.height = ""
                   // @ts-ignore
-                  e.target?.style?.height = e.target?.scrollHeight + "px"
+                  e.target.style.height = e.target.scrollHeight + "px"
                 }}
                 // use `shift+enter` to add new lines and `enter` to trigger form submission
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     handleSubmit(onSubmit)()
+                    resetField("comment")
+                    // @ts-ignore
+                    e.target.style.height = ""
+                    // @ts-ignore
+                    e.target.style.height = e.target.scrollHeight + "px"
                     e.preventDefault()
                   }
                 }}
@@ -58,7 +81,12 @@ export const NewCommentForm = () => {
                 enterTo="opacity-100"
               >
                 <div className="text-right">
-                  <Button size="sm" variant="secondary" type="submit">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    type="submit"
+                    loading={loading}
+                  >
                     Send
                   </Button>
                 </div>

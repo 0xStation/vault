@@ -36,10 +36,11 @@ export const useRequest = (requestId: string) => {
     }
   }
 
-  const { isLoading, data: request } = useSWR(
-    requestId ? `/api/v1/request/${requestId}` : null,
-    fetcher,
-  )
+  const {
+    isLoading,
+    data: request,
+    mutate,
+  } = useSWR(requestId ? `/api/v1/request/${requestId}` : null, fetcher)
 
-  return { isLoading, request }
+  return { isLoading, request, mutate }
 }
