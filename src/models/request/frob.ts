@@ -48,7 +48,7 @@ const toFrob = async (request: Request) => {
         in: [ActivityVariant.APPROVE_REQUEST, ActivityVariant.REJECT_REQUEST],
       },
     },
-    distinct: ["accountId"],
+    distinct: ["address"],
     orderBy: {
       createdAt: "desc",
     },

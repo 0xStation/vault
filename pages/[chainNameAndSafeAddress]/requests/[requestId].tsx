@@ -3,11 +3,13 @@ import { Address } from "@ui/Address"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
+import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { timeSince } from "../../../src/lib/utils"
+import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
 
 import {
@@ -81,8 +83,11 @@ const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
   )
 }
 
-const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
+const TerminalRequestIdPage = () => {
   const router = useRouter()
+
+  const { isLoading, request } = useRequest(router.query.requestId as string)
+
   return (
     <>
       <div className="fixed w-full bg-white">
@@ -91,7 +96,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <button onClick={() => router.back()}>
             <ArrowLeft />
           </button>
-          <h4 className="text-xs text-slate-500">#{request.number}</h4>
+          <h4 className="text-xs text-slate-500">#{request?.number}</h4>
           <Copy />
         </div>
       </div>
@@ -100,19 +105,23 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
-              <AvatarAddress size="sm" address={request.data.createdBy} />
+              {request ? (
+                <AvatarAddress size="sm" address={request?.data.createdBy} />
+              ) : (
+                <></>
+              )}
             </div>
             <span className="ml-3 shrink-0 self-start text-xs text-slate-500">
-              {timeSince(request.createdAt)}
+              {timeSince(request?.createdAt || new Date())}
             </span>
           </div>
           <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
-            {request.data.note}
+            {request?.data?.note}
           </h3>
-          {request.variant === RequestVariantType.TOKEN_TRANSFER && (
+          {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
             <TokenTransferRequestContent request={request} />
           )}
-          {request.variant === RequestVariantType.SIGNER_QUORUM && (
+          {request?.variant === RequestVariantType.SIGNER_QUORUM && (
             <SignerQuorumRequestContent request={request} />
           )}
         </section>
@@ -120,13 +129,13 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
             <span className="rounded-full bg-slate-100 px-2 py-1 text-sm">
-              <span className="font-bold">Quorum:</span> {request.quorum}
+              <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>
           <h4 className="mt-2 text-xs font-bold">
-            Approved ({request.approveActivities.length})
+            Approved ({request?.approveActivities?.length})
           </h4>
-          {request.approveActivities.map((activity, idx) => {
+          {request?.approveActivities?.map((activity, idx) => {
             return (
               <AvatarAddress
                 key={`approval-Account-${idx}`}
@@ -138,9 +147,9 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
           })}
 
           <h4 className="mt-3 text-xs font-bold">
-            Rejected ({request.rejectActivities.length})
+            Rejected ({request?.rejectActivities?.length})
           </h4>
-          {request.rejectActivities.map((activity, idx) => {
+          {request?.rejectActivities?.map((activity, idx) => {
             return (
               <AvatarAddress
                 key={`rejection-Account-${idx}`}
@@ -151,7 +160,7 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
             )
           })}
           <h4 className="mt-3 text-xs font-bold">Has not voted (x)</h4>
-          {request.addressesThatHaveNotSigned.map((address, idx) => {
+          {request?.addressesThatHaveNotSigned?.map((address, idx) => {
             return (
               <AvatarAddress
                 key={`waiting-signature-from-${idx}`}
@@ -164,9 +173,17 @@ const TerminalRequestIdPage = ({ request }: { request: RequestFrob }) => {
         </section>
         <section className="p-4">
           <h3 className="mb-4">Timeline</h3>
-          <ActivityItem
-            accountAddress={"0x4D75d85D37170A5f9D47275dAF250459D965dff1"}
-          />
+          <ul className="space-y-3">
+            {request?.activities?.map((activity) => (
+              <ActivityItem
+                accountAddress={activity.address}
+                variant={activity.variant}
+                comment={activity.data.comment}
+                key={`activity-${activity.id}`}
+              />
+            ))}
+          </ul>
+          <NewCommentForm />
         </section>
       </div>
     </>
