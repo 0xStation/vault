@@ -37,7 +37,7 @@ export const VoteRequest = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const { root, proofs, message } = actionsTree(actions)
+    const { message } = actionsTree(actions)
 
     let signature
     try {
@@ -53,6 +53,8 @@ export const VoteRequest = ({
       note: data.note,
     })
     setLoading(false)
+    setIsOpen(false)
+    resetField("note")
   }
 
   return (

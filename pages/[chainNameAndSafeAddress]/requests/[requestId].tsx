@@ -2,6 +2,7 @@ import { RequestVariantType } from "@prisma/client"
 import { Address } from "@ui/Address"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import prisma from "../../../prisma/client"
 import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
@@ -9,6 +10,7 @@ import ActivityItem from "../../../src/components/core/ActivityItem"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { CastYourVote } from "../../../src/components/request/CastYourVote"
+import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
@@ -85,11 +87,29 @@ const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
 }
 
 const TerminalRequestIdPage = () => {
+  const activeUser = useStore((state) => state.activeUser)
   const router = useRouter()
 
   const { isLoading, request, mutate } = useRequest(
     router.query.requestId as string,
   )
+  const [lastVote, setLastVote] = useState<"approve" | "reject">()
+
+  useEffect(() => {
+    if (!activeUser?.address || !request) {
+      setLastVote(undefined)
+    }
+    const lastVoteIsApprove = request?.approveActivities.some(
+      (activity) => activity.address === activeUser?.address,
+    )
+    const lastVoteIsReject = request?.rejectActivities.some(
+      (activity) => activity.address === activeUser?.address,
+    )
+
+    setLastVote(
+      lastVoteIsApprove ? "approve" : lastVoteIsReject ? "reject" : undefined,
+    )
+  }, [activeUser, request])
 
   return (
     <>
@@ -211,6 +231,7 @@ const TerminalRequestIdPage = () => {
               request?.data.rejectionActionIds.includes(action.id),
             ) ?? []
           }
+          lastVote={lastVote}
         />
       </div>
     </>
