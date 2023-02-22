@@ -26,6 +26,7 @@ export const getRequestById = async (
             createdAt: "desc", // sort to determine most recent vote per signer
           },
         },
+        actions: true,
       },
     })) as unknown as Request & { terminal: Terminal }
   } catch {

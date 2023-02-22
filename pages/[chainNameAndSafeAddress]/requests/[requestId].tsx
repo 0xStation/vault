@@ -8,6 +8,7 @@ import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
+import { CastYourVote } from "../../../src/components/request/CastYourVote"
 import { timeSince } from "../../../src/lib/utils"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
@@ -173,7 +174,7 @@ const TerminalRequestIdPage = () => {
             )
           })}
         </section>
-        <section className="mb-24 p-4">
+        <section className="mb-28 p-4">
           <h3 className="mb-4">Timeline</h3>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
@@ -199,6 +200,10 @@ const TerminalRequestIdPage = () => {
             }}
           />
         </section>
+        <CastYourVote
+          approveActions={request?.actions ?? []}
+          rejectActions={request?.actions ?? []}
+        />
       </div>
     </>
   )
