@@ -201,8 +201,16 @@ const TerminalRequestIdPage = () => {
           />
         </section>
         <CastYourVote
-          approveActions={request?.actions ?? []}
-          rejectActions={request?.actions ?? []}
+          approveActions={
+            request?.actions.filter(
+              (action) => !request?.data.rejectionActionIds.includes(action.id),
+            ) ?? []
+          }
+          rejectActions={
+            request?.actions.filter((action) =>
+              request?.data.rejectionActionIds.includes(action.id),
+            ) ?? []
+          }
         />
       </div>
     </>

@@ -1,5 +1,7 @@
 import { ActivityVariant } from "@prisma/client"
+import { hashAction } from "lib/signatures/action"
 import { actionsTree } from "lib/signatures/tree"
+import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
 import { Request } from "../../../../../src/models/request/types"
@@ -20,10 +22,7 @@ export default async function handler(
     return res.end(JSON.stringify("No request id provided"))
   }
 
-  // TODO: grab address from auth
   const { signature, address, approve, note } = body
-
-  // auth signature
 
   const request = (await db.request.findUnique({
     where: {
@@ -39,11 +38,31 @@ export default async function handler(
     res.end(JSON.stringify("no request found"))
   }
 
-  const { root, proofs, message } = actionsTree(request.actions)
+  // verify signature for vote on request
 
-  // create signature & proofs
+  const actions =
+    request?.actions.filter((action) =>
+      approve
+        ? // if approve, action ids not included in rejection array
+          !request?.data.rejectionActionIds.includes(action.id)
+        : // if reject, action ids included in rejection array
+          request?.data.rejectionActionIds.includes(action.id),
+    ) ?? []
 
-  await db.signature.create({
+  console.log("signed actions", actions)
+
+  const { root, proofs, message } = actionsTree(actions)
+
+  try {
+    verifyTree(root, signature, address)
+  } catch (e) {
+    res.statusCode = 401
+    res.end(JSON.stringify(e))
+  }
+
+  // if verified, create signature with proofs and activity
+
+  const signatureCreate = db.signature.create({
     data: {
       signerAddress: address,
       data: JSON.parse(
@@ -52,10 +71,18 @@ export default async function handler(
           signature,
         }),
       ),
+      proofs: {
+        createMany: {
+          data: actions.map((action) => ({
+            actionId: action.id,
+            path: proofs[hashAction(action)],
+          })),
+        },
+      },
     },
   })
 
-  await db.activity.create({
+  const activityCreate = db.activity.create({
     data: {
       address,
       variant: approve
@@ -67,6 +94,9 @@ export default async function handler(
       },
     },
   })
+
+  // make creates as one atomic transaction
+  await db.$transaction([signatureCreate, activityCreate])
 
   res.status(200).json({})
 }
