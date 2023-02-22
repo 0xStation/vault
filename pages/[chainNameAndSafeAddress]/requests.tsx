@@ -3,9 +3,12 @@ import { GetServerSidePropsContext } from "next"
 import { useAccount } from "wagmi"
 import prisma from "../../prisma/client"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
-import TerminalRequestsFilterBar, {
-  TerminalRequestsFilter,
-} from "../../src/components/core/TabBars/TerminalRequestsFilterBar"
+import TerminalRequestStatusFilterBar, {
+  TerminalRequestStatusFilter,
+} from "../../src/components/core/TabBars/TerminalRequestStatusFilterBar"
+import TerminalRequestTypeTabBar, {
+  TerminalRequestTypeTab,
+} from "../../src/components/core/TabBars/TerminalRequestTypeTabBar"
 import RequestListForm from "../../src/components/request/RequestListForm"
 import { getRequestsByTerminal } from "../../src/models/request/requests"
 import { RequestFrob } from "../../src/models/request/types"
@@ -17,6 +20,7 @@ const chainNameToChainId: Record<string, number | undefined> = {
 
 const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   const { address } = useAccount()
+  console.log(TerminalRequestTypeTab.ALL)
 
   // I'd like to nest these as their own routes but I don't think it will work until
   // next beta releases...
@@ -46,17 +50,24 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
   return (
     <>
       <AccountNavBar />
-      <TerminalRequestsFilterBar>
-        {requestContentForTab(
-          TerminalRequestsFilter.NEEDS_ATTENTION,
-          needsAttentionRequests,
-        )}
-        {requestContentForTab(
-          TerminalRequestsFilter.AWAITING_OTHERS,
-          awaitingOthersRequests,
-        )}
-        {requestContentForTab(TerminalRequestsFilter.CLOSED, closedRequests)}
-      </TerminalRequestsFilterBar>
+      <TerminalRequestTypeTabBar>
+        <div className="mt-2">
+          <TerminalRequestStatusFilterBar>
+            {requestContentForTab(
+              TerminalRequestStatusFilter.NEEDS_ATTENTION,
+              needsAttentionRequests,
+            )}
+            {requestContentForTab(
+              TerminalRequestStatusFilter.AWAITING_OTHERS,
+              awaitingOthersRequests,
+            )}
+            {requestContentForTab(
+              TerminalRequestStatusFilter.CLOSED,
+              closedRequests,
+            )}
+          </TerminalRequestStatusFilterBar>
+        </div>
+      </TerminalRequestTypeTabBar>
     </>
   )
 }

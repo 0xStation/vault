@@ -12,17 +12,28 @@ export const TabBar = ({
   style,
   defaultValue,
   options,
-  shallowRoute,
   children,
 }: {
   className?: string
   style: "tab" | "filter"
   defaultValue: string
   options: { value: string; label: string }[]
-  shallowRoute: (value: string) => string
   children: React.ReactNode
 }) => {
   const router = useRouter()
+
+  const updateQueryParam = (paramName: string, paramValue: string) => {
+    const query = { ...router.query }
+    query[paramName] = paramValue
+    router.push(
+      {
+        pathname: router.pathname,
+        query,
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
 
   return (
     <Tabs
@@ -33,9 +44,7 @@ export const TabBar = ({
           : (router.query.filter as string)) ?? defaultValue
       }
       onValueChange={(value) => {
-        router.push(shallowRoute(value), undefined, {
-          shallow: true,
-        })
+        updateQueryParam(style, value)
       }}
     >
       {style === "tab" ? (
