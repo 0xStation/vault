@@ -54,29 +54,19 @@ export const UpdateMembersDrawer = ({
       }
 
       const requestResponse = await axios.put(
-        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/withAction`, // TODO: make withAction a query param
+        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`, // TODO: make withAction a query param
         {
           chainId: safeMetadata.chainId,
           address: safeMetadata.address,
-          variantType: { setQuorum: data.quorum } as SignerQuorumVariant,
+          variantType: {
+            setQuorum: data.quorum,
+            add: [],
+            remove: [],
+          } as SignerQuorumVariant,
           createdBy: activeUser?.address,
-          note: "",
+          note: "", // TODO
           nonce: nextNonce?.nonce as number,
-        },
-      )
-
-      if (!requestResponse.data) {
-        console.log("no request :(")
-        return
-      }
-      const request = requestResponse.data
-
-      const proofResponse = await axios.put(
-        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/sign`, // TODO: make withAction a query param
-        {
-          actionId: request.actions[0].id,
           path: [],
-          signerAddress: activeUser?.address,
           signatureMetadata: {
             message,
             signature,
@@ -84,7 +74,9 @@ export const UpdateMembersDrawer = ({
         },
       )
 
-      console.log("proof!", proofResponse.data)
+      const { request, proof, activity } = requestResponse.data
+
+      console.log(request, proof, activity)
 
       // create request
     } catch (err) {
@@ -144,7 +136,7 @@ export const UpdateMembersDrawer = ({
             }`}
           >
             {formMessage.message ||
-              "You’ll be directed to sign the changes as a request, which will subject to quorum. This action does not cost gas."}
+              "You’ll be directed to sign the changes as a request, which will be subject to quorum. This action does not cost gas."}
           </p>
         </div>
       </form>
