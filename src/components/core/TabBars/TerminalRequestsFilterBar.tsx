@@ -8,6 +8,11 @@ export enum TerminalRequestsFilter {
   ALL = "all",
 }
 
+type TerminalNavOption = {
+  value: TerminalRequestsFilter
+  label: string
+}
+
 export const TerminalRequestsFilterBar = ({
   className = "",
   children,
@@ -21,8 +26,8 @@ export const TerminalRequestsFilterBar = ({
     { value: TerminalRequestsFilter.NEEDS_ATTENTION, label: "Needs attention" },
     { value: TerminalRequestsFilter.AWAITING_OTHERS, label: "Awaiting others" },
     { value: TerminalRequestsFilter.CLOSED, label: "Closed" },
-    { value: TerminalRequestsFilter.ALL, label: "All" },
-  ]
+  ] as TerminalNavOption[]
+
   const shallowRoute = (filter: string) => {
     return `/${router.query.chainNameAndSafeAddress}/requests/?filter=${filter}`
   }

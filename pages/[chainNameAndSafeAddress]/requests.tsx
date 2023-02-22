@@ -34,7 +34,6 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
       r.rejectActivities.some((a) => a.address === address),
   )
   const closedRequests = requests.filter((r) => r.isExecuted)
-  const allRequests = requests
 
   const requestContentForTab = (tab: string, requests: RequestFrob[]) => {
     return (
@@ -57,7 +56,6 @@ const TerminalRequestsPage = ({ requests }: { requests: RequestFrob[] }) => {
           awaitingOthersRequests,
         )}
         {requestContentForTab(TerminalRequestsFilter.CLOSED, closedRequests)}
-        {requestContentForTab(TerminalRequestsFilter.ALL, allRequests)}
       </TerminalRequestsFilterBar>
     </>
   )
