@@ -157,7 +157,7 @@ const MOCK_DATA = [
 // for now MOCK_DATA is an example response from n.xyz
 // this way we can just sub the API endpoint in when it's working to get real data
 // but we can simulate for now using this mock data
-const useFungibleTokenData = () => {
+const useFungibleTokenData = (address: string, chainId: number) => {
   return { data: MOCK_DATA }
 }
 
