@@ -6,7 +6,8 @@ import { Request, RequestFrob } from "./types"
 const toFrob = async (request: Request) => {
   const terminal = await prisma.terminal.findFirst({
     where: {
-      id: request.terminalId,
+      safeAddress: request.terminalAddress,
+      chainId: request.chainId,
     },
   })
 
@@ -48,7 +49,7 @@ const toFrob = async (request: Request) => {
         in: [ActivityVariant.APPROVE_REQUEST, ActivityVariant.REJECT_REQUEST],
       },
     },
-    distinct: ["accountId"],
+    distinct: ["address"],
     orderBy: {
       createdAt: "desc",
     },

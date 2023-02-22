@@ -15,9 +15,15 @@ import { createTerminal } from "../src/models/terminal/factory"
 const prisma = new PrismaClient()
 
 // expand in the future to allow for all custom request definition
-const createRequestMock = async ({ terminalId }: { terminalId: string }) => {
+const createRequestMock = async ({
+  address,
+  chainId,
+}: {
+  address: string
+  chainId: number
+}) => {
   const request = await prisma.request.create({
-    data: createRequestInput({ terminalId }),
+    data: createRequestInput({ address, chainId: chainId }),
   })
 
   const approvalAction = await prisma.action.create({
@@ -45,7 +51,6 @@ const actionOnRequestMock = async ({
   const activity = await prisma.activity.create({
     data: createActivity({
       requestId: request.id,
-      accountId: account.id,
       variant: isRejection
         ? ActivityVariant.REJECT_REQUEST
         : ActivityVariant.APPROVE_REQUEST,
@@ -90,9 +95,18 @@ async function seed() {
     data: createAccount({}),
   })) as Account
 
-  const [r1, aa1, ra1] = await createRequestMock({ terminalId: terminal.id })
-  const [_r2, _aa2, _ra2] = await createRequestMock({ terminalId: terminal.id })
-  const [_r3, _aa3, _ra3] = await createRequestMock({ terminalId: terminal.id })
+  const [r1, aa1, ra1] = await createRequestMock({
+    address: terminal.safeAddress,
+    chainId: terminal?.chainId,
+  })
+  const [_r2, _aa2, _ra2] = await createRequestMock({
+    address: terminal.safeAddress,
+    chainId: terminal?.chainId,
+  })
+  const [_r3, _aa3, _ra3] = await createRequestMock({
+    address: terminal.safeAddress,
+    chainId: terminal?.chainId,
+  })
 
   const [_act1, _sig1, _p1] = await actionOnRequestMock({
     request: r1,
