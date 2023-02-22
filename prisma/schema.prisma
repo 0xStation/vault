@@ -43,21 +43,22 @@ model Subscription {
 }
 
 model Request {
-  id         String             @id @default(uuid())
-  terminalId String
-  data       Json
-  number     Int
-  variant    RequestVariantType
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
-  txnHash    String?
+  id              String             @id @default(uuid())
+  terminalAddress String
+  chainId         Int
+  data            Json
+  number          Int
+  variant         RequestVariantType
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  txnHash         String?
 
-  terminal      Terminal       @relation(fields: [terminalId], references: [id])
+  terminal      Terminal       @relation(fields: [terminalAddress, chainId], references: [safeAddress, chainId])
   activities    Activity[]
   actions       Action[]
   subscriptions Subscription[]
 
-  @@unique([terminalId, number(sort: Desc)])
+  @@unique([terminalAddress, chainId, number(sort: Desc)])
 }
 
 model Activity {

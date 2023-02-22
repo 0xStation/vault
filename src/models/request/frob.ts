@@ -6,7 +6,8 @@ import { Request, RequestFrob } from "./types"
 const toFrob = async (request: Request) => {
   const terminal = await prisma.terminal.findFirst({
     where: {
-      id: request.terminalId,
+      safeAddress: request.terminalAddress,
+      chainId: request.chainId,
     },
   })
 

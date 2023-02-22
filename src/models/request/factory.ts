@@ -32,7 +32,8 @@ export const createRequestInput = ({
   recipient,
   transfers,
   rejectionActionIds,
-  terminalId,
+  address,
+  chainId,
   quorum,
   add,
   remove,
@@ -48,7 +49,8 @@ export const createRequestInput = ({
   recipient?: string
   transfers?: Transfer[]
   rejectionActionIds?: string[]
-  terminalId?: string
+  address?: string
+  chainId?: number
   quorum?: number
   add?: string[]
   remove?: string[]
@@ -78,7 +80,8 @@ export const createRequestInput = ({
       : signerQuorumVariant
 
   return {
-    terminalId: terminalId ?? "1",
+    terminalAddress: address ?? "",
+    chainId: chainId ?? 5,
     variant,
     number: Math.floor(Math.random() * 100000),
     data: {
