@@ -2,6 +2,7 @@
 const nextConfig = {
   images: {
     domains: [
+      "c.neevacdn.net", // nft previews
       "pbs.twimg.com",
       "user-images.githubusercontent.com",
       "station-images.nyc3.digitaloceanspaces.com",
