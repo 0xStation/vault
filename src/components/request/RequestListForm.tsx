@@ -3,6 +3,7 @@ import { Button } from "@ui/Button"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { RequestFrob } from "../../models/request/types"
+import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 
 const RequestListForm = ({
@@ -26,6 +27,23 @@ const RequestListForm = ({
   }
 
   const onSubmit = (data: any) => console.log(data)
+
+  if (requests.length === 0) {
+    return (
+      <div className="border-t border-slate-200">
+        <EmptyList
+          title="No requests"
+          subtitle="Start distributing funds and reward contributors."
+        >
+          <div className="mt-2">
+            <Button variant="secondary" size="sm">
+              New request
+            </Button>
+          </div>
+        </EmptyList>
+      </div>
+    )
+  }
 
   return (
     <>

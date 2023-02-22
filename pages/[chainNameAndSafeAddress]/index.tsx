@@ -1,10 +1,10 @@
+import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
-import { ChainPill } from "../../src/components/core/Pills/ChainPill"
 import { ChevronRight } from "../../src/components/icons"
 import LabelCard from "../../src/components/ui/LabelCard"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
@@ -65,8 +65,7 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
       <section className="px-4">
         <h1 className="text-[20px]">{terminal.data.name}</h1>
         <div className="mt-2 flex flex-row items-center space-x-1">
-          {/* TODO: the chain pill in the mocks has no background color on the terminal page but not sure if it would mess up other uses of chainpill if I take that out... leaving the bg color for now */}
-          <ChainPill chainId={terminal.chainId} />
+          <Network chainId={terminal.chainId} />
           <span className="text-xs">
             {truncateString(terminal.safeAddress)}
           </span>
