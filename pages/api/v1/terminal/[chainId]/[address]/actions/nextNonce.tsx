@@ -37,9 +37,7 @@ export default async function handler(
         return res.status(200).json({ nonce: 1 })
       }
 
-      return res
-        .status(200)
-        .json({ nonce: actions[actions.length - 1].nonce + 1 })
+      return res.status(200).json({ nonce: actions[0].nonce + 1 })
       break
     default:
       res.setHeader("Allow", ["GET", "PUT"])

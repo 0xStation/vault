@@ -62,9 +62,7 @@ export default async function handler(
           data: {
             terminalId: terminal.id,
             variant: RequestVariantType.SIGNER_QUORUM, // TODO: determine from variant type from body
-            number: requests.length
-              ? requests[requests.length - 1].number + 1
-              : 1,
+            number: requests.length ? requests[0].number + 1 : 1,
             data: {
               note: body.note,
               createdBy: body.createdBy,
@@ -82,6 +80,9 @@ export default async function handler(
                 },
               ],
             },
+          },
+          include: {
+            actions: true,
           },
         })
       } catch (err) {

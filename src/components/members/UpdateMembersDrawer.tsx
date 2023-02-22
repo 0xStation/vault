@@ -53,7 +53,7 @@ export const UpdateMembersDrawer = ({
         return
       }
 
-      const request = await axios.put(
+      const requestResponse = await axios.put(
         `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/withAction`, // TODO: make withAction a query param
         {
           chainId: safeMetadata.chainId,
@@ -65,7 +65,26 @@ export const UpdateMembersDrawer = ({
         },
       )
 
-      console.log("request!", request)
+      if (!requestResponse.data) {
+        console.log("no request :(")
+        return
+      }
+      const request = requestResponse.data
+
+      const proofResponse = await axios.put(
+        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/sign`, // TODO: make withAction a query param
+        {
+          actionId: request.actions[0].id,
+          path: [],
+          signerAddress: activeUser?.address,
+          signatureMetadata: {
+            message,
+            signature,
+          },
+        },
+      )
+
+      console.log("proof!", proofResponse.data)
 
       // create request
     } catch (err) {
