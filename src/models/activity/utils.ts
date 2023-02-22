@@ -1,6 +1,10 @@
 import { ActivityVariant } from "@prisma/client"
+import { timeSince } from "lib/utils"
 
-export const variantMessage = (variant: ActivityVariant): string => {
+export const variantMessage = (
+  variant: ActivityVariant,
+  createdAt: Date,
+): string => {
   let description
   if (variant === ActivityVariant.CREATE_AND_APPROVE_REQUEST) {
     description = "created and approved"
@@ -18,7 +22,7 @@ export const variantMessage = (variant: ActivityVariant): string => {
     description = ""
   }
 
-  const timestamp = ""
+  const timestamp = timeSince(createdAt)
 
   return description + ". " + timestamp
 }

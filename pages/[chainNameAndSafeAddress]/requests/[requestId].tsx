@@ -180,6 +180,7 @@ const TerminalRequestIdPage = () => {
               <ActivityItem
                 accountAddress={activity.address}
                 variant={activity.variant}
+                createdAt={activity.createdAt}
                 comment={activity.data.comment}
                 key={`activity-${idx}`}
               />
