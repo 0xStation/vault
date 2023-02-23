@@ -183,7 +183,9 @@ const TerminalRequestIdPage = () => {
               />
             )
           })}
-          <h4 className="mt-3 text-xs font-bold">Has not voted (x)</h4>
+          <h4 className="mt-3 text-xs font-bold">
+            Has not voted ({request?.addressesThatHaveNotSigned?.length})
+          </h4>
           {request?.addressesThatHaveNotSigned?.map((address, idx) => {
             return (
               <AvatarAddress
