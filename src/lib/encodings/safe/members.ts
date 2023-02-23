@@ -9,7 +9,7 @@ import { encodeFunctionData } from "../utils"
  * @param threshold quorum for the Safe
  * @returns RawCall representation
  */
-export const encodeChangeThreshold = (
+export const prepareChangeThresholdCall = (
   safeAddress: string,
   threshold: number,
 ): RawCall => {

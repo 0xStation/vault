@@ -1,6 +1,6 @@
 // import { SignerQuorumVariant } from "../types"
 
-import { Request, RequestVariantType } from "@prisma/client"
+import { RequestVariantType } from "@prisma/client"
 import { z } from "zod"
 
 const RequestWithActionArgs = z.object({
@@ -9,39 +9,25 @@ const RequestWithActionArgs = z.object({
   nonce: z.number(),
   createdBy: z.string(),
   note: z.string().optional(),
+  path: z.string().array(),
   variantType: z.object({
     add: z.string().array(),
     remove: z.string().array(),
     setQuorum: z.number(),
   }),
+  $tx: z.any().optional(), // $transaction calls give db as an arg
 })
 export const createRequestWithAction = async (
   input: z.infer<typeof RequestWithActionArgs>,
 ) => {
-  const { chainId, address, nonce, createdBy, note, variantType } =
+  const { chainId, address, nonce, createdBy, note, variantType, $tx } =
     RequestWithActionArgs.parse(input)
 
-  let terminal
-  try {
-    terminal = await prisma.terminal.findUnique({
-      where: {
-        chainId_safeAddress: {
-          chainId: chainId,
-          safeAddress: address,
-        },
-      },
-    })
-  } catch (err) {
-    throw Error(`Error finding Terminal ${err}`)
-  }
+  const db = $tx || prisma
 
-  if (!terminal) {
-    throw Error(`Error finding Terminal, return ${terminal}`)
-  }
-
-  let requests = [] as Request[]
+  let latestRequest
   try {
-    requests = await prisma.request.findMany({
+    latestRequest = await db.request.findFirst({
       where: {
         terminalAddress: address,
         chainId,
@@ -51,17 +37,17 @@ export const createRequestWithAction = async (
       },
     })
   } catch (err) {
-    throw Error(`Failed to retrieve requests: ${err}`)
+    throw Error(`Failed to retrieve latestRequest: ${err}`)
   }
 
   let request
   try {
-    request = await prisma.request.create({
+    request = await db.request.create({
       data: {
         terminalAddress: address,
         chainId,
         variant: RequestVariantType.SIGNER_QUORUM, // TODO: determine from variant type from body
-        number: requests.length ? requests[0].number + 1 : 1,
+        number: (latestRequest?.number || 0) + 1,
         data: {
           note: note,
           createdBy: createdBy,
@@ -75,6 +61,7 @@ export const createRequestWithAction = async (
               nonce: nonce,
               data: {
                 minDate: Date.now(),
+                // TODO: add calls
               },
             },
           ],

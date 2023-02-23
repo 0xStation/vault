@@ -5,24 +5,20 @@ const RequestWithActionArgs = z.object({
   requestId: z.string(),
   address: z.string(),
   comment: z.string().optional(),
-  variant: z.enum([
-    ActivityVariant.CREATE_REQUEST,
-    ActivityVariant.CREATE_AND_APPROVE_REQUEST,
-    ActivityVariant.APPROVE_REQUEST,
-    ActivityVariant.REJECT_REQUEST,
-    ActivityVariant.EXECUTE_REQUEST,
-    ActivityVariant.COMMENT_ON_REQUEST,
-  ]),
+  variant: z.nativeEnum(ActivityVariant),
+  $tx: z.any().optional(),
 })
 
 export const createActivity = async (
   input: z.infer<typeof RequestWithActionArgs>,
 ) => {
-  const { requestId, address, comment, variant } =
+  const { requestId, address, comment, variant, $tx } =
     RequestWithActionArgs.parse(input)
+
+  const db = $tx || prisma
   let activity
   try {
-    activity = prisma.activity.create({
+    activity = await db.activity.create({
       data: {
         requestId,
         address,

@@ -1,6 +1,6 @@
 import { ActivityVariant } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
-import { createActivity } from "../../../../../../../src/models/activity/factory"
+import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
 import { createProofWithSignature } from "../../../../../../../src/models/proof/mutations/createProofWithSignature"
 import { createRequestWithAction } from "../../../../../../../src/models/request/mutations/createRequestWithAction"
 
@@ -10,46 +10,42 @@ export default async function handler(
 ) {
   const { method, body } = req
 
-  if (method !== "PUT") {
-    res.setHeader("Allow", ["PUT"])
+  if (method !== "POST") {
+    res.setHeader("Allow", ["POST"])
     return res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  // TODO: create transaction call
-  let request
-  try {
-    request = await createRequestWithAction({
-      ...body,
-    })
-  } catch (err) {
-    res.statusCode = 500
-    return res.end(
-      JSON.stringify(`Internal error: failed to create Request ${err}`),
-    )
-  }
+  // TODO: AUTH: look at vote.ts
 
-  let proof
+  let request, proof, activity
   try {
-    proof = await createProofWithSignature({
-      ...body,
-      actionId: request.actions[0].id,
-      signerAddress: body.createdBy,
-    })
-  } catch (err) {
-    res.statusCode = 500
-    return res.end(
-      JSON.stringify(
-        `Internal error: failed to create Proof with Signature ${err}`,
-      ),
-    )
-  }
+    await prisma.$transaction(async ($tx) => {
+      request = await createRequestWithAction({
+        chainId: body.chainId,
+        address: body.address,
+        nonce: body.nonce,
+        createdBy: body.createdBy,
+        note: body.note,
+        path: body.path,
+        variantType: body.variantType,
+        $tx,
+      })
 
-  let activity
-  try {
-    activity = await createActivity({
-      ...body,
-      requestId: request.id,
-      variant: ActivityVariant.CREATE_AND_APPROVE_REQUEST,
+      proof = await createProofWithSignature({
+        path: body.path,
+        signatureMetadata: body.signatureMetadata,
+        actionId: request.actions[0].id,
+        signerAddress: body.createdBy,
+        $tx,
+      })
+
+      activity = await createActivity({
+        comment: body.comment,
+        address: body.address,
+        requestId: request.id,
+        variant: ActivityVariant.CREATE_AND_APPROVE_REQUEST,
+        $tx,
+      })
     })
   } catch (err) {
     res.statusCode = 500

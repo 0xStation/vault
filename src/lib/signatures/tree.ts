@@ -1,7 +1,8 @@
 import { hexlify } from "@ethersproject/bytes"
 import { keccak256 } from "@ethersproject/keccak256"
 import { BigNumber } from "ethers"
-import { ActionCall } from "lib/transactions/call"
+import { bundleCalls } from "lib/transactions/bundle"
+import { RawCall } from "lib/transactions/call"
 import { MerkleTree } from "merkletreejs"
 import { Action } from "../../models/action/types"
 import { hashAction, hashActionValues } from "./action"
@@ -53,10 +54,14 @@ export const actionsTree = (actions: Action[] = []): Tree => {
  * @param values set of values for a new Action
  * @returns a merkle tree to sign containing the root, proof branches, and EIP712-ready message
  */
-export const newActionTree = (
-  values: ActionCall & { chainId: number },
-): Tree => {
-  const root = hashActionValues(values) // only one node so this leaf is the root
+export const newActionTree = (values: {
+  chainId: number
+  safe: string
+  nonce: number
+  executor: string
+  calls: RawCall[]
+}): Tree => {
+  const root = hashActionValues({ ...values, ...bundleCalls(values.calls) }) // only one node so this leaf is the root
   const proofs = { root: [] } // only one node so path from leaf to root requires no path
   const message = treeMessage(root)
   return { root, proofs, message }

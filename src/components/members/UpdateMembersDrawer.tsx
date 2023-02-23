@@ -1,6 +1,6 @@
 import { Button } from "@ui/Button"
 import axios from "axios"
-import { encodeChangeThreshold } from "lib/encodings/safe/members"
+import { prepareChangeThresholdCall } from "lib/encodings/safe/members"
 import { newActionTree } from "lib/signatures/tree"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -33,15 +33,17 @@ export const UpdateMembersDrawer = ({
     message: string
   }>({ isError: false, message: "" })
   const onSubmit = async (data: any) => {
-    const encodedData = encodeChangeThreshold(safeMetadata.address, data.quorum)
+    const changeThresholdCall = prepareChangeThresholdCall(
+      safeMetadata.address,
+      data.quorum,
+    )
 
-    // TODO: move to util
-    const { root, proofs, message } = newActionTree({
-      nonce: nextNonce?.nonce as number,
-      safe: safeMetadata.address,
+    const { message } = newActionTree({
       chainId: safeMetadata.chainId,
+      safe: safeMetadata.address,
+      nonce: nextNonce?.nonce as number,
       executor: ZERO_ADDRESS,
-      ...encodedData,
+      calls: [changeThresholdCall], // order matters
     })
 
     try {
@@ -53,7 +55,7 @@ export const UpdateMembersDrawer = ({
         return
       }
 
-      const requestResponse = await axios.put(
+      const requestResponse = await axios.post(
         `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`, // TODO: make withAction a query param
         {
           chainId: safeMetadata.chainId,

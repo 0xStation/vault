@@ -12,17 +12,20 @@ const ProofWithSignatureArgs = z.object({
     }),
     signature: z.string(),
   }),
+  $tx: z.any().optional(),
 })
 
 export const createProofWithSignature = async (
   input: z.infer<typeof ProofWithSignatureArgs>,
 ) => {
-  const { path, actionId, signerAddress, signatureMetadata } =
+  const { path, actionId, signerAddress, signatureMetadata, $tx } =
     ProofWithSignatureArgs.parse(input)
+
+  const db = $tx || prisma
 
   let proof
   try {
-    proof = await prisma.proof.create({
+    proof = await db.proof.create({
       data: {
         path: path,
         action: {
