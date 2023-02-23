@@ -1,3 +1,4 @@
+import { RequestVariantType } from "@prisma/client"
 import prisma from "../../../prisma/client"
 import toFrob from "./frob"
 import { Request } from "./types"
@@ -7,23 +8,40 @@ import { Request } from "./types"
  * -------------------------
  */
 
+// options
+// tab -> all, members, assets (variant)
 export const getRequestsByTerminal = async ({
-  address,
-  chainId,
+  safeAddress,
+  safeChainId,
+  options,
 }: {
-  address: string
-  chainId: number
+  safeAddress: string
+  safeChainId: number
+  options?: any
 }) => {
   const requests = (await prisma.request.findMany({
     where: {
-      terminalAddress: address,
-      chainId,
+      terminalAddress: safeAddress,
+      chainId: safeChainId,
+      ...(options?.tab &&
+        options?.tab !== "all" && {
+          variant: {
+            in:
+              options.tab === "members"
+                ? [RequestVariantType.SIGNER_QUORUM]
+                : [
+                    RequestVariantType.TOKEN_TRANSFER,
+                    RequestVariantType.SPLIT_TOKEN_TRANSFER,
+                  ],
+          },
+        }),
     },
   })) as Request[]
 
   const requestFrobs = await Promise.all(
     requests.map(async (r: Request) => toFrob(r)),
   )
+
   return requestFrobs
 }
 
