@@ -31,7 +31,6 @@ export const createRequestInput = ({
   maxOccurences,
   recipient,
   transfers,
-  rejectionActionIds,
   address,
   chainId,
   quorum,
@@ -48,7 +47,6 @@ export const createRequestInput = ({
   maxOccurences?: number
   recipient?: string
   transfers?: Transfer[]
-  rejectionActionIds?: string[]
   address?: string
   chainId?: number
   quorum?: number
@@ -96,7 +94,6 @@ export const createRequestInput = ({
         maxOccurences: maxOccurences ?? 1,
         ...variantMeta,
       },
-      rejectionActionIds: rejectionActionIds ?? [],
     },
   }
 }

@@ -25,7 +25,6 @@ type RequestMetadata = {
   note: string
   createdBy: string // address
   meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
-  rejectionActionIds: string[]
 }
 
 export type SignerQuorumVariant = {
