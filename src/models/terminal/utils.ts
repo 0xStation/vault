@@ -8,6 +8,13 @@ const chainIdToChainName: Record<number, string | undefined> = {
   5: "gor",
 }
 
+export const convertGlobalId = (chainNameAndSafeAddress: string) => {
+  if (!chainNameAndSafeAddress) return {}
+  const splitGlobalId = chainNameAndSafeAddress?.split(":")
+  const chainId = chainNameToChainId[splitGlobalId[0]]
+  return { chainId, address: splitGlobalId[1] }
+}
+
 export const globalId = (chainId: number, address: string) => {
   return chainIdToChainName[chainId] + ":" + address
 }
