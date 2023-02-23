@@ -32,13 +32,14 @@ export const UpdateMembersDrawer = ({
     isError: boolean
     message: string
   }>({ isError: false, message: "" })
+
   const onSubmit = async (data: any) => {
     const changeThresholdCall = prepareChangeThresholdCall(
       safeMetadata.address,
       data.quorum,
     )
     let calls = [changeThresholdCall] // order matters
-    const { message } = newActionTree({
+    const { root, message } = newActionTree({
       chainId: safeMetadata.chainId,
       safe: safeMetadata.address,
       nonce: nextNonce?.nonce as number,
@@ -70,6 +71,7 @@ export const UpdateMembersDrawer = ({
           nonce: nextNonce?.nonce as number,
           path: [],
           calls,
+          root,
           signatureMetadata: {
             message,
             signature,
@@ -94,12 +96,14 @@ export const UpdateMembersDrawer = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { isDirty, errors },
+    watch,
   } = useForm({
     defaultValues: {
       quorum: safeMetadata?.quorum || 1,
     } as FieldValues,
   })
+
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen} size="lg">
       <h2 className="mb-[30px] font-bold">Edit members</h2>

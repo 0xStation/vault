@@ -1,6 +1,7 @@
 // import { SignerQuorumVariant } from "../types"
 
 import { RequestVariantType } from "@prisma/client"
+import { REJECTION_CALL } from "lib/constants"
 import { z } from "zod"
 
 const RequestWithActionArgs = z.object({
@@ -43,6 +44,10 @@ export const createRequestWithAction = async (
 
   let request
   try {
+    const actionMetadata = {
+      minDate: Date.now(),
+      calls,
+    }
     request = await db.request.create({
       data: {
         terminalAddress: address,
@@ -59,11 +64,17 @@ export const createRequestWithAction = async (
             {
               safeAddress: address as string,
               chainId,
-              nonce: nonce,
-              data: {
-                minDate: Date.now(),
-                calls,
-              },
+              nonce,
+              data: actionMetadata,
+            },
+            {
+              safeAddress: address as string,
+              chainId,
+              nonce,
+              data: JSON.parse(
+                JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
+              ),
+              isRejection: true,
             },
           ],
         },

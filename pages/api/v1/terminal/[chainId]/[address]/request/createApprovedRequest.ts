@@ -1,4 +1,5 @@
 import { ActivityVariant } from "@prisma/client"
+import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
 import { createProofWithSignature } from "../../../../../../../src/models/proof/mutations/createProofWithSignature"
@@ -15,7 +16,13 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  // TODO: AUTH: look at vote.ts
+  try {
+    verifyTree(body.root, body.signatureMetadata.signature, body.createdBy)
+  } catch (e) {
+    console.log("this is e", e)
+    res.statusCode = 401
+    return res.end(JSON.stringify(e))
+  }
 
   let request, proof, activity
   try {
@@ -42,7 +49,7 @@ export default async function handler(
 
       activity = await createActivity({
         comment: body.comment,
-        address: body.address,
+        address: body.createdBy,
         requestId: request.id,
         variant: ActivityVariant.CREATE_AND_APPROVE_REQUEST,
         $tx,
