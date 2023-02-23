@@ -1,4 +1,4 @@
-import { RequestVariantType } from "@prisma/client"
+import { ActivityVariant, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -58,6 +58,7 @@ const TerminalRequestIdPage = () => {
     request.rejectActivities.length >= request.quorum ||
     request.approveActivities.length >= request.quorum
 
+  console.log("is exe", request.isExecuted)
   return (
     <>
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
@@ -197,7 +198,18 @@ const TerminalRequestIdPage = () => {
                 optimisticExecute={() => {
                   mutate({
                     ...request,
-                    // activities: [...request?.activities!, executeActivity],
+                    activities: [
+                      ...request?.activities!,
+                      {
+                        requestId: request.id,
+                        variant: ActivityVariant.EXECUTE_REQUEST,
+                        address: activeUser?.address || "",
+                        data: {},
+                        id: "1",
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                      },
+                    ],
                     isExecuted: true,
                   })
                 }}

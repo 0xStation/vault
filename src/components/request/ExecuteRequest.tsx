@@ -3,9 +3,13 @@ import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
+import {
+  usePrepareSendTransaction,
+  useSendTransaction,
+  useWaitForTransaction,
+} from "wagmi"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import { RawCall } from "../../../src/lib/transactions/call"
@@ -37,6 +41,7 @@ export const ExecuteWrapper = ({
   const activeUser = useStore((state) => state.activeUser)
   const { loadingToast, successToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
+  const [formData, setFormData] = useState<any>()
   const { execute } = useExecute(router.query.requestId as string)
 
   const { config } = usePrepareSendTransaction({
@@ -47,8 +52,38 @@ export const ExecuteWrapper = ({
     },
     chainId: request.chainId,
   })
-  const { data, isLoading, isSuccess, sendTransaction } =
-    useSendTransaction(config)
+  const {
+    data,
+    isLoading: isSendTransactionLoading,
+    isSuccess: isSendTransactionSuccess,
+    sendTransaction,
+  } = useSendTransaction(config)
+
+  const { isLoading, isSuccess: isWaitForTransactionSuccess } =
+    useWaitForTransaction({
+      hash: data?.hash,
+    })
+
+  useEffect(() => {
+    if (isSendTransactionSuccess) {
+      // pass data here, might need to setState
+      runExecution()
+    }
+  }, [isSendTransactionSuccess, data])
+
+  useEffect(() => {
+    if (isWaitForTransactionSuccess) {
+      successToast("success")
+    }
+  }, [isWaitForTransactionSuccess])
+
+  const runExecution = async () => {
+    setLoading(false)
+    setIsOpen(false)
+    loadingToast("loading...")
+    optimisticExecute()
+    await execute(formData)
+  }
 
   const {
     register,
@@ -59,24 +94,12 @@ export const ExecuteWrapper = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    sendTransaction?.()
-    // await tx to make sure it succeeds
-    optimisticExecute()
-    await execute({
+    setFormData({
       address: activeUser?.address,
       comment: data.comment,
     })
-    setLoading(false)
-    setIsOpen(false)
-    // loadingToast("loading")
-    // wait
-    // successToast("success")
-
+    sendTransaction?.()
     resetField("comment")
-
-    // 1. optomistically update so the tx is executed and the execute box is gone
-    // 2. display loading toast while isLoading is true
-    // 3. display "done" toast when it is done
   }
 
   return (
