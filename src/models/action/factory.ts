@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker"
+import { ZERO_ADDRESS } from "lib/constants"
 import { Action, SwapChoice } from "./types"
 
 // defaults to a eth transfer to 0x65a
@@ -28,7 +29,7 @@ export const createAction = ({
   isRejection?: boolean
 }) => {
   const rejectionCall = {
-    to: "0x",
+    to: ZERO_ADDRESS,
     value: "0",
     data: "0x",
     operation: "0",

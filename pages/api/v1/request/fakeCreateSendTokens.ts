@@ -3,16 +3,13 @@ import db from "db"
 import { ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransferVariant } from "lib/encodings/token"
 import { NextApiRequest, NextApiResponse } from "next"
-import {
-  ActionMetadata,
-  SwapChoice,
-} from "../../../../../src/models/action/types"
+import { ActionMetadata, SwapChoice } from "../../../../src/models/action/types"
 import {
   FrequencyType,
   RequestMetadata,
   TokenTransferVariant,
-} from "../../../../../src/models/request/types"
-import { TokenType } from "../../../../../src/models/token/types"
+} from "../../../../src/models/request/types"
+import { TokenType } from "../../../../src/models/token/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,6 +23,8 @@ export default async function handler(
   }
 
   const { chainId, address, createdBy } = body
+
+  console.log(body)
 
   const lastRequest = await db.request.findFirst({
     where: {
@@ -85,6 +84,13 @@ export default async function handler(
     ),
   } as ActionMetadata
 
+  const rejectionCall = {
+    to: ZERO_ADDRESS,
+    value: "0",
+    data: "0x",
+    operation: "0",
+  }
+
   const request = await db.request.create({
     data: {
       terminalAddress: address,
@@ -101,6 +107,15 @@ export default async function handler(
               nonce: (lastAction?.nonce ?? 0) + 1,
               data: JSON.parse(JSON.stringify(actionMetadata)),
             },
+            {
+              safeAddress: address as string,
+              chainId,
+              nonce: (lastAction?.nonce ?? 0) + 1,
+              data: JSON.parse(
+                JSON.stringify({ ...actionMetadata, calls: [rejectionCall] }),
+              ),
+              isRejection: true,
+            },
           ],
         },
       },
@@ -113,9 +128,6 @@ export default async function handler(
           },
         ],
       },
-    },
-    include: {
-      actions: true,
     },
   })
 
