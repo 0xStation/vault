@@ -1,4 +1,6 @@
+import { ArrowLeft } from "@icons"
 import { TabsContent } from "@ui/Tabs"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestListByFilterAndTab from "../../src/components/core/RequestListByFilterAndTab"
@@ -8,6 +10,7 @@ import TerminalRequestStatusFilterBar, {
 import TerminalRequestTypeTabBar, {
   TerminalRequestTypeTab,
 } from "../../src/components/core/TabBars/TerminalRequestTypeTabBar"
+import { CreateRequestDropdown } from "../../src/components/request/CreateRequestDropdown"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
@@ -73,9 +76,20 @@ const RequestContentForFilterAndTab = ({
 }
 
 const TerminalRequestsPage = () => {
+  const router = useRouter()
   return (
     <>
       <AccountNavBar />
+      <Link
+        href={`/${router.query.chainNameAndSafeAddress}`}
+        className="block px-4"
+      >
+        <ArrowLeft />
+      </Link>
+      <div className="my-4 flex flex-row items-center justify-between px-4">
+        <span className="text-lg font-bold">Requests</span>
+        <CreateRequestDropdown />
+      </div>
       <TerminalRequestTypeTabBar>
         <RequestTypeContent tab={TerminalRequestTypeTab.ALL} />
         <RequestTypeContent tab={TerminalRequestTypeTab.ASSETS} />
