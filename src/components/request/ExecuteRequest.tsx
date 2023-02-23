@@ -1,36 +1,45 @@
 import { RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
-import { useRouter } from "next/router"
+import { BigNumber } from "ethers"
 import { Dispatch, SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
+import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
-import useStore from "../../hooks/stores/useStore"
-import { useExecute } from "../../models/request/hooks"
+import { RawCall } from "../../../src/lib/transactions/call"
+import { callAction } from "../../lib/transactions/conductor"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
-export const ExecuteRequest = ({
+export const ExecuteWrapper = ({
   title,
   subtitle,
   request,
   isOpen,
   setIsOpen,
-  approve,
+  txPayload,
 }: {
   title: string
   subtitle: string
   request: RequestFrob
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  approve: boolean
+  txPayload: RawCall
 }) => {
-  const router = useRouter()
-  const activeUser = useStore((state) => state.activeUser)
   const [loading, setLoading] = useState<boolean>(false)
 
-  console.log(request)
+  // make sure we are considering the chainId
+  const { config } = usePrepareSendTransaction({
+    request: {
+      to: txPayload.to,
+      value: BigNumber.from(txPayload.value),
+      data: txPayload.data,
+    },
+    chainId: request.chainId,
+  })
+  const { data, isLoading, isSuccess, sendTransaction } =
+    useSendTransaction(config)
 
   const {
     register,
@@ -39,19 +48,16 @@ export const ExecuteRequest = ({
     formState: { errors },
   } = useForm()
 
-  const { execute } = useExecute(router.query.requestId as string)
-
   const onSubmit = async (data: any) => {
     setLoading(true)
-
-    await execute({
-      address: activeUser?.address,
-      approve,
-      comment: data.comment,
-    })
+    sendTransaction?.()
     setLoading(false)
     setIsOpen(false)
     resetField("comment")
+
+    // 1. optomistically update so the tx is executed and the execute box is gone
+    // 2. display loading toast while isLoading is true
+    // 3. display "done" toast when it is done
   }
 
   return (
@@ -85,5 +91,46 @@ export const ExecuteRequest = ({
         </div>
       </form>
     </BottomDrawer>
+  )
+}
+
+export const ExecuteRequest = ({
+  title,
+  subtitle,
+  request,
+  isOpen,
+  setIsOpen,
+  approve,
+}: {
+  title: string
+  subtitle: string
+  request: RequestFrob
+  isOpen: boolean
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+  approve: boolean
+}) => {
+  let actionsToExecute: any[] = []
+  request?.actions.forEach((action) => {
+    if (approve && !action.isRejection) actionsToExecute.push(action)
+  })
+
+  if (actionsToExecute.length === 0) {
+    return <></>
+  }
+
+  const txPayload = callAction({
+    action: actionsToExecute?.[0],
+    proofs: actionsToExecute?.[0]?.proofs,
+  })
+
+  return (
+    <ExecuteWrapper
+      title={title}
+      subtitle={subtitle}
+      request={request}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      txPayload={txPayload}
+    />
   )
 }

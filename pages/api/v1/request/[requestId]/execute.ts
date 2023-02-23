@@ -1,4 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import db from "../../../../../prisma/client"
+import { Action } from "../../../../../src/models/action/types"
+import { Proof } from "../../../../../src/models/proof/types"
+import { Request } from "../../../../../src/models/request/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,66 +20,36 @@ export default async function handler(
     return res.end(JSON.stringify("No request id provided"))
   }
 
-  console.log(body)
+  const { address, approve, comment } = body
 
-  // const { signature, address, approve, comment } = body
+  const request = (await db.request.findUnique({
+    where: {
+      id: query.requestId as string,
+    },
+    include: {
+      actions: {
+        include: {
+          proofs: true,
+        },
+      },
+    },
+  })) as unknown as Request & { actions: (Action & { proofs: Proof[] })[] }
 
-  // const request = (await db.request.findUnique({
-  //   where: {
-  //     id: query.requestId as string,
-  //   },
-  //   include: {
-  //     actions: true,
-  //   },
-  // })) as Request
+  if (!request) {
+    res.statusCode = 404
+    res.end(JSON.stringify("no request found"))
+  }
 
-  // if (!request) {
-  //   res.statusCode = 404
-  //   res.end(JSON.stringify("no request found"))
-  // }
+  const actions =
+    request?.actions.filter((action) =>
+      approve
+        ? // if approve, action ids not included in rejection array
+          !action.isRejection
+        : // if reject, action ids included in rejection array
+          action.isRejection,
+    ) ?? []
 
-  // // verify signature for vote on request
-
-  // const actions =
-  //   request?.actions.filter((action) =>
-  //     approve
-  //       ? // if approve, action ids not included in rejection array
-  //         !request?.data.rejectionActionIds.includes(action.id)
-  //       : // if reject, action ids included in rejection array
-  //         request?.data.rejectionActionIds.includes(action.id),
-  //   ) ?? []
-
-  // const { root, proofs, message } = actionsTree(actions)
-
-  // try {
-  //   verifyTree(root, signature, address)
-  // } catch (e) {
-  //   res.statusCode = 401
-  //   res.end(JSON.stringify(e))
-  // }
-
-  // // if verified, create signature with proofs and activity
-  // // TODO: align on if we want to apply constraints to prevent duplicate signature/proof entries (e.g. approve, reject, re-approve)
-
-  // const signatureCreate = db.signature.create({
-  //   data: {
-  //     signerAddress: address,
-  //     data: JSON.parse(
-  //       JSON.stringify({
-  //         message,
-  //         signature,
-  //       }),
-  //     ),
-  //     proofs: {
-  //       createMany: {
-  //         data: actions.map((action) => ({
-  //           actionId: action.id,
-  //           path: proofs[hashAction(action)],
-  //         })),
-  //       },
-  //     },
-  //   },
-  // })
+  console.log(actions)
 
   // const activityCreate = db.activity.create({
   //   data: {
