@@ -11,6 +11,7 @@ import { ZERO_ADDRESS } from "../../lib/constants"
 import { SignerQuorumVariant } from "../../models/request/types"
 import { SafeMetadata } from "../../models/safe/types"
 import QuorumInput from "../form/QuorumInput"
+import TextareaWithLabel from "../form/TextareaWithLabel"
 import { BottomDrawer } from "../ui/BottomDrawer"
 
 export const UpdateMembersDrawer = ({
@@ -67,7 +68,7 @@ export const UpdateMembersDrawer = ({
             remove: [],
           } as SignerQuorumVariant,
           createdBy: activeUser?.address,
-          note: "", // TODO
+          note: data.note,
           nonce: nextNonce?.nonce as number,
           path: [],
           calls,
@@ -85,8 +86,21 @@ export const UpdateMembersDrawer = ({
       setIsOpen(false)
       // TODO: show toasty toast
       // create request
-    } catch (err) {
-      console.error("Something went wrong.", err)
+    } catch (err: any) {
+      if (
+        err.code === 4001 ||
+        (err?.name && err?.name === "UserRejectedRequestError")
+      ) {
+        setFormMessage({
+          isError: true,
+          message: "Signature was rejected.",
+        })
+      } else {
+        setFormMessage({
+          isError: true,
+          message: "Something went wrong.",
+        })
+      }
       // TODO: show toasty toast
     }
   }
@@ -96,11 +110,12 @@ export const UpdateMembersDrawer = ({
   const {
     register,
     handleSubmit,
-    formState: { isDirty, errors },
+    formState: { isDirty, errors, dirtyFields },
     watch,
   } = useForm({
     defaultValues: {
       quorum: safeMetadata?.quorum || 1,
+      note: "",
     } as FieldValues,
   })
 
@@ -135,6 +150,16 @@ export const UpdateMembersDrawer = ({
           }}
           quorumSize={safeMetadata?.signers?.length || 1} // default to 1 since activeUser is a member
         />
+        {isDirty && (
+          <TextareaWithLabel
+            label={"Note*"}
+            register={register}
+            required
+            name="note"
+            errors={errors}
+            placeholder="Onboard Alice to the team"
+          />
+        )}
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
           <Button type="submit" fullWidth={true}>
             Edit

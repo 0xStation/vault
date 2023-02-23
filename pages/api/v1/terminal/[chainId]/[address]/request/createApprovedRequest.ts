@@ -19,7 +19,6 @@ export default async function handler(
   try {
     verifyTree(body.root, body.signatureMetadata.signature, body.createdBy)
   } catch (e) {
-    console.log("this is e", e)
     res.statusCode = 401
     return res.end(JSON.stringify(e))
   }
