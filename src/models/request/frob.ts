@@ -46,7 +46,11 @@ const toFrob = async (request: Request) => {
     where: {
       requestId: request.id,
       variant: {
-        in: [ActivityVariant.APPROVE_REQUEST, ActivityVariant.REJECT_REQUEST],
+        in: [
+          ActivityVariant.APPROVE_REQUEST,
+          ActivityVariant.CREATE_AND_APPROVE_REQUEST,
+          ActivityVariant.REJECT_REQUEST,
+        ],
       },
     },
     distinct: ["address"],
@@ -66,7 +70,10 @@ const toFrob = async (request: Request) => {
   }
   const sortedVotingActivities = votingActivities.reduce(
     (map: VoteActivityMap, vote: Activity) => {
-      if (vote.variant === ActivityVariant.APPROVE_REQUEST) {
+      if (
+        vote.variant === ActivityVariant.APPROVE_REQUEST ||
+        vote.variant === ActivityVariant.CREATE_AND_APPROVE_REQUEST
+      ) {
         map.approveActivities.push(vote)
       } else {
         map.rejectActivities.push(vote)
