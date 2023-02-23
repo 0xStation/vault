@@ -1,3 +1,4 @@
+import { GasIcon } from "@icons/Gas"
 import { Button } from "@ui/Button"
 import { RoundedPill } from "@ui/RoundedPill"
 import { useState } from "react"
@@ -34,7 +35,10 @@ export const CastYourVote = ({
               {!lastVote ? "Cast" : "Change"} your vote
             </div>
             <RoundedPill>
-              <div className="text-xs">$0.00</div>
+              <div className="flex flex-row items-center space-x-0.5">
+                <GasIcon />
+                <div className="text-xs">$0.00</div>
+              </div>
             </RoundedPill>
           </div>
           <div className="flex flex-row items-center space-x-1">

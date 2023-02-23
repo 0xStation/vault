@@ -49,8 +49,6 @@ export default async function handler(
           request?.data.rejectionActionIds.includes(action.id),
     ) ?? []
 
-  console.log("signed actions", actions)
-
   const { root, proofs, message } = actionsTree(actions)
 
   try {
@@ -61,6 +59,7 @@ export default async function handler(
   }
 
   // if verified, create signature with proofs and activity
+  // TODO: align on if we want to apply constraints to prevent duplicate signature/proof entries (e.g. approve, reject, re-approve)
 
   const signatureCreate = db.signature.create({
     data: {
@@ -95,7 +94,7 @@ export default async function handler(
     },
   })
 
-  // make creates as one atomic transaction
+  // bundle creates as one atomic transaction
   await db.$transaction([signatureCreate, activityCreate])
 
   res.status(200).json({})
