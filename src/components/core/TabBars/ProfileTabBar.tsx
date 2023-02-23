@@ -1,4 +1,3 @@
-import { useRouter } from "next/router"
 import { TabBar } from "../TabBar"
 
 export enum ProfileTab {
@@ -13,15 +12,10 @@ export const ProfileTabBar = ({
   className?: string
   children: React.ReactNode
 }) => {
-  const router = useRouter()
-
   const options = [
     { value: ProfileTab.TERMINALS, label: "Terminals" },
     { value: ProfileTab.REQUESTS, label: "Requests" },
   ]
-  const shallowRoute = (tab: string) => {
-    return `/u/${router.query.address}/profile/?tab=${tab}`
-  }
 
   return (
     <TabBar
@@ -29,7 +23,6 @@ export const ProfileTabBar = ({
       style="tab"
       defaultValue={ProfileTab.TERMINALS}
       options={options}
-      shallowRoute={shallowRoute}
     >
       {children}
     </TabBar>

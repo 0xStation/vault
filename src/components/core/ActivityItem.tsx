@@ -21,9 +21,11 @@ const ActivityItem = ({
           {variantMessage(variant, createdAt)}
         </p>
       </div>
-      <div className="ml-6 mt-1 whitespace-pre-line rounded-md bg-slate-100 px-3 py-2 text-sm">
-        {comment}
-      </div>
+      {comment && (
+        <div className="ml-6 mt-1 whitespace-pre-line rounded-md bg-slate-100 px-3 py-2 text-sm">
+          {comment}
+        </div>
+      )}
     </div>
   )
 }

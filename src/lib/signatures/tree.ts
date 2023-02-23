@@ -20,6 +20,13 @@ export type Tree = {
  * @returns a merkle tree to sign containing the root, proof branches, and EIP712-ready message
  */
 export const actionsTree = (actions: Action[] = []): Tree => {
+  if (actions.length === 0) {
+    // if this is throwing, probably rejecting and `rejectionActionIds` is an empty array
+    // fix by making sure to create the rejection action(s) for a request and add the array on the request
+    // we may want to change this mechanism to something cleaner
+    throw Error("attempting to sign empty actions array")
+  }
+
   const leaves = actions
     .map((action) => hashAction(action))
     .sort((a, b) => {

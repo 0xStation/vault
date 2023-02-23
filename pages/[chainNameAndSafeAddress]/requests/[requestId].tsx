@@ -2,13 +2,17 @@ import { RequestVariantType } from "@prisma/client"
 import { Address } from "@ui/Address"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import prisma from "../../../prisma/client"
 import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
+import { CastYourVote } from "../../../src/components/request/CastYourVote"
+import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
+import { Activity } from "../../../src/models/activity/types"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
 
@@ -84,11 +88,29 @@ const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
 }
 
 const TerminalRequestIdPage = () => {
+  const activeUser = useStore((state) => state.activeUser)
   const router = useRouter()
 
   const { isLoading, request, mutate } = useRequest(
     router.query.requestId as string,
   )
+  const [lastVote, setLastVote] = useState<"approve" | "reject">()
+
+  useEffect(() => {
+    if (!activeUser?.address || !request) {
+      setLastVote(undefined)
+    }
+    const lastVoteIsApprove = request?.approveActivities.some(
+      (activity) => activity.address === activeUser?.address,
+    )
+    const lastVoteIsReject = request?.rejectActivities.some(
+      (activity) => activity.address === activeUser?.address,
+    )
+
+    setLastVote(
+      lastVoteIsApprove ? "approve" : lastVoteIsReject ? "reject" : undefined,
+    )
+  }, [activeUser, request])
 
   return (
     <>
@@ -161,7 +183,9 @@ const TerminalRequestIdPage = () => {
               />
             )
           })}
-          <h4 className="mt-3 text-xs font-bold">Has not voted (x)</h4>
+          <h4 className="mt-3 text-xs font-bold">
+            Has not voted ({request?.addressesThatHaveNotSigned?.length})
+          </h4>
           {request?.addressesThatHaveNotSigned?.map((address, idx) => {
             return (
               <AvatarAddress
@@ -173,7 +197,7 @@ const TerminalRequestIdPage = () => {
             )
           })}
         </section>
-        <section className="mb-24 p-4">
+        <section className="mb-28 p-4">
           <h3 className="mb-4">Timeline</h3>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
@@ -199,6 +223,47 @@ const TerminalRequestIdPage = () => {
             }}
           />
         </section>
+        <CastYourVote
+          approveActions={
+            request?.actions.filter(
+              (action) => !request?.data.rejectionActionIds.includes(action.id),
+            ) ?? []
+          }
+          rejectActions={
+            request?.actions.filter((action) =>
+              request?.data.rejectionActionIds.includes(action.id),
+            ) ?? []
+          }
+          lastVote={lastVote}
+          optimisticVote={(approve: boolean, voteActivity: Activity) => {
+            let approveActivities = request?.approveActivities!
+            let rejectActivities = request?.rejectActivities!
+
+            if (approve) {
+              // filter out previous rejection if exists
+              rejectActivities = rejectActivities?.filter(
+                (activity) => activity.address !== activeUser?.address,
+              )
+              // add approval activity
+              approveActivities = [...request?.approveActivities!, voteActivity]
+            } else {
+              // filter out previous approval if exists
+              approveActivities = approveActivities?.filter(
+                (activity) => activity.address !== activeUser?.address,
+              )
+              // add rejection activity
+              rejectActivities = [...request?.rejectActivities!, voteActivity]
+            }
+
+            mutate({
+              ...request!,
+              activities: [...request?.activities!, voteActivity],
+              approveActivities,
+              rejectActivities,
+            })
+            setLastVote(approve ? "approve" : "reject")
+          }}
+        />
       </div>
     </>
   )
