@@ -21,16 +21,19 @@ export const getRequestsByTerminal = async ({
 }) => {
   const requests = (await prisma.request.findMany({
     where: {
-      safeAddress_chainId: {
-        safeAddress,
-        chainId: safeChainId,
-      },
+      terminalAddress: safeAddress,
+      chainId: safeChainId,
       ...(options?.tab &&
         options?.tab !== "all" && {
-          variant:
-            options.tab === "members"
-              ? RequestVariantType.SIGNER_QUORUM
-              : RequestVariantType.TOKEN_TRANSFER,
+          variant: {
+            in:
+              options.tab === "members"
+                ? [RequestVariantType.SIGNER_QUORUM]
+                : [
+                    RequestVariantType.TOKEN_TRANSFER,
+                    RequestVariantType.SPLIT_TOKEN_TRANSFER,
+                  ],
+          },
         }),
     },
   })) as Request[]

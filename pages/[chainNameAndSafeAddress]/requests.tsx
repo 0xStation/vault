@@ -8,7 +8,11 @@ import TerminalRequestStatusFilterBar, {
 import TerminalRequestTypeTabBar, {
   TerminalRequestTypeTab,
 } from "../../src/components/core/TabBars/TerminalRequestTypeTabBar"
-import { chainNameToChainId } from "../../src/models/terminal/terminals"
+
+const chainNameToChainId: Record<string, number | undefined> = {
+  eth: 1,
+  gor: 5,
+}
 
 const RequestTypeContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
   return (

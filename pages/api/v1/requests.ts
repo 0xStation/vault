@@ -7,6 +7,8 @@ export default async function handler(
 ) {
   const { method, query } = req
 
+  console.log(query)
+
   if (method !== "GET") {
     res.setHeader("Allow", ["GET"])
     res.status(405).end(`Method ${method} Not Allowed`)
@@ -17,15 +19,15 @@ export default async function handler(
     return res.end(JSON.stringify("No safe address provided, or invalid"))
   }
 
-  if (!query.safeChainId || typeof query.safeChainId !== "number") {
+  if (!query.safeChainId || typeof query.safeChainId !== "string") {
     res.statusCode = 404
-    return res.end(JSON.stringify("No safe chainId provided, or invalid"))
+    return res.end(JSON.stringify("No safe chainId provided"))
   }
 
   try {
     const requests = await getRequestsByTerminal({
       safeAddress: query.safeAddress,
-      safeChainId: query.safeChainId,
+      safeChainId: parseInt(query.safeChainId),
       options: {
         tab: query.tab, // omit if null
       },

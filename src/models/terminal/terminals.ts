@@ -2,7 +2,7 @@ import prisma from "../../../prisma/client"
 import toFrob from "./frob"
 import { Terminal } from "./types"
 
-export const chainNameToChainId: Record<string, number | undefined> = {
+const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
 }
