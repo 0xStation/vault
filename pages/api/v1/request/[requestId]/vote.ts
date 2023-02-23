@@ -22,7 +22,7 @@ export default async function handler(
     return res.end(JSON.stringify("No request id provided"))
   }
 
-  const { signature, address, approve, note } = body
+  const { signature, address, approve, comment } = body
 
   const request = (await db.request.findUnique({
     where: {
@@ -90,7 +90,7 @@ export default async function handler(
         : ActivityVariant.REJECT_REQUEST,
       requestId: query.requestId as string,
       data: {
-        comment: note === "" ? null : note,
+        comment,
       },
     },
   })

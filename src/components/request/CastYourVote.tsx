@@ -8,10 +8,12 @@ export const CastYourVote = ({
   approveActions,
   rejectActions,
   lastVote,
+  optimisticVote,
 }: {
   approveActions: Action[]
   rejectActions: Action[]
   lastVote?: "approve" | "reject"
+  optimisticVote: any
 }) => {
   const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
@@ -23,6 +25,7 @@ export const CastYourVote = ({
         setIsOpen={setIsVoteOpen}
         actions={approve ? approveActions : rejectActions}
         approve={approve}
+        optimisticVote={optimisticVote}
       />
       <div className="fixed bottom-0 w-full border-t bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">

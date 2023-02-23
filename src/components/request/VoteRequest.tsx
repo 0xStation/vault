@@ -1,3 +1,4 @@
+import { ActivityVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
@@ -15,11 +16,13 @@ export const VoteRequest = ({
   setIsOpen,
   actions,
   approve,
+  optimisticVote,
 }: {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   actions: Action[]
   approve: boolean
+  optimisticVote: any
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -50,11 +53,21 @@ export const VoteRequest = ({
       signature,
       address: activeUser?.address,
       approve,
-      note: data.note,
+      comment: data.comment,
     })
     setLoading(false)
     setIsOpen(false)
-    resetField("note")
+    resetField("comment")
+
+    const voteActivity = {
+      requestId: router.query.requestId as string,
+      variant: approve
+        ? ActivityVariant.APPROVE_REQUEST
+        : ActivityVariant.REJECT_REQUEST,
+      address: activeUser?.address,
+      data,
+    }
+    optimisticVote(approve, voteActivity)
   }
 
   return (
@@ -72,7 +85,7 @@ export const VoteRequest = ({
             label="Note (optional)"
             register={register}
             placeholder="Add a note"
-            name="note"
+            name="comment"
             errors={errors}
           />
         </div>
