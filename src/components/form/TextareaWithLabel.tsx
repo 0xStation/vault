@@ -30,10 +30,18 @@ export const TextareaWithLabel = ({
         {label}
       </label>
       <textarea
-        className="h-[26px] max-h-[150px] border-b border-b-slate-300 placeholder:text-slate-400"
+        className="h-[26px] resize-none border-b border-b-slate-300 placeholder:text-slate-400"
         placeholder={placeholder}
         {...register(name, { ...registerOptions, ...requiredMessage })}
         {...rest}
+        // make height auto-adjust while typing
+        // https://stackoverflow.com/questions/7745741/auto-expanding-textarea
+        onInput={(e) => {
+          // @ts-ignore
+          e.target.style.height = ""
+          // @ts-ignore
+          e.target.style.height = e.target.scrollHeight + "px"
+        }}
       />
       <p className="text-xs text-red">
         {get(errors, name) && get(errors, `${name}.message`)}

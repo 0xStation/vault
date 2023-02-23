@@ -24,7 +24,8 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
   return (
     // wrapped in div with relative to handle non-square images via cropping
     // https://nextjs.org/docs/api-reference/next/image#fill
-    <div className={`relative ${sizeMap[size]}`}>
+    // for some reason Avatars are showing over other components in scroll views so applying a -z value
+    <div className={`relative ${sizeMap[size]} -z-10`}>
       {ensAvatar ? (
         <Image
           src={ensAvatar}
