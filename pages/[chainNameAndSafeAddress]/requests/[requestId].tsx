@@ -225,14 +225,10 @@ const TerminalRequestIdPage = () => {
         </section>
         <CastYourVote
           approveActions={
-            request?.actions.filter(
-              (action) => !request?.data.rejectionActionIds.includes(action.id),
-            ) ?? []
+            request?.actions.filter((action) => !action.isRejection) ?? []
           }
           rejectActions={
-            request?.actions.filter((action) =>
-              request?.data.rejectionActionIds.includes(action.id),
-            ) ?? []
+            request?.actions.filter((action) => action.isRejection) ?? []
           }
           lastVote={lastVote}
           optimisticVote={(approve: boolean, voteActivity: Activity) => {
