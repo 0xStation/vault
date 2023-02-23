@@ -15,12 +15,13 @@ const RequestWithActionArgs = z.object({
     remove: z.string().array(),
     setQuorum: z.number(),
   }),
+  calls: z.any().array(),
   $tx: z.any().optional(), // $transaction calls give db as an arg
 })
 export const createRequestWithAction = async (
   input: z.infer<typeof RequestWithActionArgs>,
 ) => {
-  const { chainId, address, nonce, createdBy, note, variantType, $tx } =
+  const { chainId, address, nonce, createdBy, note, variantType, calls, $tx } =
     RequestWithActionArgs.parse(input)
 
   const db = $tx || prisma
@@ -61,7 +62,7 @@ export const createRequestWithAction = async (
               nonce: nonce,
               data: {
                 minDate: Date.now(),
-                // TODO: add calls
+                calls,
               },
             },
           ],

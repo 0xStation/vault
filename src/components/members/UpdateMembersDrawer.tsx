@@ -37,26 +37,26 @@ export const UpdateMembersDrawer = ({
       safeMetadata.address,
       data.quorum,
     )
-
+    let calls = [changeThresholdCall] // order matters
     const { message } = newActionTree({
       chainId: safeMetadata.chainId,
       safe: safeMetadata.address,
       nonce: nextNonce?.nonce as number,
       executor: ZERO_ADDRESS,
-      calls: [changeThresholdCall], // order matters
+      calls,
     })
 
     try {
       const signature = await signMessage(message)
 
       if (!signature) {
-        // TODO
+        // TODO: show toasty toast
         console.log("no signature :(")
         return
       }
 
       const requestResponse = await axios.post(
-        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`, // TODO: make withAction a query param
+        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`,
         {
           chainId: safeMetadata.chainId,
           address: safeMetadata.address,
@@ -69,6 +69,7 @@ export const UpdateMembersDrawer = ({
           note: "", // TODO
           nonce: nextNonce?.nonce as number,
           path: [],
+          calls,
           signatureMetadata: {
             message,
             signature,
@@ -79,10 +80,12 @@ export const UpdateMembersDrawer = ({
       const { request, proof, activity } = requestResponse.data
 
       console.log(request, proof, activity)
-
+      setIsOpen(false)
+      // TODO: show toasty toast
       // create request
     } catch (err) {
       console.error("Something went wrong.", err)
+      // TODO: show toasty toast
     }
   }
 

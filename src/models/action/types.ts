@@ -11,7 +11,7 @@ type Call = {
   operation: number // default to 0 (call) for now
 }
 
-type ActionMetadata = {
+export type ActionMetadata = {
   // if calls.length > 1, Action is a bundle and
   // automatically delegatecall MultiSend when executing
   calls: Call[]

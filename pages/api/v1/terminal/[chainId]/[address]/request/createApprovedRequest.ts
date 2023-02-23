@@ -27,6 +27,7 @@ export default async function handler(
         createdBy: body.createdBy,
         note: body.note,
         path: body.path,
+        calls: body.calls,
         variantType: body.variantType,
         $tx,
       })

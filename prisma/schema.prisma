@@ -74,12 +74,13 @@ model Activity {
 }
 
 model Action {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   requestId   String
   safeAddress String
   chainId     Int
   nonce       Int
   data        Json
+  isRejection Boolean @default(false)
 
   request Request @relation(fields: [requestId], references: [id])
   proofs  Proof[]
