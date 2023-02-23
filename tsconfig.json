@@ -18,7 +18,8 @@
       "@ui/*": ["./src/components/ui/*"],
       "@icons": ["./src/components/icons"],
       "@icons/*": ["./src/components/icons/*"],
-      "lib/*": ["./src/lib/*"]
+      "lib/*": ["./src/lib/*"],
+      "db": ["./prisma"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
