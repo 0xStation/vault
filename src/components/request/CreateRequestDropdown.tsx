@@ -31,6 +31,7 @@ export const CreateRequestDropdown = () => {
         <DropdownMenuItem className="focus:bg-white">
           <button
             onClick={() => {
+              // TODO: temp solution, change when we have send tokens form
               console.log("send tokens")
               createFakeSendTokens({
                 chainId,

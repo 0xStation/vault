@@ -46,6 +46,7 @@ export const useRequest = (requestId: string) => {
   return { isLoading, request, mutate }
 }
 
+// TODO: delete when we have real support of send tokens
 export const useCreateFakeSendTokensRequest = (
   chainId: number,
   address: string,

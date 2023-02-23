@@ -12,6 +12,7 @@ export const globalId = (chainId: number, address: string) => {
   return chainIdToChainName[chainId] + ":" + address
 }
 
+// TODO: bad implementation, fix later
 export const parseGlobalId = (chainNameAndSafeAddress: string) => {
   const [chainName, safeAddress] = chainNameAndSafeAddress?.split(":") ?? [
     "eth",
