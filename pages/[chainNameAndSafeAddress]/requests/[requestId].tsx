@@ -89,6 +89,7 @@ const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
 
 const TerminalRequestIdPage = () => {
   const activeUser = useStore((state) => state.activeUser)
+  const setToastState = useStore((state) => state.setToastState)
   const router = useRouter()
 
   const { isLoading, request, mutate } = useRequest(

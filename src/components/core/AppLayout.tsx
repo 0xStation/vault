@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from "react"
 import { useAccount, useDisconnect } from "wagmi"
 import { useSetActiveUser } from "../../hooks/account/useSetActiveUser"
 import useStore from "../../hooks/stores/useStore"
+import { Toast } from "../ui/Toast"
 
 export const AppLayout = ({
   title,
@@ -53,6 +54,7 @@ export const AppLayout = ({
         <link rel="apple-touch-icon" href="/station-logo-favicon.ico" />
       </Head>
       {children}
+      <Toast />
     </>
   )
 }
