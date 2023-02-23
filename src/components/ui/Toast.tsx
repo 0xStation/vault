@@ -104,7 +104,7 @@ export const Toast = () => {
       setTimeoutId(
         setTimeout(() => {
           setToastState({ isToastShowing: false, variant, message: "" })
-        }, 3000),
+        }, 5000),
       )
     }
   }, [isToastShowing])

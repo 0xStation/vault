@@ -9,10 +9,12 @@ export const ExecuteAction = ({
   title,
   subtitle,
   request,
+  optimisticExecute,
 }: {
   title: string
   subtitle: string
   request: RequestFrob
+  optimisticExecute: () => void
 }) => {
   const [isExecuteOpen, setIsExecuteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
@@ -26,6 +28,7 @@ export const ExecuteAction = ({
         isOpen={isExecuteOpen}
         setIsOpen={setIsExecuteOpen}
         approve={approve}
+        optimisticExecute={optimisticExecute}
       />
       <div className="fixed bottom-0 w-full border-t bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">

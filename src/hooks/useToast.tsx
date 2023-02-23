@@ -9,7 +9,7 @@ export const useToast = () => {
   ) => {
     setToastState({
       isToastShowing: true,
-      type: "success",
+      variant: "success",
       message,
       action,
     })
@@ -21,7 +21,7 @@ export const useToast = () => {
   ) => {
     setToastState({
       isToastShowing: true,
-      type: "error",
+      variant: "error",
       message,
       action,
     })
@@ -33,7 +33,7 @@ export const useToast = () => {
   ) => {
     setToastState({
       isToastShowing: true,
-      type: "loading",
+      variant: "loading",
       message,
       action,
     })

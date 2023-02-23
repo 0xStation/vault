@@ -2,13 +2,17 @@ import { RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
+import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
 import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import { RawCall } from "../../../src/lib/transactions/call"
+import useStore from "../../hooks/stores/useStore"
+import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
+import { useExecute } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
@@ -19,6 +23,7 @@ export const ExecuteWrapper = ({
   isOpen,
   setIsOpen,
   txPayload,
+  optimisticExecute,
 }: {
   title: string
   subtitle: string
@@ -26,10 +31,14 @@ export const ExecuteWrapper = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
+  optimisticExecute: () => void
 }) => {
+  const router = useRouter()
+  const activeUser = useStore((state) => state.activeUser)
+  const { loadingToast, successToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
+  const { execute } = useExecute(router.query.requestId as string)
 
-  // make sure we are considering the chainId
   const { config } = usePrepareSendTransaction({
     request: {
       to: txPayload.to,
@@ -51,8 +60,18 @@ export const ExecuteWrapper = ({
   const onSubmit = async (data: any) => {
     setLoading(true)
     sendTransaction?.()
+    // await tx to make sure it succeeds
+    optimisticExecute()
+    await execute({
+      address: activeUser?.address,
+      comment: data.comment,
+    })
     setLoading(false)
     setIsOpen(false)
+    // loadingToast("loading")
+    // wait
+    // successToast("success")
+
     resetField("comment")
 
     // 1. optomistically update so the tx is executed and the execute box is gone
@@ -101,6 +120,7 @@ export const ExecuteRequest = ({
   isOpen,
   setIsOpen,
   approve,
+  optimisticExecute,
 }: {
   title: string
   subtitle: string
@@ -108,6 +128,7 @@ export const ExecuteRequest = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
+  optimisticExecute: () => void
 }) => {
   let actionsToExecute: any[] = []
   request?.actions.forEach((action) => {
@@ -131,6 +152,7 @@ export const ExecuteRequest = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       txPayload={txPayload}
+      optimisticExecute={optimisticExecute}
     />
   )
 }
