@@ -8,6 +8,10 @@ export const icon = cva("", {
       lg: "h-8-w-8",
       xl: "h-12 w-12",
     },
+    color: {
+      base: "fill-black",
+      "slate-500": "fill-slate-500",
+    },
   },
 })
 
