@@ -22,8 +22,6 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
     terminal.chainId,
   )
 
-  console.log(nftData)
-
   if (!tokenData || !nftData) {
     return <></>
   }
