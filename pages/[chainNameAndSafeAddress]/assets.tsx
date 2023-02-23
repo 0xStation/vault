@@ -22,7 +22,13 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
     terminal.chainId,
   )
 
-  const totalAssetValue = tokenData.reduce((sum: number, token: any) => {
+  console.log(nftData)
+
+  if (!tokenData || !nftData) {
+    return <></>
+  }
+
+  const totalAssetValue = tokenData?.reduce((sum: number, token: any) => {
     if (token.fiat) sum += token.fiat?.[0].tokenValue
     return sum
   }, 0)
