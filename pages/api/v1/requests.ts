@@ -12,16 +12,21 @@ export default async function handler(
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  if (!query.terminalId || typeof query.terminalId !== "string") {
+  if (!query.safeAddress || typeof query.safeAddress !== "string") {
     res.statusCode = 404
-    return res.end(JSON.stringify("No terminal id provided"))
+    return res.end(JSON.stringify("No safe address provided, or invalid"))
+  }
+
+  if (!query.safeChainId || typeof query.safeChainId !== "number") {
+    res.statusCode = 404
+    return res.end(JSON.stringify("No safe chainId provided, or invalid"))
   }
 
   try {
     const requests = await getRequestsByTerminal({
-      terminalId: query.terminalId,
+      safeAddress: query.safeAddress,
+      safeChainId: query.safeChainId,
       options: {
-        filter: query.filter, // omit if null
         tab: query.tab, // omit if null
       },
     })

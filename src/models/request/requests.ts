@@ -8,16 +8,23 @@ import { Request } from "./types"
  * -------------------------
  */
 
+// options
+// tab -> all, members, assets (variant)
 export const getRequestsByTerminal = async ({
-  terminalId,
+  safeAddress,
+  safeChainId,
   options,
 }: {
-  terminalId: string
+  safeAddress: string
+  safeChainId: number
   options?: any
 }) => {
   const requests = (await prisma.request.findMany({
     where: {
-      terminalId,
+      safeAddress_chainId: {
+        safeAddress,
+        chainId: safeChainId,
+      },
       ...(options?.tab &&
         options?.tab !== "all" && {
           variant:
@@ -31,6 +38,7 @@ export const getRequestsByTerminal = async ({
   const requestFrobs = await Promise.all(
     requests.map(async (r: Request) => toFrob(r)),
   )
+
   return requestFrobs
 }
 
