@@ -1,6 +1,6 @@
 import { ActivityVariant, RequestVariantType } from "@prisma/client"
 import db from "db"
-import { ZERO_ADDRESS } from "lib/constants"
+import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransferVariant } from "lib/encodings/token"
 import { NextApiRequest, NextApiResponse } from "next"
 import { ActionMetadata, SwapChoice } from "../../../../src/models/action/types"
@@ -23,8 +23,6 @@ export default async function handler(
   }
 
   const { chainId, address, createdBy } = body
-
-  console.log(body)
 
   const lastRequest = await db.request.findFirst({
     where: {
@@ -84,13 +82,6 @@ export default async function handler(
     ),
   } as ActionMetadata
 
-  const rejectionCall = {
-    to: ZERO_ADDRESS,
-    value: "0",
-    data: "0x",
-    operation: "0",
-  }
-
   const request = await db.request.create({
     data: {
       terminalAddress: address,
@@ -112,7 +103,7 @@ export default async function handler(
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
               data: JSON.parse(
-                JSON.stringify({ ...actionMetadata, calls: [rejectionCall] }),
+                JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
               isRejection: true,
             },

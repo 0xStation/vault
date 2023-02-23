@@ -36,10 +36,8 @@ export const TextareaWithLabel = ({
         {...rest}
         // make height auto-adjust while typing
         // https://stackoverflow.com/questions/7745741/auto-expanding-textarea
-        onInput={(e) => {
-          // @ts-ignore
+        onInput={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           e.target.style.height = ""
-          // @ts-ignore
           e.target.style.height = e.target.scrollHeight + "px"
         }}
       />
