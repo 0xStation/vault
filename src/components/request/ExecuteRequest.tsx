@@ -1,4 +1,4 @@
-import { RequestVariantType } from "@prisma/client"
+import { ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
@@ -16,6 +16,7 @@ import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
+import { Action } from "../../models/action/types"
 import { useExecute } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
@@ -155,8 +156,12 @@ export const ExecuteRequest = ({
   mutate: any
 }) => {
   let actionsToExecute: any[] = []
-  request?.actions.forEach((action) => {
-    if (approve && !action.isRejection) actionsToExecute.push(action)
+  request?.actions.forEach((action: Action) => {
+    if (approve && action.variant === ActionVariant.APPROVAL) {
+      actionsToExecute.push(action)
+    } else if (!approve && action.variant === ActionVariant.REJECTION) {
+      actionsToExecute.push(action)
+    }
   })
 
   if (actionsToExecute.length === 0) {

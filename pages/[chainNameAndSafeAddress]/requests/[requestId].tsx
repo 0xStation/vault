@@ -1,4 +1,4 @@
-import { RequestVariantType } from "@prisma/client"
+import { ActionVariant, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -200,10 +200,14 @@ const TerminalRequestIdPage = () => {
             ) : (
               <CastYourVote
                 approveActions={
-                  request?.actions.filter((action) => !action.isRejection) ?? []
+                  request?.actions.filter(
+                    (action) => action.variant === ActionVariant.APPROVAL,
+                  ) ?? []
                 }
                 rejectActions={
-                  request?.actions.filter((action) => action.isRejection) ?? []
+                  request?.actions.filter(
+                    (action) => action.variant === ActionVariant.REJECTION,
+                  ) ?? []
                 }
                 lastVote={lastVote}
                 optimisticVote={(approve: boolean, voteActivity: Activity) => {
