@@ -62,12 +62,12 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
   return (
     <>
       <AccountNavBar />
-      <section className="px-4">
-        <h1 className="text-[20px]">{terminal.data.name}</h1>
+      <section className="mt-6 px-4">
+        <h1 className="text-xl font-bold">{terminal.data.name}</h1>
         <div className="mt-2 flex flex-row items-center space-x-1">
           <Network chainId={terminal.chainId} />
           <span className="text-xs">
-            {truncateString(terminal.safeAddress)}
+            · {truncateString(terminal.safeAddress)}
           </span>
           <CopyToClipboard text={terminal.safeAddress} />
         </div>

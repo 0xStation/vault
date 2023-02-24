@@ -16,20 +16,21 @@ const TerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
-        className="block px-4"
+        className="block w-fit px-4"
       >
         <ArrowLeft />
       </Link>
-      <section className="px-4">
-        <h1 className="text-[20px]">{terminal.data.name}</h1>
+      <section className="mt-4 px-4">
+        <h1 className="text-xl font-bold">{terminal.data.name}</h1>
         <div className="mt-2 flex flex-row items-center space-x-1">
           <Network chainId={terminal.chainId} />
+          <span className="text-xs">·</span>
           <span className="text-xs">
             {truncateString(terminal.safeAddress)}
           </span>
           <CopyToClipboard text={terminal.safeAddress} />
         </div>
-        <p className="mt-4">{terminal.data.description}</p>
+        <p className="mt-6">{terminal.data.description}</p>
       </section>
     </div>
   )

@@ -11,7 +11,7 @@ interface AvatarProps {
 const sizeMap: { [key: string]: string } = {
   ["xs"]: "min-h-[16px] min-w-[16px]",
   ["sm"]: "min-h-[24px] min-w-[24px]",
-  ["base"]: "min-h-[34px] min-w-[34px]",
+  ["base"]: "min-h-[32px] min-w-[32px]",
   ["lg"]: "min-h-[45px] min-w-[45px]",
 }
 
