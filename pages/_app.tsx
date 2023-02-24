@@ -21,7 +21,9 @@ const queryClient = new QueryClient({
 
 const Spinner = () => {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center text-center align-middle">
+    // TODO: this is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation
+    // specifically added: mx-auto h-screen max-w-[380px] border border-slate-200
+    <div className="mx-auto flex h-screen w-full max-w-[380px] flex-col items-center justify-center border border-slate-200 text-center align-middle">
       <div role="status">
         <svg
           className="mr-2 inline h-10 w-10 animate-spin fill-black text-slate-300"

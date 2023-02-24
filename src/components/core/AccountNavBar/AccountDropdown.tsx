@@ -64,9 +64,12 @@ export const AccountNavBar = () => {
       ) : (
         <>
           {openConnectModal && (
-            <Button size="sm" onClick={() => openConnectModal()}>
-              Connect wallet
-            </Button>
+            // set height to same as Avatar to reduce cumulative layout shift
+            <div className="flex min-h-[32px] items-center">
+              <Button size="sm" onClick={() => openConnectModal()}>
+                Connect wallet
+              </Button>
+            </div>
           )}
         </>
       )}
