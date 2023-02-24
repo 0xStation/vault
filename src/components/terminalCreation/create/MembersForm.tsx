@@ -199,6 +199,7 @@ export const MembersView = ({
     handleSubmit,
     formState: { errors },
     control,
+    watch,
   } = useForm({
     defaultValues: {
       quorum: members?.length || 1,
@@ -218,6 +219,8 @@ export const MembersView = ({
     control, // contains methods for registering components into React Hook Form
     name: "members",
   })
+
+  const watchMembers = watch("members", [])
   return showLoadingScreen ? (
     <LoadingScreen
       setShowLoadingScreen={setShowLoadingScreen}
@@ -269,11 +272,13 @@ export const MembersView = ({
                       validations={{
                         noDuplicates: async (v: string) => {
                           const addy = await resolveEnsAddress(v)
+                          const memberAddresses = (
+                            watchMembers as { address: string; id: string }[]
+                          ).map((item) => item?.address)
 
                           return (
-                            ((members || [])?.every(
-                              (member) =>
-                                !addressesAreEqual(member.address, addy),
+                            (!memberAddresses.some(
+                              (val, i) => memberAddresses.indexOf(val) !== i,
                             ) &&
                               !addressesAreEqual(activeUser?.address, addy)) ||
                             "Member already added."
