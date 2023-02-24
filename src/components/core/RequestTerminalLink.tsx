@@ -11,9 +11,7 @@ const RequestTerminalLink = ({ terminal }: { terminal: Terminal }) => {
           {terminal.data.name}
         </div>
       </div>
-      <Link
-        href={`/${globalId(terminal.chainId, terminal.safeAddress)}/requests`}
-      >
+      <Link href={`/${globalId(terminal.chainId, terminal.safeAddress)}`}>
         <div className="w-20 border-b border-dotted text-xs hover:text-slate-500">
           Go to Terminal
         </div>
