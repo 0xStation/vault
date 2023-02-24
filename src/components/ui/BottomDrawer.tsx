@@ -56,10 +56,9 @@ export const BottomDrawer = ({
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              {/* TODO: reverse change made to shrink for mobile size on large screens */}
-              {/* specifically: remove max-w-[380px] */}
+              {/* TODO: sm:max-w-[570px] made to shrink for mobile size on large screens, reverse later */}
               <div
-                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full max-w-[380px]`}
+                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full sm:max-w-[570px]`}
               >
                 <div className="border-slate flex h-full w-full flex-col rounded-t-lg border-r bg-white px-5 pt-3">
                   <div className="mb-6 flex w-full justify-center">
