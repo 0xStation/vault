@@ -22,9 +22,7 @@ export const SelectWithLabel = ({
 }) => {
   const requiredMessage = required ? { required: "Required." } : {}
   return (
-    <div
-      className={`${className} mb-3 grid w-full max-w-sm items-center gap-3`}
-    >
+    <div className={`${className} mb-3 grid w-full items-center gap-3`}>
       <label className="text-sm font-bold" htmlFor={name}>
         {label}
       </label>

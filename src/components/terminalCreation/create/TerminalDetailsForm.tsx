@@ -145,7 +145,7 @@ export const TerminalDetailsForm = ({
             }}
           />
         </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
           <Button type="submit" fullWidth={true}>
             Next
           </Button>

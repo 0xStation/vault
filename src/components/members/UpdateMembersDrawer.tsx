@@ -160,7 +160,8 @@ export const UpdateMembersDrawer = ({
             placeholder="Onboard Alice to the team"
           />
         )}
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
+        {/* TODO: remove max-w-[580px] when doing desktop */}
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
           <Button type="submit" fullWidth={true}>
             Edit
           </Button>

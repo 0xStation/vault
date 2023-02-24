@@ -11,7 +11,7 @@ export const Layout = ({
   isCloseIcon?: boolean
 }) => {
   return (
-    <div className="mx-4 mt-[60px] flex h-screen flex-col">
+    <div className="mx-4 mt-[60px] flex max-h-screen flex-col">
       <button role="button" onClick={() => backFunc()}>
         {isCloseIcon ? (
           <XMarkIcon className="h-6 w-6" />

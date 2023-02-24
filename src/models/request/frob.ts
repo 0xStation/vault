@@ -1,5 +1,4 @@
 import { ActivityVariant } from "@prisma/client"
-import { getSafeDetails } from "../../lib/api/safe/getSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
@@ -16,10 +15,14 @@ const toFrob = async (request: Request) => {
     return
   }
 
-  const safeDetails = await getSafeDetails(
-    terminal.chainId,
-    terminal.safeAddress,
-  )
+  // const safeDetails = await getSafeDetails(
+  //   terminal.chainId,
+  //   terminal.safeAddress,
+  // )
+  const safeDetails = {
+    quorum: 1,
+    signers: ["0x016562aA41A8697720ce0943F003141f5dEAe006"],
+  }
 
   const quorum = safeDetails?.quorum
   const signers = safeDetails?.signers

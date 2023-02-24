@@ -20,22 +20,20 @@ const chainNameToChainId: Record<string, number | undefined> = {
 const RequestTypeContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
   return (
     <TabsContent value={tab}>
-      <div className="mt-2">
-        <TerminalRequestStatusFilterBar>
-          <RequestContentForFilterAndTab
-            filter={TerminalRequestStatusFilter.NEEDS_ATTENTION}
-            tab={tab}
-          />
-          <RequestContentForFilterAndTab
-            filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
-            tab={tab}
-          />
-          <RequestContentForFilterAndTab
-            filter={TerminalRequestStatusFilter.CLOSED}
-            tab={tab}
-          />
-        </TerminalRequestStatusFilterBar>
-      </div>
+      <TerminalRequestStatusFilterBar>
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.NEEDS_ATTENTION}
+          tab={tab}
+        />
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
+          tab={tab}
+        />
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.CLOSED}
+          tab={tab}
+        />
+      </TerminalRequestStatusFilterBar>
     </TabsContent>
   )
 }

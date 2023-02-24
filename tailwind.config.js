@@ -10,6 +10,9 @@ module.exports = {
       slate: colors.slate,
     },
     extend: {
+      screens: {
+        sm: "580px",
+      },
       fontFamily: {
         sans: ["var(--font-favoritpro)", fontFamily.sans],
       },

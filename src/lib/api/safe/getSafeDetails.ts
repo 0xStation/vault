@@ -19,6 +19,7 @@ export const getSafeDetails = async (
     })
 
     if (response.status !== 200) {
+      console.error(response)
       throw Error("Could not retrieve Safe")
     }
 
@@ -31,6 +32,7 @@ export const getSafeDetails = async (
       version: data.version,
     }
   } catch (err) {
+    console.error(err)
     throw Error("Could not retrieve Safe")
   }
 }
