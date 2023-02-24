@@ -27,7 +27,7 @@ export const ExecuteWrapper = ({
   isOpen,
   setIsOpen,
   txPayload,
-  optimisticExecute,
+  mutate,
 }: {
   title: string
   subtitle: string
@@ -35,7 +35,7 @@ export const ExecuteWrapper = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
-  optimisticExecute: () => void
+  mutate: any
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -66,10 +66,9 @@ export const ExecuteWrapper = ({
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
-      // pass data here, might need to setState
       runExecution()
     }
-  }, [isSendTransactionSuccess, data])
+  }, [isSendTransactionSuccess])
 
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
@@ -81,8 +80,8 @@ export const ExecuteWrapper = ({
     setLoading(false)
     setIsOpen(false)
     loadingToast("loading...")
-    optimisticExecute()
     await execute(formData)
+    mutate()
   }
 
   const {
@@ -143,7 +142,7 @@ export const ExecuteRequest = ({
   isOpen,
   setIsOpen,
   approve,
-  optimisticExecute,
+  mutate,
 }: {
   title: string
   subtitle: string
@@ -151,7 +150,7 @@ export const ExecuteRequest = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
-  optimisticExecute: () => void
+  mutate: any
 }) => {
   let actionsToExecute: any[] = []
   request?.actions.forEach((action) => {
@@ -175,7 +174,7 @@ export const ExecuteRequest = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       txPayload={txPayload}
-      optimisticExecute={optimisticExecute}
+      mutate={mutate}
     />
   )
 }

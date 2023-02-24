@@ -26,7 +26,7 @@ const RequestListByFilterAndTab = ({
         !(
           r.approveActivities.some((a) => a.address === address) ||
           r.rejectActivities.some((a) => a.address === address)
-        ),
+        ) && !r.isExecuted,
     )
   }
 
@@ -34,8 +34,9 @@ const RequestListByFilterAndTab = ({
     requests = requests.filter(
       (r) =>
         // need to check if ready to execute because then this should go in "needs attention"
-        r.approveActivities.some((a) => a.address === address) ||
-        r.rejectActivities.some((a) => a.address === address),
+        (r.approveActivities.some((a) => a.address === address) ||
+          r.rejectActivities.some((a) => a.address === address)) &&
+        !r.isExecuted,
     )
   }
 

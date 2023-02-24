@@ -1,4 +1,4 @@
-import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import { RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -25,7 +25,6 @@ const chainNameToChainId: Record<string, number | undefined> = {
 
 const TerminalRequestIdPage = () => {
   const activeUser = useStore((state) => state.activeUser)
-  const setToastState = useStore((state) => state.setToastState)
   const router = useRouter()
 
   const { isLoading, request, mutate } = useRequest(
@@ -54,6 +53,7 @@ const TerminalRequestIdPage = () => {
     return <></>
   }
 
+  console.log(request)
   const canExecute =
     request.rejectActivities.length >= request.quorum ||
     request.approveActivities.length >= request.quorum
@@ -195,24 +195,7 @@ const TerminalRequestIdPage = () => {
                 title="Execute Approval"
                 subtitle="This action is on-chain and will not be reversible."
                 request={request}
-                optimisticExecute={() => {
-                  mutate({
-                    ...request,
-                    activities: [
-                      ...request?.activities!,
-                      {
-                        requestId: request.id,
-                        variant: ActivityVariant.EXECUTE_REQUEST,
-                        address: activeUser?.address || "",
-                        data: {},
-                        id: "1",
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                      },
-                    ],
-                    isExecuted: true,
-                  })
-                }}
+                mutate={mutate}
               />
             ) : (
               <CastYourVote
