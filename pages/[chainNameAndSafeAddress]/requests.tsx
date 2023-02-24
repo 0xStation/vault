@@ -82,7 +82,7 @@ const TerminalRequestsPage = () => {
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
-        className="block px-4"
+        className="block w-fit px-4"
       >
         <ArrowLeft />
       </Link>

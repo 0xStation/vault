@@ -17,7 +17,7 @@ const ProfilePage = ({}: {}) => {
       {/* NAV */}
       <AccountNavBar />
       {/* ACCOUNT */}
-      <div className="flex flex-row items-center space-x-3 px-4">
+      <div className="mt-6 flex flex-row items-center space-x-3 px-4">
         <Avatar address={accountAddress} size="lg" />
         <div className="items-left flex flex-col">
           <Address address={accountAddress} size="lg" />

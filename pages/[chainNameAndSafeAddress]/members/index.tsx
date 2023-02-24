@@ -1,4 +1,6 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
+import { ArrowLeft } from "@icons"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import AccountNavBar from "../../../src/components/core/AccountNavBar"
@@ -47,12 +49,18 @@ const MembersPage = () => {
   return (
     <>
       <AccountNavBar />
+      <Link
+        href={`/${router.query.chainNameAndSafeAddress}`}
+        className="block w-fit px-4"
+      >
+        <ArrowLeft />
+      </Link>
       <UpdateMembersDrawer
         isOpen={isUpdateMembersDrawerOpen}
         setIsOpen={setUpdateMembersDrawerOpen}
         safeMetadata={safeMetadata}
       />
-      <div className="mt-2 w-full px-4">
+      <div className="mt-4 w-full px-4">
         <div className="flex flex-row justify-between">
           <h2 className="mb-6 font-bold">Members</h2>
           <EditButton

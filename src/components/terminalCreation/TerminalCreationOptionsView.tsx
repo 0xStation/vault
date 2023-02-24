@@ -12,10 +12,7 @@ export const TerminalCreationOptionsView = ({
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
   return (
-    <Layout
-      backFunc={() => router.push(`/u/${activeUser?.address}/profile`)}
-      isCloseIcon={true}
-    >
+    <Layout backFunc={() => router.back()} isCloseIcon={true}>
       <h2 className="font-bold">New Terminal</h2>
       <p className="mt-3 text-slate-500">
         Use an existing Safe, or create Terminal with a new address.

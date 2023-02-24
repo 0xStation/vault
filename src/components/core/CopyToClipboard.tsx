@@ -24,7 +24,7 @@ export const CopyToClipboard = ({
         e.preventDefault()
         navigator.clipboard.writeText(text).then(() => {
           setIsClipboardAddressCopied(true)
-          setTimeout(() => setIsClipboardAddressCopied(false), 3000)
+          setTimeout(() => setIsClipboardAddressCopied(false), 1500)
         })
       }}
     >

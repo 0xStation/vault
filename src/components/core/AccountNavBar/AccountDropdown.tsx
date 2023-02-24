@@ -23,17 +23,19 @@ export const AccountNavBar = () => {
   return (
     <DropdownMenu>
       {isConnected ? (
-        <div className="flex flex-row">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              router.push("/terminal/new")
-            }}
-          >
-            + New Terminal
-          </Button>
-          <DropdownMenuTrigger className="ml-2">
+        <div className="flex flex-row items-center space-x-3">
+          <div>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                router.push("/terminal/new")
+              }}
+            >
+              + New Terminal
+            </Button>
+          </div>
+          <DropdownMenuTrigger>
             <Avatar size="base" address={address as string} />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2">

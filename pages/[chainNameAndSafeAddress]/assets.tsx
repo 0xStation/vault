@@ -36,7 +36,7 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
-        className="block px-4"
+        className="block w-fit px-4"
       >
         <ArrowLeft />
       </Link>
@@ -87,12 +87,12 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
           {nftData.map((response: any, idx: number) => {
             return (
               <div key={`nft-${idx}`}>
-                <div className="relative h-[200px] w-full">
+                <div className="relative h-[175px] w-[175px]">
                   <Image
                     src={response.nft.previews[1].URI}
                     alt={response.nft.description}
                     fill={true}
-                    className="rounded border border-slate-200 object-contain"
+                    className="rounded rounded-lg border border-slate-200 object-contain"
                   />
                 </div>
                 <h3 className="mt-2">{response.nft.title}</h3>
