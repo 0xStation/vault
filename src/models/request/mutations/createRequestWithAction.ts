@@ -65,7 +65,7 @@ export const createRequestWithAction = async (
               chainId,
               nonce,
               data: actionMetadata,
-              status: ActionStatus.PENDING,
+              status: ActionStatus.NONE,
               variant: ActionVariant.APPROVAL,
             },
             {
@@ -75,7 +75,7 @@ export const createRequestWithAction = async (
               data: JSON.parse(
                 JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
-              status: ActionStatus.PENDING,
+              status: ActionStatus.NONE,
               variant: ActionVariant.REJECTION,
             },
           ],

@@ -1,4 +1,4 @@
-import { ActionVariant, RequestVariantType } from "@prisma/client"
+import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -14,6 +14,7 @@ import { SignerQuorumRequestContent } from "../../../src/components/request/Sign
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
+import { Action } from "../../../src/models/action/types"
 import { Activity } from "../../../src/models/activity/types"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
@@ -53,12 +54,14 @@ const TerminalRequestIdPage = () => {
     return <></>
   }
 
-  console.log(request)
   const canExecute =
     request.rejectActivities.length >= request.quorum ||
     request.approveActivities.length >= request.quorum
 
-  console.log("is exe", request.isExecuted)
+  const activeActions = request.actions.some((action: Action, idx: number) => {
+    return action.status !== ActionStatus.NONE
+  })
+
   return (
     <>
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
@@ -188,7 +191,7 @@ const TerminalRequestIdPage = () => {
             }}
           />
         </section>
-        {!request.isExecuted && (
+        {!activeActions && (
           <>
             {canExecute ? (
               <ExecuteAction

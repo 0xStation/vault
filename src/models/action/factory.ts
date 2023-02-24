@@ -51,7 +51,7 @@ export const createAction = ({
     safeAddress: safeAddress ?? faker.finance.ethereumAddress(),
     chainId: chainId ?? 5,
     nonce: nonce ?? 1,
-    status: ActionStatus.PENDING,
+    status: ActionStatus.NONE,
     variant: isRejection ? ActionVariant.REJECTION : ActionVariant.APPROVAL,
     data: {
       calls: [

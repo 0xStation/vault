@@ -1,4 +1,4 @@
-import { ActionVariant, RequestVariantType } from "@prisma/client"
+import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
@@ -16,8 +16,9 @@ import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
+import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
-import { useExecute } from "../../models/request/hooks"
+import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
@@ -25,6 +26,7 @@ export const ExecuteWrapper = ({
   title,
   subtitle,
   request,
+  actionToExecute,
   isOpen,
   setIsOpen,
   txPayload,
@@ -33,6 +35,7 @@ export const ExecuteWrapper = ({
   title: string
   subtitle: string
   request: RequestFrob
+  actionToExecute: Action
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
@@ -43,7 +46,10 @@ export const ExecuteWrapper = ({
   const { loadingToast, successToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
-  const { execute } = useExecute(router.query.requestId as string)
+  const { completeRequestExecution } = useCompleteRequestExecution(
+    router.query.requestId as string,
+  )
+  const { setActionPending } = useSetActionPending(actionToExecute.id)
 
   const { config } = usePrepareSendTransaction({
     request: {
@@ -54,38 +60,72 @@ export const ExecuteWrapper = ({
     chainId: request.chainId,
   })
   const {
-    data,
-    isLoading: isSendTransactionLoading,
+    data: txData,
     isSuccess: isSendTransactionSuccess,
     sendTransaction,
   } = useSendTransaction(config)
 
-  const { isLoading, isSuccess: isWaitForTransactionSuccess } =
-    useWaitForTransaction({
-      hash: data?.hash,
-    })
+  const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
+    hash: txData?.hash,
+  })
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
-      runExecution()
+      setLoading(false)
+      setIsOpen(false)
+      loadingToast("loading...")
+      const updatedActions = request.actions.map((action: Action) => {
+        if (action.id === actionToExecute.id) {
+          return {
+            ...actionToExecute,
+            status: ActionStatus.PENDING,
+            txHash: txData?.hash,
+          }
+        }
+        return action
+      })
+      mutate(setActionPending, {
+        optimisticData: {
+          ...request,
+          actions: updatedActions,
+        },
+        populateCache: false,
+        revalidate: false,
+      })
     }
   }, [isSendTransactionSuccess])
 
+  // what happens if the user naviagates away from page before this runs
+  // we might not run the function to update the status of the action / request
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
       console.log("success...")
+      const updatedActions = request.actions.map((action: Action) => {
+        if (action.id === actionToExecute.id) {
+          return {
+            ...actionToExecute,
+            status: ActionStatus.SUCCESS,
+          }
+        }
+        return action
+      })
+      mutate(
+        completeRequestExecution({
+          ...formData, // todo: clarify what formdata is here...
+          actionId: actionToExecute.id,
+        }),
+        {
+          optimisticData: {
+            ...request,
+            actions: updatedActions,
+          },
+          populateCache: false,
+          revalidate: false,
+        },
+      )
       successToast("success")
     }
   }, [isWaitForTransactionSuccess])
-
-  const runExecution = async () => {
-    setLoading(false)
-    setIsOpen(false)
-    console.log("loading, tx has passed...")
-    loadingToast("loading...")
-    await execute(formData)
-    mutate()
-  }
 
   const {
     register,
@@ -178,6 +218,7 @@ export const ExecuteRequest = ({
       title={title}
       subtitle={subtitle}
       request={request}
+      actionToExecute={actionsToExecute?.[0]}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       txPayload={txPayload}

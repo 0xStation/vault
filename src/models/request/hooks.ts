@@ -70,7 +70,7 @@ export const useCreateFakeSendTokensRequest = (
   return { isMutating, createFakeSendTokens }
 }
 
-export const useExecute = (requestId: string) => {
+export const useCompleteRequestExecution = (requestId: string) => {
   const fetcher = async (url: string, { arg }: { arg: any }) => {
     try {
       const response = await axios.post<any>(url, arg)
@@ -82,10 +82,10 @@ export const useExecute = (requestId: string) => {
     }
   }
 
-  const { trigger: execute, isMutating } = useSWRMutation(
+  const { trigger: completeRequestExecution, isMutating } = useSWRMutation(
     requestId ? `/api/v1/request/${requestId}/execute` : null,
     fetcher,
   )
 
-  return { isMutating, execute }
+  return { isMutating, completeRequestExecution }
 }
