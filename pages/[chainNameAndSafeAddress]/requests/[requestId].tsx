@@ -115,8 +115,8 @@ const TerminalRequestIdPage = () => {
 
   return (
     <>
-      {/* TODO: this is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
-      <div className="fixed z-10 w-full bg-white sm:max-w-[379px] sm:border-r sm:border-slate-200">
+      {/* TODO: sm:max-w-[570px] is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
+      <div className="fixed z-10 w-full bg-white sm:max-w-[570px]">
         <AccountNavBar />
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-slate-200 py-2 px-4">
           <button onClick={() => router.back()}>
