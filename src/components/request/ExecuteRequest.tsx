@@ -72,6 +72,7 @@ export const ExecuteWrapper = ({
 
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
+      console.log("success...")
       successToast("success")
     }
   }, [isWaitForTransactionSuccess])
@@ -79,6 +80,7 @@ export const ExecuteWrapper = ({
   const runExecution = async () => {
     setLoading(false)
     setIsOpen(false)
+    console.log("loading, tx has passed...")
     loadingToast("loading...")
     await execute(formData)
     mutate()
