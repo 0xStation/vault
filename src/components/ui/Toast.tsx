@@ -96,7 +96,7 @@ export interface ToastType extends VariantProps<typeof toast> {
 export const Toast = () => {
   const state = useStore((state) => state.toastState)
   const setToastState = useStore((state) => state.setToastState)
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+  const [, setTimeoutId] = useState<NodeJS.Timeout>()
   const { isToastShowing, variant, message, action } = state
 
   useEffect(() => {

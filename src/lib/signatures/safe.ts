@@ -4,42 +4,6 @@ import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "../constants"
 import { EIP712Message } from "./utils"
 
 /**
- * Create an EIP712-ready message to add the Conductor module to a Safe
- * Intended use when importing an existing Safe in onboarding and
- * handling cases where existing users disable the Conductor Module
- * @param args
- * @returns an EIP712Message encoded to call enableModule on the Safe
- */
-export const addConductorMessage = ({
-  chainId,
-  safeAddress,
-  nonce,
-  contractVersion,
-}: {
-  chainId: number
-  safeAddress: string
-  nonce: number
-  contractVersion: string
-}) => {
-  const to = safeAddress
-  const value = "0"
-  const operation = 0 // call
-
-  const data = encodeFunctionData(safeEnableModule, [CONDUCTOR_ADDRESS])
-
-  return safeMessage({
-    chainId,
-    safeAddress,
-    to,
-    value,
-    data,
-    operation,
-    nonce,
-    contractVersion,
-  })
-}
-
-/**
  * Create an EIP712-ready message for a Safe to make an arbitrary contract call
  * Intended use when making calls through the existing Safe transaction service & nonce system
  * @param args
@@ -98,4 +62,40 @@ export const safeMessage = ({
       nonce,
     },
   }
+}
+
+/**
+ * Create an EIP712-ready message to add the Conductor module to a Safe
+ * Intended use when importing an existing Safe in onboarding and
+ * handling cases where existing users disable the Conductor Module
+ * @param args
+ * @returns an EIP712Message encoded to call enableModule on the Safe
+ */
+export const addConductorMessage = ({
+  chainId,
+  safeAddress,
+  nonce,
+  contractVersion,
+}: {
+  chainId: number
+  safeAddress: string
+  nonce: number
+  contractVersion: string
+}) => {
+  const to = safeAddress
+  const value = "0"
+  const operation = 0 // call
+
+  const data = encodeFunctionData(safeEnableModule, [CONDUCTOR_ADDRESS])
+
+  return safeMessage({
+    chainId,
+    safeAddress,
+    to,
+    value,
+    data,
+    operation,
+    nonce,
+    contractVersion,
+  })
 }

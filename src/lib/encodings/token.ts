@@ -5,65 +5,6 @@ import { erc20Transfer, erc721SafeTransferFrom } from "./fragments"
 import { encodeFunctionData } from "./utils"
 
 /**
- * Create the RawCall's representing a TokenTransfer Request
- * @param safe address of the safe transfering tokens
- * @param meta `meta` field of a Request defining required metadata
- * @returns an array of RawCall's that should be executed atomically via a bundle
- */
-export const encodeTokenTransferVariant = (
-  safe: string,
-  { recipient, transfers }: TokenTransferVariant,
-): RawCall[] => {
-  return transfers.map(({ token, value, tokenId }) =>
-    encodeTokenTransfer({ sender: safe, recipient, token, value, tokenId }),
-  )
-}
-
-/**
- * Create the RawCall representing a singular transfer of tokens
- * @param tranfer required data defining a transfer of tokens
- * @returns a RawCall implementing the token transfer
- */
-export const encodeTokenTransfer = ({
-  sender,
-  recipient,
-  token,
-  value,
-  tokenId,
-}: {
-  sender: string
-  recipient: string
-  token: Token
-  value?: string // ERC20, ERC1155
-  tokenId?: string // ERC721, ERC1155
-}): RawCall => {
-  // ETH
-  if (token.type === TokenType.COIN) {
-    if (value === undefined)
-      throw Error(`${token.type} token missing "value" field`)
-
-    return encodeEthTransfer(recipient, value)
-  }
-  // ERC20
-  if (token.type === TokenType.ERC20) {
-    if (value === undefined)
-      throw Error(`${token.type} token missing "value" field`)
-
-    return encodeErc20Transfer(token.address, recipient, value)
-  }
-  // ERC721
-  if (token.type === TokenType.ERC721) {
-    if (tokenId === undefined)
-      throw Error(`${token.type} token missing "tokenId" field`)
-
-    return encodeErc721Transfer(token.address, sender, recipient, tokenId)
-  }
-  // TODO: ERC1155
-
-  throw Error("Invalid token type")
-}
-
-/**
  * Create the RawCall for an ETH transfer
  * @param recipient token recipient
  * @param value quantity of tokens, no decimal padding
@@ -122,4 +63,63 @@ const encodeErc721Transfer = (
     ]),
     operation: 0, // normal call ERC721 contract, no delegatecall needed
   }
+}
+
+/**
+ * Create the RawCall's representing a TokenTransfer Request
+ * @param safe address of the safe transfering tokens
+ * @param meta `meta` field of a Request defining required metadata
+ * @returns an array of RawCall's that should be executed atomically via a bundle
+ */
+export const encodeTokenTransferVariant = (
+  safe: string,
+  { recipient, transfers }: TokenTransferVariant,
+): RawCall[] => {
+  return transfers.map(({ token, value, tokenId }) =>
+    encodeTokenTransfer({ sender: safe, recipient, token, value, tokenId }),
+  )
+}
+
+/**
+ * Create the RawCall representing a singular transfer of tokens
+ * @param tranfer required data defining a transfer of tokens
+ * @returns a RawCall implementing the token transfer
+ */
+export const encodeTokenTransfer = ({
+  sender,
+  recipient,
+  token,
+  value,
+  tokenId,
+}: {
+  sender: string
+  recipient: string
+  token: Token
+  value?: string // ERC20, ERC1155
+  tokenId?: string // ERC721, ERC1155
+}): RawCall => {
+  // ETH
+  if (token.type === TokenType.COIN) {
+    if (value === undefined)
+      throw Error(`${token.type} token missing "value" field`)
+
+    return encodeEthTransfer(recipient, value)
+  }
+  // ERC20
+  if (token.type === TokenType.ERC20) {
+    if (value === undefined)
+      throw Error(`${token.type} token missing "value" field`)
+
+    return encodeErc20Transfer(token.address, recipient, value)
+  }
+  // ERC721
+  if (token.type === TokenType.ERC721) {
+    if (tokenId === undefined)
+      throw Error(`${token.type} token missing "tokenId" field`)
+
+    return encodeErc721Transfer(token.address, sender, recipient, tokenId)
+  }
+  // TODO: ERC1155
+
+  throw Error("Invalid token type")
 }

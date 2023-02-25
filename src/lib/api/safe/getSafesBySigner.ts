@@ -2,18 +2,6 @@ import { SUPPORTED_CHAIN_IDS } from "lib/constants"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { safeEndpoint } from "./utils"
 
-export const getSupportedSafesBySigner = async (signerAddress: string) => {
-  const safeCalls = await Promise.all(
-    SUPPORTED_CHAIN_IDS.map((chainId) =>
-      getSafesBySigner(chainId, signerAddress),
-    ),
-  )
-  // merge lists
-  const safes = safeCalls.reduce((acc, v) => [...acc, ...v], [])
-
-  return safes
-}
-
 const getSafesBySigner = async (
   chainId: number,
   signerAddress: string,
@@ -40,4 +28,16 @@ const getSafesBySigner = async (
       `failed to fetch safes for signer: ${chainId} - ${signerAddress}`,
     )
   }
+}
+
+export const getSupportedSafesBySigner = async (signerAddress: string) => {
+  const safeCalls = await Promise.all(
+    SUPPORTED_CHAIN_IDS.map((chainId) =>
+      getSafesBySigner(chainId, signerAddress),
+    ),
+  )
+  // merge lists
+  const safes = safeCalls.reduce((acc, v) => [...acc, ...v], [])
+
+  return safes
 }

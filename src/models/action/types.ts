@@ -1,14 +1,16 @@
 import { Action as PrismaAction } from "@prisma/client"
 
-export type Action = PrismaAction & {
-  data: ActionMetadata
-}
-
 type Call = {
   to: string
   value: string
   data: string
   operation: number // default to 0 (call) for now
+}
+
+export enum SwapChoice {
+  NONE,
+  ETH,
+  USDC,
 }
 
 export type ActionMetadata = {
@@ -21,8 +23,6 @@ export type ActionMetadata = {
   swapChoice: SwapChoice
 }
 
-export enum SwapChoice {
-  NONE,
-  ETH,
-  USDC,
+export type Action = PrismaAction & {
+  data: ActionMetadata
 }

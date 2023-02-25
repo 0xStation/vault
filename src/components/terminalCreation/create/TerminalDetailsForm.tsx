@@ -26,17 +26,6 @@ export const TerminalDetailsForm = ({
   const { chain } = useNetwork()
   const { name, chainId, about, url } = formData
 
-  useEffect(() => {
-    if (networkError) {
-      setError("chainId", {
-        type: "wrongNetwork",
-        message: "Please check your wallet to switch to specified chain.",
-      })
-    } else {
-      clearErrors("chainId")
-    }
-  }, [networkError])
-
   const {
     register,
     handleSubmit,
@@ -51,6 +40,17 @@ export const TerminalDetailsForm = ({
       url,
     } as FieldValues,
   })
+
+  useEffect(() => {
+    if (networkError) {
+      setError("chainId", {
+        type: "wrongNetwork",
+        message: "Please check your wallet to switch to specified chain.",
+      })
+    } else {
+      clearErrors("chainId")
+    }
+  }, [networkError])
 
   const onSubmit = (data: any) => {
     if (chain?.id !== parseInt(data.chainId)) {

@@ -15,24 +15,6 @@ export type RequestFrob = Request & {
   addressesThatHaveNotSigned: string[]
 }
 
-export type Request = PrismaRequest & {
-  data: RequestMetadata
-  activities: Activity[]
-  actions: Action[]
-}
-
-export type RequestMetadata = {
-  note: string
-  createdBy: string // address
-  meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
-}
-
-export type SignerQuorumVariant = {
-  add: string[]
-  remove: string[]
-  setQuorum: number
-}
-
 export type Transfer = {
   token: Token
   amount?: number // ERC20 & ERC1155
@@ -47,10 +29,22 @@ type SplitTokenTransferVariant = FrequencyMixin & {
   transfers: Transfer[]
 }
 
-export type TokenTransferVariant = TokenTransfersMixin &
-  FrequencyMixin & {
-    recipient: string
-  }
+export type RequestMetadata = {
+  note: string
+  createdBy: string // address
+  meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
+}
+export type Request = PrismaRequest & {
+  data: RequestMetadata
+  activities: Activity[]
+  actions: Action[]
+}
+
+export type SignerQuorumVariant = {
+  add: string[]
+  remove: string[]
+  setQuorum: number
+}
 
 type TokenTransfersMixin = {
   transfers: {
@@ -60,13 +54,10 @@ type TokenTransfersMixin = {
   }[]
 }
 
-type FrequencyMixin = {
-  frequency: FrequencyType
-  startsAt?: number // JSON cannot serialize dates, so this is ISO formatted date
-  frequencyValue?: number
-  frequencyUnit?: FrequencyUnit
-  maxOccurences?: number
-}
+export type TokenTransferVariant = TokenTransfersMixin &
+  FrequencyMixin & {
+    recipient: string
+  }
 
 export enum FrequencyType {
   NONE,
@@ -80,4 +71,12 @@ export enum FrequencyUnit {
   DAY,
   WEEK,
   MONTH,
+}
+
+type FrequencyMixin = {
+  frequency: FrequencyType
+  startsAt?: number // JSON cannot serialize dates, so this is ISO formatted date
+  frequencyValue?: number
+  frequencyUnit?: FrequencyUnit
+  maxOccurences?: number
 }

@@ -1,9 +1,5 @@
 import { Signature as PrismaSignature } from "@prisma/client"
 
-export type Signature = PrismaSignature & {
-  data: SignatureMetadata
-}
-
 type SignatureMetadata = {
   message: {
     domain: any
@@ -11,4 +7,8 @@ type SignatureMetadata = {
     values: any
   }
   signature: string
+}
+
+export type Signature = PrismaSignature & {
+  data: SignatureMetadata
 }
