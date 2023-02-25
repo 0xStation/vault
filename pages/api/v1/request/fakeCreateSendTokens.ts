@@ -1,4 +1,8 @@
-import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActivityVariant,
+  RequestVariantType,
+  SubscriptionVariant,
+} from "@prisma/client"
 import db from "db"
 import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransferVariant } from "lib/encodings/token"
@@ -116,6 +120,15 @@ export default async function handler(
             address: createdBy,
             variant: ActivityVariant.CREATE_REQUEST,
             data: {},
+          },
+        ],
+      },
+      // add subscriptions so that users can claim from profile
+      subscriptions: {
+        create: [
+          {
+            address: createdBy,
+            variant: SubscriptionVariant.TOKEN_RECIPIENT,
           },
         ],
       },

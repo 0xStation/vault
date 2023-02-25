@@ -1,13 +1,13 @@
 import { icon, IconProps } from "./utils"
 
 // right points right >>>
-export const ChevronRight = ({ size = "base" }: IconProps) => {
+export const ChevronRight = ({ size = "base", color }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className={icon({ size })}
+      className={icon({ size, color })}
     >
       <path
         fillRule="evenodd"
