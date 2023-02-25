@@ -1,5 +1,4 @@
 import { Button } from "@ui/Button"
-import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
@@ -19,10 +18,9 @@ export const EditCommentForm = ({
   const activeUser = useStore((state) => state.activeUser)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const router = useRouter()
   const { editComment } = useEditComment(activityId)
 
-  const { register, handleSubmit, resetField } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: { comment: initialValue },
   })
   const onSubmit = async (data: any) => {

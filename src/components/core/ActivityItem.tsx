@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
 import { useState } from "react"
+import useStore from "../../hooks/stores/useStore"
 import { Activity } from "../../models/activity/types"
 import { variantMessage } from "../../models/activity/utils"
 import { EditCommentForm } from "../comment/EditCommentForm"
@@ -18,6 +19,7 @@ const ActivityItem = ({
   activity: Activity
   optimisticEditComment: any
 }) => {
+  const activeUser = useStore((state) => state.activeUser)
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   return (
@@ -39,20 +41,22 @@ const ActivityItem = ({
             />
           ) : (
             <>
-              <div className="items-top flex flex-row">
+              <div className="items-top flex flex-row space-x-2.5">
                 <span className="w-full whitespace-pre-line text-sm">
                   {activity.data.comment}
                 </span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-slate-100 data-[state=open]:bg-slate-100">
-                    <EllipsisHorizontalIcon height={16} width={16} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setIsEditing(true)}>
-                      Edit
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {activity.address === activeUser?.address && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-slate-100 data-[state=open]:bg-slate-100">
+                      <EllipsisHorizontalIcon height={16} width={16} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => setIsEditing(true)}>
+                        Edit
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
               {activity.data.edited && (
                 <div className="mt-2.5 text-xs text-slate-500">(Edited)</div>
