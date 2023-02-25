@@ -48,5 +48,13 @@ export default async function handler(
     return res.end(JSON.stringify(e))
   }
 
-  res.status(200).json(requests)
+  const claimableItems = requests.filter(
+    (request) =>
+      // number of approvals that are from current signers is at or above quorurm
+      request.approveActivities.filter((activity) =>
+        request.signers.includes(activity.address),
+      ).length >= request.quorum,
+  )
+
+  res.status(200).json(claimableItems)
 }

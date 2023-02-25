@@ -258,6 +258,10 @@ const TerminalRequestIdPage = () => {
               activities: [...request?.activities!, voteActivity],
               approveActivities,
               rejectActivities,
+              addressesThatHaveNotSigned:
+                request!.addressesThatHaveNotSigned.filter(
+                  (address) => address !== activeUser?.address,
+                ),
             })
             setLastVote(approve ? "approve" : "reject")
           }}
