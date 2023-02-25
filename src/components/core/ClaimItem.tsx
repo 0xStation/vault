@@ -6,7 +6,7 @@ import { Token, TokenType } from "../../models/token/types"
 import { addValues, valueToAmount } from "../../models/token/utils"
 
 // Right now, implementatoin assumes all items are requests
-// TODO: update when workflows are supported
+// TODO: update when "automations" are supported
 export const ClaimItem = ({ item }: { item: RequestFrob }) => {
   const formatTransfers = (
     transfers: { token: Token; value?: string; tokenId?: string }[],
@@ -71,6 +71,7 @@ export const ClaimItem = ({ item }: { item: RequestFrob }) => {
           variant="secondary"
           size="sm"
           onClick={() => {
+            // TODO: add execution drawer when ready
             console.log("claim item clicked")
           }}
         >

@@ -20,6 +20,7 @@ export default async function handler(
 
   const accountAddress = query.address as string
 
+  // for now, only executable items are requests, to be changed after "Automations" added
   let requests
   try {
     requests = await getProfileRequests({

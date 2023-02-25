@@ -123,6 +123,7 @@ export default async function handler(
           },
         ],
       },
+      // add subscriptions so that users can claim from profile
       subscriptions: {
         create: [
           {

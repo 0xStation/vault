@@ -1,8 +1,7 @@
-import { BigNumber } from "ethers"
-import { formatUnits } from "ethers/lib/utils.js"
+import { BigNumber, formatFixed } from "@ethersproject/bignumber"
 
 export const valueToAmount = (value: string, decimals: number): string => {
-  return formatUnits(value, decimals)
+  return formatFixed(value, decimals)
 }
 
 export const addValues = (value1: string, value2: string): string => {
