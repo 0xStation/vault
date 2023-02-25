@@ -4,6 +4,7 @@ import Layout from "../../src/components/terminalCreation/Layout"
 
 export const GettingStartedPage = () => {
   const router = useRouter()
+  const chainNameAndSafeAddress = router.query.chainNameAndSafeAddress as string
 
   const gettingStartedOptions = [
     {
@@ -28,18 +29,17 @@ export const GettingStartedPage = () => {
       ctaFunc: () => {},
     },
   ]
-  // TODO: change route to main terminal page
   return (
-    <Layout backFunc={() => router.push("/")} isCloseIcon={true}>
+    <Layout
+      backFunc={() => router.push(`/${chainNameAndSafeAddress}`)}
+      isCloseIcon={true}
+    >
       <h2 className="mb-[30px] font-bold">Getting started</h2>
       <p className="mt-6 mb-6">
         Let us help you and your collective get started.
       </p>
       {gettingStartedOptions.map((option) => (
-        <div
-          className="mb-3 rounded bg-slate-200 p-2.5 pl-6"
-          key={option.title}
-        >
+        <div className="mb-3 rounded bg-slate-50 p-2.5 pl-6" key={option.title}>
           <p className="font-bold">{option.title}</p>
           <p className="mt-1 mb-3 text-sm">{option.subtitle}</p>
           <Button variant="secondary" size="sm">

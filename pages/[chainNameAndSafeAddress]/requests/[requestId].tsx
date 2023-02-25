@@ -199,7 +199,7 @@ const TerminalRequestIdPage = () => {
             )
           })}
         </section>
-        <section className="mb-12 p-4">
+        <section className="p-4 pb-28">
           <h3 className="mb-4">Timeline</h3>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (

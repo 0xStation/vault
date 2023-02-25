@@ -75,7 +75,7 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">
           {/* TODO: get data for description (total value) */}
-          <LabelCard label="Total assets value" description="$00.00" />
+          <LabelCard label="Total assets value" description="TODO" />
           <LabelCard
             label="Members"
             description={String(terminal.signers.length)}

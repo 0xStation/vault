@@ -30,18 +30,10 @@ const RequestListForm = ({
 
   if (requests.length === 0) {
     return (
-      <div className="border-t border-slate-200">
-        <EmptyList
-          title="No requests"
-          subtitle="Start distributing funds and reward contributors."
-        >
-          <div className="mt-2">
-            <Button variant="secondary" size="sm">
-              New request
-            </Button>
-          </div>
-        </EmptyList>
-      </div>
+      <EmptyList
+        title="No requests"
+        subtitle="Start distributing funds and reward contributors."
+      />
     )
   }
 
