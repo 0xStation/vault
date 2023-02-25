@@ -15,6 +15,23 @@ export type Tree = {
 }
 
 /**
+ * Create a EIP712-ready message given the root of a merkle tree
+ * @param root
+ * @returns an EIP712Message ready to sign
+ */
+export const treeMessage = (root: string): EIP712Message => {
+  return {
+    domain: conductorDomain(),
+    types: {
+      Tree: [{ name: "root", type: "bytes32" }],
+    },
+    value: {
+      root,
+    },
+  }
+}
+
+/**
  * Generate a Tree given an array of Action objects
  * Intended use when approving already-created Actions from detail pages and in batch
  * @param actions array of Action objects
@@ -65,21 +82,4 @@ export const newActionTree = (values: {
   const proofs = { root: [] } // only one node so path from leaf to root requires no path
   const message = treeMessage(root)
   return { root, proofs, message }
-}
-
-/**
- * Create a EIP712-ready message given the root of a merkle tree
- * @param root
- * @returns an EIP712Message ready to sign
- */
-export const treeMessage = (root: string): EIP712Message => {
-  return {
-    domain: conductorDomain(),
-    types: {
-      Tree: [{ name: "root", type: "bytes32" }],
-    },
-    value: {
-      root,
-    },
-  }
 }

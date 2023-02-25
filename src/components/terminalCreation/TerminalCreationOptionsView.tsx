@@ -4,6 +4,11 @@ import { useStore } from "../../hooks/stores/useStore"
 import Selector from "../core/SelectorCard"
 import Layout from "./Layout"
 
+export enum VIEW {
+  CREATION_OPTIONS = "creation_options",
+  CREATE_FORM = "form",
+}
+
 export const TerminalCreationOptionsView = ({
   setView,
 }: {
@@ -25,11 +30,6 @@ export const TerminalCreationOptionsView = ({
       />
     </Layout>
   )
-}
-
-export enum VIEW {
-  CREATION_OPTIONS = "creation_options",
-  CREATE_FORM = "form",
 }
 
 export default TerminalCreationOptionsView

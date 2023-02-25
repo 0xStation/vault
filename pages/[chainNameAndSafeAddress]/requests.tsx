@@ -17,27 +17,6 @@ const chainNameToChainId: Record<string, number | undefined> = {
   gor: 5,
 }
 
-const RequestTypeContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
-  return (
-    <TabsContent value={tab}>
-      <TerminalRequestStatusFilterBar>
-        <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.NEEDS_ATTENTION}
-          tab={tab}
-        />
-        <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
-          tab={tab}
-        />
-        <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.CLOSED}
-          tab={tab}
-        />
-      </TerminalRequestStatusFilterBar>
-    </TabsContent>
-  )
-}
-
 const RequestContentForFilterAndTab = ({
   filter,
   tab,
@@ -69,6 +48,27 @@ const RequestContentForFilterAndTab = ({
         safeChainId={chainId}
         safeAddress={safeAddress}
       />
+    </TabsContent>
+  )
+}
+
+const RequestTypeContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
+  return (
+    <TabsContent value={tab}>
+      <TerminalRequestStatusFilterBar>
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.NEEDS_ATTENTION}
+          tab={tab}
+        />
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
+          tab={tab}
+        />
+        <RequestContentForFilterAndTab
+          filter={TerminalRequestStatusFilter.CLOSED}
+          tab={tab}
+        />
+      </TerminalRequestStatusFilterBar>
     </TabsContent>
   )
 }

@@ -13,19 +13,6 @@ const MULTI_SEND_CALL_ONLY_ADDRESS =
   "0x40A2aCCbd92BCA938b02010E17A5b8929b49130D"
 
 /**
- * Convert an array of actions and their proofs into a singular call
- * Intended use when preparing any Action execution, automatically batches if needed
- * @param actions
- * @returns to, value, data, operation for the call
- */
-export const batchActions = (
-  actions: { action: Action; proofs: Proof[] }[],
-): RawCall => {
-  const callsToConductor = actions.map(callAction)
-  return batchCalls(callsToConductor)
-}
-
-/**
  * Convert multiple calls to a singular call to MultiSendCallOnly if needed
  * @param calls
  * @returns original call if only one present or a single call to MultiSendCallOnly
@@ -46,4 +33,17 @@ export const batchCalls = (calls: RawCall[]): RawCall => {
       operation: 0, // no need to delegatecall MultiSendCallOnly
     }
   }
+}
+
+/**
+ * Convert an array of actions and their proofs into a singular call
+ * Intended use when preparing any Action execution, automatically batches if needed
+ * @param actions
+ * @returns to, value, data, operation for the call
+ */
+export const batchActions = (
+  actions: { action: Action; proofs: Proof[] }[],
+): RawCall => {
+  const callsToConductor = actions.map(callAction)
+  return batchCalls(callsToConductor)
 }

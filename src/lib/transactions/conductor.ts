@@ -8,6 +8,34 @@ import { bundleCalls } from "./bundle"
 import { ConductorCall, RawCall } from "./call"
 
 /**
+ * Encode the arguments needed for execution into a call to Conductor
+ * @param call function parameters for Conductor's `execute`
+ * @returns a call to the Conductor module
+ */
+const callConductor = (call: ConductorCall): RawCall => {
+  const conductorData = encodeFunctionData(conductorExecute, [
+    call.safe,
+    call.nonce,
+    call.executor,
+    call.to,
+    call.value,
+    call.operation, // TODO: reorder this after executor (requires new contract)
+    call.data,
+    call.proofs,
+    // TODO: we should notify users that the check title will be published on-chain if the checkbook is public
+    // if the checkbook is private we should pass in an empty string to not publicize on chain
+    call.note,
+  ])
+
+  return {
+    to: CONDUCTOR_ADDRESS,
+    value: "0",
+    data: conductorData,
+    operation: 0, // no need to delegatecall Conductor
+  }
+}
+
+/**
  * Prepare an Action and its Proofs into a call to the Conductor module
  * @param payload
  * @returns to, value, data, operation for a raw call
@@ -44,32 +72,4 @@ export const callAction = ({
     proofs: formattedProofs,
     note: "", // come from request
   })
-}
-
-/**
- * Encode the arguments needed for execution into a call to Conductor
- * @param call function parameters for Conductor's `execute`
- * @returns a call to the Conductor module
- */
-const callConductor = (call: ConductorCall): RawCall => {
-  const conductorData = encodeFunctionData(conductorExecute, [
-    call.safe,
-    call.nonce,
-    call.executor,
-    call.to,
-    call.value,
-    call.operation, // TODO: reorder this after executor (requires new contract)
-    call.data,
-    call.proofs,
-    // TODO: we should notify users that the check title will be published on-chain if the checkbook is public
-    // if the checkbook is private we should pass in an empty string to not publicize on chain
-    call.note,
-  ])
-
-  return {
-    to: CONDUCTOR_ADDRESS,
-    value: "0",
-    data: conductorData,
-    operation: 0, // no need to delegatecall Conductor
-  }
 }
