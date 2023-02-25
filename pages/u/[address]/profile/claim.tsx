@@ -3,11 +3,12 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import AccountNavBar from "../../../../src/components/core/AccountNavBar"
 import { ClaimItem } from "../../../../src/components/core/ClaimItem"
+import { useAccountItemsToClaim } from "../../../../src/models/account/hooks"
 
 const ProfileClaimPage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
-  const requests = [1, 2, 3, 4]
+  const { items } = useAccountItemsToClaim(accountAddress)
 
   return (
     <>
@@ -17,8 +18,8 @@ const ProfileClaimPage = ({}: {}) => {
         <ArrowLeft />
       </Link>
       <ul className="mt-3">
-        {requests.map((request, idx) => (
-          <ClaimItem key={`claim-item-${idx}`} />
+        {items?.map((item, idx) => (
+          <ClaimItem item={item} key={`claim-item-${idx}`} />
         ))}
       </ul>
     </>

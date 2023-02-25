@@ -1,4 +1,8 @@
-import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActivityVariant,
+  RequestVariantType,
+  SubscriptionVariant,
+} from "@prisma/client"
 import db from "db"
 import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransferVariant } from "lib/encodings/token"
@@ -116,6 +120,14 @@ export default async function handler(
             address: createdBy,
             variant: ActivityVariant.CREATE_REQUEST,
             data: {},
+          },
+        ],
+      },
+      subscriptions: {
+        create: [
+          {
+            address: createdBy,
+            variant: SubscriptionVariant.TOKEN_RECIPIENT,
           },
         ],
       },

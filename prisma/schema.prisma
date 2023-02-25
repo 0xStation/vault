@@ -35,8 +35,9 @@ model Account {
 }
 
 model Subscription {
-  id        String @id @default(uuid())
+  id        String              @id @default(uuid())
   address   String
+  variant   SubscriptionVariant
   requestId String
 
   request Request @relation(fields: [requestId], references: [id])
@@ -117,4 +118,8 @@ enum RequestVariantType {
   SIGNER_QUORUM
   TOKEN_TRANSFER
   SPLIT_TOKEN_TRANSFER
+}
+
+enum SubscriptionVariant {
+  TOKEN_RECIPIENT
 }
