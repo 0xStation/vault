@@ -34,6 +34,7 @@ export const TerminalRequestStatusFilterBar = ({
     <TabBar
       className={className}
       style="filter"
+      showBorder={true}
       defaultValue={TerminalRequestStatusFilter.NEEDS_ATTENTION}
       options={options}
     >

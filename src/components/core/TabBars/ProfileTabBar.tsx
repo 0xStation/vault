@@ -21,6 +21,7 @@ export const ProfileTabBar = ({
     <TabBar
       className={className}
       style="tab"
+      showBorder={true}
       defaultValue={ProfileTab.TERMINALS}
       options={options}
     >

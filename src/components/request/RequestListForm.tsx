@@ -48,7 +48,7 @@ const RequestListForm = ({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="divide-y divide-slate-200">
+        <ul>
           {requests.map((request, idx) => {
             return (
               <RequestCard
@@ -62,7 +62,7 @@ const RequestListForm = ({
               />
             )
           })}
-        </div>
+        </ul>
       </form>
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
@@ -74,7 +74,7 @@ const RequestListForm = ({
           leaveFrom="translate-y-0"
           leaveTo="translate-y-[200%]"
         >
-          <div className="flex w-full flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
+          <div className="mx-auto flex w-full max-w-[400px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
             <p className="text-sm text-white">
               {selectedRequests.length} selected
             </p>

@@ -23,7 +23,7 @@ export const QuorumInput = ({
 }) => {
   const requiredMessage = required ? { required: "Required." } : {}
   return (
-    <div className="mb-3 grid w-full max-w-sm items-center gap-1.5">
+    <div className="mb-3 grid w-full items-center gap-1.5">
       <label className="text-sm font-bold" htmlFor={name}>
         {label}
       </label>

@@ -33,7 +33,7 @@ const RequestCard = ({
       )}/requests/${request.id}`}
     >
       <div
-        className={`w-full max-w-[100vw] border-t border-slate-200 p-4 last:border-b ${
+        className={`w-full max-w-[100vw] border-b border-slate-200 p-4 ${
           disabled ? "opacity-30" : "hover:bg-slate-50"
         }`}
       >

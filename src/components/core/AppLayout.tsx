@@ -53,10 +53,7 @@ export const AppLayout = ({
         />
         <link rel="apple-touch-icon" href="/station-logo-favicon.ico" />
       </Head>
-      {/* TODO: this entire div is only here to shrink to mobile size for easier demoing, remove when doing actual desktop implementation */}
-      <div className="sm:mx-auto sm:h-screen sm:max-w-[570px] sm:overflow-y-auto">
-        {children}
-      </div>
+      <div className="mx-auto max-w-[580px]">{children}</div>
       <Toast />
     </>
   )

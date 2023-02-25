@@ -28,8 +28,8 @@ export const CastYourVote = ({
         approve={approve}
         optimisticVote={optimisticVote}
       />
-      {/* TODO: sm:max-w-[570px] is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation */}
-      <div className="fixed bottom-0 w-full border-t bg-white px-4 pt-3 pb-6 sm:max-w-[570px]">
+      {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation */}
+      <div className="fixed bottom-0 w-full max-w-[580px] border-t bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">
           <div className="items-left flex flex-col">
             <div className="font-bold">

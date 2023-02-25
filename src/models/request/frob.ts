@@ -1,5 +1,5 @@
 import { ActivityVariant } from "@prisma/client"
-import { getSafeDetails } from "../../lib/api/safe/getSafeDetails"
+import { getSafeDetails } from "lib/api/safe/getSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
