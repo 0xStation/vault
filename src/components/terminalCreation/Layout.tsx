@@ -12,7 +12,7 @@ export const Layout = ({
 }) => {
   return (
     <div className="h-calc[100%-60px] mx-4 mt-[60px] flex flex-col">
-      <button role="button" onClick={() => backFunc()}>
+      <button role="button" onClick={() => backFunc()} className="w-fit">
         {isCloseIcon ? (
           <XMarkIcon className="h-6 w-6" />
         ) : (

@@ -1,6 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
-import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import axios from "axios"
 import { ZERO_ADDRESS } from "lib/constants"
@@ -12,86 +11,25 @@ import {
 import { getOwnerIndexAndPrevSignerAddress } from "lib/helpers/getPrevSignerAddress"
 import { prepareSwapCallAndUpdateVariant } from "lib/helpers/prepareSwapCallAndUpdateVariant"
 import { newActionTree } from "lib/signatures/tree"
-import truncateString, { addressesAreEqual } from "lib/utils"
+import { addressesAreEqual } from "lib/utils"
 import isEqual from "lodash.isequal"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
-import { useEnsName } from "wagmi"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import AddressInput from "../../../src/components/form/AddressInput"
 import QuorumInput from "../../../src/components/form/QuorumInput"
 import TextareaWithLabel from "../../../src/components/form/TextareaWithLabel"
+import RemoveSignerConfirmationDrawer from "../../../src/components/memberEditing/RemoveSignerConfirmationDrawer"
 import Layout from "../../../src/components/terminalCreation/Layout"
 import { useResolveEnsAddress } from "../../../src/hooks/ens/useResolveEns"
 import { useSafeMetadata } from "../../../src/hooks/safe/useSafeMetadata"
 import useStore from "../../../src/hooks/stores/useStore"
 import { useGetNextNonce } from "../../../src/hooks/useGetNextNonce"
 import useSignature from "../../../src/hooks/useSignature"
+import useWindowSize from "../../../src/hooks/useWindowSize"
 import { SignerQuorumVariant } from "../../../src/models/request/types"
 import { convertGlobalId } from "../../../src/models/terminal/utils"
-
-const RemoveSignerConfirmationDrawer = ({
-  isOpen,
-  setIsOpen,
-  onClick,
-  addressToBeRemoved,
-  activeUserAddress,
-}: {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-  onClick: () => void
-  addressToBeRemoved: string
-  activeUserAddress: string
-}) => {
-  const { data: ensName } = useEnsName({
-    address: addressToBeRemoved as `0x${string}`,
-    chainId: 1,
-    cacheTime: 60 * 60 * 1000, // (1 hr) time (in ms) which the data should remain in the cache
-  })
-
-  let title = `Are you sure you would like to remove
-  ${ensName || truncateString(addressToBeRemoved, 8)}?`
-  let subtitle =
-    "Member will be removed from the Terminal once the request has been approved and executed."
-  if (addressesAreEqual(activeUserAddress, addressToBeRemoved)) {
-    title = "Are you sure you’d like to leave the Terminal?"
-    subtitle =
-      "You’ll be removed from the Terminal once the request has been approved and executed."
-  }
-  return (
-    <BottomDrawer setIsOpen={setIsOpen} isOpen={isOpen} size="sm">
-      <div className="mt-2 flex flex-col">
-        <div>
-          <button onClick={() => setIsOpen(false)}>
-            <XMarkIcon className="h-6 w-6" />
-          </button>
-        </div>
-        <div className="mt-6 flex grow flex-col">
-          <h2 className="font-bold">{title}</h2>
-          <p className="mt-3">{subtitle}</p>
-        </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-5 w-full px-5 text-center">
-          <Button
-            type="button"
-            fullWidth={true}
-            onClick={() => {
-              onClick()
-              setIsOpen(false)
-            }}
-          >
-            Confirm
-          </Button>
-
-          <p className="mt-3 text-center text-xs text-slate-500">
-            This drawer will close following confirmation. This action does not
-            cost gas.
-          </p>
-        </div>
-      </div>
-    </BottomDrawer>
-  )
-}
 
 export const EditMembersPage = () => {
   const router = useRouter()
@@ -119,8 +57,6 @@ export const EditMembersPage = () => {
   )
 
   const onSubmit = async (data: any) => {
-    // TODO: check if form state hasn't changed at all
-    setFormMessage({ isError: false, message: "" })
     const existingSignersState = [...safeMetadata?.signers]
 
     // We need to keep track of the addresses of the signers
@@ -150,6 +86,8 @@ export const EditMembersPage = () => {
       (address) => signersToRemoveArray.indexOf(address) === -1,
     )
 
+    // Check if any changes have been made to the signers or quorum
+    // if not, return.
     if (
       isEqual(newSignersState, existingSignersState) &&
       data.quorum === safeMetadata?.quorum
@@ -321,6 +259,8 @@ export const EditMembersPage = () => {
     }
   }
 
+  const windowSize = useWindowSize()
+
   const onError = () => {}
   const [isRemoveSignerDrawerOpen, setRemoveSignerDrawerOpen] =
     useState<boolean>(false)
@@ -357,6 +297,7 @@ export const EditMembersPage = () => {
 
   const updatedQuorum =
     safeMetadata?.signers?.length - signersToRemove.size + watchMembers.length
+  const hi = `max-h-[${windowSize?.height - 400}px]`
 
   return (
     <>
@@ -378,11 +319,22 @@ export const EditMembersPage = () => {
           onSubmit={handleSubmit(onSubmit, onError)}
           className="flex h-[calc(100%-120px)] flex-col"
         >
-          <div className="flex max-h-[420px] grow flex-col overflow-scroll pb-3">
+          <div
+            className={`flex ${
+              windowSize.height < 730
+                ? "max-h-[430px]"
+                : windowSize.height < 800
+                ? "max-h-[500px]"
+                : "max-h-[600px]"
+            } grow flex-col overflow-scroll pb-3`}
+          >
             <div className="mb-3">
               {safeMetadata?.signers?.map((address) => {
                 return !signersToRemove.has(address) ? (
-                  <div className="mb-3 flex flex-row justify-between">
+                  <div
+                    className="mb-3 flex flex-row justify-between"
+                    key={address}
+                  >
                     {address === activeUser?.address ? (
                       <div
                         className={`flex flex-row ${
@@ -513,7 +465,11 @@ export const EditMembersPage = () => {
             )}
           </div>
           <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
-            <Button type="submit" fullWidth={true}>
+            <Button
+              type="submit"
+              fullWidth={true}
+              onBlur={() => setFormMessage({ isError: false, message: "" })}
+            >
               Edit
             </Button>
             <p

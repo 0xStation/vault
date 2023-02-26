@@ -26,6 +26,13 @@ export const prepareChangeThresholdCall = (
   }
 }
 
+/**
+ * Add owner with threshold
+ * @param safeAddress address of Safe contract
+ * @param newOwner new owner to be added to the Safe
+ * @param threshold quorum for the Safe
+ * @returns RawCall representation
+ */
 export const prepareAddOwnerWithThresholdCall = (
   safeAddress: string,
   newOwner: string,
@@ -39,6 +46,14 @@ export const prepareAddOwnerWithThresholdCall = (
   }
 }
 
+/**
+ * Add owner with threshold
+ * @param safeAddress address of Safe contract
+ * @param prevOwner Owner that pointed to the owner to be removed in the linked list
+ * @param owner Owner address to be removed.
+ * @param threshold New threshold.
+ * @returns RawCall representation
+ */
 export const prepareRemoveOwnerCall = (
   safeAddress: string,
   prevOwner: string,
@@ -55,6 +70,7 @@ export const prepareRemoveOwnerCall = (
 
 /**
  * Swap owner
+ * @param safeAddress address of Safe contract
  * @param prevOwner Owner that pointed to the owner to be replaced in the linked list
  * @param oldOwner Owner address to be replaced.
  * @param newOwner New owner address.

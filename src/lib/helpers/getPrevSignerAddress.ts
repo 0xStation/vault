@@ -8,8 +8,6 @@ export const getOwnerIndexAndPrevSignerAddress = ({
   addressArray: string[]
   ownerAddress: string
 }) => {
-  console.log("addressArray", addressArray)
-  console.log("ownerAddress", ownerAddress)
   let ownerIndex = addressArray?.findIndex((owner: string) =>
     addressesAreEqual(owner, ownerAddress),
   )
@@ -17,6 +15,7 @@ export const getOwnerIndexAndPrevSignerAddress = ({
   if (!isOwner) {
     throw Error("Could not find owner index")
   }
+
   return {
     ownerIndex,
     prevSignerAddress:
