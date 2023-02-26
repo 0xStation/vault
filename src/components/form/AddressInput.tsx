@@ -14,6 +14,7 @@ export const AddressInput = ({
   errors,
   className = "",
   validations,
+  onBlur,
 }: {
   label: string
   register: UseFormRegister<FieldValues>
@@ -24,6 +25,7 @@ export const AddressInput = ({
   className?: string
   type?: string
   validations?: any
+  onBlur?: (e: any) => void
 }) => {
   const { setAddressInputVal } = useEnsInput()
 
@@ -61,11 +63,10 @@ export const AddressInput = ({
             },
             ...validations,
           },
-          onChange: (e: any) =>
-            handleEnsAddressInputValOnChange(
-              e.target.value,
-              setAddressInputVal,
-            ),
+          onChange: (e: any) => {
+            handleEnsAddressInputValOnChange(e.target.value, setAddressInputVal)
+          },
+          onBlur,
         }}
       />
     </>

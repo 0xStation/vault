@@ -2,12 +2,9 @@ import { PencilIcon } from "@heroicons/react/24/solid"
 import { ArrowLeft } from "@icons"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import AccountNavBar from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
-import { UpdateMembersDrawer } from "../../../src/components/members/UpdateMembersDrawer"
 import { useSafeMetadata } from "../../../src/hooks/safe/useSafeMetadata"
-import { useGetNextNonce } from "../../../src/hooks/useGetNextNonce"
 import { convertGlobalId } from "../../../src/models/terminal/utils"
 
 const EditButton = ({
@@ -33,15 +30,8 @@ const MembersPage = () => {
   const { chainId, address } = convertGlobalId(
     chainNameAndSafeAddress as string,
   )
-  const [isUpdateMembersDrawerOpen, setUpdateMembersDrawerOpen] =
-    useState<boolean>(false)
 
   const { safeMetadata } = useSafeMetadata({
-    chainId: chainId as number,
-    address: address as string,
-  })
-
-  const nextNonce = useGetNextNonce({
     chainId: chainId as number,
     address: address as string,
   })
@@ -55,16 +45,13 @@ const MembersPage = () => {
       >
         <ArrowLeft />
       </Link>
-      <UpdateMembersDrawer
-        isOpen={isUpdateMembersDrawerOpen}
-        setIsOpen={setUpdateMembersDrawerOpen}
-        safeMetadata={safeMetadata}
-      />
       <div className="mt-4 w-full px-4">
         <div className="flex flex-row justify-between">
           <h2 className="mb-6 font-bold">Members</h2>
           <EditButton
-            onClick={() => setUpdateMembersDrawerOpen(true)}
+            onClick={() =>
+              router.push(`/${chainNameAndSafeAddress}/members/edit`)
+            }
             className="rounded border border-slate-200"
           />
         </div>
