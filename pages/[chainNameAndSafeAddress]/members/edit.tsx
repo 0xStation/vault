@@ -297,7 +297,15 @@ export const EditMembersPage = () => {
 
   const updatedQuorum =
     safeMetadata?.signers?.length - signersToRemove.size + watchMembers.length
-  const hi = `max-h-[${windowSize?.height - 400}px]`
+
+  // TODO: figure out good height settings for mobile.
+  // These height settings are to temporarily deal with the different mobile heights
+  const formHeight =
+    windowSize.height < 730
+      ? "max-h-[430px]"
+      : windowSize.height < 800
+      ? "max-h-[500px]"
+      : "max-h-[600px]"
 
   return (
     <>
@@ -320,13 +328,7 @@ export const EditMembersPage = () => {
           className="flex h-[calc(100%-120px)] flex-col"
         >
           <div
-            className={`flex ${
-              windowSize.height < 730
-                ? "max-h-[430px]"
-                : windowSize.height < 800
-                ? "max-h-[500px]"
-                : "max-h-[600px]"
-            } grow flex-col overflow-scroll pb-3`}
+            className={`flex ${formHeight} grow flex-col overflow-scroll pb-3`}
           >
             <div className="mb-3">
               {safeMetadata?.signers?.map((address) => {
