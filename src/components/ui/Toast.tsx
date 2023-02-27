@@ -104,11 +104,16 @@ export const Toast = () => {
         <div className="flex flex-row items-center space-x-2">
           {variant === "success" && <CheckIcon />}
           {variant === "loading" && <LoadingSpinner />}
-          <span>{message}</span>
+          <span className="text-sm">{message}</span>
         </div>
         {action && (
           <div className="flex cursor-pointer items-center space-x-2 border-b border-dotted">
-            <a href={action.href} className="text-sm">
+            <a
+              href={action.href}
+              className="text-sm"
+              target="_blank"
+              rel="noreferrer"
+            >
               {action.label}
             </a>
             <ArrowUpRight size="sm" />

@@ -62,8 +62,6 @@ const TerminalRequestIdPage = () => {
     return action.status !== ActionStatus.NONE
   })
 
-  console.log(activeActions)
-
   return (
     <>
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
@@ -193,65 +191,61 @@ const TerminalRequestIdPage = () => {
             }}
           />
         </section>
+      </div>
+      <div className={`${activeActions ? "hidden" : "block"}`}>
+        {canExecute ? (
+          <ExecuteAction
+            title="Execute Approval"
+            subtitle="This action is on-chain and will not be reversible."
+            request={request}
+            mutate={mutate}
+          />
+        ) : (
+          <CastYourVote
+            approveActions={
+              request?.actions.filter(
+                (action) => action.variant === ActionVariant.APPROVAL,
+              ) ?? []
+            }
+            rejectActions={
+              request?.actions.filter(
+                (action) => action.variant === ActionVariant.REJECTION,
+              ) ?? []
+            }
+            lastVote={lastVote}
+            optimisticVote={(approve: boolean, voteActivity: Activity) => {
+              let approveActivities = request?.approveActivities!
+              let rejectActivities = request?.rejectActivities!
 
-        <div className={`${activeActions ? "hidden" : "block"}`}>
-          {canExecute ? (
-            <ExecuteAction
-              title="Execute Approval"
-              subtitle="This action is on-chain and will not be reversible."
-              request={request}
-              mutate={mutate}
-            />
-          ) : (
-            <CastYourVote
-              approveActions={
-                request?.actions.filter(
-                  (action) => action.variant === ActionVariant.APPROVAL,
-                ) ?? []
+              if (approve) {
+                // filter out previous rejection if exists
+                rejectActivities = rejectActivities?.filter(
+                  (activity) => activity.address !== activeUser?.address,
+                )
+                // add approval activity
+                approveActivities = [
+                  ...request?.approveActivities!,
+                  voteActivity,
+                ]
+              } else {
+                // filter out previous approval if exists
+                approveActivities = approveActivities?.filter(
+                  (activity) => activity.address !== activeUser?.address,
+                )
+                // add rejection activity
+                rejectActivities = [...request?.rejectActivities!, voteActivity]
               }
-              rejectActions={
-                request?.actions.filter(
-                  (action) => action.variant === ActionVariant.REJECTION,
-                ) ?? []
-              }
-              lastVote={lastVote}
-              optimisticVote={(approve: boolean, voteActivity: Activity) => {
-                let approveActivities = request?.approveActivities!
-                let rejectActivities = request?.rejectActivities!
 
-                if (approve) {
-                  // filter out previous rejection if exists
-                  rejectActivities = rejectActivities?.filter(
-                    (activity) => activity.address !== activeUser?.address,
-                  )
-                  // add approval activity
-                  approveActivities = [
-                    ...request?.approveActivities!,
-                    voteActivity,
-                  ]
-                } else {
-                  // filter out previous approval if exists
-                  approveActivities = approveActivities?.filter(
-                    (activity) => activity.address !== activeUser?.address,
-                  )
-                  // add rejection activity
-                  rejectActivities = [
-                    ...request?.rejectActivities!,
-                    voteActivity,
-                  ]
-                }
-
-                mutate({
-                  ...request!,
-                  activities: [...request?.activities!, voteActivity],
-                  approveActivities,
-                  rejectActivities,
-                })
-                setLastVote(approve ? "approve" : "reject")
-              }}
-            />
-          )}
-        </div>
+              mutate({
+                ...request!,
+                activities: [...request?.activities!, voteActivity],
+                approveActivities,
+                rejectActivities,
+              })
+              setLastVote(approve ? "approve" : "reject")
+            }}
+          />
+        )}
       </div>
     </>
   )
