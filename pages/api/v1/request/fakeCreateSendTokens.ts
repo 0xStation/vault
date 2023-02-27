@@ -1,14 +1,9 @@
 import {
-<<<<<<< HEAD
-  ActivityVariant,
-  RequestVariantType,
-  SubscriptionVariant,
-=======
   ActionStatus,
   ActionVariant,
   ActivityVariant,
   RequestVariantType,
->>>>>>> eb91414 (schema changes for actions)
+  SubscriptionVariant,
 } from "@prisma/client"
 import db from "db"
 import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
@@ -108,7 +103,7 @@ export default async function handler(
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
               variant: ActionVariant.APPROVAL,
-              status: ActionStatus.NONE,
+              status: ActionStatus.PENDING,
               data: JSON.parse(JSON.stringify(actionMetadata)),
             },
             {
@@ -116,7 +111,7 @@ export default async function handler(
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
               variant: ActionVariant.REJECTION,
-              status: ActionStatus.NONE,
+              status: ActionStatus.PENDING,
               data: JSON.parse(
                 JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
