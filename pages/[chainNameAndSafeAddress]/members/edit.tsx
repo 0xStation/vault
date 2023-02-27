@@ -103,17 +103,18 @@ export const EditMembersPage = () => {
     )
 
     // The existing signer state minus the intersection (unaffected signers).
-    const filteredExistingSignersState = existingSignersState.filter(
+    const signersToBeRemoved = existingSignersState.filter(
       (address) => intersection.indexOf(address) === -1,
     )
     // The new signer state minus the intersection (unaffected signers).
-    const filteredNewSignersState = newSignersState.filter(
+    const signersToBeAdded = newSignersState.filter(
       (address) => intersection.indexOf(address) === -1,
     )
 
-    // they will all be swap calls otherwise
+    // Swap calls don't have the ability to change the quorum,
+    // we're checking if we're only performing swap calls
     const shouldChangeQuorumWithSeparateCall =
-      filteredExistingSignersState.length === filteredNewSignersState.length &&
+      signersToBeRemoved.length === signersToBeAdded.length &&
       data.quorum !== safeMetadata?.quorum
 
     let variantType = {
@@ -123,8 +124,8 @@ export const EditMembersPage = () => {
     } as SignerQuorumVariant
     let preparedCalls = []
     const swapLength = Math.min(
-      filteredNewSignersState.length,
-      filteredExistingSignersState.length,
+      signersToBeAdded.length,
+      signersToBeRemoved.length,
     )
 
     let i = 0
@@ -132,17 +133,15 @@ export const EditMembersPage = () => {
       const { ownerIndex, prevSignerAddress } =
         getOwnerIndexAndPrevSignerAddress({
           addressArray: updatedSignersState,
-          ownerAddress: filteredExistingSignersState[i],
+          ownerAddress: signersToBeRemoved[i],
         })
 
-      const newSignerAddress = await resolveEnsAddress(
-        filteredNewSignersState[i],
-      )
+      const newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
 
       const { swapOwnerCall } = prepareSwapCallAndUpdateVariant({
         safeAddress: safeMetadata.address,
         prevSignerAddress,
-        oldSignerAddress: filteredExistingSignersState[i],
+        oldSignerAddress: signersToBeRemoved[i],
         newSignerAddress: newSignerAddress as string,
         variantType,
       })
@@ -152,36 +151,34 @@ export const EditMembersPage = () => {
       i++
     }
 
-    if (filteredExistingSignersState.length > filteredNewSignersState.length) {
-      while (i < filteredExistingSignersState.length) {
+    if (signersToBeRemoved.length > signersToBeAdded.length) {
+      while (i < signersToBeRemoved.length) {
         const { ownerIndex, prevSignerAddress } =
           getOwnerIndexAndPrevSignerAddress({
             addressArray: updatedSignersState,
-            ownerAddress: filteredExistingSignersState[i],
+            ownerAddress: signersToBeRemoved[i],
           })
         const removeOwnerCall = prepareRemoveOwnerCall(
           safeMetadata.address,
           prevSignerAddress,
-          filteredExistingSignersState[i],
-          i === filteredExistingSignersState.length - 1
+          signersToBeRemoved[i],
+          i === signersToBeRemoved.length - 1
             ? safeMetadata?.quorum
             : data.quorum,
         )
 
-        variantType.remove.push(filteredExistingSignersState[i])
+        variantType.remove.push(signersToBeRemoved[i])
         updatedSignersState.splice(ownerIndex, 1)
         preparedCalls.push(removeOwnerCall)
         i++
       }
     } else {
-      while (i < filteredNewSignersState.length) {
-        const newSignerAddress = await resolveEnsAddress(
-          filteredNewSignersState[i],
-        )
+      while (i < signersToBeAdded.length) {
+        const newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
         const addOwnerCall = prepareAddOwnerWithThresholdCall(
           safeMetadata.address,
           newSignerAddress as string,
-          i === filteredExistingSignersState.length - 1
+          i === signersToBeRemoved.length - 1
             ? safeMetadata?.quorum
             : data.quorum,
         )
