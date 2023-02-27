@@ -1,4 +1,4 @@
-import truncateString from "lib/utils"
+import truncateString, { cn } from "lib/utils"
 import { useEnsName } from "wagmi"
 
 interface AddressProps {
@@ -26,7 +26,7 @@ export const Address = ({
 
   return (
     <div
-      className="group cursor-pointer"
+      className={cn("group", interactive ? "cursor-pointer" : "")}
       onClick={
         // if address is interactive, enable copy on click
         interactive

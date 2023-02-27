@@ -204,11 +204,28 @@ const TerminalRequestIdPage = () => {
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
-                accountAddress={activity.address}
-                variant={activity.variant}
-                createdAt={activity.createdAt}
-                comment={activity.data.comment}
+                activity={activity}
                 key={`activity-${idx}`}
+                optimisticEditComment={(update: {
+                  activityId: string
+                  comment: string
+                }) => {
+                  mutate({
+                    ...request!,
+                    activities: request!.activities.map((a) => {
+                      if (update.activityId !== a.id) {
+                        return a
+                      }
+                      return {
+                        ...a,
+                        data: {
+                          comment: update.comment,
+                          edited: true,
+                        },
+                      }
+                    }),
+                  })
+                }}
               />
             ))}
           </ul>
@@ -258,6 +275,10 @@ const TerminalRequestIdPage = () => {
               activities: [...request?.activities!, voteActivity],
               approveActivities,
               rejectActivities,
+              addressesThatHaveNotSigned:
+                request!.addressesThatHaveNotSigned.filter(
+                  (address) => address !== activeUser?.address,
+                ),
             })
             setLastVote(approve ? "approve" : "reject")
           }}
