@@ -3,7 +3,7 @@ import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   usePrepareSendTransaction,
@@ -43,6 +43,7 @@ export const ExecuteWrapper = ({
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
+  const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
   const { loadingToast, successToast, closeCurrentToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
@@ -59,64 +60,11 @@ export const ExecuteWrapper = ({
     },
     chainId: request.chainId,
   })
-  const {
-    data: txData,
-    isSuccess: isSendTransactionSuccess,
-    sendTransaction,
-  } = useSendTransaction(config)
 
-  const {
-    isSuccess: isWaitForTransactionSuccess,
-    data,
-    isError,
-    isLoading,
-    status,
-  } = useWaitForTransaction({
-    hash: txData?.hash,
-    chainId: request.chainId,
-    enabled: !!txData?.hash,
-  })
-
-  // pull these out later, useful for testing the wait transaction response in the meantime
-  console.log("tx data", data)
-  console.log("tx is error", isError)
-  console.log("tx is loading", isLoading)
-  console.log("status", status)
-
-  useEffect(() => {
-    if (isSendTransactionSuccess) {
-      setLoading(false)
-      setIsOpen(false)
-      loadingToast({
-        message: "loading...",
-        action: { href: `etherscan.io/tx/${txData?.hash}`, label: "etherscan" },
-      })
-      const updatedActions = request.actions.map((action: Action) => {
-        if (action.id === actionToExecute.id) {
-          return {
-            ...actionToExecute,
-            status: ActionStatus.PENDING,
-            txHash: txData?.hash,
-          }
-        }
-        return action
-      })
-      mutate(setActionPending, {
-        optimisticData: {
-          ...request,
-          actions: updatedActions,
-        },
-        populateCache: false,
-        revalidate: false,
-      })
-    }
-  }, [isSendTransactionSuccess])
-
-  // what happens if the user naviagates away from page before this runs
-  // we might not run the function to update the status of the action / request
-  useEffect(() => {
-    if (isWaitForTransactionSuccess) {
-      console.log("success...")
+  useWaitForTransaction({
+    confirmations: 1,
+    hash: txnHash,
+    onSuccess: async (transaction) => {
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
           return {
@@ -142,8 +90,89 @@ export const ExecuteWrapper = ({
       )
       closeCurrentToast() // loading toast
       successToast({ message: "Request successfully executed!", timeout: 5000 })
-    }
-  }, [isWaitForTransactionSuccess])
+    },
+    onError: async (data) => {
+      setTxnHash(undefined)
+    },
+  })
+
+  const { sendTransactionAsync } = useSendTransaction({
+    mode: "recklesslyUnprepared",
+  })
+
+  // const {
+  //   data: txData,
+  //   isSuccess: isSendTransactionSuccess,
+  //   sendTransaction,
+  // } = useSendTransaction(config)
+
+  // const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
+  //   hash: txData?.hash,
+  //   chainId: request.chainId,
+  //   enabled: !!txData?.hash,
+  // })
+
+  // useEffect(() => {
+  //   if (isSendTransactionSuccess) {
+  //   setLoading(false)
+  //   setIsOpen(false)
+  //   loadingToast({
+  //     message: "loading...",
+  //     action: { href: `etherscan.io/tx/${txData?.hash}`, label: "etherscan" },
+  //   })
+  //   const updatedActions = request.actions.map((action: Action) => {
+  //     if (action.id === actionToExecute.id) {
+  //       return {
+  //         ...actionToExecute,
+  //         status: ActionStatus.PENDING,
+  //         txHash: txData?.hash,
+  //       }
+  //     }
+  //     return action
+  //   })
+  //   mutate(setActionPending, {
+  //     optimisticData: {
+  //       ...request,
+  //       actions: updatedActions,
+  //     },
+  //     populateCache: false,
+  //     revalidate: false,
+  //   })
+  // }
+  // }, [isSendTransactionSuccess])
+
+  // what happens if the user naviagates away from page before this runs
+  // we might not run the function to update the status of the action / request
+  // useEffect(() => {
+  // if (isWaitForTransactionSuccess) {
+  //   console.log("success...")
+  // const updatedActions = request.actions.map((action: Action) => {
+  //   if (action.id === actionToExecute.id) {
+  //     return {
+  //       ...actionToExecute,
+  //       status: ActionStatus.SUCCESS,
+  //     }
+  //   }
+  //   return action
+  // })
+  // mutate(
+  //   completeRequestExecution({
+  //     ...formData, // todo: clarify what formdata is here...
+  //     actionId: actionToExecute.id,
+  //   }),
+  //   {
+  //     optimisticData: {
+  //       ...request,
+  //       actions: updatedActions,
+  //     },
+  //     populateCache: false,
+  //     revalidate: false,
+  //   },
+  // )
+  // closeCurrentToast() // loading toast
+  // successToast({ message: "Request successfully executed!", timeout: 5000 })
+  //   }
+  // }, [isWaitForTransactionSuccess])
 
   const {
     register,
@@ -158,7 +187,46 @@ export const ExecuteWrapper = ({
       address: activeUser?.address,
       comment: data.comment,
     })
-    sendTransaction?.()
+    // sendTransaction?.()
+    let transaction: any
+    try {
+      transaction = await sendTransactionAsync({
+        recklesslySetUnpreparedRequest: {
+          chainId: request.chainId,
+          to: txPayload.to,
+          value: BigNumber.from(txPayload.value),
+          data: txPayload.data,
+        },
+      })
+      setTxnHash(transaction?.hash)
+      setLoading(false)
+      setIsOpen(false)
+      loadingToast({
+        message: "loading...",
+        action: {
+          href: `etherscan.io/tx/${transaction?.hash}`,
+          label: "etherscan",
+        },
+      })
+      const updatedActions = request.actions.map((action: Action) => {
+        if (action.id === actionToExecute.id) {
+          return {
+            ...actionToExecute,
+            status: ActionStatus.PENDING,
+            txHash: transaction?.hash,
+          }
+        }
+        return action
+      })
+      mutate(setActionPending, {
+        optimisticData: {
+          ...request,
+          actions: updatedActions,
+        },
+        populateCache: false,
+        revalidate: false,
+      })
+    } catch (err: any) {}
     resetField("comment")
   }
 
