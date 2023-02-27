@@ -6,7 +6,7 @@ const Checkbox = ({
   formRegister,
 }: {
   name: string
-  value?: string
+  value?: any
   checked?: boolean
   defaultChecked?: boolean
   formRegister: any

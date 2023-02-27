@@ -28,6 +28,8 @@ const RequestListForm = ({
 
   const onSubmit = (data: any) => console.log(data)
 
+  console.log(selectedRequests)
+
   if (requests.length === 0) {
     return (
       <EmptyList
@@ -66,7 +68,7 @@ const RequestListForm = ({
           leaveFrom="translate-y-0"
           leaveTo="translate-y-[200%]"
         >
-          <div className="mx-auto flex w-full max-w-[400px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
+          <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
             <p className="text-sm text-white">
               {selectedRequests.length} selected
             </p>
