@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import AccountNavBar from "../../../src/components/core/AccountNavBar"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { useSafeMetadata } from "../../../src/hooks/safe/useSafeMetadata"
+import { useGetSignerQuorumRequestChanges } from "../../../src/hooks/useGetSignerQuorumRequestChanges"
 import { convertGlobalId } from "../../../src/models/terminal/utils"
 
 const EditButton = ({
@@ -24,6 +25,17 @@ const EditButton = ({
   )
 }
 
+const AddButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="h-[28px] rounded border border-slate-900 bg-slate-900 px-2 text-sm font-medium text-white"
+    >
+      + Add
+    </button>
+  )
+}
+
 const MembersPage = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
@@ -34,6 +46,12 @@ const MembersPage = () => {
   const { safeMetadata } = useSafeMetadata({
     chainId: chainId as number,
     address: address as string,
+  })
+
+  const { data } = useGetSignerQuorumRequestChanges({
+    chainId: chainId as number,
+    address: address as string,
+    currentQuorum: safeMetadata?.quorum,
   })
 
   return (
@@ -48,29 +66,72 @@ const MembersPage = () => {
       <div className="mt-4 w-full px-4">
         <div className="flex flex-row justify-between">
           <h2 className="mb-6 font-bold">Members</h2>
-          <EditButton
-            onClick={() =>
-              router.push(`/${chainNameAndSafeAddress}/members/edit`)
-            }
-            className="rounded border border-slate-200"
-          />
+          <div className="items-center">
+            <AddButton
+              onClick={() =>
+                router.push(`/${chainNameAndSafeAddress}/members/edit`)
+              }
+            />
+            <EditButton
+              onClick={() =>
+                router.push(`/${chainNameAndSafeAddress}/members/edit`)
+              }
+              className="ml-2 rounded border border-slate-200"
+            />
+          </div>
         </div>
         <div>
-          {safeMetadata?.signers?.map((signerAddress) => (
-            <div key={signerAddress} className="flex flex-row">
-              <AvatarAddress
-                size="sm"
-                address={signerAddress}
-                className="mb-2"
-              />
-            </div>
-          ))}
+          {safeMetadata?.signers?.map((signerAddress) => {
+            const activeRequest =
+              data?.modifiedChangesToRequests?.modifiedAddresses?.[
+                signerAddress
+              ]
+            return (
+              <div
+                key={signerAddress}
+                className="mb-2 flex flex-row justify-between"
+              >
+                <AvatarAddress
+                  size="sm"
+                  address={signerAddress}
+                  className={`${
+                    activeRequest?.length ? "opacity-70" : "opacity-100"
+                  }`}
+                />
+
+                {activeRequest?.length ? (
+                  <p className="flex items-center text-xs text-slate-500">
+                    Pending entry · {"  "}
+                    <a
+                      className="text-xs text-black underline decoration-dotted"
+                      href={`/${chainNameAndSafeAddress}/requests/${activeRequest[0]}`}
+                    >
+                      View request
+                    </a>
+                  </p>
+                ) : null}
+              </div>
+            )
+          })}
         </div>
         <div className="mt-4">
           <p className="text-sm font-bold">Quorum</p>
-          <p className="mt-2">
-            {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
-          </p>
+          <div className="flex flex-row justify-between">
+            <p className="mt-2">
+              {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
+            </p>
+            {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
+              <p className="text-xs text-slate-500">
+                Pending update · {"  "}
+                <a
+                  className="text-xs text-black underline decoration-dotted"
+                  href={`/${chainNameAndSafeAddress}/requests/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
+                >
+                  View request
+                </a>
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
     </>

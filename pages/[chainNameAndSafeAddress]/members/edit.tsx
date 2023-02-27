@@ -236,9 +236,7 @@ export const EditMembersPage = () => {
         },
       )
 
-      const { request, proof, activity } = requestResponse.data
-
-      router.push(`${chainNameAndSafeAddress}/members`)
+      router.push(`/${chainNameAndSafeAddress}/members`)
     } catch (err: any) {
       console.error(err)
       if (
@@ -455,7 +453,7 @@ export const EditMembersPage = () => {
               }}
               quorumSize={updatedQuorum || 1} // default to 1 since activeUser is a member
             />
-            {isDirty && (
+            {isDirty || signersToRemove.size ? (
               <TextareaWithLabel
                 label={"Note*"}
                 register={register}
@@ -464,7 +462,7 @@ export const EditMembersPage = () => {
                 errors={errors}
                 placeholder="Onboard Alice to the team"
               />
-            )}
+            ) : null}
           </div>
           <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
             <Button
