@@ -103,7 +103,7 @@ export default async function handler(
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
               variant: ActionVariant.APPROVAL,
-              status: ActionStatus.PENDING,
+              status: ActionStatus.NONE,
               data: JSON.parse(JSON.stringify(actionMetadata)),
             },
             {
@@ -111,7 +111,7 @@ export default async function handler(
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
               variant: ActionVariant.REJECTION,
-              status: ActionStatus.PENDING,
+              status: ActionStatus.NONE,
               data: JSON.parse(
                 JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
