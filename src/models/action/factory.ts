@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker"
-import { ZERO_ADDRESS } from "lib/constants"
+import { ActionStatus, ActionVariant } from "@prisma/client"
 import { Action, SwapChoice } from "./types"
+
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 // defaults to a eth transfer to 0x65a
 export const createAction = ({
@@ -49,6 +51,8 @@ export const createAction = ({
     safeAddress: safeAddress ?? faker.finance.ethereumAddress(),
     chainId: chainId ?? 5,
     nonce: nonce ?? 1,
+    status: ActionStatus.NONE,
+    variant: isRejection ? ActionVariant.REJECTION : ActionVariant.APPROVAL,
     data: {
       calls: [
         isRejection

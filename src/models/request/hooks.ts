@@ -69,3 +69,23 @@ export const useCreateFakeSendTokensRequest = (
 
   return { isMutating, createFakeSendTokens }
 }
+
+export const useCompleteRequestExecution = (requestId: string) => {
+  const fetcher = async (url: string, { arg }: { arg: any }) => {
+    try {
+      const response = await axios.post<any>(url, arg)
+      if (response.status === 200) {
+        return response.data
+      }
+    } catch (err) {
+      console.log("err:", err)
+    }
+  }
+
+  const { trigger: completeRequestExecution, isMutating } = useSWRMutation(
+    requestId ? `/api/v1/request/${requestId}/execute` : null,
+    fetcher,
+  )
+
+  return { isMutating, completeRequestExecution }
+}

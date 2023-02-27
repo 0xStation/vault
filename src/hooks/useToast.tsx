@@ -3,41 +3,82 @@ import useStore from "./stores/useStore"
 export const useToast = () => {
   const setToastState = useStore((state) => state.setToastState)
 
-  const successToast = (
-    message: string,
-    action?: { href: string; label: string },
-  ) => {
+  const successToast = ({
+    message,
+    action,
+    timeout,
+  }: {
+    message: string
+    action?: { href: string; label: string }
+    timeout?: number
+  }) => {
     setToastState({
       isToastShowing: true,
-      type: "success",
+      variant: "success",
       message,
       action,
     })
+
+    if (timeout) {
+      setTimeout(() => {
+        closeCurrentToast()
+      }, timeout)
+    }
   }
 
-  const errorToast = (
-    message: string,
-    action?: { href: string; label: string },
-  ) => {
+  const errorToast = ({
+    message,
+    action,
+    timeout,
+  }: {
+    message: string
+    action?: { href: string; label: string }
+    timeout?: number
+  }) => {
     setToastState({
       isToastShowing: true,
-      type: "error",
+      variant: "error",
       message,
       action,
     })
+
+    if (timeout) {
+      setTimeout(() => {
+        closeCurrentToast()
+      }, timeout)
+    }
   }
 
-  const loadingToast = (
-    message: string,
-    action?: { href: string; label: string },
-  ) => {
+  const loadingToast = ({
+    message,
+    action,
+    timeout,
+  }: {
+    message: string
+    action?: { href: string; label: string }
+    timeout?: number
+  }) => {
     setToastState({
       isToastShowing: true,
-      type: "loading",
+      variant: "loading",
       message,
       action,
     })
+
+    if (timeout) {
+      setTimeout(() => {
+        closeCurrentToast()
+      }, timeout)
+    }
   }
 
-  return { successToast, errorToast, loadingToast }
+  const closeCurrentToast = () => {
+    setToastState({
+      isToastShowing: false,
+      variant: "success", // doesn't matter since it's closed
+      message: "",
+    })
+  }
+
+  return { successToast, errorToast, loadingToast, closeCurrentToast }
 }

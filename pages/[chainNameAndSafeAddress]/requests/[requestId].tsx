@@ -1,5 +1,4 @@
-import { RequestVariantType } from "@prisma/client"
-import { Address } from "@ui/Address"
+import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -10,86 +9,23 @@ import ActivityItem from "../../../src/components/core/ActivityItem"
 import { AvatarAddress } from "../../../src/components/core/AvatarAddress"
 import { ArrowLeft, Copy } from "../../../src/components/icons"
 import { CastYourVote } from "../../../src/components/request/CastYourVote"
+import { ExecuteAction } from "../../../src/components/request/ExecuteAction"
+import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
+import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
+import { Action } from "../../../src/models/action/types"
 import { Activity } from "../../../src/models/activity/types"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
-
-import {
-  RequestFrob,
-  SignerQuorumVariant,
-  TokenTransferVariant,
-} from "../../../src/models/request/types"
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
 }
 
-const TokenTransferRequestContent = ({ request }: { request: RequestFrob }) => {
-  let tokenTransferMeta = request.data.meta as TokenTransferVariant
-  return (
-    <>
-      <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Recipient(s)</span>
-        <span>xxx</span>
-      </div>
-      <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Token(s)</span>
-        <span>xxx</span>
-      </div>
-    </>
-  )
-}
-
-const SignerQuorumRequestContent = ({ request }: { request: RequestFrob }) => {
-  let signerQuorumMeta = request.data.meta as SignerQuorumVariant
-
-  const membersAdded = signerQuorumMeta.add.length
-  const membersRemoved = signerQuorumMeta.remove.length
-
-  const prompt = `${[
-    ...(membersAdded > 0 ? [`adding ${membersAdded}`] : []),
-    ...(membersRemoved > 0 ? [`removing ${membersRemoved}`] : []),
-  ].join(", ")} ${membersAdded + membersRemoved > 1 ? "members" : "member"}`
-
-  // should never happen but just in case...
-  if (membersAdded + membersRemoved === 0) {
-    return <></>
-  }
-
-  return (
-    <>
-      <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Members</span>
-        <span>{prompt}</span>
-      </div>
-      <div className="p2- space-y-2 rounded-md bg-slate-100 p-3">
-        {signerQuorumMeta.add.length > 0 && (
-          <h5 className="text-xs font-bold text-slate-500">Add</h5>
-        )}
-        {signerQuorumMeta.add.map((address, idx) => {
-          return <Address key={`address-${idx}`} address={address} />
-        })}
-        {signerQuorumMeta.remove.length > 0 && (
-          <h5 className="text-xs font-bold text-slate-500">Remove</h5>
-        )}
-        {signerQuorumMeta.remove.map((address, idx) => {
-          return <Address key={`address-${idx}`} address={address} />
-        })}
-      </div>
-      <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Quorum</span>
-        <span>{signerQuorumMeta.setQuorum}</span>
-      </div>
-    </>
-  )
-}
-
 const TerminalRequestIdPage = () => {
   const activeUser = useStore((state) => state.activeUser)
-  const setToastState = useStore((state) => state.setToastState)
   const router = useRouter()
 
   const { isLoading, request, mutate } = useRequest(
@@ -112,6 +48,19 @@ const TerminalRequestIdPage = () => {
       lastVoteIsApprove ? "approve" : lastVoteIsReject ? "reject" : undefined,
     )
   }, [activeUser, request])
+
+  // replace with loader
+  if (!request) {
+    return <></>
+  }
+
+  const canExecute =
+    request.rejectActivities.length >= request.quorum ||
+    request.approveActivities.length >= request.quorum
+
+  const activeActions = request.actions.some((action: Action, idx: number) => {
+    return action.status !== ActionStatus.NONE
+  })
 
   return (
     <>
@@ -242,47 +191,61 @@ const TerminalRequestIdPage = () => {
             }}
           />
         </section>
-        <CastYourVote
-          approveActions={
-            request?.actions.filter((action) => !action.isRejection) ?? []
-          }
-          rejectActions={
-            request?.actions.filter((action) => action.isRejection) ?? []
-          }
-          lastVote={lastVote}
-          optimisticVote={(approve: boolean, voteActivity: Activity) => {
-            let approveActivities = request?.approveActivities!
-            let rejectActivities = request?.rejectActivities!
-
-            if (approve) {
-              // filter out previous rejection if exists
-              rejectActivities = rejectActivities?.filter(
-                (activity) => activity.address !== activeUser?.address,
-              )
-              // add approval activity
-              approveActivities = [...request?.approveActivities!, voteActivity]
-            } else {
-              // filter out previous approval if exists
-              approveActivities = approveActivities?.filter(
-                (activity) => activity.address !== activeUser?.address,
-              )
-              // add rejection activity
-              rejectActivities = [...request?.rejectActivities!, voteActivity]
+      </div>
+      <div className={`${activeActions ? "hidden" : "block"}`}>
+        {canExecute ? (
+          <ExecuteAction
+            title="Execute Approval"
+            subtitle="This action is on-chain and will not be reversible."
+            request={request}
+            mutate={mutate}
+          />
+        ) : (
+          <CastYourVote
+            approveActions={
+              request?.actions.filter(
+                (action) => action.variant === ActionVariant.APPROVAL,
+              ) ?? []
             }
+            rejectActions={
+              request?.actions.filter(
+                (action) => action.variant === ActionVariant.REJECTION,
+              ) ?? []
+            }
+            lastVote={lastVote}
+            optimisticVote={(approve: boolean, voteActivity: Activity) => {
+              let approveActivities = request?.approveActivities!
+              let rejectActivities = request?.rejectActivities!
 
-            mutate({
-              ...request!,
-              activities: [...request?.activities!, voteActivity],
-              approveActivities,
-              rejectActivities,
-              addressesThatHaveNotSigned:
-                request!.addressesThatHaveNotSigned.filter(
-                  (address) => address !== activeUser?.address,
-                ),
-            })
-            setLastVote(approve ? "approve" : "reject")
-          }}
-        />
+              if (approve) {
+                // filter out previous rejection if exists
+                rejectActivities = rejectActivities?.filter(
+                  (activity) => activity.address !== activeUser?.address,
+                )
+                // add approval activity
+                approveActivities = [
+                  ...request?.approveActivities!,
+                  voteActivity,
+                ]
+              } else {
+                // filter out previous approval if exists
+                approveActivities = approveActivities?.filter(
+                  (activity) => activity.address !== activeUser?.address,
+                )
+                // add rejection activity
+                rejectActivities = [...request?.rejectActivities!, voteActivity]
+              }
+
+              mutate({
+                ...request!,
+                activities: [...request?.activities!, voteActivity],
+                approveActivities,
+                rejectActivities,
+              })
+              setLastVote(approve ? "approve" : "reject")
+            }}
+          />
+        )}
       </div>
     </>
   )

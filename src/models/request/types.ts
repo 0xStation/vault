@@ -1,6 +1,7 @@
 import { Request as PrismaRequest } from "@prisma/client"
 import { Action } from "../action/types"
 import { Activity } from "../activity/types"
+import { Proof } from "../proof/types"
 import { Terminal } from "../terminal/types"
 import { Token } from "../token/types"
 
@@ -13,6 +14,12 @@ export type RequestFrob = Request & {
   terminal: Terminal
   signers: string[]
   addressesThatHaveNotSigned: string[]
+}
+
+export type Request = PrismaRequest & {
+  data: RequestMetadata
+  activities: Activity[]
+  actions: (Action & { proofs: Proof[] })[]
 }
 
 export type Transfer = {
@@ -33,11 +40,6 @@ export type RequestMetadata = {
   note: string
   createdBy: string // address
   meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
-}
-export type Request = PrismaRequest & {
-  data: RequestMetadata
-  activities: Activity[]
-  actions: Action[]
 }
 
 export type SignerQuorumVariant = {
