@@ -263,7 +263,7 @@ export const EditMembersPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { isDirty, errors },
+    formState: { isDirty, errors, isSubmitting },
     control,
     watch,
     trigger,
@@ -466,6 +466,8 @@ export const EditMembersPage = () => {
               type="submit"
               fullWidth={true}
               onBlur={() => setFormMessage({ isError: false, message: "" })}
+              disabled={isSubmitting}
+              loading={isSubmitting}
             >
               Edit
             </Button>
