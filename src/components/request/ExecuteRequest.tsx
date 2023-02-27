@@ -43,7 +43,7 @@ export const ExecuteWrapper = ({
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
-  const { loadingToast, successToast } = useToast()
+  const { loadingToast, successToast, closeCurrentToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
   const { completeRequestExecution } = useCompleteRequestExecution(
@@ -65,15 +65,32 @@ export const ExecuteWrapper = ({
     sendTransaction,
   } = useSendTransaction(config)
 
-  const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
+  const {
+    isSuccess: isWaitForTransactionSuccess,
+    data,
+    isError,
+    isLoading,
+    status,
+  } = useWaitForTransaction({
     hash: txData?.hash,
+    chainId: request.chainId,
+    enabled: !!txData?.hash,
   })
+
+  // pull these out later, useful for testing the wait transaction response in the meantime
+  console.log("tx data", data)
+  console.log("tx is error", isError)
+  console.log("tx is loading", isLoading)
+  console.log("status", status)
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
       setLoading(false)
       setIsOpen(false)
-      loadingToast("loading...")
+      loadingToast({
+        message: "loading...",
+        action: { href: `etherscan.io/tx/${txData?.hash}`, label: "etherscan" },
+      })
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
           return {
@@ -123,7 +140,8 @@ export const ExecuteWrapper = ({
           revalidate: false,
         },
       )
-      successToast("success")
+      closeCurrentToast() // loading toast
+      successToast({ message: "Request successfully executed!", timeout: 5000 })
     }
   }, [isWaitForTransactionSuccess])
 
