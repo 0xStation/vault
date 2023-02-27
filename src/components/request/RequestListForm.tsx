@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
+import { VoteDrawer } from "./VoteDrawer"
 
 const RequestListForm = ({
   requests,
@@ -28,7 +29,11 @@ const RequestListForm = ({
 
   const onSubmit = (data: any) => console.log(data)
 
-  console.log(selectedRequests)
+  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
+  const [promptAction, setPromptAction] = useState<
+    "approve" | "reject" | "execute"
+  >()
+  const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
 
   if (requests.length === 0) {
     return (
@@ -53,11 +58,30 @@ const RequestListForm = ({
                 request={request}
                 formRegister={register}
                 showTerminal={isProfile ? request.terminal : undefined}
+                takeActionOnRequest={(
+                  action: "approve" | "reject" | "execute",
+                  request,
+                ) => {
+                  setRequestActedOn(request)
+                  setPromptAction(action)
+                  if (action === "execute") {
+                    // set ExecuteDrawer open
+                  } else {
+                    setIsVoteOpen(true)
+                  }
+                }}
               />
             )
           })}
         </ul>
       </form>
+      <VoteDrawer
+        request={requestActedOn}
+        isOpen={isVoteOpen}
+        setIsOpen={setIsVoteOpen}
+        approve={promptAction === "approve"}
+        optimisticVote={() => {}}
+      />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
           show={selectedRequests.length > 0}

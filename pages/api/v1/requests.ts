@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { getRequestsByTerminal } from "../../../src/models/request/requests"
+import { getTerminalRequests } from "../../../src/models/request/queries/getTerminalRequests"
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,7 +25,7 @@ export default async function handler(
   }
 
   try {
-    const requests = await getRequestsByTerminal({
+    const requests = await getTerminalRequests({
       safeAddress: query.safeAddress,
       safeChainId: parseInt(query.safeChainId),
       options: {

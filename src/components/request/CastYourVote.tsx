@@ -2,17 +2,15 @@ import { GasIcon } from "@icons/Gas"
 import { Button } from "@ui/Button"
 import { RoundedPill } from "@ui/RoundedPill"
 import { useState } from "react"
-import { Action } from "../../models/action/types"
-import { VoteRequest } from "./VoteRequest"
+import { RequestFrob } from "../../models/request/types"
+import { VoteDrawer } from "./VoteDrawer"
 
 export const CastYourVote = ({
-  approveActions,
-  rejectActions,
+  request,
   lastVote,
   optimisticVote,
 }: {
-  approveActions: Action[]
-  rejectActions: Action[]
+  request?: RequestFrob
   lastVote?: "approve" | "reject"
   optimisticVote: any
 }) => {
@@ -21,10 +19,10 @@ export const CastYourVote = ({
 
   return (
     <>
-      <VoteRequest
+      <VoteDrawer
+        request={request}
         isOpen={isVoteOpen}
         setIsOpen={setIsVoteOpen}
-        actions={approve ? approveActions : rejectActions}
         approve={approve}
         optimisticVote={optimisticVote}
       />

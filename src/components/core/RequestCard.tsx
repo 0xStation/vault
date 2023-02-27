@@ -15,11 +15,16 @@ const RequestCard = ({
   request,
   formRegister,
   showTerminal,
+  takeActionOnRequest,
 }: {
   disabled?: boolean
   request: RequestFrob
   formRegister?: any
   showTerminal?: Terminal
+  takeActionOnRequest?: (
+    action: "approve" | "reject" | "execute",
+    request: RequestFrob,
+  ) => void
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -41,7 +46,10 @@ const RequestCard = ({
           {showTerminal ? (
             <RequestTerminalLink terminal={showTerminal} />
           ) : (
-            <RequestActionPrompt request={request} />
+            <RequestActionPrompt
+              request={request}
+              takeActionOnRequest={takeActionOnRequest!}
+            />
           )}
           <div className="flex w-full items-center space-x-2">
             {!showTerminal && (

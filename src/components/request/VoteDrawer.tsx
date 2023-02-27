@@ -7,20 +7,20 @@ import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
 import { actionsTree } from "../../lib/signatures/tree"
-import { Action } from "../../models/action/types"
+import { RequestFrob } from "../../models/request/types"
 import { useVote } from "../../models/signature/hooks"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
-export const VoteRequest = ({
+export const VoteDrawer = ({
+  request,
   isOpen,
   setIsOpen,
-  actions,
   approve,
   optimisticVote,
 }: {
+  request?: RequestFrob
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  actions: Action[]
   approve: boolean
   optimisticVote: any
 }) => {
@@ -36,11 +36,15 @@ export const VoteRequest = ({
   } = useForm()
 
   const { signMessage } = useSignature()
-  const { vote } = useVote(router.query.requestId as string)
+  const { vote } = useVote(request?.id as string)
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const { message } = actionsTree(actions)
+    const { message } = actionsTree(
+      request?.actions.filter((action) =>
+        approve ? !action.isRejection : action.isRejection,
+      ),
+    )
 
     let signature
     try {

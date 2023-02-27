@@ -202,48 +202,9 @@ const TerminalRequestIdPage = () => {
           />
         ) : (
           <CastYourVote
-            approveActions={
-              request?.actions.filter(
-                (action) => action.variant === ActionVariant.APPROVAL,
-              ) ?? []
-            }
-            rejectActions={
-              request?.actions.filter(
-                (action) => action.variant === ActionVariant.REJECTION,
-              ) ?? []
-            }
+            request={request}
             lastVote={lastVote}
-            optimisticVote={(approve: boolean, voteActivity: Activity) => {
-              let approveActivities = request?.approveActivities!
-              let rejectActivities = request?.rejectActivities!
-
-              if (approve) {
-                // filter out previous rejection if exists
-                rejectActivities = rejectActivities?.filter(
-                  (activity) => activity.address !== activeUser?.address,
-                )
-                // add approval activity
-                approveActivities = [
-                  ...request?.approveActivities!,
-                  voteActivity,
-                ]
-              } else {
-                // filter out previous approval if exists
-                approveActivities = approveActivities?.filter(
-                  (activity) => activity.address !== activeUser?.address,
-                )
-                // add rejection activity
-                rejectActivities = [...request?.rejectActivities!, voteActivity]
-              }
-
-              mutate({
-                ...request!,
-                activities: [...request?.activities!, voteActivity],
-                approveActivities,
-                rejectActivities,
-              })
-              setLastVote(approve ? "approve" : "reject")
-            }}
+            optimisticVote={mutate}
           />
         )}
       </div>
