@@ -56,8 +56,24 @@ export const safeSetup = fn(
 // https://github.com/safe-global/safe-contracts/blob/6b3784f10a7262d3b857139914aaa33082990435/contracts/base/OwnerManager.sol#L119
 export const changeThreshold = fn("changeThreshold(uint256 _threshold)")
 
+// https://github.com/safe-global/safe-contracts/blob/6f4355ecf38f7a842f9f173f25429def2bcbfae9/contracts/base/OwnerManager.sol#L58
+export const addOwnerWithThreshold = fn(
+  "addOwnerWithThreshold(address owner, uint256 _threshold)",
+)
+
+// https://github.com/safe-global/safe-contracts/blob/6f4355ecf38f7a842f9f173f25429def2bcbfae9/contracts/base/OwnerManager.sol#L78
+export const removeOwner = fn(
+  "removeOwner(address prevOwner, address owner, uint256 _threshold)",
+)
+
+// https://github.com/safe-global/safe-contracts/blob/6f4355ecf38f7a842f9f173f25429def2bcbfae9/contracts/base/OwnerManager.sol#L99
+export const swapOwner = fn(
+  "swapOwner(address prevOwner, address oldOwner, address newOwner)",
+)
+
 // EVENTS
 
+// https://github.com/safe-global/safe-contracts/blob/96a4e280876c33c53a09b5ef6ee78201a101ff58/contracts/proxies/SafeProxyFactory.sol#L12
 export const proxyCreation = ev(
   "ProxyCreation(address proxy, address singleton)",
 )

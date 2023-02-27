@@ -6,6 +6,7 @@ body {
   background-color: "#ffffff";
   color: #212121;
   font-family: "Favorit Pro";
+  height: 100%;
 }
 
 input[type="checkbox"] {

@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import useStore from "../../hooks/stores/useStore"
 import { useCreateFakeSendTokensRequest } from "../../models/request/hooks"
@@ -47,7 +48,9 @@ export const CreateRequestDropdown = () => {
           Request tokens
         </DropdownMenuItem>
         <DropdownMenuItem className="focus:bg-white">
-          Edit members
+          <Link href={`/${router.query.chainNameAndSafeAddress}/members/edit`}>
+            Edit members
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

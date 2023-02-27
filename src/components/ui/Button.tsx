@@ -62,6 +62,7 @@ export const Button = ({
   return (
     <button
       className={button({ variant, size, fullWidth, disabled })}
+      disabled={Boolean(disabled)}
       {...props}
     >
       <>
