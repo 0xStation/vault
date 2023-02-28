@@ -48,6 +48,9 @@ export const getRequestsByTerminal = async ({
 export const getRequestById = async ({ requestId }: { requestId: string }) => {
   const request = (await prisma.request.findFirst({
     where: { id: requestId },
+    include: {
+      actions: true,
+    },
   })) as Request
 
   const requestFrob = await toFrob(request)

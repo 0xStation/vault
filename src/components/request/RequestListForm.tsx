@@ -5,12 +5,15 @@ import { useForm } from "react-hook-form"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
+import { VoteDrawer } from "./VoteDrawer"
 
 const RequestListForm = ({
   requests,
+  mutate,
   isProfile = false,
 }: {
   requests: RequestFrob[]
+  mutate: (data: any) => void
   isProfile?: boolean
 }) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
@@ -27,6 +30,12 @@ const RequestListForm = ({
   }
 
   const onSubmit = (data: any) => console.log(data)
+
+  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
+  const [promptAction, setPromptAction] = useState<
+    "approve" | "reject" | "execute"
+  >()
+  const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
 
   if (requests.length === 0) {
     return (
@@ -51,11 +60,35 @@ const RequestListForm = ({
                 request={request}
                 formRegister={register}
                 showTerminal={isProfile ? request.terminal : undefined}
+                takeActionOnRequest={(
+                  action: "approve" | "reject" | "execute",
+                  request,
+                ) => {
+                  setRequestActedOn(request)
+                  setPromptAction(action)
+                  if (action === "execute") {
+                    // set ExecuteDrawer open
+                  } else {
+                    setIsVoteOpen(true)
+                  }
+                }}
               />
             )
           })}
         </ul>
       </form>
+      <VoteDrawer
+        request={requestActedOn}
+        isOpen={isVoteOpen}
+        setIsOpen={setIsVoteOpen}
+        approve={promptAction === "approve"}
+        optimisticVote={(newRequest) => {
+          const newArray = requests.map((request) =>
+            request.id === newRequest.id ? newRequest : request,
+          )
+          mutate(newArray)
+        }}
+      />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
           show={selectedRequests.length > 0}
@@ -66,7 +99,7 @@ const RequestListForm = ({
           leaveFrom="translate-y-0"
           leaveTo="translate-y-[200%]"
         >
-          <div className="mx-auto flex w-full max-w-[400px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
+          <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
             <p className="text-sm text-white">
               {selectedRequests.length} selected
             </p>

@@ -1,4 +1,4 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActionVariant, ActivityVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
@@ -6,23 +6,25 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
+import { useToast } from "../../hooks/useToast"
 import { actionsTree } from "../../lib/signatures/tree"
-import { Action } from "../../models/action/types"
+import { Activity } from "../../models/activity/types"
+import { RequestFrob } from "../../models/request/types"
 import { useVote } from "../../models/signature/hooks"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
-export const VoteRequest = ({
+export const VoteDrawer = ({
+  request,
   isOpen,
   setIsOpen,
-  actions,
   approve,
   optimisticVote,
 }: {
+  request?: RequestFrob
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  actions: Action[]
   approve: boolean
-  optimisticVote: any
+  optimisticVote: (newRequest: RequestFrob) => void
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -35,39 +37,81 @@ export const VoteRequest = ({
     formState: { errors },
   } = useForm()
 
+  const { successToast, errorToast } = useToast()
   const { signMessage } = useSignature()
-  const { vote } = useVote(router.query.requestId as string)
+  const { vote } = useVote(request?.id as string)
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const { message } = actionsTree(actions)
+    const { message } = actionsTree(
+      request?.actions.filter((action) =>
+        approve
+          ? action.variant === ActionVariant.APPROVAL
+          : action.variant === ActionVariant.REJECTION,
+      ),
+    )
 
     let signature
     try {
       signature = await signMessage(message)
+      await vote({
+        signature,
+        address: activeUser?.address,
+        approve,
+        comment: data.comment,
+      })
     } catch (e) {
       setLoading(false)
+      errorToast({ message: `${approve ? "Approval" : "Rejection"} failed` })
       return
     }
-    await vote({
-      signature,
-      address: activeUser?.address,
-      approve,
-      comment: data.comment,
-    })
     setLoading(false)
     setIsOpen(false)
     resetField("comment")
+    successToast({ message: `${approve ? "Approved" : "Rejected"} request` })
 
-    const voteActivity = {
+    const voteActivity: Activity = {
+      id: "optimistic-vote",
       requestId: router.query.requestId as string,
       variant: approve
         ? ActivityVariant.APPROVE_REQUEST
         : ActivityVariant.REJECT_REQUEST,
-      address: activeUser?.address,
+      address: activeUser?.address as string,
       data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
-    optimisticVote(approve, voteActivity)
+
+    let approveActivities = request?.approveActivities!
+    let rejectActivities = request?.rejectActivities!
+
+    if (approve) {
+      // filter out previous rejection if exists
+      rejectActivities = rejectActivities?.filter(
+        (activity) => activity.address !== activeUser?.address,
+      )
+      // add approval activity
+      approveActivities = [...request?.approveActivities!, voteActivity]
+    } else {
+      // filter out previous approval if exists
+      approveActivities = approveActivities?.filter(
+        (activity) => activity.address !== activeUser?.address,
+      )
+      // add rejection activity
+      rejectActivities = [...request?.rejectActivities!, voteActivity]
+    }
+
+    const newRequest = {
+      ...request!,
+      activities: [...request?.activities!, voteActivity],
+      approveActivities,
+      rejectActivities,
+      addressesThatHaveNotSigned: request!.addressesThatHaveNotSigned.filter(
+        (address) => address !== activeUser?.address,
+      ),
+    }
+
+    optimisticVote(newRequest)
   }
 
   return (

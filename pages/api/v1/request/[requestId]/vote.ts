@@ -1,4 +1,4 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActionVariant, ActivityVariant } from "@prisma/client"
 import { hashAction } from "lib/signatures/action"
 import { actionsTree } from "lib/signatures/tree"
 import { verifyTree } from "lib/signatures/verify"
@@ -39,14 +39,11 @@ export default async function handler(
   }
 
   // verify signature for vote on request
-
   const actions =
     request?.actions.filter((action) =>
       approve
-        ? // if approve, action ids not included in rejection array
-        !action.isRejection
-        : // if reject, action ids included in rejection array
-        action.isRejection,
+        ? action.variant === ActionVariant.APPROVAL
+        : action.variant === ActionVariant.REJECTION,
     ) ?? []
 
   const { root, proofs, message } = actionsTree(actions)

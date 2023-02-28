@@ -1,4 +1,6 @@
 import {
+  ActionStatus,
+  ActionVariant,
   ActivityVariant,
   RequestVariantType,
   SubscriptionVariant,
@@ -100,16 +102,19 @@ export default async function handler(
               safeAddress: address as string,
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
+              variant: ActionVariant.APPROVAL,
+              status: ActionStatus.NONE,
               data: JSON.parse(JSON.stringify(actionMetadata)),
             },
             {
               safeAddress: address as string,
               chainId,
               nonce: (lastAction?.nonce ?? 0) + 1,
+              variant: ActionVariant.REJECTION,
+              status: ActionStatus.NONE,
               data: JSON.parse(
                 JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
-              isRejection: true,
             },
           ],
         },

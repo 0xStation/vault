@@ -1,6 +1,5 @@
 // import { SignerQuorumVariant } from "../types"
-
-import { RequestVariantType } from "@prisma/client"
+import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import { REJECTION_CALL } from "lib/constants"
 import {
   ZodSignerQuorumVariant,
@@ -82,6 +81,8 @@ export const createRequestWithAction = async (
               chainId,
               nonce,
               data: actionMetadata,
+              status: ActionStatus.NONE,
+              variant: ActionVariant.APPROVAL,
             },
             {
               safeAddress: address as string,
@@ -90,7 +91,8 @@ export const createRequestWithAction = async (
               data: JSON.parse(
                 JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
               ),
-              isRejection: true,
+              status: ActionStatus.NONE,
+              variant: ActionVariant.REJECTION,
             },
           ],
         },

@@ -16,7 +16,11 @@ const RequestListByFilterAndTab = ({
 }) => {
   const { address } = useAccount()
 
-  let { data: requests, error } = useRequests(safeChainId, safeAddress, { tab })
+  let {
+    data: requests,
+    error,
+    mutate,
+  } = useRequests(safeChainId, safeAddress, { tab })
 
   if (!requests) return <LoadingCardList />
 
@@ -26,7 +30,7 @@ const RequestListByFilterAndTab = ({
         !(
           r.approveActivities.some((a) => a.address === address) ||
           r.rejectActivities.some((a) => a.address === address)
-        ),
+        ) && !r.isExecuted,
     )
   }
 
@@ -34,8 +38,9 @@ const RequestListByFilterAndTab = ({
     requests = requests.filter(
       (r) =>
         // need to check if ready to execute because then this should go in "needs attention"
-        r.approveActivities.some((a) => a.address === address) ||
-        r.rejectActivities.some((a) => a.address === address),
+        (r.approveActivities.some((a) => a.address === address) ||
+          r.rejectActivities.some((a) => a.address === address)) &&
+        !r.isExecuted,
     )
   }
 
@@ -43,7 +48,7 @@ const RequestListByFilterAndTab = ({
     requests = requests.filter((r) => r.isExecuted)
   }
 
-  return <RequestListForm requests={requests} />
+  return <RequestListForm requests={requests} mutate={mutate} />
 }
 
 export default RequestListByFilterAndTab

@@ -2,38 +2,42 @@ import { GasIcon } from "@icons/Gas"
 import { Button } from "@ui/Button"
 import { RoundedPill } from "@ui/RoundedPill"
 import { useState } from "react"
-import { Action } from "../../models/action/types"
-import { VoteRequest } from "./VoteRequest"
+import useStore from "../../hooks/stores/useStore"
+import { RequestFrob } from "../../models/request/types"
+import { VoteDrawer } from "./VoteDrawer"
 
 export const CastYourVote = ({
-  approveActions,
-  rejectActions,
-  lastVote,
+  request,
   optimisticVote,
 }: {
-  approveActions: Action[]
-  rejectActions: Action[]
-  lastVote?: "approve" | "reject"
-  optimisticVote: any
+  request?: RequestFrob
+  optimisticVote: (newRequest: RequestFrob) => void
 }) => {
   const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
+  const activeUser = useStore((state) => state.activeUser)
 
   return (
     <>
-      <VoteRequest
+      <VoteDrawer
+        request={request}
         isOpen={isVoteOpen}
         setIsOpen={setIsVoteOpen}
-        actions={approve ? approveActions : rejectActions}
         approve={approve}
         optimisticVote={optimisticVote}
       />
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation */}
-      <div className="fixed bottom-0 w-full max-w-[580px] border-t bg-white px-4 pt-3 pb-6">
+      <div className="fixed bottom-0 w-full max-w-[580px] border-t border-slate-200 bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">
           <div className="items-left flex flex-col">
             <div className="font-bold">
-              {!lastVote ? "Cast" : "Change"} your vote
+              {[
+                ...(request?.approveActivities ?? []),
+                ...(request?.rejectActivities ?? []),
+              ].some((activity) => activity.address === activeUser?.address)
+                ? "Change"
+                : "Cast"}{" "}
+              your vote
             </div>
             <RoundedPill>
               <div className="flex flex-row items-center space-x-0.5">
@@ -43,7 +47,9 @@ export const CastYourVote = ({
             </RoundedPill>
           </div>
           <div className="flex flex-row items-center space-x-1">
-            {lastVote !== "approve" && (
+            {!request?.approveActivities.some(
+              (activity) => activity.address === activeUser?.address,
+            ) && (
               <Button
                 size="sm"
                 variant="secondary"
@@ -55,7 +61,9 @@ export const CastYourVote = ({
                 Approve
               </Button>
             )}
-            {lastVote !== "reject" && (
+            {!request?.rejectActivities.some(
+              (activity) => activity.address === activeUser?.address,
+            ) && (
               <Button
                 size="sm"
                 variant="secondary"

@@ -81,7 +81,9 @@ model Action {
   chainId     Int
   nonce       Int
   data        Json
-  isRejection Boolean @default(false)
+  variant ActionVariant
+  status ActionStatus
+  txHash String?
 
   request Request @relation(fields: [requestId], references: [id])
   proofs  Proof[]
@@ -122,4 +124,16 @@ enum RequestVariantType {
 
 enum SubscriptionVariant {
   TOKEN_RECIPIENT
+}
+ // enum to potentially support more options in future for more complex requests
+enum ActionVariant {
+  APPROVAL // the expected execution for the request, e.g. a single token transfer, a member change
+  REJECTION // rejects the intended execution for the request by burning a nonce
+}
+
+enum ActionStatus {
+  NONE // default, nothing has happened yet
+  PENDING // trying to execute the action, have a txnHash saved on the Action, used to show loading state
+  SUCCESS // execution has completed successfully, updated after useWaitForTransaction or indexer completes
+  FAILURE // execution has failed, updated through same as SUCCESS, tbd on what to do with this
 }
