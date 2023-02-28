@@ -67,7 +67,7 @@ export const createRequestWithAction = async (
       data: {
         terminalAddress: address,
         chainId,
-        variant: requestVariantType, // TODO: determine from variant type from body
+        variant: requestVariantType,
         number: (latestRequest?.number || 0) + 1,
         data: {
           note: note,

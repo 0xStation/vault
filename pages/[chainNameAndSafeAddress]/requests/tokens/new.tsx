@@ -1,4 +1,4 @@
-import { XMarkIcon } from "@heroicons/react/24/solid"
+import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { RequestVariantType } from "@prisma/client"
 import { Button } from "@ui/Button"
 import {
@@ -35,13 +35,24 @@ import { TokenTransferVariant } from "../../../../src/models/request/types"
 import { convertGlobalId } from "../../../../src/models/terminal/utils"
 import { Token, TokenType } from "../../../../src/models/token/types"
 
+interface nTokenInfoType {
+  name: string
+  contractAddress: string
+  nft?: any
+  symbolLogos: any[]
+  blockchain: any
+  symbol: string
+  decimals: number
+  tokenValue: number
+}
+
 export const NewTokensPage = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
     chainNameAndSafeAddress as string,
   )
-  const { tokens } = useGetTokens({
+  const { tokens, nftError, fungibleTokenError } = useGetTokens({
     address: address as string,
     chainId: chainId as number,
   })
@@ -91,7 +102,9 @@ export const NewTokensPage = () => {
         (tokenField: { address: string; amount?: string }) => {
           const [reFormattedTokenAddress, nTokenIndex] =
             tokenField?.address.split(".")
-          const nTokenInfo = tokens[parseInt(nTokenIndex as string)]
+          const nTokenInfo = tokens[
+            parseInt(nTokenIndex as string)
+          ] as nTokenInfoType
           const token = {
             chainId: parseInt(nTokenInfo?.blockchain?.shortChainID),
             address: reFormattedTokenAddress,
@@ -105,21 +118,21 @@ export const NewTokensPage = () => {
             decimals: nTokenInfo?.decimals,
           }
           let amount = decimalToBigNumber(
-            parseInt(tokenField?.amount),
-            nTokenInfo?.decimals,
+            parseFloat(tokenField?.amount as string),
+            nTokenInfo?.decimals || 0,
           )
 
           const preparedTokenTransferCall = encodeTokenTransfer({
             sender: address as string,
             recipient: resolvedRecipientAddress as string, // recipient
             token,
-            value: amount, // tokenField?.amount, // value
+            value: amount.toString(),
             tokenId: nTokenInfo?.nft?.tokenID,
           })
 
           tokenTransferVariantMeta.transfers.push({
             token,
-            value: tokenField?.amount, // value
+            value: amount.toString(), // value
             tokenId: nTokenInfo?.nft?.tokenID,
           })
 
@@ -142,7 +155,7 @@ export const NewTokensPage = () => {
         return
       }
 
-      const requestResponse = await axios.post(
+      await axios.post(
         `/api/v1/terminal/${chainId}/${address}/request/createApprovedRequest`,
         {
           chainId: chainId as number,
@@ -161,7 +174,8 @@ export const NewTokensPage = () => {
           },
         },
       )
-      // router.push(`/${chainNameAndSafeAddress}/requests`)
+      // TODO: show toast
+      router.push(`/${chainNameAndSafeAddress}/requests`)
     } catch (err: any) {
       console.error(err)
       if (
@@ -204,14 +218,14 @@ export const NewTokensPage = () => {
       ? "max-h-[500px]"
       : "max-h-[600px]"
 
-  const getErc20FieldValue = (index: number) => {
+  const getErc20FieldTokenData = (index: number) => {
     const tokensIndex = watchTokens[index]?.address?.split(".")?.[1]
     if (
       tokensIndex &&
       typeof tokens[tokensIndex] === "object" &&
       !(tokens[tokensIndex] as {})?.hasOwnProperty("nft")
     ) {
-      return tokens[tokensIndex]
+      return tokens[tokensIndex] as nTokenInfoType
     }
     return null
   }
@@ -242,127 +256,173 @@ export const NewTokensPage = () => {
               Tokens*
             </label>
             <div className="mb-3">
-              {(
-                tokenFields as unknown as [
-                  { id: string; address: string; amount?: number },
-                ]
-              ).map((item, index) => {
-                return (
-                  <div key={item.id} className="mb-1 rounded bg-slate-50 p-3">
-                    <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-sm text-slate-500">
-                        Token {index + 1}
-                      </p>
-                      <button type="button" onClick={() => remove(index)}>
-                        <XMarkIcon className="h-5 w-5 fill-slate-500" />
-                      </button>
-                    </div>
-                    <label className="text-sm font-bold">Token*</label>
-                    <Controller
-                      control={control}
-                      name={`tokens.${index}.address`}
-                      render={({
-                        field: { onChange, onBlur, ref, value },
-                        fieldState: { invalid, isTouched, isDirty, error },
-                        formState,
-                      }) => (
-                        <Select onValueChange={onChange} required>
-                          <SelectTrigger ref={ref}>
-                            <SelectValue placeholder="Select one" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {tokens.map((token, i) => {
-                              const tokenUri = token?.hasOwnProperty("nft")
-                                ? token.nft.previews?.[1]?.URI
-                                : token?.symbolLogos?.[0]?.URI || ""
-
-                              const fieldTitle = token?.hasOwnProperty("nft")
-                                ? `${token?.nft?.contractTitle} #${token?.nft?.tokenID}`
-                                : token?.name
-
-                              return (
-                                <SelectItem
-                                  ref={ref}
-                                  value={`${token?.contractAddress}.${i}`}
-                                  url={tokenUri}
-                                >
-                                  {fieldTitle}
-                                </SelectItem>
-                              )
-                            })}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                    {Boolean(getErc20FieldValue(index)) ? (
-                      <div className="my-3 grid w-full items-center gap-1.5">
-                        <label
-                          className="text-sm font-bold"
-                          htmlFor={`token.${index}.amount`}
-                        >
-                          Amount*
-                        </label>
-                        <div
-                          className={`flex flex-row justify-between border-b ${
-                            parseFloat(tokenFields?.[index as number]?.amount) >
-                              getErc20FieldValue(index)?.tokenValue &&
-                            !errors?.tokens?.[index as number]?.amount
-                              ? "border-b-orange"
-                              : "border-b-slate-200"
-                          } bg-slate-50`}
-                        >
-                          <input
-                            required={Boolean(getErc20FieldValue(index))}
-                            className="w-full bg-slate-50 placeholder:text-slate-400"
-                            placeholder="Enter an amount"
-                            {...register(`tokens.${index}.amount`, {
-                              validate: {
-                                isGreaterThanZero: (v: any) => {
-                                  return (
-                                    v > 0 || "Amount must be greater than 0."
-                                  )
-                                },
-                                isLessThanDecimals: (v: any) => {
-                                  const decimals =
-                                    getErc20FieldValue(0)?.decimals
-                                  return (
-                                    v.split(".")[1]?.length < decimals ||
-                                    `Cannot have more than ${decimals} decimal places.`
-                                  )
-                                  return
-                                },
-                                isNan: (v: any) =>
-                                  !isNaN(v) || "Please enter a valid amount.",
-                              },
-                            })}
-                          />
+              {nftError || fungibleTokenError ? (
+                <div className=" w-full rounded bg-slate-50 p-3 text-orange">
+                  <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
+                  <p className="pt-3 text-center text-sm">
+                    We apologize for the inconvenience, there was an error
+                    retrieving assets for you terminal. Please refresh the page
+                    or try again later.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {(
+                    tokenFields as unknown as [
+                      { id: string; address: string; amount?: number },
+                    ]
+                  ).map((item, index) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="mb-1 rounded bg-slate-50 p-3"
+                      >
+                        <div className="mb-5 flex flex-row justify-between">
+                          <p className="text-sm text-slate-500">
+                            Token {index + 1}
+                          </p>
+                          <button type="button" onClick={() => remove(index)}>
+                            <XMarkIcon className="h-5 w-5 fill-slate-500" />
+                          </button>
                         </div>
-                        {errors?.tokens?.[index as number]?.amount?.message ? (
-                          <p className="text-xs text-red">
-                            {errors?.tokens?.[index as number]?.amount?.message}
-                          </p>
-                        ) : parseFloat(watchTokens?.[0 as number]?.amount) >
-                          getErc20FieldValue(index)?.tokenValue ? (
-                          <p className="text-xs text-orange">
-                            The amount entered exceeds the current balance. You
-                            can still create the request but will not be able to
-                            execute it unless the balance has been refilled.
-                          </p>
+                        <label className="text-sm font-bold">Token*</label>
+                        <Controller
+                          control={control}
+                          name={`tokens.${index}.address`}
+                          render={({ field: { onChange, ref } }) => (
+                            <Select
+                              onValueChange={onChange}
+                              required
+                              disabled={!tokens.length}
+                            >
+                              <SelectTrigger ref={ref}>
+                                <SelectValue
+                                  placeholder={
+                                    tokens.length
+                                      ? "Select one"
+                                      : "No tokens found."
+                                  }
+                                />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {tokens.map((token: nTokenInfoType, i) => {
+                                  const tokenUri = token?.hasOwnProperty("nft")
+                                    ? token.nft.previews?.[1]?.URI
+                                    : token?.symbolLogos?.[0]?.URI || ""
+
+                                  const fieldTitle = token?.hasOwnProperty(
+                                    "nft",
+                                  )
+                                    ? `${token?.nft?.contractTitle} #${token?.nft?.tokenID}`
+                                    : token?.name
+
+                                  return (
+                                    <SelectItem
+                                      key={token.name + i}
+                                      ref={ref}
+                                      value={`${token?.contractAddress}.${i}`}
+                                      url={tokenUri}
+                                    >
+                                      {fieldTitle}
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+
+                        {Boolean(getErc20FieldTokenData(index)) ? (
+                          <div className="my-3 grid w-full items-center gap-1.5">
+                            <label
+                              className="text-sm font-bold"
+                              htmlFor={`token.${index}.amount`}
+                            >
+                              Amount*
+                            </label>
+                            <div
+                              className={`flex flex-row justify-between border-b ${
+                                parseFloat(
+                                  (
+                                    tokenFields?.[index as number] as {
+                                      address: string
+                                      id: string
+                                      amount: string
+                                    }
+                                  )?.amount,
+                                ) >
+                                  (getErc20FieldTokenData(index) as any)
+                                    ?.tokenValue &&
+                                !(errors as any)?.tokens?.[index as number]
+                                  ?.amount
+                                  ? "border-b-orange"
+                                  : "border-b-slate-200"
+                              } bg-slate-50`}
+                            >
+                              <input
+                                required={Boolean(
+                                  getErc20FieldTokenData(index),
+                                )}
+                                className="w-full bg-slate-50 placeholder:text-slate-400"
+                                placeholder="Enter an amount"
+                                {...register(`tokens.${index}.amount`, {
+                                  validate: {
+                                    isGreaterThanZero: (v: any) => {
+                                      return (
+                                        v > 0 ||
+                                        "Amount must be greater than 0."
+                                      )
+                                    },
+                                    isLessThanDecimals: (v: any) => {
+                                      const decimals =
+                                        getErc20FieldTokenData(0)?.decimals || 0
+                                      return (
+                                        v.split(".")[1]?.length < decimals ||
+                                        `Cannot have more than ${decimals} decimal places.`
+                                      )
+                                      return
+                                    },
+                                    isNan: (v: any) =>
+                                      !isNaN(v) ||
+                                      "Please enter a valid amount.",
+                                  },
+                                })}
+                              />
+                            </div>
+                            {((errors as any)?.tokens?.[index as number]?.amount
+                              ?.message as string) ? (
+                              <p className="text-xs text-red">
+                                {
+                                  (errors as any)?.tokens?.[index as number]
+                                    ?.amount?.message
+                                }
+                              </p>
+                            ) : parseFloat(watchTokens?.[0 as number]?.amount) >
+                              (getErc20FieldTokenData(index) as any)
+                                ?.tokenValue ? (
+                              <p className="text-xs text-orange">
+                                The amount entered exceeds the current balance.
+                                You can still create the request but will not be
+                                able to execute it unless the balance has been
+                                refilled.
+                              </p>
+                            ) : null}
+                          </div>
                         ) : null}
                       </div>
-                    ) : null}
-                  </div>
-                )
-              })}
-              <Button
-                type="button"
-                variant="tertiary"
-                fullWidth={true}
-                size="lg"
-                onClick={() => append({ address: "", amount: 0 })}
-              >
-                + Add token
-              </Button>
+                    )
+                  })}
+                  <Button
+                    type="button"
+                    variant="tertiary"
+                    fullWidth={true}
+                    size="lg"
+                    onClick={() => append({ address: "", amount: 0 })}
+                  >
+                    + Add token
+                  </Button>
+                </>
+              )}
             </div>
             <TextareaWithLabel
               label={"What for?*"}

@@ -1,5 +1,3 @@
-// use ZodToken.partial() for all optional fields
-
 import { z } from "zod"
 import { FrequencyType, FrequencyUnit } from "../models/request/types"
 import { TokenType } from "../models/token/types"

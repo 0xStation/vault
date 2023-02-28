@@ -92,7 +92,7 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
                     src={response.nft.previews[1].URI}
                     alt={response.nft.description}
                     fill={true}
-                    className="rounded rounded-lg border border-slate-200 object-contain"
+                    className="rounded border border-slate-200 object-contain"
                   />
                 </div>
                 <h3 className="mt-2">{response.nft.title}</h3>

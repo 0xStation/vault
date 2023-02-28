@@ -8,9 +8,13 @@ export const useGetTokens = ({
   address: string
   chainId: number
 }) => {
-  const { data: nftData = [] } = useNFTAssetData(address, chainId)
-  const { data: tokenData = [] } = useFungibleTokenData(address, chainId)
+  const { data: nftData = [], error: nftError } = useNFTAssetData(
+    address,
+    chainId,
+  )
+  const { data: tokenData = [], error: fungibleTokenError } =
+    useFungibleTokenData(address, chainId)
 
   const tokens = [...(nftData as []), ...(tokenData as [])]
-  return { tokens }
+  return { tokens, nftError, fungibleTokenError }
 }
