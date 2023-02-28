@@ -13,6 +13,7 @@ export type RequestFrob = Request & {
   quorum: number
   terminal: Terminal
   signers: string[]
+  stage?: "VOTE" | "EXECUTE"
   addressesThatHaveNotSigned: string[]
 }
 

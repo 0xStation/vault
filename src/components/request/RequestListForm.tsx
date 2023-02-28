@@ -5,6 +5,7 @@ import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 import { XMark } from "../icons"
+import BatchExecuteDrawer from "../request/BatchExecuteDrawer"
 import BatchVoteDrawer from "../request/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
 
@@ -19,19 +20,30 @@ const RequestListForm = ({
 }) => {
   const [isBatchVoteDrawerOpen, setIsBatchVoteDrawerOpen] =
     useState<boolean>(false)
+  const [isBatchExecuteDrawerOpen, setIsBatchExecuteDrawerOpen] =
+    useState<boolean>(false)
+  const [currentBatchState, setCurrentBatchState] = useState<
+    "VOTE" | "EXECUTE" | undefined
+  >(undefined)
   const [batchType, setBatchType] = useState<"approve" | "reject" | "execute">(
     "approve",
   )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch, reset } = useForm()
 
+  console.log(requests)
+
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
     const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)
+
     const newSelectedRequests = checkedBoxes.map(([reqId, _bool]) => {
       const req = requests.find((request) => request.id === reqId)
       return req
     }) as RequestFrob[]
+    if (newSelectedRequests.length === 1) {
+      setCurrentBatchState(newSelectedRequests[0].stage)
+    }
     setSelectedRequests(newSelectedRequests)
   })
 
@@ -101,9 +113,14 @@ const RequestListForm = ({
       />
       <BatchVoteDrawer
         requestsToApprove={selectedRequests}
+        isOpen={isBatchExecuteDrawerOpen}
+        setIsOpen={setIsBatchExecuteDrawerOpen}
+        approve={batchType === "approve"}
+      />
+      <BatchExecuteDrawer
+        requestsToApprove={selectedRequests}
         isOpen={isBatchVoteDrawerOpen}
         setIsOpen={setIsBatchVoteDrawerOpen}
-        approve={batchType === "approve"}
       />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
@@ -120,24 +137,39 @@ const RequestListForm = ({
               {selectedRequests.length} selected
             </p>
             <div className="flex flex-row items-center space-x-3">
-              <button
-                className="text-sm text-white"
-                onClick={() => {
-                  setBatchType("approve")
-                  setIsBatchVoteDrawerOpen(true)
-                }}
-              >
-                Approve
-              </button>
-              <button
-                className="text-sm text-white"
-                onClick={() => {
-                  setBatchType("reject")
-                  setIsBatchVoteDrawerOpen(true)
-                }}
-              >
-                Reject
-              </button>
+              {currentBatchState === "EXECUTE" && (
+                <button
+                  className="text-sm text-white"
+                  onClick={() => {
+                    setBatchType("execute")
+                    setIsBatchVoteDrawerOpen(true)
+                  }}
+                >
+                  Execute
+                </button>
+              )}
+              {currentBatchState === "VOTE" && (
+                <>
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setBatchType("approve")
+                      setIsBatchExecuteDrawerOpen(true)
+                    }}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setBatchType("reject")
+                      setIsBatchVoteDrawerOpen(true)
+                    }}
+                  >
+                    Reject
+                  </button>
+                </>
+              )}
               <div
                 onClick={() => reset()}
                 className="cursor-pointer text-slate-200"
