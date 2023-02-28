@@ -1,4 +1,4 @@
-import { ActionVariant, RequestVariantType } from "@prisma/client"
+import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
@@ -14,27 +14,37 @@ import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { batchCalls } from "../../lib/transactions/batch"
 import { callAction } from "../../lib/transactions/conductor"
+import { useSetActionsPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
+import { useCompleteRequestsExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { SignerQuorumRequestContent } from "./SignerQuorumRequestContent"
 import { TokenTransferRequestCard } from "./TokenTransferRequestCard"
 
 const BatchExecuteWrapper = ({
   requestsToApprove,
+  actionsToExecute,
   txPayload,
   isOpen,
   setIsOpen,
+  mutateSelectedRequests,
+  approve,
 }: {
   requestsToApprove: RequestFrob[]
+  actionsToExecute: Action[]
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
+  mutateSelectedRequests: any
+  approve: boolean
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const { loadingToast, successToast, closeCurrentToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const { handleSubmit } = useForm()
+  const { setActionsPending } = useSetActionsPending()
+  const { completeRequestsExecution } = useCompleteRequestsExecution()
 
   const { config } = usePrepareSendTransaction({
     request: {
@@ -43,10 +53,6 @@ const BatchExecuteWrapper = ({
       data: txPayload.data,
     },
     chainId: requestsToApprove[0].chainId,
-  })
-
-  const { sendTransactionAsync } = useSendTransaction({
-    mode: "recklesslyUnprepared",
   })
 
   const {
@@ -65,6 +71,7 @@ const BatchExecuteWrapper = ({
     if (isSendTransactionSuccess) {
       setLoading(false)
       setIsOpen(false)
+      // update etherscan to be chain dependant
       loadingToast({
         message: "loading...",
         action: {
@@ -72,6 +79,18 @@ const BatchExecuteWrapper = ({
           label: "View on etherscan",
         },
       })
+      mutateSelectedRequests(
+        requestsToApprove,
+        approve,
+        setActionsPending({
+          actionIds: actionsToExecute.map((action) => action.id),
+          txHash: txData?.hash,
+        }),
+        {
+          status: ActionStatus.PENDING,
+          txHash: txData?.hash,
+        },
+      )
     }
   }, [isSendTransactionSuccess])
 
@@ -79,9 +98,22 @@ const BatchExecuteWrapper = ({
   // we might not run the function to update the status of the action / request
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
+      // catch if not success and change status to error
+      mutateSelectedRequests(
+        requestsToApprove,
+        approve,
+        completeRequestsExecution({
+          address: activeUser?.address,
+          actionIds: actionsToExecute.map((action) => action.id),
+        }),
+        {
+          status: ActionStatus.SUCCESS,
+        },
+      )
       closeCurrentToast() // loading toast
+      // update etherscan to be chain dependant
       successToast({
-        message: "Request successfully executed!",
+        message: "Batch of requests successfully executed!",
         action: {
           href: `https://www.etherscan.io/tx/${txData?.hash}`,
           label: "View on etherscan",
@@ -147,15 +179,20 @@ const BatchExecuteDrawer = ({
   isOpen,
   setIsOpen,
   requestsToApprove,
+  approve,
+  mutateSelectedRequests,
 }: {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   requestsToApprove: RequestFrob[]
+  approve: boolean
+  mutateSelectedRequests: any
 }) => {
-  // update this in case we want to take the rejection case
   const actionsToExecute = requestsToApprove.map((request: RequestFrob) => {
-    const actionsForApprovalType = request.actions.filter(
-      (action: Action) => action.variant === ActionVariant.APPROVAL,
+    const actionsForApprovalType = request.actions.filter((action: Action) =>
+      approve
+        ? action.variant === ActionVariant.APPROVAL
+        : action.variant === ActionVariant.REJECTION,
     )
     return actionsForApprovalType[0]
   })
@@ -175,7 +212,10 @@ const BatchExecuteDrawer = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       requestsToApprove={requestsToApprove}
+      actionsToExecute={actionsToExecute}
       txPayload={txPayload}
+      mutateSelectedRequests={mutateSelectedRequests}
+      approve={approve}
     />
   )
 }

@@ -1,6 +1,8 @@
 import { Transition } from "@headlessui/react"
+import { ActionVariant } from "@prisma/client"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
@@ -15,7 +17,7 @@ const RequestListForm = ({
   isProfile = false,
 }: {
   requests: RequestFrob[]
-  mutate: (data: any) => void
+  mutate: any
   isProfile?: boolean
 }) => {
   const [isBatchVoteDrawerOpen, setIsBatchVoteDrawerOpen] =
@@ -30,8 +32,6 @@ const RequestListForm = ({
   )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch, reset } = useForm()
-
-  console.log(requests)
 
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
@@ -58,6 +58,45 @@ const RequestListForm = ({
     "approve" | "reject" | "execute"
   >()
   const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
+  const mutateSelectedRequests = (
+    selectedRequests: RequestFrob[],
+    approve: boolean,
+    fn: () => void,
+    updateActionPayload: any,
+  ) => {
+    const requestIdsToUpdate = selectedRequests.map(
+      (request: RequestFrob) => request.id,
+    )
+    const updatedRequests = requests.map((request: RequestFrob) => {
+      if (requestIdsToUpdate.includes(request.id)) {
+        const updatedActions = request.actions.map((action: Action) => {
+          if (
+            (action.variant === ActionVariant.APPROVAL && approve) ||
+            (action.variant === ActionVariant.REJECTION && !approve)
+          ) {
+            return {
+              ...action,
+              ...updateActionPayload,
+            }
+          }
+          return action
+        })
+        return {
+          ...request,
+          actions: updatedActions,
+        }
+      }
+      return request
+    })
+
+    console.log(fn)
+
+    mutate(fn, {
+      optimisticData: updatedRequests,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
 
   if (requests.length === 0) {
     return (
@@ -121,6 +160,8 @@ const RequestListForm = ({
         requestsToApprove={selectedRequests}
         isOpen={isBatchVoteDrawerOpen}
         setIsOpen={setIsBatchVoteDrawerOpen}
+        approve={true}
+        mutateSelectedRequests={mutateSelectedRequests}
       />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
