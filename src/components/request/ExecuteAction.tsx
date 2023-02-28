@@ -45,7 +45,7 @@ export const ExecuteAction = ({
         approve={approve}
         mutate={mutate}
       />
-      <div className="fixed bottom-0 w-full border-t border-slate-200 bg-white px-4 pt-3 pb-6">
+      <div className="fixed bottom-0 w-full max-w-[580px] border-t border-slate-200 bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">
           <div className="items-left flex flex-col">
             <div className="font-bold">{renderHeading(request)}</div>

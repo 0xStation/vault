@@ -1,7 +1,16 @@
 import { RequestFrob } from "../../models/request/types"
 import ActionPrompt from "./ActionPrompt"
 
-const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
+const RequestActionPrompt = ({
+  request,
+  takeActionOnRequest,
+}: {
+  request: RequestFrob
+  takeActionOnRequest: (
+    action: "approve" | "reject" | "execute",
+    request: RequestFrob,
+  ) => void
+}) => {
   let executePrompt = `Execute ${[
     ...(request.approveActivities.length > request.quorum ? ["approval"] : []),
     ...(request.rejectActivities.length > request.quorum ? ["rejection"] : []),
@@ -33,6 +42,7 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
     onClick: (e: any) => {
       e.stopPropagation()
       console.log("executed")
+      takeActionOnRequest("execute", request)
     },
   }
 
@@ -41,6 +51,7 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
     onClick: (e: any) => {
       e.stopPropagation()
       console.log("approved")
+      takeActionOnRequest("approve", request)
     },
   }
 
@@ -49,6 +60,7 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
     onClick: (e: any) => {
       e.stopPropagation()
       console.log("rejected")
+      takeActionOnRequest("reject", request)
     },
   }
 

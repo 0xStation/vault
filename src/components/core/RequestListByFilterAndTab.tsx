@@ -16,7 +16,11 @@ const RequestListByFilterAndTab = ({
 }) => {
   const { address } = useAccount()
 
-  let { data: requests, error } = useRequests(safeChainId, safeAddress, { tab })
+  let {
+    data: requests,
+    error,
+    mutate,
+  } = useRequests(safeChainId, safeAddress, { tab })
 
   if (!requests) return <LoadingCardList />
 
@@ -44,7 +48,7 @@ const RequestListByFilterAndTab = ({
     requests = requests.filter((r) => r.isExecuted)
   }
 
-  return <RequestListForm requests={requests} />
+  return <RequestListForm requests={requests} mutate={mutate} />
 }
 
 export default RequestListByFilterAndTab

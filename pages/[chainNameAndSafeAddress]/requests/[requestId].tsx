@@ -1,7 +1,6 @@
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import { ActionStatus, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import prisma from "../../../prisma/client"
 import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
@@ -12,10 +11,8 @@ import { CastYourVote } from "../../../src/components/request/CastYourVote"
 import { ExecuteAction } from "../../../src/components/request/ExecuteAction"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
-import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
 import { Action } from "../../../src/models/action/types"
-import { Activity } from "../../../src/models/activity/types"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
 
@@ -25,31 +22,11 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestIdPage = () => {
-  const activeUser = useStore((state) => state.activeUser)
   const router = useRouter()
 
-  const { isLoading, request, mutate } = useRequest(
-    router.query.requestId as string,
-  )
-  const [lastVote, setLastVote] = useState<"approve" | "reject">()
+  const { request, mutate } = useRequest(router.query.requestId as string)
 
-  useEffect(() => {
-    if (!activeUser?.address || !request) {
-      setLastVote(undefined)
-    }
-    const lastVoteIsApprove = request?.approveActivities.some(
-      (activity) => activity.address === activeUser?.address,
-    )
-    const lastVoteIsReject = request?.rejectActivities.some(
-      (activity) => activity.address === activeUser?.address,
-    )
-
-    setLastVote(
-      lastVoteIsApprove ? "approve" : lastVoteIsReject ? "reject" : undefined,
-    )
-  }, [activeUser, request])
-
-  // replace with loader
+  // TODO: replace with loader
   if (!request) {
     return <></>
   }
@@ -201,50 +178,7 @@ const TerminalRequestIdPage = () => {
             mutate={mutate}
           />
         ) : (
-          <CastYourVote
-            approveActions={
-              request?.actions.filter(
-                (action) => action.variant === ActionVariant.APPROVAL,
-              ) ?? []
-            }
-            rejectActions={
-              request?.actions.filter(
-                (action) => action.variant === ActionVariant.REJECTION,
-              ) ?? []
-            }
-            lastVote={lastVote}
-            optimisticVote={(approve: boolean, voteActivity: Activity) => {
-              let approveActivities = request?.approveActivities!
-              let rejectActivities = request?.rejectActivities!
-
-              if (approve) {
-                // filter out previous rejection if exists
-                rejectActivities = rejectActivities?.filter(
-                  (activity) => activity.address !== activeUser?.address,
-                )
-                // add approval activity
-                approveActivities = [
-                  ...request?.approveActivities!,
-                  voteActivity,
-                ]
-              } else {
-                // filter out previous approval if exists
-                approveActivities = approveActivities?.filter(
-                  (activity) => activity.address !== activeUser?.address,
-                )
-                // add rejection activity
-                rejectActivities = [...request?.rejectActivities!, voteActivity]
-              }
-
-              mutate({
-                ...request!,
-                activities: [...request?.activities!, voteActivity],
-                approveActivities,
-                rejectActivities,
-              })
-              setLastVote(approve ? "approve" : "reject")
-            }}
-          />
+          <CastYourVote request={request} optimisticVote={mutate} />
         )}
       </div>
     </>
