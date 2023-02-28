@@ -60,40 +60,41 @@ const BatchVoteDrawer = ({
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="space-y-6">
-        <div className="text-lg font-bold">
-          {approve ? "Approve" : "Reject"} {requestsToApprove.length} requests
+      <div className="overflow-scroll pb-[110px]">
+        <div className="space-y-6">
+          <div className="text-lg font-bold">
+            {approve ? "Approve" : "Reject"} {requestsToApprove.length} requests
+          </div>
+          <div>
+            The {approve ? "approval" : "rejection"} will be executed once the
+            quorum has been met.
+          </div>
         </div>
-        <div>
-          The {approve ? "approval" : "rejection"} will be executed once the
-          quorum has been met.
+
+        <div className="space-y-4">
+          {requestsToApprove.map((request, idx) => {
+            if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
+              return (
+                <TokenTransferRequestCard
+                  request={request}
+                  key={`batch-${idx}`}
+                />
+              )
+            }
+
+            if (request?.variant === RequestVariantType.SIGNER_QUORUM) {
+              return (
+                <SignerQuorumRequestContent
+                  request={request}
+                  key={`batch-${idx}`}
+                />
+              )
+            }
+          })}
         </div>
       </div>
-
-      <div className="space-y-4">
-        {requestsToApprove.map((request, idx) => {
-          if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
-            return (
-              <TokenTransferRequestCard
-                request={request}
-                key={`batch-${idx}`}
-              />
-            )
-          }
-
-          if (request?.variant === RequestVariantType.SIGNER_QUORUM) {
-            return (
-              <SignerQuorumRequestContent
-                request={request}
-                key={`batch-${idx}`}
-              />
-            )
-          }
-        })}
-      </div>
-
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full max-w-[580px] px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white py-6 px-5 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>
             {approve ? "Approve" : "Reject"}
           </Button>
