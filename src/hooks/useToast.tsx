@@ -2,11 +2,12 @@ import useStore from "./stores/useStore"
 
 export const useToast = () => {
   const setToastState = useStore((state) => state.setToastState)
+  const defaultTimeout = 2000
 
   const successToast = ({
     message,
     action,
-    timeout,
+    timeout = defaultTimeout,
   }: {
     message: string
     action?: { href: string; label: string }
@@ -29,7 +30,7 @@ export const useToast = () => {
   const errorToast = ({
     message,
     action,
-    timeout,
+    timeout = defaultTimeout,
   }: {
     message: string
     action?: { href: string; label: string }
@@ -52,7 +53,7 @@ export const useToast = () => {
   const loadingToast = ({
     message,
     action,
-    timeout,
+    timeout = defaultTimeout,
   }: {
     message: string
     action?: { href: string; label: string }

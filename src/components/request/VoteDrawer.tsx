@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
+import { useToast } from "../../hooks/useToast"
 import { actionsTree } from "../../lib/signatures/tree"
 import { Activity } from "../../models/activity/types"
 import { RequestFrob } from "../../models/request/types"
@@ -36,6 +37,7 @@ export const VoteDrawer = ({
     formState: { errors },
   } = useForm()
 
+  const { successToast, errorToast } = useToast()
   const { signMessage } = useSignature()
   const { vote } = useVote(request?.id as string)
 
@@ -52,19 +54,21 @@ export const VoteDrawer = ({
     let signature
     try {
       signature = await signMessage(message)
+      await vote({
+        signature,
+        address: activeUser?.address,
+        approve,
+        comment: data.comment,
+      })
     } catch (e) {
       setLoading(false)
+      errorToast({ message: `${approve ? "Approval" : "Rejection"} failed` })
       return
     }
-    await vote({
-      signature,
-      address: activeUser?.address,
-      approve,
-      comment: data.comment,
-    })
     setLoading(false)
     setIsOpen(false)
     resetField("comment")
+    successToast({ message: `${approve ? "Approved" : "Rejected"} request` })
 
     const voteActivity: Activity = {
       id: "optimistic-vote",

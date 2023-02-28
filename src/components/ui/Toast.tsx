@@ -71,7 +71,7 @@ const LoadingSpinner = () => {
 }
 
 const toast = cva(
-  "flex w-full justify-between items-center rounded-full py-2 px-3 z-50",
+  "flex w-full justify-between items-center min-w-screen max-w-[400px] mx-auto rounded-full py-2 px-3 z-50",
   {
     variants: {
       variant: {
@@ -99,7 +99,7 @@ export const Toast = () => {
   if (!isToastShowing) return <></>
 
   return (
-    <div className="fixed bottom-0 max-w-[400px] p-4">
+    <div className="fixed bottom-0 w-full p-4">
       <div className={toast({ variant })}>
         <div className="flex flex-row items-center space-x-2">
           {variant === "success" && <CheckIcon />}
