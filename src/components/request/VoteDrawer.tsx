@@ -1,4 +1,4 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActionVariant, ActivityVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
@@ -43,7 +43,9 @@ export const VoteDrawer = ({
     setLoading(true)
     const { message } = actionsTree(
       request?.actions.filter((action) =>
-        approve ? !action.isRejection : action.isRejection,
+        approve
+          ? action.variant === ActionVariant.APPROVAL
+          : action.variant === ActionVariant.REJECTION,
       ),
     )
 

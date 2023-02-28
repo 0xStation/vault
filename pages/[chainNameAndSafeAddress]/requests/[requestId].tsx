@@ -1,4 +1,4 @@
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import { ActionStatus, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import prisma from "../../../prisma/client"
@@ -11,10 +11,8 @@ import { CastYourVote } from "../../../src/components/request/CastYourVote"
 import { ExecuteAction } from "../../../src/components/request/ExecuteAction"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
-import useStore from "../../../src/hooks/stores/useStore"
 import { timeSince } from "../../../src/lib/utils"
 import { Action } from "../../../src/models/action/types"
-import { Activity } from "../../../src/models/activity/types"
 import { useRequest } from "../../../src/models/request/hooks"
 import { getRequestById } from "../../../src/models/request/requests"
 
@@ -24,12 +22,11 @@ const chainNameToChainId: Record<string, number | undefined> = {
 }
 
 const TerminalRequestIdPage = () => {
-  const activeUser = useStore((state) => state.activeUser)
   const router = useRouter()
 
   const { request, mutate } = useRequest(router.query.requestId as string)
 
-  // replace with loader
+  // TODO: replace with loader
   if (!request) {
     return <></>
   }

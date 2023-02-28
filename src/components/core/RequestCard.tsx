@@ -5,6 +5,7 @@ import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { Terminal } from "../../models/terminal/types"
 import { globalId } from "../../models/terminal/utils"
+import { valueToAmount } from "../../models/token/utils"
 import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
@@ -74,7 +75,11 @@ const RequestCard = ({
               <>
                 <ArrowUpRight size={"sm"} />
                 <span className="text-base text-slate-500">
-                  {transfer.value} {transfer.token.symbol}{" "}
+                  {valueToAmount(
+                    transfer.value as string,
+                    transfer.token.decimals as number,
+                  )}{" "}
+                  {transfer.token.symbol}{" "}
                   {transferCount > 1 && `and ${transferCount - 1} others`}
                 </span>
               </>
