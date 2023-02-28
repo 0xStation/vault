@@ -44,11 +44,11 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
-      value: "workflows",
-      label: "Workflows",
-      description: "Coming soon",
-      active: false,
-      href: `/${router.query.chainNameAndSafeAddress}/workflows`,
+      value: "automations",
+      label: "Automations",
+      description: "Description to educate users (replace this!)",
+      active: true,
+      href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       value: "about",
