@@ -2,20 +2,20 @@ import { GasIcon } from "@icons/Gas"
 import { Button } from "@ui/Button"
 import { RoundedPill } from "@ui/RoundedPill"
 import { useState } from "react"
+import useStore from "../../hooks/stores/useStore"
 import { RequestFrob } from "../../models/request/types"
 import { VoteDrawer } from "./VoteDrawer"
 
 export const CastYourVote = ({
   request,
-  lastVote,
   optimisticVote,
 }: {
   request?: RequestFrob
-  lastVote?: "approve" | "reject"
-  optimisticVote: any
+  optimisticVote: (newRequest: RequestFrob) => void
 }) => {
   const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
+  const activeUser = useStore((state) => state.activeUser)
 
   return (
     <>
@@ -31,7 +31,13 @@ export const CastYourVote = ({
         <div className="flex flex-row items-center justify-between">
           <div className="items-left flex flex-col">
             <div className="font-bold">
-              {!lastVote ? "Cast" : "Change"} your vote
+              {[
+                ...(request?.approveActivities ?? []),
+                ...(request?.rejectActivities ?? []),
+              ].some((activity) => activity.address === activeUser?.address)
+                ? "Change"
+                : "Cast"}{" "}
+              your vote
             </div>
             <RoundedPill>
               <div className="flex flex-row items-center space-x-0.5">
@@ -41,7 +47,9 @@ export const CastYourVote = ({
             </RoundedPill>
           </div>
           <div className="flex flex-row items-center space-x-1">
-            {lastVote !== "approve" && (
+            {!request?.approveActivities.some(
+              (activity) => activity.address === activeUser?.address,
+            ) && (
               <Button
                 size="sm"
                 variant="secondary"
@@ -53,7 +61,9 @@ export const CastYourVote = ({
                 Approve
               </Button>
             )}
-            {lastVote !== "reject" && (
+            {!request?.rejectActivities.some(
+              (activity) => activity.address === activeUser?.address,
+            ) && (
               <Button
                 size="sm"
                 variant="secondary"

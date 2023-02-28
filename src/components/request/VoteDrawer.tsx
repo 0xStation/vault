@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
 import { actionsTree } from "../../lib/signatures/tree"
+import { Activity } from "../../models/activity/types"
 import { RequestFrob } from "../../models/request/types"
 import { useVote } from "../../models/signature/hooks"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
@@ -22,7 +23,7 @@ export const VoteDrawer = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
-  optimisticVote: any
+  optimisticVote: (newRequest: RequestFrob) => void
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -63,15 +64,48 @@ export const VoteDrawer = ({
     setIsOpen(false)
     resetField("comment")
 
-    const voteActivity = {
+    const voteActivity: Activity = {
+      id: "optimistic-vote",
       requestId: router.query.requestId as string,
       variant: approve
         ? ActivityVariant.APPROVE_REQUEST
         : ActivityVariant.REJECT_REQUEST,
-      address: activeUser?.address,
+      address: activeUser?.address as string,
       data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
-    optimisticVote(approve, voteActivity)
+
+    let approveActivities = request?.approveActivities!
+    let rejectActivities = request?.rejectActivities!
+
+    if (approve) {
+      // filter out previous rejection if exists
+      rejectActivities = rejectActivities?.filter(
+        (activity) => activity.address !== activeUser?.address,
+      )
+      // add approval activity
+      approveActivities = [...request?.approveActivities!, voteActivity]
+    } else {
+      // filter out previous approval if exists
+      approveActivities = approveActivities?.filter(
+        (activity) => activity.address !== activeUser?.address,
+      )
+      // add rejection activity
+      rejectActivities = [...request?.rejectActivities!, voteActivity]
+    }
+
+    const newRequest = {
+      ...request!,
+      activities: [...request?.activities!, voteActivity],
+      approveActivities,
+      rejectActivities,
+      addressesThatHaveNotSigned: request!.addressesThatHaveNotSigned.filter(
+        (address) => address !== activeUser?.address,
+      ),
+    }
+
+    optimisticVote(newRequest)
   }
 
   return (

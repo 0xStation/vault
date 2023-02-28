@@ -1,7 +1,6 @@
 import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import prisma from "../../../prisma/client"
 import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
@@ -28,26 +27,7 @@ const TerminalRequestIdPage = () => {
   const activeUser = useStore((state) => state.activeUser)
   const router = useRouter()
 
-  const { isLoading, request, mutate } = useRequest(
-    router.query.requestId as string,
-  )
-  const [lastVote, setLastVote] = useState<"approve" | "reject">()
-
-  useEffect(() => {
-    if (!activeUser?.address || !request) {
-      setLastVote(undefined)
-    }
-    const lastVoteIsApprove = request?.approveActivities.some(
-      (activity) => activity.address === activeUser?.address,
-    )
-    const lastVoteIsReject = request?.rejectActivities.some(
-      (activity) => activity.address === activeUser?.address,
-    )
-
-    setLastVote(
-      lastVoteIsApprove ? "approve" : lastVoteIsReject ? "reject" : undefined,
-    )
-  }, [activeUser, request])
+  const { request, mutate } = useRequest(router.query.requestId as string)
 
   // replace with loader
   if (!request) {
@@ -201,11 +181,7 @@ const TerminalRequestIdPage = () => {
             mutate={mutate}
           />
         ) : (
-          <CastYourVote
-            request={request}
-            lastVote={lastVote}
-            optimisticVote={mutate}
-          />
+          <CastYourVote request={request} optimisticVote={mutate} />
         )}
       </div>
     </>

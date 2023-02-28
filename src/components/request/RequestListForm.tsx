@@ -9,9 +9,11 @@ import { VoteDrawer } from "./VoteDrawer"
 
 const RequestListForm = ({
   requests,
+  mutate,
   isProfile = false,
 }: {
   requests: RequestFrob[]
+  mutate: (data: any) => void
   isProfile?: boolean
 }) => {
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
@@ -80,7 +82,12 @@ const RequestListForm = ({
         isOpen={isVoteOpen}
         setIsOpen={setIsVoteOpen}
         approve={promptAction === "approve"}
-        optimisticVote={() => {}}
+        optimisticVote={(newRequest) => {
+          const newArray = requests.map((request) =>
+            request.id === newRequest.id ? newRequest : request,
+          )
+          mutate(newArray)
+        }}
       />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
