@@ -1,4 +1,4 @@
-import { ActionVariant } from "@prisma/client"
+import { ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { Dispatch, SetStateAction, useState } from "react"
@@ -9,6 +9,8 @@ import { actionsTree } from "../../lib/signatures/tree"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { useBatchVote } from "../../models/signature/hooks"
+import { SignerQuorumRequestContent } from "./SignerQuorumRequestContent"
+import { TokenTransferRequestCard } from "./TokenTransferRequestCard"
 
 const BatchVoteDrawer = ({
   isOpen,
@@ -23,13 +25,7 @@ const BatchVoteDrawer = ({
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const [loading, setLoading] = useState<boolean>(false)
-  const {
-    register,
-    handleSubmit,
-    resetField,
-    formState: { errors },
-  } = useForm()
-
+  const { handleSubmit } = useForm()
   const { signMessage } = useSignature()
   const { batchVote } = useBatchVote()
 
@@ -61,6 +57,7 @@ const BatchVoteDrawer = ({
     setLoading(false)
     setIsOpen(false)
   }
+
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="space-y-6">
@@ -72,6 +69,29 @@ const BatchVoteDrawer = ({
           quorum has been met.
         </div>
       </div>
+
+      <div className="space-y-4">
+        {requestsToApprove.map((request, idx) => {
+          if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
+            return (
+              <TokenTransferRequestCard
+                request={request}
+                key={`batch-${idx}`}
+              />
+            )
+          }
+
+          if (request?.variant === RequestVariantType.SIGNER_QUORUM) {
+            return (
+              <SignerQuorumRequestContent
+                request={request}
+                key={`batch-${idx}`}
+              />
+            )
+          }
+        })}
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full max-w-[580px] px-5 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>
