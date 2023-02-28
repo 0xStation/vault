@@ -61,8 +61,10 @@ export const TerminalAutomationDetailPage = () => {
                 <div className="mt-1 flex flex-row items-center space-x-1">
                   <Network chainId={chainId} />
                   <span className="px-1 text-xs">·</span>
-                  <span className="text-xs">{truncateString(address)}</span>
-                  <CopyToClipboard text={address} />
+                  <span className="text-xs">
+                    {truncateString(automation?.data.meta.address)}
+                  </span>
+                  <CopyToClipboard text={automation?.data.meta.address} />
                 </div>
                 <div className="mt-4">
                   {automation.data.meta.splits.map(({ address, value }) => (

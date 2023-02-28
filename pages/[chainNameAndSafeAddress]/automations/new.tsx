@@ -1,10 +1,12 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { Button } from "@ui/Button"
-import { ZERO_ADDRESS } from "lib/constants"
+import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
 import { isEns } from "lib/utils"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
+import { useSendTransaction, useWaitForTransaction } from "wagmi"
+import { TransactionLoadingPage } from "../../../src/components/core/TransactionLoadingPage"
 import { InputWithLabel } from "../../../src/components/form"
 import AddressInput from "../../../src/components/form/AddressInput"
 import PercentInput from "../../../src/components/form/PercentInput"
@@ -19,11 +21,18 @@ const NewAutomationPage = () => {
   const { resolveEnsAddress } = useResolveEnsAddress()
   const activeUser = useStore((state) => state.activeUser)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [formData, setFormData] = useState<{
+    name: string
+    splits: { address: string; value: string }[]
+  }>()
 
-  const { chainId, address } = parseGlobalId(
+  const { chainId, address: terminalAddress } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { isMutating, createAutomation } = useCreateAutomation(chainId, address)
+  const { isMutating, createAutomation } = useCreateAutomation(
+    chainId,
+    terminalAddress,
+  )
   const { successToast } = useToast()
 
   const [formMessage, setFormMessage] = useState<{
@@ -38,28 +47,78 @@ const NewAutomationPage = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async (data: any) => {
-    console.log(data)
+  const { data: txData, sendTransactionAsync } = useSendTransaction({
+    mode: "recklesslyUnprepared",
+  })
+
+  useWaitForTransaction({
+    hash: txData?.hash,
+    enabled: !!txData?.hash,
+    chainId,
+    onSuccess: async (transaction) => {
+      const logsLastIndex = transaction.logs?.length - 1
+      const log = transaction.logs[logsLastIndex] // CreatedSplit(address indexed split)
+      const addressTopic = log.topics[1] // address is indexed so stored in topics, and first topic is for event name so grab second index
+      const proxyAddress = "0x" + addressTopic.substring(26) // 20-byte address is padded into a 32-byte slot so remove padding (24 char + '0x')
+
+      const automation = await createAutomation({
+        name: formData?.name,
+        address: proxyAddress,
+        splits: formData?.splits,
+      })
+      successToast({ message: "Revenue Share Automation created" })
+      router.push(`/${router.query.chainNameAndSafeAddress}/automations`)
+    },
+    onSettled: () => {
+      setIsLoading(false)
+    },
+  })
+
+  const onSubmit = async (formValues: any) => {
     setIsLoading(true)
 
     const addressSplits = await Promise.all(
-      data.splits.map(
+      formValues.splits.map(
         async ({ address, value }: { address: string; value: string }) => ({
           address: isEns(address) ? await resolveEnsAddress(address) : address,
           value,
         }),
       ),
     )
+    setFormData({ name: formValues.name, splits: addressSplits })
 
-    const automation = await createAutomation({
-      name: data.name,
-      address: ZERO_ADDRESS, // splits proxy
-      splits: addressSplits,
-    })
-    console.log(automation)
-    successToast({ message: "Revenue Share Automation created" })
-    router.push(`/${router.query.chainNameAndSafeAddress}/automations`)
-    setIsLoading(false)
+    const { to, value, data } = prepareCreateSplitCall(
+      terminalAddress,
+      addressSplits,
+    )
+    try {
+      await sendTransactionAsync({
+        recklesslySetUnpreparedRequest: {
+          chainId,
+          to,
+          value,
+          data,
+        },
+      })
+
+      setFormMessage({ isError: false, message: "" })
+    } catch (err: any) {
+      if (err?.name && err?.name === "UserRejectedRequestError") {
+        setFormMessage({
+          isError: true,
+          message: "Transaction was rejected.",
+        })
+      } else {
+        setFormMessage({
+          isError: true,
+          message: "Something went wrong.",
+        })
+      }
+      setIsLoading(false)
+    }
+
+    // will update data from useSendTransaction, which triggers useWaitForTransaction
+    // which triggers the onSuccess/onError/onSettled to write data to API
   }
 
   const onError = (errors: any) => {
@@ -79,7 +138,12 @@ const NewAutomationPage = () => {
   })
   const watchSplits = watch("splits", [])
 
-  return (
+  return txData ? (
+    <TransactionLoadingPage
+      title="Deploying your Automation"
+      subtitle="Please do not leave or refresh the page."
+    />
+  ) : (
     <div className="mt-12 px-4">
       <button onClick={() => router.back()}>
         <XMarkIcon className="h-6 w-6" />
