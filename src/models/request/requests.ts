@@ -1,5 +1,6 @@
 import { RequestVariantType } from "@prisma/client"
 import db from "db"
+import { Terminal } from "../terminal/types"
 import toFrob from "./frob"
 import { Request } from "./types"
 
@@ -36,7 +37,26 @@ export const getRequestsByTerminal = async ({
           },
         }),
     },
-  })) as Request[]
+    include: {
+      // profiles aggregate requests from many terminals, so include on query
+      terminal: true,
+      // activites needed for counts of votes and comments
+      activities: {
+        orderBy: {
+          createdAt: "desc", // sort to determine most recent vote per signer
+        },
+      },
+      actions: {
+        include: {
+          proofs: {
+            include: {
+              signature: true,
+            },
+          },
+        },
+      },
+    },
+  })) as unknown as (Request & { terminal: Terminal })[]
 
   const requestFrobs = await Promise.all(
     requests.map(async (r: Request) => toFrob(r)),

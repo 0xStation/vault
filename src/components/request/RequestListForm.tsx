@@ -1,10 +1,11 @@
 import { Transition } from "@headlessui/react"
-import { Button } from "@ui/Button"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
+import { XMark } from "../icons"
+import BatchVoteDrawer from "../request/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
 
 const RequestListForm = ({
@@ -16,17 +17,26 @@ const RequestListForm = ({
   mutate: (data: any) => void
   isProfile?: boolean
 }) => {
+  const [isBatchVoteDrawerOpen, setIsBatchVoteDrawerOpen] =
+    useState<boolean>(false)
+  const [batchType, setBatchType] = useState<"approve" | "reject" | "execute">(
+    "approve",
+  )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
   const { register, handleSubmit, watch, reset } = useForm()
 
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
     const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)
-    setSelectedRequests(checkedBoxes)
+    const newSelectedRequests = checkedBoxes.map(([reqId, _bool]) => {
+      const req = requests.find((request) => request.id === reqId)
+      return req
+    }) as RequestFrob[]
+    setSelectedRequests(newSelectedRequests)
   })
 
   const requestIsSelected = (id: string) => {
-    return selectedRequests.find(([rId, _v]: [string, boolean]) => rId === id)
+    return selectedRequests.find((req: RequestFrob) => req.id === id)
   }
 
   const onSubmit = (data: any) => console.log(data)
@@ -89,6 +99,12 @@ const RequestListForm = ({
           mutate(newArray)
         }}
       />
+      <BatchVoteDrawer
+        requestsToApprove={selectedRequests}
+        isOpen={isBatchVoteDrawerOpen}
+        setIsOpen={setIsBatchVoteDrawerOpen}
+        approve={batchType === "approve"}
+      />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
           show={selectedRequests.length > 0}
@@ -103,9 +119,32 @@ const RequestListForm = ({
             <p className="text-sm text-white">
               {selectedRequests.length} selected
             </p>
-            <Button size="sm" variant="secondary" onClick={() => reset()}>
-              Cancel
-            </Button>
+            <div className="flex flex-row items-center space-x-3">
+              <button
+                className="text-sm text-white"
+                onClick={() => {
+                  setBatchType("approve")
+                  setIsBatchVoteDrawerOpen(true)
+                }}
+              >
+                Approve
+              </button>
+              <button
+                className="text-sm text-white"
+                onClick={() => {
+                  setBatchType("reject")
+                  setIsBatchVoteDrawerOpen(true)
+                }}
+              >
+                Reject
+              </button>
+              <div
+                onClick={() => reset()}
+                className="cursor-pointer text-slate-200"
+              >
+                <XMark size="sm" />
+              </div>
+            </div>
           </div>
         </Transition>
       </div>
