@@ -1,4 +1,4 @@
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { cn } from "lib/utils"
 import Image from "next/image"
@@ -9,43 +9,6 @@ const Select = SelectPrimitive.Root
 const SelectGroup = SelectPrimitive.Group
 
 const SelectValue = SelectPrimitive.Value
-
-const SelectValueItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Value>,
-  SelectPrimitiveItemUrlProps
->(({ className, children, ...props }, ref) => {
-  return (
-    <SelectPrimitive.Value
-      asChild // needed for react-hook-form to work
-      ref={ref}
-      className={cn(
-        "relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-base outline-none focus:bg-slate-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        className,
-      )}
-      {...props}
-    >
-      <>
-        <span className="absolute left-2 h-3.5 w-3.5 items-center justify-center">
-          {props?.url && (
-            <Image
-              height={24}
-              width={24}
-              src={props?.url}
-              alt={"Token image."}
-            />
-          )}
-        </span>
-
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-        <span className="absolute right-10 h-3.5 w-3.5 items-center justify-center">
-          <SelectPrimitive.ItemIndicator>
-            <p className="text-xs text-slate-500">Selected</p>
-          </SelectPrimitive.ItemIndicator>
-        </span>
-      </>
-    </SelectPrimitive.Value>
-  )
-})
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
@@ -151,7 +114,6 @@ const SelectSeparator = React.forwardRef<
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
 export {
-  SelectValueItem,
   Select,
   SelectGroup,
   SelectValue,
