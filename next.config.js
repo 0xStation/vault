@@ -10,6 +10,7 @@ const nextConfig = {
       "avatar.tobi.sh",
       "gateway.ipfs.io", // ENS avatars,
       "i.seadn.io", // ENS avatars
+      "safe-transaction-assets.safe.global",
     ],
   },
   reactStrictMode: true,

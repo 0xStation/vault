@@ -44,6 +44,23 @@ input[type="checkbox"]:disabled {
   cursor: not-allowed;
 }
 
+.custom-select-wrapper select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select-wrapper::after {
+  content: "▾";
+  font-size: 1rem;
+  top: calc(50% - 0.5rem);
+  right: 10px;
+  position: absolute;
+}
+
 @layer base {
   h1 {
     @apply text-2xl;

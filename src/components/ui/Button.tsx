@@ -8,7 +8,7 @@ const button = cva("relative font-medium rounded", {
       secondary:
         "border text-black border-slate-200 bg-white hover:bg-slate-100",
       unemphasized: "border text-white border-white bg-black",
-      tertiary: "bg-slate-200 text-slate-500",
+      tertiary: "bg-slate-50 text-slate-500",
     },
     size: {
       sm: "px-3 py-1 text-xs font-medium",

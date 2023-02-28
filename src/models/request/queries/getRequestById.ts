@@ -50,30 +50,30 @@ export const getRequestById = async (
 
   request.activities.forEach((activity) => {
     switch (activity.variant) {
-      case ActivityVariant.COMMENT_ON_REQUEST:
-        commentActivities.push(activity)
-        break
-      case ActivityVariant.EXECUTE_REQUEST:
-        isExecuted = true
-        break
-      case ActivityVariant.APPROVE_REQUEST:
-        if (!signatureAccounted[activity.address]) {
-          signatureAccounted[activity.address] = true
-          approveActivities.push(activity)
-        }
-        break
-      case ActivityVariant.REJECT_REQUEST:
-        if (!signatureAccounted[activity.address]) {
-          signatureAccounted[activity.address] = true
-          rejectActivities.push(activity)
-        }
-        break
-      case ActivityVariant.CREATE_AND_APPROVE_REQUEST:
-        if (!signatureAccounted[activity.address]) {
-          signatureAccounted[activity.address] = true
-          approveActivities.push(activity)
-        }
-        break
+    case ActivityVariant.COMMENT_ON_REQUEST:
+      commentActivities.push(activity)
+      break
+    case ActivityVariant.EXECUTE_REQUEST:
+      isExecuted = true
+      break
+    case ActivityVariant.APPROVE_REQUEST:
+      if (!signatureAccounted[activity.address]) {
+        signatureAccounted[activity.address] = true
+        approveActivities.push(activity)
+      }
+      break
+    case ActivityVariant.REJECT_REQUEST:
+      if (!signatureAccounted[activity.address]) {
+        signatureAccounted[activity.address] = true
+        rejectActivities.push(activity)
+      }
+      break
+    case ActivityVariant.CREATE_AND_APPROVE_REQUEST:
+      if (!signatureAccounted[activity.address]) {
+        signatureAccounted[activity.address] = true
+        approveActivities.push(activity)
+      }
+      break
     }
   })
 

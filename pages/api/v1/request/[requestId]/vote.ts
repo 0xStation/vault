@@ -44,9 +44,9 @@ export default async function handler(
     request?.actions.filter((action) =>
       approve
         ? // if approve, action ids not included in rejection array
-          !action.isRejection
+        !action.isRejection
         : // if reject, action ids included in rejection array
-          action.isRejection,
+        action.isRejection,
     ) ?? []
 
   const { root, proofs, message } = actionsTree(actions)

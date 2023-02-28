@@ -205,8 +205,8 @@ export const MembersView = ({
       quorum: members?.length || 1,
       members: members?.length
         ? members.map((address) => ({
-            address,
-          }))
+          address,
+        }))
         : [{ address: activeUser?.address }],
     } as FieldValues,
   })

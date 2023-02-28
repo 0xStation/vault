@@ -25,16 +25,16 @@ export const getRequestsByTerminal = async ({
       chainId: safeChainId,
       ...(options?.tab &&
         options?.tab !== "all" && {
-          variant: {
-            in:
+        variant: {
+          in:
               options.tab === "members"
                 ? [RequestVariantType.SIGNER_QUORUM]
                 : [
-                    RequestVariantType.TOKEN_TRANSFER,
-                    RequestVariantType.SPLIT_TOKEN_TRANSFER,
-                  ],
-          },
-        }),
+                  RequestVariantType.TOKEN_TRANSFER,
+                  RequestVariantType.SPLIT_TOKEN_TRANSFER,
+                ],
+        },
+      }),
     },
   })) as Request[]
 
