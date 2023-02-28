@@ -53,3 +53,27 @@ export const useCreateAutomation = (
 
   return { isMutating, createAutomation }
 }
+
+export const useAutomation = (automationId: string) => {
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axios.get<Automation>(url)
+      if (response.status === 200) {
+        return response.data
+      }
+    } catch (err) {
+      console.log("err:", err)
+    }
+  }
+
+  const {
+    isLoading,
+    data: automation,
+    mutate,
+  } = useSWR(
+    automationId ? `/api/v1/automation/${automationId}` : null,
+    fetcher,
+  )
+
+  return { isLoading, automation, mutate }
+}
