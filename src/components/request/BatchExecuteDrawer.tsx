@@ -30,6 +30,7 @@ const BatchExecuteWrapper = ({
   setIsOpen,
   mutateSelectedRequests,
   approve,
+  clearSelectedRequests,
 }: {
   requestsToApprove: RequestFrob[]
   actionsToExecute: Action[]
@@ -38,6 +39,7 @@ const BatchExecuteWrapper = ({
   txPayload: RawCall
   mutateSelectedRequests: any
   approve: boolean
+  clearSelectedRequests: () => void
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const { loadingToast, successToast, closeCurrentToast } = useToast()
@@ -109,6 +111,9 @@ const BatchExecuteWrapper = ({
         {
           status: ActionStatus.SUCCESS,
         },
+        {
+          isExecuted: true,
+        },
       )
       closeCurrentToast() // loading toast
       // update etherscan to be chain dependant
@@ -120,6 +125,7 @@ const BatchExecuteWrapper = ({
         },
         timeout: 5000,
       })
+      clearSelectedRequests()
     }
   }, [isWaitForTransactionSuccess])
 
@@ -181,12 +187,14 @@ const BatchExecuteDrawer = ({
   requestsToApprove,
   approve,
   mutateSelectedRequests,
+  clearSelectedRequests,
 }: {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   requestsToApprove: RequestFrob[]
   approve: boolean
   mutateSelectedRequests: any
+  clearSelectedRequests: () => void
 }) => {
   const actionsToExecute = requestsToApprove.map((request: RequestFrob) => {
     const actionsForApprovalType = request.actions.filter((action: Action) =>
@@ -216,6 +224,7 @@ const BatchExecuteDrawer = ({
       txPayload={txPayload}
       mutateSelectedRequests={mutateSelectedRequests}
       approve={approve}
+      clearSelectedRequests={clearSelectedRequests}
     />
   )
 }

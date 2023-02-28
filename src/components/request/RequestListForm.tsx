@@ -31,7 +31,7 @@ const RequestListForm = ({
     "approve",
   )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const { register, handleSubmit, watch, reset } = useForm()
+  const { register, watch, reset } = useForm()
 
   watch((data) => {
     const checkBoxEntries = Object.entries(data)
@@ -51,8 +51,6 @@ const RequestListForm = ({
     return selectedRequests.find((req: RequestFrob) => req.id === id)
   }
 
-  const onSubmit = (data: any) => console.log(data)
-
   const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [promptAction, setPromptAction] = useState<
     "approve" | "reject" | "execute"
@@ -63,6 +61,7 @@ const RequestListForm = ({
     approve: boolean,
     fn: () => void,
     updateActionPayload: any,
+    updateRequestPayload: any,
   ) => {
     const requestIdsToUpdate = selectedRequests.map(
       (request: RequestFrob) => request.id,
@@ -83,13 +82,12 @@ const RequestListForm = ({
         })
         return {
           ...request,
+          ...updateRequestPayload,
           actions: updatedActions,
         }
       }
       return request
     })
-
-    console.log(fn)
 
     mutate(fn, {
       optimisticData: updatedRequests,
@@ -109,7 +107,7 @@ const RequestListForm = ({
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <ul>
           {requests.map((request, idx) => {
             return (
@@ -155,6 +153,7 @@ const RequestListForm = ({
         isOpen={isBatchExecuteDrawerOpen}
         setIsOpen={setIsBatchExecuteDrawerOpen}
         approve={batchType === "approve"}
+        clearSelectedRequests={reset}
       />
       <BatchExecuteDrawer
         requestsToApprove={selectedRequests}
@@ -162,6 +161,7 @@ const RequestListForm = ({
         setIsOpen={setIsBatchVoteDrawerOpen}
         approve={true}
         mutateSelectedRequests={mutateSelectedRequests}
+        clearSelectedRequests={reset}
       />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition

@@ -17,11 +17,13 @@ const BatchVoteDrawer = ({
   setIsOpen,
   approve,
   requestsToApprove,
+  clearSelectedRequests,
 }: {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
   requestsToApprove: RequestFrob[]
+  clearSelectedRequests: () => void
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const [loading, setLoading] = useState<boolean>(false)
@@ -56,6 +58,7 @@ const BatchVoteDrawer = ({
     })
     setLoading(false)
     setIsOpen(false)
+    clearSelectedRequests()
   }
 
   return (
