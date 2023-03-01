@@ -2,7 +2,7 @@ import { TabBar } from "../TabBar"
 
 export enum TerminalRequestTypeTab {
   MEMBERS = "members",
-  ASSETS = "assets",
+  TOKENS = "tokens",
   ALL = "all",
 }
 
@@ -21,12 +21,12 @@ export const TerminalRequestStatusTabBar = ({
   const options = [
     { value: TerminalRequestTypeTab.ALL, label: "All" },
     {
-      value: TerminalRequestTypeTab.MEMBERS,
-      label: "Members",
+      value: TerminalRequestTypeTab.TOKENS,
+      label: "Tokens",
     },
     {
-      value: TerminalRequestTypeTab.ASSETS,
-      label: "Assets",
+      value: TerminalRequestTypeTab.MEMBERS,
+      label: "Members",
     },
   ] as TerminalNavOption[]
 
