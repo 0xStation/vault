@@ -20,7 +20,7 @@ export const ZodToken = z.object({
 
 export const ZodTransfer = z.object({
   token: z.any(),
-  amount: z.number().optional(),
+  value: z.string().optional(),
   tokenId: z.string().optional(), // ERC721 & ERC1155
 })
 
@@ -49,7 +49,11 @@ export const ZodSplitTokenTransferVariant = z.object({
 })
 
 export const ZodTokenTransferVariant = z.object({
-  ZodTransfer,
-  ZodFrequencyMixin,
+  transfers: ZodTransfer.array(),
+  frequency: z.nativeEnum(FrequencyType),
+  startsAt: z.number().optional(),
+  frequencyValue: z.number().optional(),
+  frequencyUnit: z.nativeEnum(FrequencyUnit).optional(),
+  maxOccurences: z.number().optional(),
   recipient: z.string(),
 })

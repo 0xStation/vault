@@ -31,7 +31,10 @@ import { useGetNextNonce } from "../../../../src/hooks/useGetNextNonce"
 import { useGetTokens } from "../../../../src/hooks/useGetTokens"
 import useSignature from "../../../../src/hooks/useSignature"
 import useWindowSize from "../../../../src/hooks/useWindowSize"
-import { TokenTransferVariant } from "../../../../src/models/request/types"
+import {
+  FrequencyType,
+  TokenTransferVariant,
+} from "../../../../src/models/request/types"
 import { convertGlobalId } from "../../../../src/models/terminal/utils"
 import { Token, TokenType } from "../../../../src/models/token/types"
 
@@ -56,8 +59,10 @@ export const NewTokensPage = () => {
     address: address as string,
     chainId: chainId as number,
   })
+
   const windowSize = useWindowSize()
   const activeUser = useStore((state) => state.activeUser)
+  const [addressCopied, setAddressCopied] = useState<boolean>(false)
 
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
@@ -74,7 +79,7 @@ export const NewTokensPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
     watch,
   } = useForm({
@@ -96,6 +101,7 @@ export const NewTokensPage = () => {
           value?: string // ERC20 & ERC1155
           tokenId?: string // ERC721 & ERC1155
         }[],
+        frequency: FrequencyType.NONE,
         recipient: resolvedRecipientAddress,
       }
       data.tokens.forEach(
@@ -132,7 +138,7 @@ export const NewTokensPage = () => {
 
           tokenTransferVariantMeta.transfers.push({
             token,
-            value: amount.toString(), // value
+            value: amount.toString(),
             tokenId: nTokenInfo?.nft?.tokenID,
           })
 
@@ -264,6 +270,25 @@ export const NewTokensPage = () => {
                     retrieving assets for you terminal. Please refresh the page
                     or try again later.
                   </p>
+                </div>
+              ) : !tokens.length ? (
+                <div className="w-full rounded bg-slate-50 p-4 text-center">
+                  <p className="font-bold">No tokens found</p>
+                  <p className="pt-2 text-sm">
+                    Look’s like your Terminal doesn’t have any tokens. Add
+                    tokens by sending them to your address.
+                  </p>
+                  <button
+                    type="button"
+                    className="pt-2 text-sm font-bold text-violet"
+                    onClick={() => {
+                      navigator.clipboard.writeText(address as string)
+                      setAddressCopied(true)
+                      setTimeout(() => setAddressCopied(false), 1500)
+                    }}
+                  >
+                    {addressCopied ? "Copied!" : "Copy address"}
+                  </button>
                 </div>
               ) : (
                 <>
@@ -401,10 +426,15 @@ export const NewTokensPage = () => {
                               (getErc20FieldTokenData(index) as any)
                                 ?.tokenValue ? (
                               <p className="text-xs text-orange">
-                                The amount entered exceeds the current balance.
-                                You can still create the request but will not be
-                                able to execute it unless the balance has been
-                                refilled.
+                                The amount entered exceeds the current balance
+                                of{" "}
+                                {
+                                  (getErc20FieldTokenData(index) as any)
+                                    ?.tokenValue
+                                }
+                                . You can still create the request but will not
+                                be able to execute it unless the balance has
+                                been refilled.
                               </p>
                             ) : null}
                           </div>
@@ -433,9 +463,11 @@ export const NewTokensPage = () => {
               placeholder="Add a note"
             />
           </div>
-          <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
+          <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
             <Button
               type="submit"
+              disabled={isSubmitting}
+              loading={isSubmitting}
               fullWidth={true}
               onBlur={() => setFormMessage({ isError: false, message: "" })}
             >

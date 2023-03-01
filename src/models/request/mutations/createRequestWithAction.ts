@@ -20,7 +20,7 @@ const RequestWithActionArgs = z.object({
   meta: z.union([
     ZodSignerQuorumVariant,
     ZodSplitTokenTransferVariant,
-    ZodTokenTransferVariant.partial(),
+    ZodTokenTransferVariant,
   ]),
   $tx: z.any().optional(), // $transaction calls give db as an arg
 })
@@ -72,7 +72,7 @@ export const createRequestWithAction = async (
         data: {
           note: note,
           createdBy: createdBy,
-          meta: { ...meta },
+          meta: JSON.parse(JSON.stringify(meta)),
         },
         actions: {
           create: [

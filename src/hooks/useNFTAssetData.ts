@@ -17,7 +17,6 @@ const useNFTAssetData = (address: string, chainId: number) => {
   const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/nfts?chainID=${chainNameToChainId[chainId]}&filterSpam=true&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
 
   const { isLoading, data, mutate, error } = useSWR(endpoint, fetcher)
-  console.log("swrerror", error)
 
   return { data, isLoading, error, mutate }
 }

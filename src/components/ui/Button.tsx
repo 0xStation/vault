@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes } from "react"
 const button = cva("relative font-medium rounded", {
   variants: {
     variant: {
-      primary: "border bg-slate-900 border-slate-900 text-white",
+      primary: "border text-white",
       secondary:
         "border text-black border-slate-200 bg-white hover:bg-slate-100",
       unemphasized: "border text-white border-white bg-black",
@@ -19,7 +19,7 @@ const button = cva("relative font-medium rounded", {
       true: "w-full",
     },
     disabled: {
-      true: "bg-slate-300 border border-slate-300 cursor-not-allowed border-gray",
+      true: "bg-slate-300 cursor-not-allowed",
     },
   },
   compoundVariants: [
@@ -27,18 +27,18 @@ const button = cva("relative font-medium rounded", {
       variant: ["primary"],
       size: ["sm", "base", "lg"],
       disabled: false,
-      class: "hover:bg-black/80",
+      class: "hover:bg-black/80 bg-slate-900 border-slate-900",
     },
     {
       variant: ["primary", "secondary", "unemphasized"],
       size: ["sm", "base", "lg"],
       disabled: true,
-      class: "hover:bg-border-slate-300",
+      class: "hover:bg-slate-300 border border-slate-300",
     },
     {
       variant: ["secondary", "unemphasized"],
       size: ["sm", "base", "lg"],
-      class: "hover:bg-gray/80",
+      class: "hover:bg-slate-300/80",
     },
   ],
 })
