@@ -16,6 +16,17 @@ export default async function handler(
     res.setHeader("Allow", ["POST"])
     return res.status(405).end(`Method ${method} Not Allowed`)
   }
+  const { chainId, address } = body
+
+  if (!chainId || !address) {
+    // Missing status code
+    res.statusCode = 422
+    return res.end(
+      JSON.stringify(
+        `Missing parameters. Called with chainId ${chainId} and terminalAddress ${address}`,
+      ),
+    )
+  }
 
   let requests
   // we want to return an object to the client that stores the
@@ -29,6 +40,8 @@ export default async function handler(
   try {
     requests = await db.request.findMany({
       where: {
+        terminalAddress: body?.address,
+        chainId: body?.chainId,
         variant: RequestVariantType.SIGNER_QUORUM,
       },
     })

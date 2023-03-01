@@ -30,18 +30,18 @@ export const CreateRequestDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2">
         <DropdownMenuItem className="cursor-pointer focus:bg-white">
-          <button
-            onClick={() => {
-              router.push(
-                `/${router.query.chainNameAndSafeAddress}/requests/tokens/new`,
-              )
-            }}
+          <Link
+            href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/new`}
           >
             Send tokens
-          </button>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer focus:bg-white">
-          Request tokens
+          <Link
+            href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/request`}
+          >
+            Request tokens
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer focus:bg-white">
           <Link href={`/${router.query.chainNameAndSafeAddress}/members/edit`}>
