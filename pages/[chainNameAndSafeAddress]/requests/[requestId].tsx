@@ -1,7 +1,7 @@
 import { ActionStatus, RequestVariantType } from "@prisma/client"
+import db from "db"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import prisma from "../../../prisma/client"
 import { NewCommentForm } from "../../../src/components/comment/NewCommentForm"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ActivityItem from "../../../src/components/core/ActivityItem"
@@ -217,7 +217,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  const terminal = await prisma.terminal.findFirst({
+  const terminal = await db.terminal.findFirst({
     where: {
       chainId,
       safeAddress,

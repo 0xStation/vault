@@ -1,4 +1,4 @@
-import prisma from "../../../prisma/client"
+import db from "db"
 import toFrob from "./frob"
 import { Terminal } from "./types"
 
@@ -11,7 +11,7 @@ export const getTerminalByChainIdAndAddress = async (
   chainId: number,
   safeAddress: string,
 ) => {
-  const terminal = (await prisma.terminal.findFirst({
+  const terminal = (await db.terminal.findFirst({
     where: {
       chainId: chainId,
       safeAddress: safeAddress,

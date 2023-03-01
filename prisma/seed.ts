@@ -5,6 +5,7 @@ import { Activity } from "../src/models/activity/types"
 import { Request } from "../src/models/request/types"
 import { Signature } from "../src/models/signature/types"
 
+import db from "db"
 import { createAccount } from "../src/models/account/factory"
 import { createAction } from "../src/models/action/factory"
 import { createActivity } from "../src/models/activity/factory"
@@ -22,15 +23,15 @@ const createRequestMock = async ({
   address: string
   chainId: number
 }) => {
-  const request = await prisma.request.create({
+  const request = await db.request.create({
     data: createRequestInput({ address, chainId: chainId }),
   })
 
-  const approvalAction = await prisma.action.create({
+  const approvalAction = await db.action.create({
     data: createAction({ requestId: request.id, isRejection: false }),
   })
 
-  const rejectionAction = await prisma.action.create({
+  const rejectionAction = await db.action.create({
     data: createAction({ requestId: request.id, isRejection: true }),
   })
 
@@ -48,7 +49,7 @@ const actionOnRequestMock = async ({
   action: Action
   isRejection: boolean
 }) => {
-  const activity = await prisma.activity.create({
+  const activity = await db.activity.create({
     data: createActivity({
       requestId: request.id,
       variant: isRejection
@@ -57,11 +58,11 @@ const actionOnRequestMock = async ({
     }),
   })
 
-  const signature = await prisma.signature.create({
+  const signature = await db.signature.create({
     data: createSignature({ signerAddress: account.address }),
   })
 
-  const proof = await prisma.proof.create({
+  const proof = await db.proof.create({
     data: createProof({ signatureId: signature.id, actionId: action.id }),
   })
 
@@ -83,15 +84,15 @@ const actionOnRequestMock = async ({
  * todo: in the future, we could have many functions for many different seed scripts to seed different use cases.
  */
 async function seed() {
-  const terminal = await prisma.terminal.create({
+  const terminal = await db.terminal.create({
     data: createTerminal({}),
   })
 
-  const acc1 = (await prisma.account.create({
+  const acc1 = (await db.account.create({
     data: createAccount({}),
   })) as Account
 
-  const acc2 = (await prisma.account.create({
+  const acc2 = (await db.account.create({
     data: createAccount({}),
   })) as Account
 
@@ -124,10 +125,10 @@ async function seed() {
 
 seed()
   .then(async () => {
-    await prisma.$disconnect()
+    await db.$disconnect()
   })
   .catch(async (e) => {
     console.error(e)
-    await prisma.$disconnect()
+    await db.$disconnect()
     process.exit(1)
   })

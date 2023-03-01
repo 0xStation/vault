@@ -1,6 +1,6 @@
 import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import db from "db"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
-import db from "../../../../prisma/client"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
@@ -20,7 +20,7 @@ export const getTerminalRequests = async ({
   let terminal: Terminal
   let requests: Request[]
   try {
-    const terminalQuery = prisma.terminal.findUnique({
+    const terminalQuery = db.terminal.findUnique({
       where: {
         chainId_safeAddress: {
           chainId: safeChainId,
@@ -28,7 +28,7 @@ export const getTerminalRequests = async ({
         },
       },
     })
-    const requestsQuery = prisma.request.findMany({
+    const requestsQuery = db.request.findMany({
       where: {
         terminalAddress: safeAddress,
         chainId: safeChainId,

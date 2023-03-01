@@ -1,4 +1,5 @@
 import { RequestVariantType } from "@prisma/client"
+import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
 import {
   Request,
@@ -26,7 +27,7 @@ export default async function handler(
     modifiedQuorum: [] as string[],
   }
   try {
-    requests = await prisma.request.findMany({
+    requests = await db.request.findMany({
       where: {
         variant: RequestVariantType.SIGNER_QUORUM,
       },
