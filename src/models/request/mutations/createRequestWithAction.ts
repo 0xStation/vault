@@ -1,5 +1,9 @@
-// import { SignerQuorumVariant } from "../types"
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActionStatus,
+  ActionVariant,
+  RequestVariantType,
+  SubscriptionVariant,
+} from "@prisma/client"
 import { REJECTION_CALL } from "lib/constants"
 import {
   ZodSignerQuorumVariant,
@@ -7,6 +11,7 @@ import {
   ZodTokenTransferVariant,
 } from "lib/zod"
 import { z } from "zod"
+import { TokenTransferVariant } from "../types"
 
 const RequestWithActionArgs = z.object({
   chainId: z.number(),
@@ -59,10 +64,26 @@ export const createRequestWithAction = async (
 
   let request
   try {
+    const subscriptions =
+      requestVariantType === RequestVariantType?.TOKEN_TRANSFER &&
+      (meta as TokenTransferVariant).recipient
+        ? {
+            subscriptions: {
+              create: [
+                {
+                  address: (meta as TokenTransferVariant).recipient,
+                  variant: SubscriptionVariant.TOKEN_RECIPIENT,
+                },
+              ],
+            },
+          }
+        : {}
+
     const actionMetadata = {
       minDate: Date.now(),
       calls,
     }
+
     request = await db.request.create({
       data: {
         terminalAddress: address,
@@ -96,6 +117,7 @@ export const createRequestWithAction = async (
             },
           ],
         },
+        ...subscriptions,
       },
       include: {
         actions: true,
