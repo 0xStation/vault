@@ -1,9 +1,10 @@
 import { BytesLike } from "@ethersproject/bytes"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
+import { getTransactionLink } from "lib/utils/getTransactionLink"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
@@ -42,11 +43,15 @@ const LoadingScreen = ({
   setTerminalCreationError,
   terminalCreationError,
   setCreateTerminalView,
+  txnHash,
+  chainId,
 }: {
   setTerminalCreationError: Dispatch<SetStateAction<string>>
   setShowLoadingScreen: Dispatch<SetStateAction<boolean>>
   terminalCreationError: string
   setCreateTerminalView: Dispatch<SetStateAction<CREATE_TERMINAL_VIEW>>
+  txnHash: string
+  chainId: number
 }) => {
   return (
     <div className="flex h-screen flex-col items-center justify-center text-center">
@@ -71,6 +76,15 @@ const LoadingScreen = ({
           <p className="animate-pulse text-sm">
             Please do not leave or refresh the page.
           </p>
+          <a
+            className="flex flex-row items-center pt-3 text-sm text-violet underline"
+            href={getTransactionLink(chainId, txnHash)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View status
+            <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
+          </a>
         </>
       )}
     </div>
@@ -101,7 +115,14 @@ export const MembersView = ({
   useWaitForTransaction({
     confirmations: 1,
     hash: txnHash,
-    onSuccess: async (transaction) => {
+    onSettled: async (transaction, error) => {
+      console.log("settled", transaction, error)
+      if (error || !transaction) {
+        setTerminalCreationError("Failed to create transaction.")
+        setTxnHash(undefined)
+        console.error("Failed to create Terminal", error)
+        return
+      }
       const logsLastIndex = transaction.logs?.length - 1
       const decodedProxyEvent = decodeProxyEvent({
         data: transaction.logs[logsLastIndex].data,
@@ -123,11 +144,13 @@ export const MembersView = ({
           )}/getting-started`,
         )
       } catch (err) {
+        console.error("Failed to create Terminal", err)
         setTerminalCreationError("Failed to create Terminal.")
         setTxnHash(undefined)
       }
     },
     onError: async (data) => {
+      console.error("Failed to wait for txn", data)
       setTerminalCreationError("Failed to create transaction.")
       setTxnHash(undefined)
     },
@@ -205,8 +228,8 @@ export const MembersView = ({
       quorum: members?.length || 1,
       members: members?.length
         ? members.map((address) => ({
-          address,
-        }))
+            address,
+          }))
         : [{ address: activeUser?.address }],
     } as FieldValues,
   })
@@ -221,12 +244,14 @@ export const MembersView = ({
   })
 
   const watchMembers = watch("members", [])
-  return showLoadingScreen ? (
+  return showLoadingScreen && formData?.chainId && txnHash ? (
     <LoadingScreen
       setShowLoadingScreen={setShowLoadingScreen}
       setTerminalCreationError={setTerminalCreationError}
       terminalCreationError={terminalCreationError}
       setCreateTerminalView={setCreateTerminalView}
+      chainId={formData?.chainId}
+      txnHash={txnHash}
     />
   ) : (
     <Layout
