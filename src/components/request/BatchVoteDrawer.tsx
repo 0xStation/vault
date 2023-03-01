@@ -81,6 +81,7 @@ const BatchVoteDrawer = ({
                 <TokenTransferRequestCard
                   request={request}
                   key={`batch-${idx}`}
+                  approve={approve}
                 />
               )
             }

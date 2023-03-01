@@ -139,9 +139,10 @@ const BatchExecuteWrapper = ({
       <div className="overflow-scroll pb-[110px]">
         <div className="mb-4 space-y-6">
           <div className="text-lg font-bold">
-            Execute {requestsToApprove.length} requests
+            Execute ({`${approve ? "approve" : "reject"}`}){" "}
+            {requestsToApprove.length} requests
           </div>
-          <div>execute is final</div>
+          <div>This action is on-chain and will not be reversible.</div>
         </div>
 
         <div className="space-y-4">
@@ -151,6 +152,7 @@ const BatchExecuteWrapper = ({
                 <TokenTransferRequestCard
                   request={request}
                   key={`batch-${idx}`}
+                  approve={approve}
                 />
               )
             }

@@ -10,8 +10,10 @@ import { AvatarAddress } from "../core/AvatarAddress"
 
 export const TokenTransferRequestCard = ({
   request,
+  approve,
 }: {
   request: RequestFrob
+  approve: boolean
 }) => {
   const [showRecipients, setShowRecipients] = useState<boolean>(true)
   const [showTokens, setShowTokens] = useState<boolean>(true)
@@ -19,6 +21,11 @@ export const TokenTransferRequestCard = ({
   return (
     <div className="space-y-4 rounded bg-slate-100 p-4">
       <span className="text-xs text-slate-500">#{request.number}</span>
+      {!approve && (
+        <span className="tracking wider ml-2 text-xs font-bold uppercase text-red-100">
+          Rejecting this request
+        </span>
+      )}
       <div
         className="flex flex-row items-center justify-between"
         onClick={() => setShowRecipients(!showRecipients)}

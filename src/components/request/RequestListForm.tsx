@@ -15,6 +15,8 @@ const intersection = (array1: any[], array2: any[]) => {
   return array1.filter((value) => array2.includes(value))
 }
 
+const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
+
 const RequestListForm = ({
   requests,
   mutate,
@@ -36,10 +38,11 @@ const RequestListForm = ({
     "approve",
   )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const [validExecutionActions, setValidExecutionActions] = useState<any[]>([
-    "EXECUTE-APPROVE",
-    "EXECUTE-REJECT",
-  ])
+  const [validExecutionActions, setValidExecutionActions] = useState<any[]>(
+    DEFAULT_EXECUTION_ACTIONS,
+  )
+  const [isExecutingaApproval, setIsExecutingaApproval] =
+    useState<boolean>(false)
 
   const [promptAction, setPromptAction] = useState<
     "approve" | "reject" | "execute"
@@ -63,10 +66,15 @@ const RequestListForm = ({
     const allExecutionActions = newSelectedRequests?.map(
       (req) => req.validActions as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[],
     )
-    const newValidExecutionActions = allExecutionActions?.reduce((a, b) =>
-      a.filter((c) => b.includes(c)),
-    )
-    setValidExecutionActions(newValidExecutionActions)
+
+    if (allExecutionActions.length > 0) {
+      const newValidExecutionActions = allExecutionActions?.reduce((a, b) =>
+        a.filter((c) => b.includes(c)),
+      )
+      setValidExecutionActions(newValidExecutionActions)
+    } else {
+      setValidExecutionActions(DEFAULT_EXECUTION_ACTIONS)
+    }
     setSelectedRequests(newSelectedRequests)
   })
 
@@ -182,7 +190,7 @@ const RequestListForm = ({
         requestsToApprove={selectedRequests}
         isOpen={isBatchExecuteDrawerOpen}
         setIsOpen={setIsBatchExecuteDrawerOpen}
-        approve={true}
+        approve={isExecutingaApproval}
         mutateSelectedRequests={mutateSelectedRequests}
         clearSelectedRequests={reset}
       />
@@ -201,17 +209,32 @@ const RequestListForm = ({
               {selectedRequests.length} selected
             </p>
             <div className="flex flex-row items-center space-x-3">
-              {currentBatchState === "EXECUTE" && (
-                <button
-                  className="text-sm text-white"
-                  onClick={() => {
-                    setBatchType("execute")
-                    setIsBatchVoteDrawerOpen(true)
-                  }}
-                >
-                  Execute
-                </button>
-              )}
+              {currentBatchState === "EXECUTE" &&
+                validExecutionActions.includes("EXECUTE-APPROVE") && (
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setBatchType("execute")
+                      setIsExecutingaApproval(true)
+                      setIsBatchExecuteDrawerOpen(true)
+                    }}
+                  >
+                    Execute Approval
+                  </button>
+                )}
+              {currentBatchState === "EXECUTE" &&
+                validExecutionActions.includes("EXECUTE-REJECT") && (
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setBatchType("execute")
+                      setIsExecutingaApproval(false)
+                      setIsBatchExecuteDrawerOpen(true)
+                    }}
+                  >
+                    Execute Rejection
+                  </button>
+                )}
               {currentBatchState === "VOTE" && (
                 <>
                   <button
