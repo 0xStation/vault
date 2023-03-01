@@ -38,7 +38,19 @@ const BatchExecuteWrapper = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
-  mutateSelectedRequests: any
+  mutateSelectedRequests: ({
+    selectedRequests,
+    approve,
+    fn,
+    updateActionPayload,
+    updateRequestPayload,
+  }: {
+    selectedRequests: RequestFrob[]
+    approve: boolean
+    fn: Promise<any>
+    updateActionPayload?: any
+    updateRequestPayload?: any
+  }) => void
   approve: boolean
   clearSelectedRequests: () => void
 }) => {
@@ -86,18 +98,18 @@ const BatchExecuteWrapper = ({
         },
         useTimeout: false,
       })
-      mutateSelectedRequests(
-        requestsToApprove,
+      mutateSelectedRequests({
+        selectedRequests: requestsToApprove,
         approve,
-        setActionsPending({
+        fn: setActionsPending({
           actionIds: actionsToExecute.map((action) => action.id),
           txHash: txData?.hash,
         }),
-        {
+        updateActionPayload: {
           status: ActionStatus.PENDING,
           txHash: txData?.hash,
         },
-      )
+      })
     }
   }, [isSendTransactionSuccess])
 
@@ -106,20 +118,20 @@ const BatchExecuteWrapper = ({
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
       // catch if not success and change status to error
-      mutateSelectedRequests(
-        requestsToApprove,
+      mutateSelectedRequests({
+        selectedRequests: requestsToApprove,
         approve,
-        completeRequestsExecution({
+        fn: completeRequestsExecution({
           address: activeUser?.address,
           actionIds: actionsToExecute.map((action) => action.id),
         }),
-        {
+        updateActionPayload: {
           status: ActionStatus.SUCCESS,
         },
-        {
+        updateRequestPayload: {
           isExecuted: true,
         },
-      )
+      })
       closeCurrentToast() // loading toast
       successToast({
         message: "Batch of requests successfully executed!",
@@ -199,7 +211,19 @@ const BatchExecuteDrawer = ({
   setIsOpen: Dispatch<SetStateAction<boolean>>
   requestsToApprove: RequestFrob[]
   approve: boolean
-  mutateSelectedRequests: any
+  mutateSelectedRequests: ({
+    selectedRequests,
+    approve,
+    fn,
+    updateActionPayload,
+    updateRequestPayload,
+  }: {
+    selectedRequests: RequestFrob[]
+    approve: boolean
+    fn: Promise<any>
+    updateActionPayload?: any
+    updateRequestPayload?: any
+  }) => void
   clearSelectedRequests: () => void
 }) => {
   const actionsToExecute = requestsToApprove.map((request: RequestFrob) => {

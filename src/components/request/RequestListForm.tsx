@@ -78,13 +78,19 @@ const RequestListForm = ({
     setSelectedRequests(newSelectedRequests)
   })
 
-  const mutateSelectedRequests = (
-    selectedRequests: RequestFrob[],
-    approve: boolean,
-    fn: () => void,
-    updateActionPayload: any,
-    updateRequestPayload: any,
-  ) => {
+  const mutateSelectedRequests = ({
+    selectedRequests,
+    approve,
+    fn,
+    updateActionPayload,
+    updateRequestPayload,
+  }: {
+    selectedRequests: RequestFrob[]
+    approve: boolean
+    fn: Promise<any>
+    updateActionPayload?: any
+    updateRequestPayload?: any
+  }) => {
     const requestIdsToUpdate = selectedRequests.map(
       (request: RequestFrob) => request.id,
     )
