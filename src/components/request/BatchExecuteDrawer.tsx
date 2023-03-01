@@ -14,6 +14,7 @@ import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { batchCalls } from "../../lib/transactions/batch"
 import { callAction } from "../../lib/transactions/conductor"
+import networks from "../../lib/utils/networks.json"
 import { useSetActionsPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
@@ -69,17 +70,21 @@ const BatchExecuteWrapper = ({
     enabled: !!txData?.hash,
   })
 
+  // typescript with json is annoying
+  //@ts-ignore
+  const blockExplorer = networks[String(requestsToApprove[0].chainId)].explorer
+
   useEffect(() => {
     if (isSendTransactionSuccess) {
       setLoading(false)
       setIsOpen(false)
-      // update etherscan to be chain dependant
       loadingToast({
         message: "loading...",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
+          href: `${blockExplorer}/tx/${txData?.hash}`,
           label: "View on etherscan",
         },
+        useTimeout: false,
       })
       mutateSelectedRequests(
         requestsToApprove,
@@ -116,11 +121,10 @@ const BatchExecuteWrapper = ({
         },
       )
       closeCurrentToast() // loading toast
-      // update etherscan to be chain dependant
       successToast({
         message: "Batch of requests successfully executed!",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
+          href: `${blockExplorer}/tx/${txData?.hash}`,
           label: "View on etherscan",
         },
         timeout: 5000,

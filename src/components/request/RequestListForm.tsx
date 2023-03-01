@@ -30,7 +30,7 @@ const RequestListForm = ({
     useState<boolean>(false)
   const [isBatchExecuteDrawerOpen, setIsBatchExecuteDrawerOpen] =
     useState<boolean>(false)
-  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
+  const [isVoteDrawerOpen, setIsVoteDrawerOpen] = useState<boolean>(false)
   const [currentBatchState, setCurrentBatchState] = useState<
     "VOTE" | "EXECUTE" | undefined
   >(undefined)
@@ -159,7 +159,7 @@ const RequestListForm = ({
                   if (action === "execute") {
                     // set ExecuteDrawer open
                   } else {
-                    setIsVoteOpen(true)
+                    setIsVoteDrawerOpen(true)
                   }
                 }}
               />
@@ -169,8 +169,8 @@ const RequestListForm = ({
       </form>
       <VoteDrawer
         request={requestActedOn}
-        isOpen={isVoteOpen}
-        setIsOpen={setIsVoteOpen}
+        isOpen={isVoteDrawerOpen}
+        setIsOpen={setIsVoteDrawerOpen}
         approve={promptAction === "approve"}
         optimisticVote={(newRequest) => {
           const newArray = requests.map((request) =>
