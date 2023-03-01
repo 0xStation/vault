@@ -1,11 +1,18 @@
 import axios from "axios"
 import useSWR from "swr"
 
-const fetcher = async (url: string | null, currentQuorum: number) => {
-  if (!url) return null
+const fetcher = async (
+  url: string | null,
+  currentQuorum: number,
+  chainId: number,
+  address: string,
+) => {
+  if (!url || !currentQuorum || !chainId || !address) return null
   try {
     const response = await axios.post<any>(url, {
       currentQuorum,
+      chainId,
+      address,
     })
 
     return response.data
@@ -24,12 +31,12 @@ export const useGetSignerQuorumRequestChanges = ({
   chainId: number
   currentQuorum: number
 }) => {
-  const url =
-    address && chainId
-      ? `/api/v1/terminal/${chainId}/${address}/request/getSignerQuorumRequestChanges`
-      : null
-  const data = useSWR([url, currentQuorum], ([url, currentQuorum]) =>
-    fetcher(url, currentQuorum),
+  const url = Boolean(address && chainId && currentQuorum)
+    ? `/api/v1/terminal/${chainId}/${address}/request/getSignerQuorumRequestChanges`
+    : null
+  const data = useSWR(
+    [url, currentQuorum, chainId, address],
+    ([url, currentQuorum]) => fetcher(url, currentQuorum, chainId, address),
   )
 
   return data
