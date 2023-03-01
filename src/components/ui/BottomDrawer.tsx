@@ -1,9 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Dispatch, Fragment, ReactNode, SetStateAction } from "react"
+import { Fragment, ReactNode } from "react"
 
 interface BottomDrawerProps {
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: any
   children?: ReactNode
   size?: "sm" | "base" | "lg"
 }

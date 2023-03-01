@@ -26,11 +26,18 @@ const RequestListForm = ({
   mutate: any
   isProfile?: boolean
 }) => {
-  const [isBatchVoteDrawerOpen, setIsBatchVoteDrawerOpen] =
-    useState<boolean>(false)
-  const [isBatchExecuteDrawerOpen, setIsBatchExecuteDrawerOpen] =
-    useState<boolean>(false)
-  const [isVoteDrawerOpen, setIsVoteDrawerOpen] = useState<boolean>(false)
+  const [drawerManagerState, setDrawerManagerState] = useState({
+    batchVoteDrawer: false,
+    batchExecuteDrawer: false,
+    voteDrawer: false,
+  })
+  const toggleDrawer = (drawerKey: string, state: boolean) => {
+    setDrawerManagerState({
+      ...drawerManagerState,
+      [drawerKey]: state,
+    })
+  }
+
   const [currentBatchState, setCurrentBatchState] = useState<
     "VOTE" | "EXECUTE" | undefined
   >(undefined)
@@ -165,7 +172,7 @@ const RequestListForm = ({
                   if (action === "execute") {
                     // set ExecuteDrawer open
                   } else {
-                    setIsVoteDrawerOpen(true)
+                    toggleDrawer("voteDrawer", true)
                   }
                 }}
               />
@@ -175,8 +182,10 @@ const RequestListForm = ({
       </form>
       <VoteDrawer
         request={requestActedOn}
-        isOpen={isVoteDrawerOpen}
-        setIsOpen={setIsVoteDrawerOpen}
+        isOpen={drawerManagerState.voteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("voteDrawer", state)
+        }}
         approve={promptAction === "approve"}
         optimisticVote={(newRequest) => {
           const newArray = requests.map((request) =>
@@ -187,15 +196,19 @@ const RequestListForm = ({
       />
       <BatchVoteDrawer
         requestsToApprove={selectedRequests}
-        isOpen={isBatchVoteDrawerOpen}
-        setIsOpen={setIsBatchVoteDrawerOpen}
+        isOpen={drawerManagerState.batchVoteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("batchVoteDrawer", state)
+        }}
         approve={batchType === "approve"}
         clearSelectedRequests={reset}
       />
       <BatchExecuteDrawer
         requestsToApprove={selectedRequests}
-        isOpen={isBatchExecuteDrawerOpen}
-        setIsOpen={setIsBatchExecuteDrawerOpen}
+        isOpen={drawerManagerState.batchExecuteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("batchExecuteDrawer", state)
+        }}
         approve={isExecutingaApproval}
         mutateSelectedRequests={mutateSelectedRequests}
         clearSelectedRequests={reset}
@@ -222,7 +235,7 @@ const RequestListForm = ({
                     onClick={() => {
                       setBatchType("execute")
                       setIsExecutingaApproval(true)
-                      setIsBatchExecuteDrawerOpen(true)
+                      toggleDrawer("batchExecuteDrawer", true)
                     }}
                   >
                     Execute Approval
@@ -235,7 +248,7 @@ const RequestListForm = ({
                     onClick={() => {
                       setBatchType("execute")
                       setIsExecutingaApproval(false)
-                      setIsBatchExecuteDrawerOpen(true)
+                      toggleDrawer("batchExecuteDrawer", true)
                     }}
                   >
                     Execute Rejection
@@ -247,7 +260,7 @@ const RequestListForm = ({
                     className="text-sm text-white"
                     onClick={() => {
                       setBatchType("approve")
-                      setIsBatchVoteDrawerOpen(true)
+                      toggleDrawer("batchVoteDrawer", true)
                     }}
                   >
                     Approve
@@ -256,7 +269,7 @@ const RequestListForm = ({
                     className="text-sm text-white"
                     onClick={() => {
                       setBatchType("reject")
-                      setIsBatchVoteDrawerOpen(true)
+                      toggleDrawer("batchVoteDrawer", true)
                     }}
                   >
                     Rejection

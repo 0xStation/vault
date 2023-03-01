@@ -1,7 +1,7 @@
 import { ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
-import { Dispatch, SetStateAction, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
@@ -20,7 +20,7 @@ const BatchVoteDrawer = ({
   clearSelectedRequests,
 }: {
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: (state: boolean) => void
   approve: boolean
   requestsToApprove: RequestFrob[]
   clearSelectedRequests: () => void
@@ -81,7 +81,6 @@ const BatchVoteDrawer = ({
                 <TokenTransferRequestCard
                   request={request}
                   key={`batch-${idx}`}
-                  approve={approve}
                 />
               )
             }

@@ -2,7 +2,7 @@ import { ActionVariant, ActivityVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import useSignature from "../../hooks/useSignature"
@@ -22,7 +22,7 @@ export const VoteDrawer = ({
 }: {
   request?: RequestFrob
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: (state: boolean) => void
   approve: boolean
   optimisticVote: (newRequest: RequestFrob) => void
 }) => {

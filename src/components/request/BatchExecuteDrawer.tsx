@@ -2,7 +2,7 @@ import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   usePrepareSendTransaction,
@@ -36,7 +36,7 @@ const BatchExecuteWrapper = ({
   requestsToApprove: RequestFrob[]
   actionsToExecute: Action[]
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: (state: boolean) => void
   txPayload: RawCall
   mutateSelectedRequests: ({
     selectedRequests,
@@ -168,7 +168,6 @@ const BatchExecuteWrapper = ({
                 <TokenTransferRequestCard
                   request={request}
                   key={`batch-${idx}`}
-                  approve={approve}
                 />
               )
             }
@@ -208,7 +207,7 @@ const BatchExecuteDrawer = ({
   clearSelectedRequests,
 }: {
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: (state: boolean) => void
   requestsToApprove: RequestFrob[]
   approve: boolean
   mutateSelectedRequests: ({
