@@ -1,3 +1,4 @@
+import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(
@@ -21,7 +22,7 @@ export default async function handler(
   }
   let latestAction
   try {
-    latestAction = await prisma.action.findFirst({
+    latestAction = await db.action.findFirst({
       where: {
         safeAddress: query.address as string,
         chainId: parseInt(query.chainId as string),
