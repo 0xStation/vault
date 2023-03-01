@@ -19,7 +19,6 @@ export default async function handler(
   const { chainId, address } = body
 
   if (!chainId || !address) {
-    // Missing status code
     res.statusCode = 422
     return res.end(
       JSON.stringify(
