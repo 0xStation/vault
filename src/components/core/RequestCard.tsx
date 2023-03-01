@@ -54,7 +54,11 @@ const RequestCard = ({
           )}
           <div className="flex w-full items-center space-x-2">
             {!showTerminal && (
-              <Checkbox name={request.id} formRegister={formRegister} />
+              <Checkbox
+                name={request.id}
+                formRegister={formRegister}
+                isDisabled={disabled || false}
+              />
             )}
             <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
             <Avatar size="sm" address={request.data.createdBy} />

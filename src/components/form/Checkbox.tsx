@@ -4,12 +4,14 @@ const Checkbox = ({
   checked,
   defaultChecked,
   formRegister,
+  isDisabled,
 }: {
   name: string
   value?: any
   checked?: boolean
   defaultChecked?: boolean
   formRegister: any
+  isDisabled: boolean
 }) => {
   return (
     <input
@@ -20,6 +22,7 @@ const Checkbox = ({
       defaultChecked={defaultChecked}
       type="checkbox"
       checked={checked}
+      disabled={isDisabled}
     />
   )
 }

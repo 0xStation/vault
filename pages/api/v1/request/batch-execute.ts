@@ -7,7 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  console.log("we are in execute")
   const { method, body } = req
 
   if (method !== "POST") {

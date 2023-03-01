@@ -137,7 +137,7 @@ const BatchExecuteWrapper = ({
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="overflow-scroll pb-[110px]">
-        <div className="space-y-6">
+        <div className="mb-4 space-y-6">
           <div className="text-lg font-bold">
             Execute {requestsToApprove.length} requests
           </div>

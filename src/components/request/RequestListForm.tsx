@@ -11,6 +11,10 @@ import BatchExecuteDrawer from "../request/BatchExecuteDrawer"
 import BatchVoteDrawer from "../request/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
 
+const intersection = (array1: any[], array2: any[]) => {
+  return array1.filter((value) => array2.includes(value))
+}
+
 const RequestListForm = ({
   requests,
   mutate,
@@ -24,6 +28,7 @@ const RequestListForm = ({
     useState<boolean>(false)
   const [isBatchExecuteDrawerOpen, setIsBatchExecuteDrawerOpen] =
     useState<boolean>(false)
+  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [currentBatchState, setCurrentBatchState] = useState<
     "VOTE" | "EXECUTE" | undefined
   >(undefined)
@@ -31,6 +36,16 @@ const RequestListForm = ({
     "approve",
   )
   const [selectedRequests, setSelectedRequests] = useState<any[]>([])
+  const [validExecutionActions, setValidExecutionActions] = useState<any[]>([
+    "EXECUTE-APPROVE",
+    "EXECUTE-REJECT",
+  ])
+
+  const [promptAction, setPromptAction] = useState<
+    "approve" | "reject" | "execute"
+  >()
+  const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
+
   const { register, watch, reset } = useForm()
 
   watch((data) => {
@@ -41,21 +56,20 @@ const RequestListForm = ({
       const req = requests.find((request) => request.id === reqId)
       return req
     }) as RequestFrob[]
+
     if (newSelectedRequests.length === 1) {
       setCurrentBatchState(newSelectedRequests[0].stage)
     }
+    const allExecutionActions = newSelectedRequests?.map(
+      (req) => req.validActions as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[],
+    )
+    const newValidExecutionActions = allExecutionActions?.reduce((a, b) =>
+      a.filter((c) => b.includes(c)),
+    )
+    setValidExecutionActions(newValidExecutionActions)
     setSelectedRequests(newSelectedRequests)
   })
 
-  const requestIsSelected = (id: string) => {
-    return selectedRequests.find((req: RequestFrob) => req.id === id)
-  }
-
-  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
-  const [promptAction, setPromptAction] = useState<
-    "approve" | "reject" | "execute"
-  >()
-  const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
   const mutateSelectedRequests = (
     selectedRequests: RequestFrob[],
     approve: boolean,
@@ -113,7 +127,16 @@ const RequestListForm = ({
             return (
               <RequestCard
                 disabled={
-                  selectedRequests.length > 0 && !requestIsSelected(request.id)
+                  currentBatchState &&
+                  (request.stage !== currentBatchState ||
+                    (request.stage === "EXECUTE" &&
+                      intersection(
+                        request.validActions as (
+                          | "EXECUTE-REJECT"
+                          | "EXECUTE-APPROVE"
+                        )[],
+                        validExecutionActions,
+                      ).length === 0))
                 }
                 key={`request-${idx}`}
                 request={request}
@@ -150,15 +173,15 @@ const RequestListForm = ({
       />
       <BatchVoteDrawer
         requestsToApprove={selectedRequests}
-        isOpen={isBatchExecuteDrawerOpen}
-        setIsOpen={setIsBatchExecuteDrawerOpen}
+        isOpen={isBatchVoteDrawerOpen}
+        setIsOpen={setIsBatchVoteDrawerOpen}
         approve={batchType === "approve"}
         clearSelectedRequests={reset}
       />
       <BatchExecuteDrawer
         requestsToApprove={selectedRequests}
-        isOpen={isBatchVoteDrawerOpen}
-        setIsOpen={setIsBatchVoteDrawerOpen}
+        isOpen={isBatchExecuteDrawerOpen}
+        setIsOpen={setIsBatchExecuteDrawerOpen}
         approve={true}
         mutateSelectedRequests={mutateSelectedRequests}
         clearSelectedRequests={reset}
@@ -195,7 +218,7 @@ const RequestListForm = ({
                     className="text-sm text-white"
                     onClick={() => {
                       setBatchType("approve")
-                      setIsBatchExecuteDrawerOpen(true)
+                      setIsBatchVoteDrawerOpen(true)
                     }}
                   >
                     Approve
@@ -207,7 +230,7 @@ const RequestListForm = ({
                       setIsBatchVoteDrawerOpen(true)
                     }}
                   >
-                    Reject
+                    Rejection
                   </button>
                 </>
               )}

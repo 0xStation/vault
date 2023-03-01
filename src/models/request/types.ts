@@ -14,6 +14,7 @@ export type RequestFrob = Request & {
   terminal: Terminal
   signers: string[]
   stage?: "VOTE" | "EXECUTE"
+  validActions?: ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
   addressesThatHaveNotSigned: string[]
 }
 
