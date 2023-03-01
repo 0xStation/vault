@@ -35,7 +35,8 @@ export default async function handler(
         note: body.note,
         path: body.path,
         calls: body.calls,
-        variantType: body.variantType,
+        requestVariantType: body.requestVariantType,
+        meta: body.meta,
         $tx,
       })
 

@@ -6,13 +6,13 @@ export const prepareSwapCallAndUpdateVariant = ({
   prevSignerAddress,
   oldSignerAddress,
   newSignerAddress,
-  variantType,
+  signerQuorumVariantMeta,
 }: {
   safeAddress: string
   prevSignerAddress: string
   oldSignerAddress: string
   newSignerAddress: string
-  variantType: SignerQuorumVariant
+  signerQuorumVariantMeta: SignerQuorumVariant
 }) => {
   const swapOwnerCall = prepareSwapOwnerCall(
     safeAddress,
@@ -21,7 +21,7 @@ export const prepareSwapCallAndUpdateVariant = ({
     newSignerAddress,
   )
 
-  variantType.add.push(newSignerAddress as string)
-  variantType.remove.push(oldSignerAddress as string)
-  return { swapOwnerCall, variantType }
+  signerQuorumVariantMeta.add.push(newSignerAddress as string)
+  signerQuorumVariantMeta.remove.push(oldSignerAddress as string)
+  return { swapOwnerCall, signerQuorumVariantMeta }
 }

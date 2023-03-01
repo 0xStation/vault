@@ -58,11 +58,11 @@ export const createAction = ({
         isRejection
           ? rejectionCall
           : {
-              to: to ?? sendEthCall.to,
-              value: value ?? sendEthCall.value,
-              data: data ?? sendEthCall.data,
-              operation: operation ?? sendEthCall.operation,
-            },
+            to: to ?? sendEthCall.to,
+            value: value ?? sendEthCall.value,
+            data: data ?? sendEthCall.data,
+            operation: operation ?? sendEthCall.operation,
+          },
       ],
       minDate: minDate ?? +new Date(),
       recipient: recipient ?? faker.finance.ethereumAddress(),

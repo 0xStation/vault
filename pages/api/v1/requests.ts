@@ -7,8 +7,6 @@ export default async function handler(
 ) {
   const { method, query } = req
 
-  console.log(query)
-
   if (method !== "GET") {
     res.setHeader("Allow", ["GET"])
     res.status(405).end(`Method ${method} Not Allowed`)
