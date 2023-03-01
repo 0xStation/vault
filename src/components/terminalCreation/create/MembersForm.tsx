@@ -115,7 +115,14 @@ export const MembersView = ({
   useWaitForTransaction({
     confirmations: 1,
     hash: txnHash,
-    onSuccess: async (transaction) => {
+    onSettled: async (transaction, error) => {
+      console.log("settled", transaction, error)
+      if (error || !transaction) {
+        setTerminalCreationError("Failed to create transaction.")
+        setTxnHash(undefined)
+        console.error("Failed to create Terminal", error)
+        return
+      }
       const logsLastIndex = transaction.logs?.length - 1
       const decodedProxyEvent = decodeProxyEvent({
         data: transaction.logs[logsLastIndex].data,
@@ -137,11 +144,13 @@ export const MembersView = ({
           )}/getting-started`,
         )
       } catch (err) {
+        console.error("Failed to create Terminal", err)
         setTerminalCreationError("Failed to create Terminal.")
         setTxnHash(undefined)
       }
     },
     onError: async (data) => {
+      console.error("Failed to wait for txn", data)
       setTerminalCreationError("Failed to create transaction.")
       setTxnHash(undefined)
     },

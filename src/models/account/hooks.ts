@@ -4,22 +4,17 @@ import { RequestFrob } from "../request/types"
 
 export const useAccountItemsToClaim = (
   address: string,
-): { isLoading: boolean; items: RequestFrob[] | undefined } => {
+): { isLoading: boolean; items: RequestFrob[] | undefined; error: any } => {
   const fetcher = async (url: string) => {
-    try {
-      const response = await axios.get<RequestFrob[]>(url)
-      if (response.status === 200) {
-        return response.data
-      }
-    } catch (err) {
-      console.log("err:", err)
-    }
+    const response = await axios.get<RequestFrob[]>(url)
+    return response.data
   }
 
-  const { isLoading, data: items } = useSWR(
-    address ? `/api/v1/account/${address}/claim` : null,
-    fetcher,
-  )
+  const {
+    isLoading,
+    data: items,
+    error,
+  } = useSWR(address ? `/api/v1/account/${address}/claim` : null, fetcher)
 
-  return { isLoading, items }
+  return { isLoading, items, error }
 }
