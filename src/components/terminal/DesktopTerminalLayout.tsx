@@ -51,9 +51,11 @@ const options = (router: any) =>
 
 const DesktopTerminalLayout = ({
   terminal,
+  assumeDefaultPadding = true,
   children,
 }: {
   terminal: Terminal
+  assumeDefaultPadding?: boolean
   children?: React.ReactNode
 }) => {
   const router = useRouter()
@@ -100,7 +102,7 @@ const DesktopTerminalLayout = ({
             if (option.active) {
               return (
                 <Link href={option.href} className="block" key={`link-${idx}`}>
-                  <div className="cursor-pointer p-4 hover:bg-slate-100">
+                  <div className="cursor-pointer py-3 px-4 hover:bg-slate-100">
                     <span>{option.label}</span>
                   </div>
                 </Link>
@@ -130,7 +132,9 @@ const DesktopTerminalLayout = ({
           />
         </section>
       </div>
-      <div className="grow p-12">{children}</div>
+      <div className={`grow ${assumeDefaultPadding ? "p-12" : "p-0"}`}>
+        {children}
+      </div>
     </div>
   )
 }

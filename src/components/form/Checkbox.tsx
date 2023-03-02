@@ -5,6 +5,7 @@ const Checkbox = ({
   defaultChecked,
   isDisabled,
   onChange,
+  className,
 }: {
   name: string
   value?: any
@@ -12,9 +13,11 @@ const Checkbox = ({
   defaultChecked?: boolean
   isDisabled: boolean
   onChange: (e: any) => void
+  className?: string
 }) => {
   return (
     <input
+      className={className}
       onClick={(e) => e.stopPropagation()}
       name={name}
       value={value}
