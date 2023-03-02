@@ -1,5 +1,5 @@
+import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
-import prisma from "../../../../prisma"
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,7 @@ export default async function handler(
       const { address, pfpUrl, chainId } = body
 
       try {
-        account = await prisma.account.findFirst({
+        account = await db.account.findFirst({
           where: { address },
         })
       } catch (err) {
@@ -26,7 +26,7 @@ export default async function handler(
       }
 
       try {
-        account = await prisma.account.create({
+        account = await db.account.create({
           data: {
             address,
             chainId,

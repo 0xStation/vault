@@ -7,13 +7,13 @@ import { encodeFunctionData } from "./utils"
 /**
  * Create the RawCall for an ETH transfer
  * @param recipient token recipient
- * @param value quantity of tokens, no decimal padding
+ * @param value quantity of tokens, type is number since BigNumber.from throws if it is supplied a string with a decimal in it.
  * @returns RawCall representation
  */
 const encodeEthTransfer = (recipient: string, value: string) => {
   return {
     to: recipient, // recipient is getting called
-    value, // value is always in wei
+    value: value, // value is always in wei
     data: "0x", // no data to send
     operation: 0, // normal call receiving contract
   }

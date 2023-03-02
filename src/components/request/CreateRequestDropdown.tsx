@@ -29,25 +29,21 @@ export const CreateRequestDropdown = () => {
         <Button size="sm">+ Create</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2">
-        <DropdownMenuItem className="focus:bg-white">
-          <button
-            onClick={() => {
-              // TODO: temp solution, change when we have send tokens form
-              console.log("send tokens")
-              createFakeSendTokens({
-                chainId,
-                address,
-                createdBy: activeUser?.address,
-              })
-            }}
+        <DropdownMenuItem className="cursor-pointer focus:bg-white">
+          <Link
+            href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/new`}
           >
             Send tokens
-          </button>
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="focus:bg-white">
-          Request tokens
+        <DropdownMenuItem className="cursor-pointer focus:bg-white">
+          <Link
+            href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/request`}
+          >
+            Request tokens
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="focus:bg-white">
+        <DropdownMenuItem className="cursor-pointer focus:bg-white">
           <Link href={`/${router.query.chainNameAndSafeAddress}/members/edit`}>
             Edit members
           </Link>

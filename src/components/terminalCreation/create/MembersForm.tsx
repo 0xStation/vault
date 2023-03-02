@@ -1,9 +1,10 @@
 import { BytesLike } from "@ethersproject/bytes"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
+import { getTransactionLink } from "lib/utils/getTransactionLink"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
@@ -24,32 +25,51 @@ const LoadingScreen = ({
   setTerminalCreationError,
   terminalCreationError,
   setCreateTerminalView,
+  txnHash,
+  chainId,
 }: {
   setTerminalCreationError: Dispatch<SetStateAction<string>>
   setShowLoadingScreen: Dispatch<SetStateAction<boolean>>
   terminalCreationError: string
   setCreateTerminalView: Dispatch<SetStateAction<CREATE_TERMINAL_VIEW>>
+  txnHash: string
+  chainId: number
 }) => {
-  return terminalCreationError ? (
+  return 
     <div className="flex h-screen flex-col items-center justify-center text-center">
-      <p className="text-red">{terminalCreationError}</p>
-      <button
-        onClick={() => {
-          setShowLoadingScreen(false)
-          setTerminalCreationError("")
-          setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
-        }}
-        className="mt-1 text-sm underline"
-      >
-        Try again.
-      </button>
+      {terminalCreationError ? (
+        <>
+          <p className="text-red">{terminalCreationError}</p>
+          <button
+            onClick={() => {
+              setShowLoadingScreen(false)
+              setTerminalCreationError("")
+              setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
+            }}
+            className="mt-1 text-sm underline"
+          >
+            Try again.
+          </button>
+        </>
+      ) : (
+        <>
+          <LoadingSpinner className="mb-8" />
+          <p className="mb-2 animate-pulse font-bold">Building your Terminal</p>
+          <p className="animate-pulse text-sm">
+            Please do not leave or refresh the page.
+          </p>
+          <a
+            className="flex flex-row items-center pt-3 text-sm text-violet underline"
+            href={getTransactionLink(chainId, txnHash)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View status
+            <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
+          </a>
+        </>
+      )}
     </div>
-  ) : (
-    <TransactionLoadingPage
-      title="Building your Terminal"
-      subtitle="Please do not leave or refresh the page."
-    />
-  )
 }
 
 export const MembersView = ({
@@ -76,7 +96,13 @@ export const MembersView = ({
   useWaitForTransaction({
     confirmations: 1,
     hash: txnHash,
-    onSuccess: async (transaction) => {
+    onSettled: async (transaction, error) => {
+      if (error || !transaction) {
+        setTerminalCreationError("Failed to create transaction.")
+        setTxnHash(undefined)
+        console.error("Failed to create Terminal", error)
+        return
+      }
       const logsLastIndex = transaction.logs?.length - 1
       const decodedProxyEvent = decodeProxyEvent({
         data: transaction.logs[logsLastIndex].data,
@@ -98,11 +124,13 @@ export const MembersView = ({
           )}/getting-started`,
         )
       } catch (err) {
+        console.error("Failed to create Terminal", err)
         setTerminalCreationError("Failed to create Terminal.")
         setTxnHash(undefined)
       }
     },
     onError: async (data) => {
+      console.error("Failed to wait for txn", data)
       setTerminalCreationError("Failed to create transaction.")
       setTxnHash(undefined)
     },
@@ -172,7 +200,7 @@ export const MembersView = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
     watch,
   } = useForm({
@@ -196,12 +224,14 @@ export const MembersView = ({
   })
 
   const watchMembers = watch("members", [])
-  return showLoadingScreen ? (
+  return showLoadingScreen && formData?.chainId && txnHash ? (
     <LoadingScreen
       setShowLoadingScreen={setShowLoadingScreen}
       setTerminalCreationError={setTerminalCreationError}
       terminalCreationError={terminalCreationError}
       setCreateTerminalView={setCreateTerminalView}
+      chainId={formData?.chainId}
+      txnHash={txnHash}
     />
   ) : (
     <Layout
@@ -227,9 +257,9 @@ export const MembersView = ({
                     <p className="ml-2">You</p>
                   </div>
                 ) : (
-                  <div key={item.id} className="mb-1 rounded bg-slate-200 p-3">
+                  <div key={item.id} className="mb-1 rounded bg-slate-50 p-3">
                     <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-sm font-bold text-slate-500">
+                      <p className="text-sm text-slate-500">
                         Member {index + 1}
                       </p>
                       <button type="button" onClick={() => remove(index)}>
@@ -242,7 +272,7 @@ export const MembersView = ({
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-slate-200 [&>input]:placeholder:text-slate-500"
+                      className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
@@ -296,7 +326,12 @@ export const MembersView = ({
           />
         </div>
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
-          <Button type="submit" fullWidth={true}>
+          <Button
+            type="submit"
+            fullWidth={true}
+            disabled={isSubmitting}
+            loading={isSubmitting}
+          >
             Create Terminal
           </Button>
           <p

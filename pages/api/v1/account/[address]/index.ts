@@ -1,5 +1,5 @@
+import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
-import prisma from "../../../../../prisma"
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +15,7 @@ export default async function handler(
         return res.end(JSON.stringify("Account not found"))
       }
       try {
-        account = await prisma.account.findFirst({
+        account = await db.account.findFirst({
           where: { address: query.address as string },
         })
       } catch (err) {

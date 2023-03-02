@@ -1,7 +1,17 @@
-// import { SignerQuorumVariant } from "../types"
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActionStatus,
+  ActionVariant,
+  RequestVariantType,
+  SubscriptionVariant,
+} from "@prisma/client"
 import { REJECTION_CALL } from "lib/constants"
+import {
+  ZodSignerQuorumVariant,
+  ZodSplitTokenTransferVariant,
+  ZodTokenTransferVariant,
+} from "lib/zod"
 import { z } from "zod"
+import { TokenTransferVariant } from "../types"
 
 const RequestWithActionArgs = z.object({
   chainId: z.number(),
@@ -10,19 +20,30 @@ const RequestWithActionArgs = z.object({
   createdBy: z.string(),
   note: z.string().optional(),
   path: z.string().array(),
-  variantType: z.object({
-    add: z.string().array(),
-    remove: z.string().array(),
-    setQuorum: z.number(),
-  }),
   calls: z.any().array(),
+  requestVariantType: z.nativeEnum(RequestVariantType),
+  meta: z.union([
+    ZodSignerQuorumVariant,
+    ZodSplitTokenTransferVariant,
+    ZodTokenTransferVariant,
+  ]),
   $tx: z.any().optional(), // $transaction calls give db as an arg
 })
+
 export const createRequestWithAction = async (
   input: z.infer<typeof RequestWithActionArgs>,
 ) => {
-  const { chainId, address, nonce, createdBy, note, variantType, calls, $tx } =
-    RequestWithActionArgs.parse(input)
+  const {
+    chainId,
+    address,
+    nonce,
+    createdBy,
+    note,
+    requestVariantType,
+    meta,
+    calls,
+    $tx,
+  } = RequestWithActionArgs.parse(input)
 
   const db = $tx || prisma
 
@@ -43,20 +64,36 @@ export const createRequestWithAction = async (
 
   let request
   try {
+    const subscriptions =
+      requestVariantType === RequestVariantType?.TOKEN_TRANSFER &&
+      (meta as TokenTransferVariant).recipient
+        ? {
+            subscriptions: {
+              create: [
+                {
+                  address: (meta as TokenTransferVariant).recipient,
+                  variant: SubscriptionVariant.TOKEN_RECIPIENT,
+                },
+              ],
+            },
+          }
+        : {}
+
     const actionMetadata = {
       minDate: Date.now(),
       calls,
     }
+
     request = await db.request.create({
       data: {
         terminalAddress: address,
         chainId,
-        variant: RequestVariantType.SIGNER_QUORUM, // TODO: determine from variant type from body
+        variant: requestVariantType,
         number: (latestRequest?.number || 0) + 1,
         data: {
           note: note,
           createdBy: createdBy,
-          meta: { ...variantType },
+          meta: JSON.parse(JSON.stringify(meta)),
         },
         actions: {
           create: [
@@ -80,6 +117,7 @@ export const createRequestWithAction = async (
             },
           ],
         },
+        ...subscriptions,
       },
       include: {
         actions: true,

@@ -28,7 +28,7 @@ export type Transfer = {
   tokenId?: number // ERC721 & ERC1155
 }
 
-type SplitTokenTransferVariant = FrequencyMixin & {
+export type SplitTokenTransferVariant = FrequencyMixin & {
   splits: {
     recipient: string
     percent: number // percent

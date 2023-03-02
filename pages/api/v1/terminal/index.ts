@@ -1,5 +1,5 @@
+import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
-import prisma from "../../../../prisma"
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +19,7 @@ export default async function handler(
 
       let terminal
       try {
-        terminal = await prisma.terminal.create({
+        terminal = await db.terminal.create({
           data: {
             safeAddress: safeAddress,
             chainId: chainId,

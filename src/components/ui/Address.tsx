@@ -31,9 +31,9 @@ export const Address = ({
         // if address is interactive, enable copy on click
         interactive
           ? (e) => {
-              e.preventDefault()
-              navigator.clipboard.writeText(address)
-            }
+            e.preventDefault()
+            navigator.clipboard.writeText(address)
+          }
           : () => {}
       }
     >

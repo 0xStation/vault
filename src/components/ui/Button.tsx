@@ -27,18 +27,18 @@ const button = cva("relative font-medium rounded", {
       variant: ["primary"],
       size: ["sm", "base", "lg"],
       disabled: false,
-      class: "hover:bg-black/80",
+      class: "hover:bg-black/80 bg-slate-900 border-slate-900",
     },
     {
       variant: ["primary", "secondary", "unemphasized"],
       size: ["sm", "base", "lg"],
       disabled: true,
-      class: "hover:bg-border-slate-300",
+      class: "hover:bg-slate-300 border border-slate-300",
     },
     {
       variant: ["secondary", "unemphasized"],
       size: ["sm", "base", "lg"],
-      class: "hover:bg-gray/80",
+      class: "hover:bg-slate-300/80",
     },
     {
       variant: ["tertiary"],

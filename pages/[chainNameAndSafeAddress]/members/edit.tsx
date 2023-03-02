@@ -1,4 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
+import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import axios from "axios"
@@ -117,7 +118,7 @@ export const EditMembersPage = () => {
       signersToBeRemoved.length === signersToBeAdded.length &&
       data.quorum !== safeMetadata?.quorum
 
-    let variantType = {
+    let signerQuorumVariantMeta = {
       add: [] as string[],
       remove: [] as string[],
       setQuorum: data.quorum || safeMetadata?.quorum,
@@ -143,7 +144,7 @@ export const EditMembersPage = () => {
         prevSignerAddress,
         oldSignerAddress: signersToBeRemoved[i],
         newSignerAddress: newSignerAddress as string,
-        variantType,
+        signerQuorumVariantMeta,
       })
 
       updatedSignersState[ownerIndex] = newSignerAddress as string
@@ -167,7 +168,7 @@ export const EditMembersPage = () => {
             : data.quorum,
         )
 
-        variantType.remove.push(signersToBeRemoved[i])
+        signerQuorumVariantMeta.remove.push(signersToBeRemoved[i])
         updatedSignersState.splice(ownerIndex, 1)
         preparedCalls.push(removeOwnerCall)
         i++
@@ -183,7 +184,7 @@ export const EditMembersPage = () => {
             : data.quorum,
         )
         updatedSignersState.push(newSignerAddress as string)
-        variantType.add.push(newSignerAddress as string)
+        signerQuorumVariantMeta.add.push(newSignerAddress as string)
         preparedCalls.push(addOwnerCall)
         i++
       }
@@ -214,12 +215,13 @@ export const EditMembersPage = () => {
         return
       }
 
-      const requestResponse = await axios.post(
+      await axios.post(
         `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`,
         {
           chainId: safeMetadata.chainId,
           address: safeMetadata.address,
-          variantType,
+          requestVariantType: RequestVariantType.SIGNER_QUORUM,
+          meta: signerQuorumVariantMeta,
           createdBy: activeUser?.address,
           note: data.note,
           nonce: nextNonce?.nonce as number,
@@ -370,7 +372,7 @@ export const EditMembersPage = () => {
                 return (
                   <div
                     key={item.id + item.address}
-                    className="mb-1 rounded bg-slate-200 p-3"
+                    className="mb-1 rounded bg-slate-50 p-3"
                   >
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
@@ -390,7 +392,7 @@ export const EditMembersPage = () => {
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-slate-200 [&>input]:placeholder:text-slate-500"
+                      className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
@@ -461,7 +463,7 @@ export const EditMembersPage = () => {
               />
             ) : null}
           </div>
-          <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full px-5 text-center">
+          <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
             <Button
               type="submit"
               fullWidth={true}

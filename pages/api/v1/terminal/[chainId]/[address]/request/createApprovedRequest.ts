@@ -1,4 +1,5 @@
 import { ActivityVariant } from "@prisma/client"
+import db from "db"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
@@ -25,7 +26,7 @@ export default async function handler(
 
   let request, proof, activity
   try {
-    await prisma.$transaction(async ($tx) => {
+    await db.$transaction(async ($tx) => {
       request = await createRequestWithAction({
         chainId: body.chainId,
         address: body.address,
@@ -34,7 +35,8 @@ export default async function handler(
         note: body.note,
         path: body.path,
         calls: body.calls,
-        variantType: body.variantType,
+        requestVariantType: body.requestVariantType,
+        meta: body.meta,
         $tx,
       })
 

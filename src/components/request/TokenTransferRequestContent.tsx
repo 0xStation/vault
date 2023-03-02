@@ -15,6 +15,7 @@ export const TokenTransferRequestContent = ({
 }) => {
   const [showTokens, setShowTokens] = useState<boolean>(false)
   let tokenTransferMeta = request.data.meta as TokenTransferVariant
+
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -31,7 +32,7 @@ export const TokenTransferRequestContent = ({
           className="flex cursor-pointer flex-row items-center space-x-2"
           onClick={() => setShowTokens(!showTokens)}
         >
-          <span>{tokenTransferMeta.transfers.length} Token(s) </span>
+          <span>{tokenTransferMeta?.transfers?.length} Token(s) </span>
           {showTokens ? (
             <ChevronDownIcon className="ml-auto h-4 w-4" />
           ) : (
@@ -41,7 +42,7 @@ export const TokenTransferRequestContent = ({
       </div>
       {showTokens && (
         <div>
-          {tokenTransferMeta.transfers.map((transfer, idx) => {
+          {tokenTransferMeta?.transfers?.map((transfer, idx) => {
             return (
               <div
                 key={`transfer-${idx}`}

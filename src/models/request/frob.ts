@@ -1,10 +1,11 @@
 import { ActivityVariant } from "@prisma/client"
+import db from "db"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
 import { Activity } from "../activity/types"
 import { Request, RequestFrob } from "./types"
 
 const toFrob = async (request: Request) => {
-  const terminal = await prisma.terminal.findFirst({
+  const terminal = await db.terminal.findFirst({
     where: {
       safeAddress: request.terminalAddress,
       chainId: request.chainId,
@@ -24,7 +25,7 @@ const toFrob = async (request: Request) => {
   const quorum = safeDetails?.quorum
   const signers = safeDetails?.signers
 
-  const executingActivites = await prisma.activity.findMany({
+  const executingActivites = await db.activity.findMany({
     where: {
       requestId: request.id,
       variant: {
@@ -33,7 +34,7 @@ const toFrob = async (request: Request) => {
     },
   })
 
-  const commentActivities = await prisma.activity.findMany({
+  const commentActivities = await db.activity.findMany({
     where: {
       requestId: request.id,
       variant: {
@@ -42,7 +43,7 @@ const toFrob = async (request: Request) => {
     },
   })
 
-  const votingActivities = (await prisma.activity.findMany({
+  const votingActivities = (await db.activity.findMany({
     where: {
       requestId: request.id,
       variant: {
