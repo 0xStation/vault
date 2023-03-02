@@ -1,19 +1,25 @@
 import { Network } from "@ui/Network"
+import Breakpoint from '@ui/Breakpoint'
+import { GetServerSidePropsContext } from "next"
 import truncateString from "lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
+import { createBreakpoint } from "react-use"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ChevronRight } from "../../src/components/icons"
-import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
+import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import LabelCard from "../../src/components/ui/LabelCard"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
 import { convertGlobalId } from "../../src/models/terminal/utils"
+import {Terminal} from '../../src/models/terminal/types'
+import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
+
 
 type TerminalNavOption = {
-  value: string
   label: string
   description: string
   active: boolean
@@ -34,37 +40,33 @@ const TerminalPage = () => {
     chainId: terminal?.chainId,
   })
 
-  const options = [
+const options = (router: any) =>
+  [
     {
-      value: "requests",
       label: "Requests",
       description: "Description to educate users (replace this!)",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/requests`,
     },
     {
-      value: "assets",
       label: "Assets",
       description: "Description to educate users (replace this!)",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/assets`,
     },
     {
-      value: "members",
       label: "Members",
       description: "Description to educate users (replace this!)",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
-      value: "automations",
       label: "Automations",
       description: "Description to educate users (replace this!)",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
-      value: "about",
       label: "About",
       description: "Description to educate users (replace this!)",
       active: true,
@@ -74,6 +76,10 @@ const TerminalPage = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
+const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
+
+const MobileTerminalIndexPage = ({ terminal }: { terminal: Terminal }) => {
+  const router = useRouter()
   return (
     <>
       {isSuccess && !isModuleEnabled && (
@@ -107,7 +113,7 @@ const TerminalPage = () => {
         </div>
       </section>
       <section className="mt-4 divide-y divide-slate-300 border-t border-b border-slate-300">
-        {options.map((option, idx) => {
+        {options(router).map((option, idx) => {
           if (option.active) {
             return (
               <Link href={option.href} className="block" key={`link-${idx}`}>
@@ -140,6 +146,42 @@ const TerminalPage = () => {
       </section>
     </>
   )
+}
+
+const DesktopTerminalIndexPage = ({ terminal }: { terminal: Terminal }) => {
+  return <DesktopTerminalLayout terminal={terminal}></DesktopTerminalLayout>
+}
+
+const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) return <MobileTerminalIndexPage terminal={terminal} />
+        return <DesktopTerminalIndexPage terminal={terminal} />
+      }}
+    </Breakpoint>
+  )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const chainNameAndSafeAddress = context?.params?.chainNameAndSafeAddress
+
+  try {
+    let terminal = await getTerminalFromChainNameAndSafeAddress(
+      chainNameAndSafeAddress,
+    )
+    terminal = JSON.parse(JSON.stringify(terminal))
+    return {
+      props: {
+        terminal: terminal,
+      },
+    }
+  } catch (e) {
+    console.error(`Error: ${e}`)
+    return {
+      notFound: true,
+    }
+  }
 }
 
 export default TerminalPage
