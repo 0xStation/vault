@@ -3,18 +3,29 @@ import { Button } from "@ui/Button"
 import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
 import { isEns } from "lib/utils"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { TransactionLoadingPage } from "../../../src/components/core/TransactionLoadingPage"
 import { InputWithLabel } from "../../../src/components/form"
 import AddressInput from "../../../src/components/form/AddressInput"
+import { FieldArrayItem } from "../../../src/components/form/FieldArrayItem"
 import PercentInput from "../../../src/components/form/PercentInput"
 import { useResolveEnsAddress } from "../../../src/hooks/ens/useResolveEns"
 import useStore from "../../../src/hooks/stores/useStore"
 import { useToast } from "../../../src/hooks/useToast"
 import { useCreateAutomation } from "../../../src/models/automation/hooks"
 import { parseGlobalId } from "../../../src/models/terminal/utils"
+
+const sumSplits = (splits: { value: number }[]) => {
+  return (
+    splits?.reduce(
+      (acc: number, split: { value: number }) =>
+        acc + (isNaN(split.value) ? 0 : split.value),
+      0,
+    ) || 0
+  )
+}
 
 const NewAutomationPage = () => {
   const router = useRouter()
@@ -39,13 +50,6 @@ const NewAutomationPage = () => {
     isError: boolean
     message: string
   }>({ isError: false, message: "" })
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm()
 
   const { data: txData, sendTransactionAsync } = useSendTransaction({
     mode: "recklesslyUnprepared",
@@ -129,14 +133,50 @@ const NewAutomationPage = () => {
   }
 
   const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm({
+    criteriaMode: "all",
+  })
+
+  const {
     fields: splitFields,
     append,
     remove,
   } = useFieldArray({
     control, // contains methods for registering components into React Hook Form
     name: "splits",
+    rules: {
+      minLength: {
+        value: 2,
+        message: "Must have more than 2 split recipients",
+      },
+      validate: (splits) => {
+        const sum = sumSplits(splits as { value: number }[])
+        if (sum > 100) {
+          return "Splits exceeds 100%: " + sum
+        } else if (sum < 100) {
+          return "Splits below 100%: " + sum
+        } else {
+          return true
+        }
+      },
+    },
   })
   const watchSplits = watch("splits", [])
+  // when split values change, trigger validation for error rendering
+  useEffect(
+    () => {
+      trigger("splits")
+    },
+    watchSplits.map((split: { value: number }) => split.value),
+  )
+
+  console.log(errors)
 
   return txData ? (
     <TransactionLoadingPage
@@ -144,7 +184,7 @@ const NewAutomationPage = () => {
       subtitle="Please do not leave or refresh the page."
     />
   ) : (
-    <div className="mt-12 px-4">
+    <div className="mt-12 mb-24 grow px-4">
       <button onClick={() => router.back()}>
         <XMarkIcon className="h-6 w-6" />
       </button>
@@ -169,28 +209,16 @@ const NewAutomationPage = () => {
           <div className="flex flex-row items-center justify-between">
             <label className="text-sm font-bold">Recipients and splits*</label>
             <span className="text-xs text-slate-500">
-              {watchSplits.reduce(
-                (acc: number, split: { value: string }) =>
-                  acc + parseFloat(split.value),
-                0,
-              )}
-              /100%
+              {sumSplits(watchSplits)}/100%
             </span>
           </div>
           <ul className="mt-2">
             {splitFields.map((split, index) => (
-              <li
+              <FieldArrayItem
                 key={split.id}
-                className="mb-1 space-y-5 rounded-lg bg-slate-50 p-3"
+                title={`Recipient ${index + 1}`}
+                remove={() => remove(index)}
               >
-                <div className="flex flex-row items-center justify-between">
-                  <p className="text-xs text-slate-500">
-                    Recipient {index + 1}
-                  </p>
-                  <button type="button" onClick={() => remove(index)}>
-                    <XMarkIcon className="h-4 w-4 fill-slate-500" />
-                  </button>
-                </div>
                 <AddressInput
                   name={`splits.${index}.address`}
                   register={register}
@@ -202,13 +230,9 @@ const NewAutomationPage = () => {
                   validations={{
                     noDuplicates: async (v: string) => {
                       const address = await resolveEnsAddress(v)
-                      const recipients = (
-                        watchSplits as {
-                          address: string
-                          value: number
-                          id: string
-                        }[]
-                      ).map((split) => split?.address)
+                      const recipients: string[] = watchSplits.map(
+                        (split: { address: string }) => split.address,
+                      )
 
                       return (
                         !recipients.some(
@@ -225,22 +249,32 @@ const NewAutomationPage = () => {
                   label="Split"
                   placeholder="Enter a percent of revenue to share"
                   required
+                  // prevent splits with 0-value recipients
+                  min={0.1}
+                  max={99.9}
                 />
-              </li>
+              </FieldArrayItem>
             ))}
           </ul>
           <Button
             variant="tertiary"
             fullWidth={true}
             size="lg"
-            onClick={() => append({ address: "" })}
+            onClick={() => append({ address: "", value: 0 })}
           >
             + Add recipient
           </Button>
-          {/* more fields */}
+          <p className="text-center text-xs text-red">
+            {(errors.splits?.root?.message as string) || ""}
+          </p>
         </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
-          <Button type="submit" fullWidth={true} loading={isLoading}>
+        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white px-5 py-3 text-center">
+          <Button
+            type="submit"
+            fullWidth={true}
+            loading={isLoading}
+            disabled={!isValid}
+          >
             Create
           </Button>
           <p

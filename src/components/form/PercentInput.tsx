@@ -1,3 +1,4 @@
+import get from "lodash.get"
 import { FieldValues, RegisterOptions, UseFormRegister } from "react-hook-form"
 
 // TODO: extend native html props
@@ -7,6 +8,9 @@ export const PercentInput = ({
   placeholder,
   name,
   required = false,
+  min = 0,
+  max = 100,
+  decimals = 1,
   errors,
   registerOptions = {},
   ...rest
@@ -16,6 +20,9 @@ export const PercentInput = ({
   placeholder?: string
   name: string
   required?: boolean
+  min?: number
+  max?: number
+  decimals?: number
   errors: any
   registerOptions?: RegisterOptions
 }) => {
@@ -28,19 +35,37 @@ export const PercentInput = ({
       <div className="flex flex-row space-x-2 border-b border-b-slate-300">
         <input
           type="number"
-          min={0}
-          step={0.1}
-          max={100}
+          min={min}
+          step={10 ** (-1 * decimals)}
+          max={max}
           defaultValue={0}
           className="w-full bg-slate-50 placeholder:text-slate-500"
           placeholder={placeholder}
-          {...register(name, { ...registerOptions, ...requiredMessage })}
+          {...register(name, {
+            required: "Required",
+            valueAsNumber: true,
+            min: {
+              value: min,
+              message: `Must be above ${min}`,
+            },
+            max: {
+              value: max,
+              message: `Must be below ${max}`,
+            },
+            validate: (v: number) => {
+              if (Math.floor(v * 10 ** decimals) / 10 ** decimals !== v) {
+                return "Too many decimals, max allowed: " + decimals
+              } else {
+                return true
+              }
+            },
+          })}
           {...rest}
         />
         <span className="text-slate-500">%</span>
       </div>
       <p className="text-xs text-red">
-        {errors[name] && errors[name]?.message}
+        {get(errors, name) && get(errors, `${name}.message`)}
       </p>
     </div>
   )

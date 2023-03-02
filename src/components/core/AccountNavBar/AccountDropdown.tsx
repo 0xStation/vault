@@ -47,7 +47,9 @@ export const AccountNavBar = () => {
               />
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={`/u/${address}/profile`}>Profile</Link>
+              <Link href={`/u/${address}/profile`} className="w-full">
+                Profile
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <button
@@ -55,6 +57,7 @@ export const AccountNavBar = () => {
                   disconnect()
                   setActiveUser(null)
                 }}
+                className="w-full text-left"
               >
                 Disconnect
               </button>
