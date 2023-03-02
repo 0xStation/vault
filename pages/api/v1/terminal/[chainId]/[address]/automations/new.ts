@@ -16,7 +16,7 @@ export default async function handler(
 
   const { name, address, splits } = body
 
-  // validate body values
+  // TODO: validate body values
 
   const revShareMetadata: AutomationMetadata = {
     name,

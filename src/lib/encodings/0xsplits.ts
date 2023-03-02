@@ -6,7 +6,7 @@ import { encodeFunctionData } from "./utils"
 
 export const prepareCreateSplitCall = (
   terminalAddress: string,
-  splits: { address: string; value: string }[],
+  splits: { address: string; value: number }[],
 ): RawCall => {
   let accounts: string[] = []
   let allocations: number[] = []
@@ -14,7 +14,7 @@ export const prepareCreateSplitCall = (
     .sort((a, b) => compareAddresses(a.address, b.address))
     .forEach(({ address, value }) => {
       accounts.push(address)
-      allocations.push((parseFloat(value) * SPLITS_PERCENTAGE_SCALE) / 100)
+      allocations.push((value * SPLITS_PERCENTAGE_SCALE) / 100)
     })
 
   return {
@@ -24,7 +24,7 @@ export const prepareCreateSplitCall = (
       accounts,
       allocations,
       "0", // no distributor fee, tbd if we want to keep this
-      terminalAddress,
+      terminalAddress, // controller, able to change split
     ]),
     operation: 0,
   }

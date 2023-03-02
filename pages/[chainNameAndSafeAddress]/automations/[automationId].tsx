@@ -81,9 +81,6 @@ export const TerminalAutomationDetailPage = () => {
             )}
           </div>
         </TabsContent>
-        <TabsContent value={AutomationTab.BALANCE}>
-          <div className="mt-8 px-4">Balance</div>
-        </TabsContent>
         <TabsContent value={AutomationTab.HISTORY}>
           <div className="mt-8 px-4">History</div>
         </TabsContent>

@@ -5,14 +5,7 @@ import { Automation } from "./types"
 
 export const useAutomations = (chainId: number, terminalAddress: string) => {
   const fetcher = async (url: string) => {
-    try {
-      const response = await axios.get<Automation[]>(url)
-      if (response.status === 200) {
-        return response.data
-      }
-    } catch (err) {
-      console.log("err:", err)
-    }
+    return (await axios.get<Automation[]>(url)).data
   }
 
   const {
@@ -34,14 +27,7 @@ export const useCreateAutomation = (
   terminalAddress: string,
 ) => {
   const fetcher = async (url: string, { arg }: { arg: any }) => {
-    try {
-      const response = await axios.post<Automation>(url, arg)
-      if (response.status === 200) {
-        return response.data
-      }
-    } catch (err) {
-      console.log("err:", err)
-    }
+    return (await axios.post<Automation>(url, arg)).data
   }
 
   const { isMutating, trigger: createAutomation } = useSWRMutation(
@@ -56,14 +42,7 @@ export const useCreateAutomation = (
 
 export const useAutomation = (automationId: string) => {
   const fetcher = async (url: string) => {
-    try {
-      const response = await axios.get<Automation>(url)
-      if (response.status === 200) {
-        return response.data
-      }
-    } catch (err) {
-      console.log("err:", err)
-    }
+    return (await axios.get<Automation>(url)).data
   }
 
   const {

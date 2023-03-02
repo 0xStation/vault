@@ -151,11 +151,12 @@ const NewAutomationPage = () => {
     control, // contains methods for registering components into React Hook Form
     name: "splits",
     rules: {
-      minLength: {
-        value: 2,
-        message: "Must have more than 2 split recipients",
-      },
       validate: (splits) => {
+        // validate number of recipients
+        if (splits?.length < 2) {
+          return "Must have more than 2 split recipients"
+        }
+        // validate split sum
         const sum = sumSplits(splits as { value: number }[])
         if (sum > 100) {
           return "Splits exceeds 100%: " + sum
@@ -175,8 +176,6 @@ const NewAutomationPage = () => {
     },
     watchSplits.map((split: { value: number }) => split.value),
   )
-
-  console.log(errors)
 
   return txData ? (
     <TransactionLoadingPage
@@ -260,7 +259,7 @@ const NewAutomationPage = () => {
             variant="tertiary"
             fullWidth={true}
             size="lg"
-            onClick={() => append({ address: "", value: 0 })}
+            onClick={() => append({ address: "", value: "" })}
           >
             + Add recipient
           </Button>

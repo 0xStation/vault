@@ -24,9 +24,10 @@ export const CreateAutomationDropdown = () => {
         <Button size="sm">+ Create</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2">
-        <DropdownMenuItem className="focus:bg-white">
+        <DropdownMenuItem>
           <Link
             href={`/${router.query.chainNameAndSafeAddress}/automations/new`}
+            className="w-full"
           >
             Revenue share
           </Link>
