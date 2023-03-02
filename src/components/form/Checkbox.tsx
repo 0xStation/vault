@@ -3,22 +3,22 @@ const Checkbox = ({
   value,
   checked,
   defaultChecked,
-  formRegister,
   isDisabled,
+  onChange,
 }: {
   name: string
   value?: any
   checked?: boolean
   defaultChecked?: boolean
-  formRegister: any
   isDisabled: boolean
+  onChange: (e: any) => void
 }) => {
   return (
     <input
       onClick={(e) => e.stopPropagation()}
-      {...formRegister(name)}
       name={name}
       value={value}
+      onChange={onChange}
       defaultChecked={defaultChecked}
       type="checkbox"
       checked={checked}

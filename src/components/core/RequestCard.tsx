@@ -16,18 +16,18 @@ import RequestTerminalLink from "./RequestTerminalLink"
 const RequestCard = ({
   disabled,
   request,
-  formRegister,
   showTerminal,
   takeActionOnRequest,
+  onCheckboxChange,
 }: {
   disabled?: boolean
   request: RequestFrob
-  formRegister?: any
   showTerminal?: Terminal
   takeActionOnRequest?: (
     action: "approve" | "reject" | "execute",
     request: RequestFrob,
   ) => void
+  onCheckboxChange?: (e: any) => void
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -37,11 +37,6 @@ const RequestCard = ({
     request.actions.filter((action: Action) => {
       return action.status === ActionStatus.PENDING
     }).length > 0
-
-  if (request.number === 35) {
-    console.log(request.actions)
-    console.log(hasPendingActions)
-  }
 
   return (
     <Link
@@ -65,14 +60,14 @@ const RequestCard = ({
             />
           )}
           <div className="flex w-full items-center space-x-2">
-            {!showTerminal && (
+            {!showTerminal && onCheckboxChange && (
               <>
                 {hasPendingActions ? (
                   <LoadingSpinner />
                 ) : (
                   <Checkbox
+                    onChange={onCheckboxChange}
                     name={request.id}
-                    formRegister={formRegister}
                     isDisabled={disabled || false}
                   />
                 )}

@@ -72,6 +72,8 @@ export const TokenTransferRequestCard = ({
           })}
         </div>
       )}
+      <span className="block text-xs text-slate-500">Note</span>
+      <div>{request.data.note}</div>
     </div>
   )
 }
