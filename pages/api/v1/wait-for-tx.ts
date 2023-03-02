@@ -1,11 +1,12 @@
 import { waitForTransaction } from "@wagmi/core"
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { configureChains, createClient, mainnet } from "@wagmi/core"
+import { configureChains, createClient, goerli, mainnet } from "@wagmi/core"
 import { publicProvider } from "@wagmi/core/providers/public"
+import db from "db"
 
 const { provider, webSocketProvider } = configureChains(
-  [mainnet],
+  [mainnet, goerli],
   [publicProvider()],
 )
 
@@ -32,11 +33,16 @@ export default async function handler(
   }
 
   const data = await waitForTransaction({
+    chainId: 5,
     hash: body.hash,
   })
 
   if (data.status) {
-    // run updates
+    await db.waitDemo.create({
+      data: {
+        txHash: data.transactionHash,
+      },
+    })
   }
 
   try {

@@ -107,6 +107,11 @@ model Signature {
   proofs Proof[]
 }
 
+model WaitDemo {
+  id            String @id @default(uuid())
+  txHash String
+}
+
 enum ActivityVariant {
   CREATE_REQUEST
   CREATE_AND_APPROVE_REQUEST
