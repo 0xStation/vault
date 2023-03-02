@@ -177,10 +177,12 @@ const NewAutomationPage = () => {
     watchSplits.map((split: { value: number }) => split.value),
   )
 
-  return txData ? (
+  return txData?.hash ? (
     <TransactionLoadingPage
       title="Deploying your Automation"
       subtitle="Please do not leave or refresh the page."
+      chainId={chainId}
+      txnHash={txData?.hash}
     />
   ) : (
     <div className="mt-12 mb-24 grow px-4">

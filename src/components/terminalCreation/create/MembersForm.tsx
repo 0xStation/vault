@@ -1,5 +1,6 @@
 import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
+import { LoadingSpinner } from "@icons/LoadingSpinner"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
@@ -15,7 +16,6 @@ import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
 import { globalId } from "../../../models/terminal/utils"
-import { TransactionLoadingPage } from "../../core/TransactionLoadingPage"
 import AddressInput from "../../form/AddressInput"
 import QuorumInput from "../../form/QuorumInput"
 import Layout from "../Layout"
@@ -35,7 +35,7 @@ const LoadingScreen = ({
   txnHash: string
   chainId: number
 }) => {
-  return 
+  return (
     <div className="flex h-screen flex-col items-center justify-center text-center">
       {terminalCreationError ? (
         <>
@@ -53,8 +53,10 @@ const LoadingScreen = ({
         </>
       ) : (
         <>
-          <LoadingSpinner className="mb-8" />
-          <p className="mb-2 animate-pulse font-bold">Building your Terminal</p>
+          <LoadingSpinner />
+          <p className="mt-8 mb-2 animate-pulse font-bold">
+            Building your Terminal
+          </p>
           <p className="animate-pulse text-sm">
             Please do not leave or refresh the page.
           </p>
@@ -70,6 +72,7 @@ const LoadingScreen = ({
         </>
       )}
     </div>
+  )
 }
 
 export const MembersView = ({
