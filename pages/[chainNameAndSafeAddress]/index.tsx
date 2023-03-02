@@ -44,11 +44,11 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
-      value: "workflows",
-      label: "Workflows",
-      description: "Coming soon",
-      active: false,
-      href: `/${router.query.chainNameAndSafeAddress}/workflows`,
+      value: "automations",
+      label: "Automations",
+      description: "Description to educate users (replace this!)",
+      active: true,
+      href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       value: "about",
@@ -66,8 +66,9 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
         <h1 className="text-xl font-bold">{terminal.data.name}</h1>
         <div className="mt-2 flex flex-row items-center space-x-1">
           <Network chainId={terminal.chainId} />
+          <span className="px-1 text-xs">·</span>
           <span className="text-xs">
-            · {truncateString(terminal.safeAddress)}
+            {truncateString(terminal.safeAddress)}
           </span>
           <CopyToClipboard text={terminal.safeAddress} />
         </div>

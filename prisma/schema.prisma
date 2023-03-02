@@ -18,7 +18,8 @@ model Terminal {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  requests Request[]
+  requests    Request[]
+  automations Automation[]
 
   @@unique([chainId, safeAddress])
 }
@@ -75,15 +76,15 @@ model Activity {
 }
 
 model Action {
-  id          String  @id @default(uuid())
+  id          String        @id @default(uuid())
   requestId   String
   safeAddress String
   chainId     Int
   nonce       Int
   data        Json
-  variant ActionVariant
-  status ActionStatus
-  txHash String?
+  variant     ActionVariant
+  status      ActionStatus
+  txHash      String?
 
   request Request @relation(fields: [requestId], references: [id])
   proofs  Proof[]
@@ -107,6 +108,18 @@ model Signature {
   proofs Proof[]
 }
 
+model Automation {
+  id              String            @id @default(uuid())
+  chainId         Int
+  terminalAddress String
+  variant         AutomationVariant
+  data            Json
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  terminal Terminal @relation(fields: [chainId, terminalAddress], references: [chainId, safeAddress])
+}
+
 enum ActivityVariant {
   CREATE_REQUEST
   CREATE_AND_APPROVE_REQUEST
@@ -125,7 +138,8 @@ enum RequestVariantType {
 enum SubscriptionVariant {
   TOKEN_RECIPIENT
 }
- // enum to potentially support more options in future for more complex requests
+
+// enum to potentially support more options in future for more complex requests
 enum ActionVariant {
   APPROVAL // the expected execution for the request, e.g. a single token transfer, a member change
   REJECTION // rejects the intended execution for the request by burning a nonce
@@ -136,4 +150,8 @@ enum ActionStatus {
   PENDING // trying to execute the action, have a txnHash saved on the Action, used to show loading state
   SUCCESS // execution has completed successfully, updated after useWaitForTransaction or indexer completes
   FAILURE // execution has failed, updated through same as SUCCESS, tbd on what to do with this
+}
+
+enum AutomationVariant {
+  REV_SHARE
 }
