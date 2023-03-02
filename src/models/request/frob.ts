@@ -87,6 +87,12 @@ const toFrob = async (request: Request) => {
     },
   )
 
+  const stage =
+    sortedVotingActivities.approveActivities.length >= quorum ||
+    sortedVotingActivities.rejectActivities.length >= quorum
+      ? "EXECUTE"
+      : "VOTE"
+
   return {
     ...request,
     ...sortedVotingActivities,
@@ -94,6 +100,7 @@ const toFrob = async (request: Request) => {
     addressesThatHaveNotSigned: addressesThatHaveNotSigned || [],
     isExecuted: executingActivites.length > 0,
     quorum: quorum,
+    stage,
     terminal,
   } as RequestFrob
 }

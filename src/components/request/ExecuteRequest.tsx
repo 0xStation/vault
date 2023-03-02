@@ -108,7 +108,6 @@ export const ExecuteWrapper = ({
   // we might not run the function to update the status of the action / request
   useEffect(() => {
     if (isWaitForTransactionSuccess) {
-      console.log("success...")
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
           return {

@@ -1,4 +1,5 @@
 import { Action as PrismaAction } from "@prisma/client"
+import { Proof } from "../proof/types"
 
 type Call = {
   to: string
@@ -24,5 +25,6 @@ export type ActionMetadata = {
 }
 
 export type Action = PrismaAction & {
+  proofs?: Proof[]
   data: ActionMetadata
 }

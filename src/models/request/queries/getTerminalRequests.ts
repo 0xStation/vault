@@ -52,7 +52,15 @@ export const getTerminalRequests = async ({
             createdAt: "desc", // sort to determine most recent vote per signer
           },
         },
-        actions: true,
+        actions: {
+          include: {
+            proofs: {
+              include: {
+                signature: true,
+              },
+            },
+          },
+        },
       },
     })
 
@@ -106,10 +114,27 @@ export const getTerminalRequests = async ({
       }
     })
 
+    const stage = (
+      approveActivities.length >= safeDetails.quorum ||
+      rejectActivities.length >= safeDetails.quorum
+        ? "EXECUTE"
+        : "VOTE"
+    ) as "EXECUTE" | "VOTE"
+
+    let validActions = [] as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
+    if (approveActivities.length >= safeDetails.quorum) {
+      validActions.push("EXECUTE-APPROVE")
+    }
+    if (rejectActivities.length >= safeDetails.quorum) {
+      validActions.push("EXECUTE-REJECT")
+    }
+
     return {
       ...request,
       terminal,
       isExecuted,
+      stage,
+      validActions,
       approveActivities,
       rejectActivities,
       commentActivities,

@@ -58,34 +58,49 @@ export const getRequestById = async (
 
   request.activities.forEach((activity) => {
     switch (activity.variant) {
-    case ActivityVariant.COMMENT_ON_REQUEST:
-      commentActivities.push(activity)
-      break
-    case ActivityVariant.EXECUTE_REQUEST:
-      isExecuted = true
-      break
-    case ActivityVariant.APPROVE_REQUEST:
-      if (!signatureAccounted[activity.address]) {
-        signatureAccounted[activity.address] = true
-        approveActivities.push(activity)
-      }
-      break
-    case ActivityVariant.REJECT_REQUEST:
-      if (!signatureAccounted[activity.address]) {
-        signatureAccounted[activity.address] = true
-        rejectActivities.push(activity)
-      }
-      break
-    case ActivityVariant.CREATE_AND_APPROVE_REQUEST:
-      if (!signatureAccounted[activity.address]) {
-        signatureAccounted[activity.address] = true
-        approveActivities.push(activity)
-      }
-      break
+      case ActivityVariant.COMMENT_ON_REQUEST:
+        commentActivities.push(activity)
+        break
+      case ActivityVariant.EXECUTE_REQUEST:
+        isExecuted = true
+        break
+      case ActivityVariant.APPROVE_REQUEST:
+        if (!signatureAccounted[activity.address]) {
+          signatureAccounted[activity.address] = true
+          approveActivities.push(activity)
+        }
+        break
+      case ActivityVariant.REJECT_REQUEST:
+        if (!signatureAccounted[activity.address]) {
+          signatureAccounted[activity.address] = true
+          rejectActivities.push(activity)
+        }
+        break
+      case ActivityVariant.CREATE_AND_APPROVE_REQUEST:
+        if (!signatureAccounted[activity.address]) {
+          signatureAccounted[activity.address] = true
+          approveActivities.push(activity)
+        }
+        break
     }
   })
 
   const { quorum, signers } = safeDetails
+
+  const stage = (
+    approveActivities.length >= safeDetails.quorum ||
+    rejectActivities.length >= safeDetails.quorum
+      ? "EXECUTE"
+      : "VOTE"
+  ) as "EXECUTE" | "VOTE"
+
+  let validActions = [] as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
+  if (approveActivities.length >= safeDetails.quorum) {
+    validActions.push("EXECUTE-APPROVE")
+  }
+  if (rejectActivities.length >= safeDetails.quorum) {
+    validActions.push("EXECUTE-REJECT")
+  }
 
   return {
     ...request,
@@ -96,6 +111,8 @@ export const getRequestById = async (
     commentActivities,
     quorum,
     signers,
+    stage,
+    validActions,
     addressesThatHaveNotSigned: signers.filter(
       (address: string) => !signatureAccounted[address],
     ),
