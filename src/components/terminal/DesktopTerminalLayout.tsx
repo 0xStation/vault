@@ -130,7 +130,7 @@ const DesktopTerminalLayout = ({
           />
         </section>
       </div>
-      <div className="grow">{children}</div>
+      <div className="grow p-12">{children}</div>
     </div>
   )
 }

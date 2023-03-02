@@ -43,10 +43,8 @@ const MobileTerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
 const DesktopTerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
   return (
     <DesktopTerminalLayout terminal={terminal}>
-      <div className="p-12">
-        <h1>About</h1>
-        <p className="mt-6">{terminal.data.description}</p>
-      </div>
+      <h1>About</h1>
+      <p className="mt-6">{terminal.data.description}</p>
     </DesktopTerminalLayout>
   )
 }
