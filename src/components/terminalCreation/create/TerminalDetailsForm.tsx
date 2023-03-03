@@ -1,12 +1,12 @@
 import { Button } from "@ui/Button"
-import { SUPPORTED_CHAINS } from "lib/constants"
+import networks from "lib/utils/networks"
 import { isValidUrl } from "lib/validations"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
-import { useNetwork, useSwitchNetwork } from "wagmi"
+import { useNetwork } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
-import { InputWithLabel, SelectWithLabel } from "../../form"
+import { InputWithLabel } from "../../form"
 import TextareaWithLabel from "../../form/TextareaWithLabel"
 
 export const TerminalDetailsForm = ({
@@ -16,7 +16,6 @@ export const TerminalDetailsForm = ({
     SetStateAction<CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS>
   >
 }) => {
-  const { switchNetwork, error: networkError } = useSwitchNetwork()
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
   const [formMessage, setFormMessage] = useState<{
@@ -30,40 +29,31 @@ export const TerminalDetailsForm = ({
     register,
     handleSubmit,
     formState: { errors },
-    setError,
-    clearErrors,
   } = useForm({
     defaultValues: {
       name,
-      chainId: chainId || chain?.id,
       about,
       url,
     } as FieldValues,
   })
 
-  useEffect(() => {
-    if (networkError) {
-      setError("chainId", {
-        type: "wrongNetwork",
-        message: "Please check your wallet to switch to specified chain.",
-      })
-    } else {
-      clearErrors("chainId")
-    }
-  }, [networkError])
-
-  const onSubmit = (data: any) => {
-    if (chain?.id !== parseInt(data.chainId)) {
-      setError("chainId", {
-        type: "wrongNetwork",
-        message: "Please switch network to specified chain.",
+  const onSubmit = (fieldValues: any) => {
+    console.log(chain?.id, chainId)
+    console.log(fieldValues)
+    if (chain?.id !== chainId) {
+      const networkErrMessage = chainId
+        ? `Wrong network. Please switch to ${(networks as any)[chainId]?.name}.`
+        : "Wrong network. Please switch to the selected network."
+      setFormMessage({
+        isError: true,
+        message: networkErrMessage,
       })
       return
     }
+
     setFormData({
       ...formData,
-      ...data,
-      chainId: parseInt(data.chainId),
+      ...fieldValues,
     })
     setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
   }
@@ -93,28 +83,6 @@ export const TerminalDetailsForm = ({
               },
             }}
           />
-          <SelectWithLabel
-            className="mb-3"
-            label="Chain*"
-            name="chainId"
-            required
-            register={register}
-            errors={errors}
-            registerOptions={{
-              onChange: (e) => {
-                switchNetwork?.(parseInt(e.target.value))
-              },
-            }}
-          >
-            <option value="">Choose option</option>
-            {SUPPORTED_CHAINS?.map((chain, idx) => {
-              return (
-                <option key={chain.id} value={chain.id}>
-                  {chain.name}
-                </option>
-              )
-            })}
-          </SelectWithLabel>
           <TextareaWithLabel
             className="mb-3"
             label="About"

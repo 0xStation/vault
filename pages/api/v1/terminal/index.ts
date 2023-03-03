@@ -9,12 +9,22 @@ export default async function handler(
 
   switch (method) {
     case "PUT":
-      const { safeAddress, name, chainId, description, url } = body as {
+      const {
+        safeAddress,
+        name,
+        chainId,
+        description,
+        url,
+        transactionData,
+        nonce,
+      } = body as {
         safeAddress: string
         name: string
         chainId: number
         description?: string
         url?: string
+        transactionData?: any
+        nonce?: number
       }
 
       let terminal
@@ -27,6 +37,8 @@ export default async function handler(
               name,
               description,
               url,
+              safeTxns: transactionData ? [transactionData] : [],
+              nonce,
             },
           },
         })

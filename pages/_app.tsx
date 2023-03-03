@@ -4,6 +4,7 @@ import type { AppProps } from "next/app"
 import NextHead from "next/head"
 import { useEffect, useState } from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
+import { SWRConfig } from "swr"
 import { WagmiConfig } from "wagmi"
 import "../styles/globals.css"
 
@@ -50,35 +51,37 @@ function App({ Component, pageProps }: AppProps) {
   useEffect(() => setMounted(true), [])
   const [loading] = useIsRouterLoading()
   return (
-    <WagmiConfig client={client}>
-      <RainbowKitProvider
-        appInfo={{
-          appName: "Station",
-        }}
-        chains={chains}
-        theme={lightTheme({
-          accentColor: "#AD72FF",
-          accentColorForeground: "white",
-          borderRadius: "small",
-          fontStack: "system",
-          overlayBlur: "small",
-        })}
-      >
-        <NextHead>
-          <title>Station</title>
-        </NextHead>
-        <QueryClientProvider client={queryClient}>
-          {mounted &&
-            (loading ? (
-              <Spinner />
-            ) : (
-              <AppLayout>
-                <Component {...pageProps} />
-              </AppLayout>
-            ))}
-        </QueryClientProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <WagmiConfig client={client}>
+        <RainbowKitProvider
+          appInfo={{
+            appName: "Station",
+          }}
+          chains={chains}
+          theme={lightTheme({
+            accentColor: "#AD72FF",
+            accentColorForeground: "white",
+            borderRadius: "small",
+            fontStack: "system",
+            overlayBlur: "small",
+          })}
+        >
+          <NextHead>
+            <title>Station</title>
+          </NextHead>
+          <QueryClientProvider client={queryClient}>
+            {mounted &&
+              (loading ? (
+                <Spinner />
+              ) : (
+                <AppLayout>
+                  <Component {...pageProps} />
+                </AppLayout>
+              ))}
+          </QueryClientProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </SWRConfig>
   )
 }
 

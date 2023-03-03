@@ -7,12 +7,16 @@ export const createTerminal = async ({
   chainId,
   description,
   url,
+  transactionData,
+  nonce,
 }: {
   safeAddress: string
   name: string
   chainId: number
   description?: string
   url?: string
+  transactionData?: any
+  nonce?: number
 }) => {
   if (!safeAddress || !name || !chainId)
     throw Error(
@@ -24,6 +28,8 @@ export const createTerminal = async ({
     chainId,
     description,
     url,
+    transactionData,
+    nonce,
   })
 
   return response.data
