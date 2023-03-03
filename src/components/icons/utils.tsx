@@ -12,6 +12,7 @@ export const icon = cva("", {
     color: {
       base: "fill-black",
       "slate-500": "fill-slate-500",
+      "stroke-slate-500": "stroke-slate-500",
     },
   },
 })

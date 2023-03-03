@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEnsAvatar, useEnsName } from "wagmi"
+import { useContract, useEnsAvatar, useEnsName } from "wagmi"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import {
   TerminalAssetsHistoryFilter,
@@ -13,7 +13,7 @@ import {
   TerminalAssetsTab,
   TerminalAssetsTabBar,
 } from "../../src/components/core/TabBars/TerminalAssetsTabBar"
-import { ArrowLeft } from "../../src/components/icons"
+import { ArrowLeft, Contract } from "../../src/components/icons"
 import { Hyperlink } from "../../src/components/ui/Hyperlink"
 import LabelCard from "../../src/components/ui/LabelCard"
 import {
@@ -128,13 +128,22 @@ const TransactionItem = ({
   const { data: name } = useEnsName({ address: from as `0x${string}` })
   const { data: avatarUri } = useEnsAvatar({ address: from as `0x${string}` })
 
+  // @tdot: Not sure what other way exists to determine whether the address is a contract or not.
+  const contract = useContract({
+    address: from,
+  })
+
+  const isContract = !!contract
+
   const blockExplorer = (networks as Record<string, any>)[String(chainId)]
     .explorer
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row items-center space-x-2">
         <div className="relative h-6 w-6 rounded-full">
-          {avatarUri ? (
+          {isContract ? (
+            <Contract />
+          ) : avatarUri ? (
             <Image
               src={avatarUri}
               alt={"Logo for transaction"}
