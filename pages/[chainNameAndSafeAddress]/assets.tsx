@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useEnsAvatar, useEnsName } from "wagmi"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import {
   TerminalAssetsHistoryFilter,
@@ -13,10 +14,12 @@ import {
   TerminalAssetsTabBar,
 } from "../../src/components/core/TabBars/TerminalAssetsTabBar"
 import { ArrowLeft } from "../../src/components/icons"
+import { Hyperlink } from "../../src/components/ui/Hyperlink"
 import LabelCard from "../../src/components/ui/LabelCard"
+import { useAssetTransfers } from "../../src/hooks/useAssetTransfers"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import useNFTAssetData from "../../src/hooks/useNFTAssetData"
-import useTransactions from "../../src/hooks/useTransactions"
+import networks from "../../src/lib/utils/networks.json"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
 
@@ -105,22 +108,52 @@ const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
 }
 
 type TransactionProps = {
-  logoUri?: string
+  chainId: number
+  hash: string
   value: string
   date: string
   from: string
 }
 
-const TransactionItem = ({ logoUri, value, date, from }: TransactionProps) => {
+const TransactionItem = ({
+  hash,
+  value,
+  date,
+  from,
+  chainId,
+}: TransactionProps) => {
+  const { data: name } = useEnsName({ address: from as `0x${string}` })
+  const { data: avatarUri } = useEnsAvatar({ address: from as `0x${string}` })
+
+  const blockExplorer = (networks as Record<string, any>)[String(chainId)]
+    .explorer
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row items-center space-x-2">
         <div className="relative h-6 w-6 rounded-full">
-          <span className="block h-6 w-6 rounded-full bg-slate-200"></span>
+          {avatarUri ? (
+            <Image
+              src={avatarUri}
+              alt={"Logo for transaction"}
+              fill={true}
+              className="block rounded-full object-contain"
+            />
+          ) : (
+            <span className="block h-6 w-6 rounded-full bg-slate-200"></span>
+          )}
         </div>
         <div className="flex flex-col">
-          <p>{from}</p>
-          <p className="text-xs text-slate-500">{date}</p>
+          <p>{name ?? from.slice(0, 6) + "..." + from.slice(-3)}</p>
+          <div className="flex flex-row">
+            <p className="text-xs text-slate-500">
+              {date}
+              {" . "}
+            </p>
+            <Hyperlink
+              href={`${blockExplorer}/tx/${hash}`}
+              label="View on Etherscan"
+            />
+          </div>
         </div>
       </div>
       <p className="text-lg text-slate-500">{value}</p>
@@ -128,43 +161,76 @@ const TransactionItem = ({ logoUri, value, date, from }: TransactionProps) => {
   )
 }
 
+type TransferItem = {
+  hash: string
+  from: string
+  to: string
+  value: number | null
+  asset: string | null
+  category: "external" | "erc20" | "erc721" | "erc1155"
+  metadata: {
+    blockTimestamp: string
+  }
+}
+
+const formatAssetValue = (tx: TransferItem): string => {
+  switch (tx.category) {
+    case "erc20":
+      return tx.value + " " + tx.asset
+    case "external":
+      return tx.value + " ETH"
+    case "erc721":
+    case "erc1155":
+      return ""
+  }
+}
+
+const formatTxDate = (tx: TransferItem): string => {
+  const date = new Date(tx.metadata.blockTimestamp)
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+  return months[date.getMonth()] + " " + date.getDate()
+}
+
+const IncomingAssetsTab = ({ terminal }: { terminal: Terminal }) => {
+  const { data } = useAssetTransfers(terminal.safeAddress, terminal.chainId)
+
+  return (
+    <section className="space-y-4 px-4">
+      {data?.map((tx: TransferItem) => (
+        <TransactionItem
+          key={tx.hash}
+          hash={tx.hash}
+          chainId={terminal.chainId}
+          value={formatAssetValue(tx)}
+          date={formatTxDate(tx)}
+          from={tx.from}
+        />
+      ))}
+    </section>
+  )
+}
+
 const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
-  const { data } = useTransactions(terminal.safeAddress, terminal.chainId)
-
-  const sent = data?.filter((d) => d.fromAddress === terminal.safeAddress)
-
-  const received = data?.filter((d) => d.fromAddress !== terminal.safeAddress)
-
   return (
     <TabsContent value={TerminalAssetsTab.HISTORY}>
       <TerminalAssetsHistoryFilterBar>
         <TabsContent value={TerminalAssetsHistoryFilter.SENT}>
-          <section className="space-y-4 px-4">
-            {sent?.map((tx) => (
-              <TransactionItem
-                key={tx.transactionHash}
-                value={tx.value.pretty + " " + tx.value.symbol}
-                date={tx.timestamp}
-                from={
-                  tx.fromAddress.slice(0, 6) + "..." + tx.fromAddress.slice(-3)
-                }
-              />
-            ))}
-          </section>
+          <section className="space-y-4 px-4"></section>
         </TabsContent>
         <TabsContent value={TerminalAssetsHistoryFilter.RECEIVED}>
-          <section className="space-y-4 px-4">
-            {received?.map((tx) => (
-              <TransactionItem
-                key={tx.transactionHash}
-                value={tx.value.pretty + " " + tx.value.symbol}
-                date={tx.timestamp}
-                from={
-                  tx.fromAddress.slice(0, 6) + "..." + tx.fromAddress.slice(-3)
-                }
-              />
-            ))}
-          </section>
+          <IncomingAssetsTab terminal={terminal} />
         </TabsContent>
       </TerminalAssetsHistoryFilterBar>
     </TabsContent>
@@ -187,7 +253,7 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
         <h3 className="mb-2 text-lg font-bold">Assets</h3>
       </section>
       <TerminalAssetsTabBar>
-        <CurrentAssetsTab terminal={terminal} />
+        {/* <CurrentAssetsTab terminal={terminal} /> */}
         <TerminalAssetsHistoryTab terminal={terminal} />
       </TerminalAssetsTabBar>
     </>
