@@ -16,7 +16,10 @@ import {
 import { ArrowLeft } from "../../src/components/icons"
 import { Hyperlink } from "../../src/components/ui/Hyperlink"
 import LabelCard from "../../src/components/ui/LabelCard"
-import { useAssetTransfers } from "../../src/hooks/useAssetTransfers"
+import {
+  TransferDirection,
+  useAssetTransfers,
+} from "../../src/hooks/useAssetTransfers"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import useNFTAssetData from "../../src/hooks/useNFTAssetData"
 import networks from "../../src/lib/utils/networks"
@@ -152,6 +155,7 @@ const TransactionItem = ({
             <Hyperlink
               href={`${blockExplorer}/tx/${hash}`}
               label="View on Etherscan"
+              size="xs"
             />
           </div>
         </div>
@@ -203,8 +207,18 @@ const formatTxDate = (tx: TransferItem): string => {
   return months[date.getMonth()] + " " + date.getDate()
 }
 
-const IncomingAssetsTab = ({ terminal }: { terminal: Terminal }) => {
-  const { data } = useAssetTransfers(terminal.safeAddress, terminal.chainId)
+const AssetTransfersTab = ({
+  terminal,
+  direction,
+}: {
+  terminal: Terminal
+  direction: string
+}) => {
+  const { data } = useAssetTransfers(
+    terminal.safeAddress,
+    terminal.chainId,
+    direction,
+  )
 
   return (
     <section className="space-y-4 px-4">
@@ -227,10 +241,16 @@ const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
     <TabsContent value={TerminalAssetsTab.HISTORY}>
       <TerminalAssetsHistoryFilterBar>
         <TabsContent value={TerminalAssetsHistoryFilter.SENT}>
-          <section className="space-y-4 px-4"></section>
+          <AssetTransfersTab
+            terminal={terminal}
+            direction={TransferDirection.OUTBOUND}
+          />
         </TabsContent>
         <TabsContent value={TerminalAssetsHistoryFilter.RECEIVED}>
-          <IncomingAssetsTab terminal={terminal} />
+          <AssetTransfersTab
+            terminal={terminal}
+            direction={TransferDirection.INBOUND}
+          />
         </TabsContent>
       </TerminalAssetsHistoryFilterBar>
     </TabsContent>
