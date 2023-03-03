@@ -82,7 +82,7 @@ const RequestTypeContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
 
 const DesktopTerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
   return (
-    <DesktopTerminalLayout terminal={terminal} assumeDefaultPadding={false}>
+    <DesktopTerminalLayout terminal={terminal}>
       <div>
         <div className="my-4 flex flex-row items-center justify-between px-4">
           <span className="text-lg font-bold">Requests</span>

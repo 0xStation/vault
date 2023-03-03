@@ -9,19 +9,19 @@ import {
   useSendTransaction,
   useWaitForTransaction,
 } from "wagmi"
-import { RawCall } from "../../../src/lib/transactions/call"
-import useStore from "../../hooks/stores/useStore"
-import { useToast } from "../../hooks/useToast"
-import { batchCalls } from "../../lib/transactions/batch"
-import { callAction } from "../../lib/transactions/conductor"
-import networks from "../../lib/utils/networks/networks.json"
-import { useSetActionsPending } from "../../models/action/hooks"
-import { Action } from "../../models/action/types"
-import { Proof } from "../../models/proof/types"
-import { useCompleteRequestsExecution } from "../../models/request/hooks"
-import { RequestFrob } from "../../models/request/types"
-import { SignerQuorumRequestContent } from "./SignerQuorumRequestContent"
-import { TokenTransferRequestCard } from "./TokenTransferRequestCard"
+import useStore from "../../../hooks/stores/useStore"
+import { useToast } from "../../../hooks/useToast"
+import { batchCalls } from "../../../lib/transactions/batch"
+import { RawCall } from "../../../lib/transactions/call"
+import { callAction } from "../../../lib/transactions/conductor"
+import networks from "../../../lib/utils/networks/networks.json"
+import { useSetActionsPending } from "../../../models/action/hooks"
+import { Action } from "../../../models/action/types"
+import { Proof } from "../../../models/proof/types"
+import { useCompleteRequestsExecution } from "../../../models/request/hooks"
+import { RequestFrob } from "../../../models/request/types"
+import { SignerQuorumRequestContent } from "../SignerQuorumRequestContent"
+import { TokenTransferRequestCard } from "../TokenTransferRequestCard"
 
 const BatchExecuteWrapper = ({
   requestsToApprove,

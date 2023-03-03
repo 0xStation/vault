@@ -9,8 +9,8 @@ import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
-import BatchExecuteDrawer from "../request/BatchExecuteDrawer"
-import BatchVoteDrawer from "../request/BatchVoteDrawer"
+import BatchExecuteManager from "./BatchExecuteManager"
+import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
 
 const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
@@ -252,7 +252,7 @@ const RequestListForm = ({
         approve={isVotingApproval}
         clearSelectedRequests={reset}
       />
-      <BatchExecuteDrawer
+      <BatchExecuteManager
         requestsToApprove={batchState.selectedRequests}
         isOpen={drawerManagerState.batchExecuteDrawer}
         setIsOpen={(state: boolean) => {
