@@ -1,10 +1,7 @@
-import { createBreakpoint } from "react-use"
+import Breakpoint from "@ui/Breakpoint"
+import { RequestFrob } from "../../../../src/models/request/types"
 import BatchVoteDrawer from "./BatchVoteDrawer"
 import BatchVoteModal from "./BatchVoteModal"
-
-import { RequestFrob } from "../../../../src/models/request/types"
-
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
 
 const BatchVoteManager = ({
   isOpen,
@@ -19,25 +16,30 @@ const BatchVoteManager = ({
   requestsToApprove: RequestFrob[]
   clearSelectedRequests: () => void
 }) => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
-
-  return isMobile ? (
-    <BatchVoteDrawer
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      approve={approve}
-      requestsToApprove={requestsToApprove}
-      clearSelectedRequests={clearSelectedRequests}
-    />
-  ) : (
-    <BatchVoteModal
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      approve={approve}
-      requestsToApprove={requestsToApprove}
-      clearSelectedRequests={clearSelectedRequests}
-    />
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile)
+          return (
+            <BatchVoteDrawer
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              approve={approve}
+              requestsToApprove={requestsToApprove}
+              clearSelectedRequests={clearSelectedRequests}
+            />
+          )
+        return (
+          <BatchVoteModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            approve={approve}
+            requestsToApprove={requestsToApprove}
+            clearSelectedRequests={clearSelectedRequests}
+          />
+        )
+      }}
+    </Breakpoint>
   )
 }
 

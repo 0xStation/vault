@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react"
 import { ActionVariant } from "@prisma/client"
+import Breakpoint from "@ui/Breakpoint"
 import { useReducer, useState } from "react"
-import { createBreakpoint } from "react-use"
 import { listIntersection } from "../../lib/utils/listIntersection"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
@@ -13,7 +13,6 @@ import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
 
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
 
 type BatchState = {
@@ -77,9 +76,6 @@ const RequestListForm = ({
   mutate: any
   isProfile?: boolean
 }) => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
-
   const [drawerManagerState, setDrawerManagerState] = useState({
     batchVoteDrawer: false,
     batchExecuteDrawer: false,
@@ -172,60 +168,62 @@ const RequestListForm = ({
       <form>
         <ul>
           {requests.map((request, idx) => {
-            if (isMobile) {
-              return (
-                <RequestCard
-                  onCheckboxChange={onCheckboxChange}
-                  disabled={
-                    (batchState.batchVariant &&
-                      request.stage !== batchState.batchVariant) ||
-                    (request.stage === "EXECUTE" &&
-                      listIntersection(
-                        request.validActions as (
-                          | "EXECUTE-REJECT"
-                          | "EXECUTE-APPROVE"
-                        )[],
-                        batchState.validActions,
-                      ).length === 0)
-                  }
-                  key={`request-${idx}`}
-                  request={request}
-                  showTerminal={isProfile ? request.terminal : undefined}
-                  takeActionOnRequest={(
-                    action: "approve" | "reject" | "execute",
-                    request,
-                  ) => {
-                    setRequestActedOn(request)
-                    setPromptAction(action)
-                    if (action === "execute") {
-                      // set ExecuteDrawer open
-                    } else {
-                      toggleDrawer("voteDrawer", true)
-                    }
-                  }}
-                />
-              )
-            } else {
-              return (
-                <RequestTableRow
-                  disabled={
-                    (batchState.batchVariant &&
-                      request.stage !== batchState.batchVariant) ||
-                    (request.stage === "EXECUTE" &&
-                      listIntersection(
-                        request.validActions as (
-                          | "EXECUTE-REJECT"
-                          | "EXECUTE-APPROVE"
-                        )[],
-                        batchState.validActions,
-                      ).length === 0)
-                  }
-                  request={request}
-                  key={`request-${idx}`}
-                  onCheckboxChange={onCheckboxChange}
-                />
-              )
-            }
+            return (
+              <Breakpoint key={`request-${idx}`}>
+                {(isMobile) => {
+                  if (isMobile)
+                    return (
+                      <RequestCard
+                        onCheckboxChange={onCheckboxChange}
+                        disabled={
+                          (batchState.batchVariant &&
+                            request.stage !== batchState.batchVariant) ||
+                          (request.stage === "EXECUTE" &&
+                            listIntersection(
+                              request.validActions as (
+                                | "EXECUTE-REJECT"
+                                | "EXECUTE-APPROVE"
+                              )[],
+                              batchState.validActions,
+                            ).length === 0)
+                        }
+                        request={request}
+                        showTerminal={isProfile ? request.terminal : undefined}
+                        takeActionOnRequest={(
+                          action: "approve" | "reject" | "execute",
+                          request,
+                        ) => {
+                          setRequestActedOn(request)
+                          setPromptAction(action)
+                          if (action === "execute") {
+                            // set ExecuteDrawer open
+                          } else {
+                            toggleDrawer("voteDrawer", true)
+                          }
+                        }}
+                      />
+                    )
+                  return (
+                    <RequestTableRow
+                      disabled={
+                        (batchState.batchVariant &&
+                          request.stage !== batchState.batchVariant) ||
+                        (request.stage === "EXECUTE" &&
+                          listIntersection(
+                            request.validActions as (
+                              | "EXECUTE-REJECT"
+                              | "EXECUTE-APPROVE"
+                            )[],
+                            batchState.validActions,
+                          ).length === 0)
+                      }
+                      request={request}
+                      onCheckboxChange={onCheckboxChange}
+                    />
+                  )
+                }}
+              </Breakpoint>
+            )
           })}
         </ul>
       </form>

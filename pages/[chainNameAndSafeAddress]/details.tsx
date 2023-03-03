@@ -1,17 +1,16 @@
+import Breakpoint from "@ui/Breakpoint"
+// import Device from "@ui/Device"
 import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { createBreakpoint } from "react-use"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ArrowLeft } from "../../src/components/icons"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
-
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
 
 const MobileTerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
   const router = useRouter()
@@ -50,13 +49,13 @@ const DesktopTerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
 }
 
 const TerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
-
-  return isMobile ? (
-    <MobileTerminalDetailsPage terminal={terminal} />
-  ) : (
-    <DesktopTerminalDetailsPage terminal={terminal} />
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) return <MobileTerminalDetailsPage terminal={terminal} />
+        return <DesktopTerminalDetailsPage terminal={terminal} />
+      }}
+    </Breakpoint>
   )
 }
 

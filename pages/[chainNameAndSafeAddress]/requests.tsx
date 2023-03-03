@@ -1,9 +1,9 @@
 import { ArrowLeft } from "@icons"
+import Breakpoint from "@ui/Breakpoint"
 import { TabsContent } from "@ui/Tabs"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { createBreakpoint } from "react-use"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import RequestListByFilterAndTab from "../../src/components/core/RequestListByFilterAndTab"
 import TerminalRequestStatusFilterBar, {
@@ -21,8 +21,6 @@ const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
   gor: 5,
 }
-
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
 
 const RequestContentForFilterAndTab = ({
   filter,
@@ -123,13 +121,13 @@ const MobileTerminalRequestsPage = () => {
 }
 
 const TerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
-
-  return isMobile ? (
-    <MobileTerminalRequestsPage />
-  ) : (
-    <DesktopTerminalRequestsPage terminal={terminal} />
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) return <MobileTerminalRequestsPage />
+        return <DesktopTerminalRequestsPage terminal={terminal} />
+      }}
+    </Breakpoint>
   )
 }
 

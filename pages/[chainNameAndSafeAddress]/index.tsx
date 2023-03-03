@@ -1,23 +1,21 @@
+import Breakpoint from "@ui/Breakpoint"
 import { Network } from "@ui/Network"
-import Breakpoint from '@ui/Breakpoint'
-import { GetServerSidePropsContext } from "next"
 import truncateString from "lib/utils"
+import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
-import { createBreakpoint } from "react-use"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ChevronRight } from "../../src/components/icons"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
+import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
 import LabelCard from "../../src/components/ui/LabelCard"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
-import { convertGlobalId } from "../../src/models/terminal/utils"
-import {Terminal} from '../../src/models/terminal/types'
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
-
+import { Terminal } from "../../src/models/terminal/types"
+import { convertGlobalId } from "../../src/models/terminal/utils"
 
 type TerminalNavOption = {
   label: string
@@ -25,20 +23,6 @@ type TerminalNavOption = {
   active: boolean
   href: string
 }
-
-const TerminalPage = () => {
-  const router = useRouter()
-  const { chainId, address } = convertGlobalId(
-    router.query.chainNameAndSafeAddress as string,
-  )
-  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
-    chainId: chainId as number,
-    address: address as string,
-  })
-  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
-    address: terminal?.safeAddress,
-    chainId: terminal?.chainId,
-  })
 
 const options = (router: any) =>
   [
@@ -74,12 +58,21 @@ const options = (router: any) =>
     },
   ] as TerminalNavOption[]
 
+const MobileTerminalIndexPage = () => {
+  const router = useRouter()
+  const { chainId, address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
+  )
+  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
+    chainId: chainId as number,
+    address: address as string,
+  })
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
+    address: terminal?.safeAddress,
+    chainId: terminal?.chainId,
+  })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
-
-const MobileTerminalIndexPage = ({ terminal }: { terminal: Terminal }) => {
-  const router = useRouter()
   return (
     <>
       {isSuccess && !isModuleEnabled && (
@@ -156,7 +149,7 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
   return (
     <Breakpoint>
       {(isMobile) => {
-        if (isMobile) return <MobileTerminalIndexPage terminal={terminal} />
+        if (isMobile) return <MobileTerminalIndexPage />
         return <DesktopTerminalIndexPage terminal={terminal} />
       }}
     </Breakpoint>

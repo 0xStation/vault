@@ -1,9 +1,7 @@
-import { createBreakpoint } from "react-use"
+import Breakpoint from "@ui/Breakpoint"
 import { RequestFrob } from "../../../../src/models/request/types"
 import BatchExecuteDrawer from "./BatchExecuteDrawer"
 import BatchExecuteModal from "./BatchExecuteModal"
-
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 580 })
 
 const BatchExecuteManager = ({
   isOpen,
@@ -32,27 +30,32 @@ const BatchExecuteManager = ({
   }) => void
   clearSelectedRequests: () => void
 }) => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
-
-  return isMobile ? (
-    <BatchExecuteDrawer
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      requestsToApprove={requestsToApprove}
-      approve={approve}
-      mutateSelectedRequests={mutateSelectedRequests}
-      clearSelectedRequests={clearSelectedRequests}
-    />
-  ) : (
-    <BatchExecuteModal
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      requestsToApprove={requestsToApprove}
-      approve={approve}
-      mutateSelectedRequests={mutateSelectedRequests}
-      clearSelectedRequests={clearSelectedRequests}
-    />
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile)
+          return (
+            <BatchExecuteDrawer
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              requestsToApprove={requestsToApprove}
+              approve={approve}
+              mutateSelectedRequests={mutateSelectedRequests}
+              clearSelectedRequests={clearSelectedRequests}
+            />
+          )
+        return (
+          <BatchExecuteModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            requestsToApprove={requestsToApprove}
+            approve={approve}
+            mutateSelectedRequests={mutateSelectedRequests}
+            clearSelectedRequests={clearSelectedRequests}
+          />
+        )
+      }}
+    </Breakpoint>
   )
 }
 
