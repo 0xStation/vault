@@ -32,16 +32,19 @@ const RequestTableRow = ({
   request,
   disabled,
   onCheckboxChange,
+  triggerDetails,
 }: {
   request: RequestFrob
   disabled?: boolean
   onCheckboxChange?: (e: any) => void
+  triggerDetails: (request: RequestFrob) => void
 }) => {
   return (
     <div
       className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-slate-200 py-3 px-4 hover:bg-slate-100 ${
         disabled ? "opacity-30" : "hover:bg-slate-50"
       }`}
+      onClick={() => triggerDetails(request)}
     >
       {onCheckboxChange && (
         <Checkbox

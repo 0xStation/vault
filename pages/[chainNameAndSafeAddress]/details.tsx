@@ -1,5 +1,4 @@
 import Breakpoint from "@ui/Breakpoint"
-// import Device from "@ui/Device"
 import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"

@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react"
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
+import RightSlider from "@ui/RightSlider"
 import { useReducer, useState } from "react"
 import { listIntersection } from "../../lib/utils/listIntersection"
 import { Action } from "../../models/action/types"
@@ -9,6 +10,7 @@ import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
+import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
@@ -88,6 +90,10 @@ const RequestListForm = ({
     })
   }
 
+  const [requestForDetails, setRequestForDetails] = useState<
+    RequestFrob | undefined
+  >(undefined)
+  const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
@@ -165,6 +171,14 @@ const RequestListForm = ({
 
   return (
     <>
+      {requestForDetails && (
+        <RightSlider open={detailsSliderOpen} setOpen={setDetailsSliderOpen}>
+          <RequestDetailsContent
+            request={requestForDetails}
+            mutate={() => {}}
+          />
+        </RightSlider>
+      )}
       <form>
         <ul>
           {requests.map((request, idx) => {
@@ -218,6 +232,10 @@ const RequestListForm = ({
                           ).length === 0)
                       }
                       request={request}
+                      triggerDetails={(request) => {
+                        setRequestForDetails(request)
+                        setDetailsSliderOpen(true)
+                      }}
                       onCheckboxChange={onCheckboxChange}
                     />
                   )
