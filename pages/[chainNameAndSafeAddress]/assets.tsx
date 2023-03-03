@@ -19,7 +19,7 @@ import LabelCard from "../../src/components/ui/LabelCard"
 import { useAssetTransfers } from "../../src/hooks/useAssetTransfers"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import useNFTAssetData from "../../src/hooks/useNFTAssetData"
-import networks from "../../src/lib/utils/networks.json"
+import networks from "../../src/lib/utils/networks"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
 
@@ -253,7 +253,7 @@ const TerminalAssetsPage = ({ terminal }: { terminal: Terminal }) => {
         <h3 className="mb-2 text-lg font-bold">Assets</h3>
       </section>
       <TerminalAssetsTabBar>
-        {/* <CurrentAssetsTab terminal={terminal} /> */}
+        <CurrentAssetsTab terminal={terminal} />
         <TerminalAssetsHistoryTab terminal={terminal} />
       </TerminalAssetsTabBar>
     </>
