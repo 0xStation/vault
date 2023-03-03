@@ -12,7 +12,6 @@ const nextConfig = {
       "i.seadn.io", // ENS avatars
     ],
   },
-  reactStrictMode: true,
 }
 
 module.exports = nextConfig
