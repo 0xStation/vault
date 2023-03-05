@@ -7,12 +7,12 @@ export const ExecuteAction = ({
   title,
   subtitle,
   request,
-  mutate,
+  mutateRequest,
 }: {
   title: string
   subtitle: string
   request: RequestFrob
-  mutate: any
+  mutateRequest: any
 }) => {
   const [isExecuteOpen, setIsExecuteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
@@ -43,7 +43,7 @@ export const ExecuteAction = ({
         isOpen={isExecuteOpen}
         setIsOpen={setIsExecuteOpen}
         approve={approve}
-        mutate={mutate}
+        mutateRequest={mutateRequest}
       />
       <div className="fixed bottom-0 w-full max-w-[580px] border-t border-slate-200 bg-white px-4 pt-3 pb-6">
         <div className="flex flex-row items-center justify-between">

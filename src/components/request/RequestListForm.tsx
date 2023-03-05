@@ -160,6 +160,28 @@ const RequestListForm = ({
     })
   }
 
+  const mutateRequest = ({
+    fn,
+    requestId,
+    payload,
+  }: {
+    fn: Promise<any>
+    requestId: string
+    payload: any
+  }) => {
+    const updatedRequests = requests.map((request: RequestFrob) => {
+      if (request.id === requestId) {
+        return payload
+      }
+      return request
+    })
+    mutate(fn, {
+      optimisticData: updatedRequests,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
+
   if (requests.length === 0) {
     return (
       <EmptyList
@@ -175,7 +197,8 @@ const RequestListForm = ({
         <RightSlider open={detailsSliderOpen} setOpen={setDetailsSliderOpen}>
           <RequestDetailsContent
             request={requestForDetails}
-            mutate={() => {}}
+            mutate={() => mutate()}
+            mutateRequest={mutateRequest}
           />
         </RightSlider>
       )}
@@ -252,12 +275,7 @@ const RequestListForm = ({
           toggleDrawer("voteDrawer", state)
         }}
         approve={promptAction === "approve"}
-        optimisticVote={(newRequest) => {
-          const newArray = requests.map((request) =>
-            request.id === newRequest.id ? newRequest : request,
-          )
-          mutate(newArray)
-        }}
+        mutateRequest={mutateRequest}
       />
       <BatchVoteDrawer
         requestsToApprove={batchState.selectedRequests}

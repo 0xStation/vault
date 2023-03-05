@@ -30,7 +30,7 @@ export const ExecuteWrapper = ({
   isOpen,
   setIsOpen,
   txPayload,
-  mutate,
+  mutateRequest,
 }: {
   title: string
   subtitle: string
@@ -39,7 +39,7 @@ export const ExecuteWrapper = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
-  mutate: any
+  mutateRequest: any
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -82,6 +82,7 @@ export const ExecuteWrapper = ({
           href: `https://www.etherscan.io/tx/${txData?.hash}`,
           label: "View on etherscan",
         },
+        useTimeout: false,
       })
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
@@ -93,13 +94,10 @@ export const ExecuteWrapper = ({
         }
         return action
       })
-      mutate(setActionPending, {
-        optimisticData: {
-          ...request,
-          actions: updatedActions,
-        },
-        populateCache: false,
-        revalidate: false,
+      mutateRequest({
+        fn: setActionPending,
+        requestId: request.id,
+        payload: { ...request, actions: updatedActions },
       })
     }
   }, [isSendTransactionSuccess])
@@ -117,20 +115,18 @@ export const ExecuteWrapper = ({
         }
         return action
       })
-      mutate(
-        completeRequestExecution({
+      mutateRequest({
+        fn: completeRequestExecution({
           ...formData, // todo: clarify what formdata is here...
           actionId: actionToExecute.id,
         }),
-        {
-          optimisticData: {
-            ...request,
-            actions: updatedActions,
-          },
-          populateCache: false,
-          revalidate: false,
+        request: request.id,
+        payload: {
+          ...request,
+          actions: updatedActions,
         },
-      )
+      })
+
       closeCurrentToast() // loading toast
       successToast({
         message: "Request successfully executed!",
@@ -201,7 +197,7 @@ export const ExecuteRequest = ({
   isOpen,
   setIsOpen,
   approve,
-  mutate,
+  mutateRequest,
 }: {
   title: string
   subtitle: string
@@ -209,7 +205,7 @@ export const ExecuteRequest = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
-  mutate: any
+  mutateRequest: any
 }) => {
   let actionsToExecute: any[] = []
   request?.actions.forEach((action: Action) => {
@@ -238,7 +234,7 @@ export const ExecuteRequest = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       txPayload={txPayload}
-      mutate={mutate}
+      mutateRequest={mutateRequest}
     />
   )
 }

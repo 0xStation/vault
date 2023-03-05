@@ -7,10 +7,32 @@ const RequestDetailsDesktop = () => {
 
   const { request, mutate } = useRequest(router.query.requestId as string)
 
+  const mutateRequest = ({
+    fn,
+    requestId,
+    payload,
+  }: {
+    fn: Promise<any>
+    requestId: string
+    payload: any
+  }) => {
+    mutate(fn, {
+      optimisticData: payload,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
+
   if (!request) {
     return <></>
   }
-  return <RequestDetailsContent request={request} mutate={mutate} />
+  return (
+    <RequestDetailsContent
+      request={request}
+      mutate={mutate}
+      mutateRequest={mutateRequest}
+    />
+  )
 }
 
 export default RequestDetailsDesktop

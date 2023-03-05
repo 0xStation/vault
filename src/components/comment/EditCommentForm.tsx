@@ -5,12 +5,12 @@ import useStore from "../../hooks/stores/useStore"
 import { useEditComment } from "../../models/activity/hooks"
 
 export const EditCommentForm = ({
-  optimisticEditComment,
+  mutateRequest,
   activityId,
   initialValue,
   close,
 }: {
-  optimisticEditComment: (update: any) => void
+  mutateRequest: any
   activityId: string
   initialValue: string
   close: () => void
@@ -30,7 +30,10 @@ export const EditCommentForm = ({
       activityId,
       data: { ...data, edited: true },
     }
-    optimisticEditComment(update)
+    mutateRequest(
+      editComment({ ...data, address: activeUser?.address as string }),
+      update,
+    )
     setLoading(false)
     close()
   }

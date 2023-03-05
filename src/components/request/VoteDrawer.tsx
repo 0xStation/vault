@@ -18,13 +18,13 @@ export const VoteDrawer = ({
   isOpen,
   setIsOpen,
   approve,
-  optimisticVote,
+  mutateRequest,
 }: {
   request?: RequestFrob
   isOpen: boolean
   setIsOpen: (state: boolean) => void
   approve: boolean
-  optimisticVote: (newRequest: RequestFrob) => void
+  mutateRequest: any
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
@@ -37,7 +37,7 @@ export const VoteDrawer = ({
     formState: { errors },
   } = useForm()
 
-  const { successToast, errorToast } = useToast()
+  const { successToast } = useToast()
   const { signMessage } = useSignature()
   const { vote } = useVote(request?.id as string)
 
@@ -50,25 +50,7 @@ export const VoteDrawer = ({
           : action.variant === ActionVariant.REJECTION,
       ),
     )
-
-    let signature
-    try {
-      signature = await signMessage(message)
-      await vote({
-        signature,
-        address: activeUser?.address,
-        approve,
-        comment: data.comment,
-      })
-    } catch (e) {
-      setLoading(false)
-      errorToast({ message: `${approve ? "Approval" : "Rejection"} failed` })
-      return
-    }
-    setLoading(false)
-    setIsOpen(false)
-    resetField("comment")
-    successToast({ message: `${approve ? "Approved" : "Rejected"} request` })
+    let signature = await signMessage(message)
 
     const voteActivity: Activity = {
       id: "optimistic-vote",
@@ -111,7 +93,21 @@ export const VoteDrawer = ({
       ),
     }
 
-    optimisticVote(newRequest)
+    mutateRequest({
+      fn: vote({
+        signature,
+        address: activeUser?.address,
+        approve,
+        comment: data.comment,
+      }),
+      requestId: request?.id,
+      payload: newRequest,
+    })
+
+    setLoading(false)
+    setIsOpen(false)
+    resetField("comment")
+    successToast({ message: `${approve ? "Approved" : "Rejected"} request` })
   }
 
   return (

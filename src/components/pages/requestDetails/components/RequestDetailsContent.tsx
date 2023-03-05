@@ -14,9 +14,19 @@ import { RequestFrob } from "../../../../models/request/types"
 const RequestDetailsContent = ({
   request,
   mutate,
+  mutateRequest,
 }: {
   request: RequestFrob
   mutate: any
+  mutateRequest: ({
+    fn,
+    requestId,
+    payload,
+  }: {
+    fn: Promise<any>
+    requestId: string
+    payload: any
+  }) => void
 }) => {
   if (!request) {
     return <></>
@@ -113,38 +123,49 @@ const RequestDetailsContent = ({
               <ActivityItem
                 activity={activity}
                 key={`activity-${idx}`}
-                optimisticEditComment={(update: {
-                  activityId: string
-                  comment: string
-                }) => {
-                  mutate({
-                    ...request!,
-                    activities: request!.activities.map((a) => {
-                      if (update.activityId !== a.id) {
-                        return a
-                      }
-                      return {
-                        ...a,
-                        data: {
-                          comment: update.comment,
-                          edited: true,
-                        },
-                      }
-                    }),
+                mutateRequest={(
+                  fn: Promise<any>,
+                  update: {
+                    activityId: string
+                    comment: string
+                  },
+                ) => {
+                  mutateRequest({
+                    fn,
+                    requestId: request.id,
+                    payload: {
+                      ...request!,
+                      activities: request!.activities.map((a) => {
+                        if (update.activityId !== a.id) {
+                          return a
+                        }
+                        return {
+                          ...a,
+                          data: {
+                            comment: update.comment,
+                            edited: true,
+                          },
+                        }
+                      }),
+                    },
                   })
                 }}
               />
             ))}
           </ul>
           <NewCommentForm
-            optimisticAddComment={(commentActivity) => {
-              mutate({
-                ...request!,
-                activities: [...request!.activities, commentActivity],
-                commentActivities: [
-                  commentActivity,
-                  ...request!.commentActivities,
-                ],
+            mutateRequest={(fn: Promise<any>, commentActivity: any) => {
+              mutateRequest({
+                fn: fn,
+                requestId: request.id,
+                payload: {
+                  ...request!,
+                  activities: [...request!.activities, commentActivity],
+                  commentActivities: [
+                    commentActivity,
+                    ...request!.commentActivities,
+                  ],
+                },
               })
             }}
           />
@@ -156,10 +177,10 @@ const RequestDetailsContent = ({
             title="Execute Approval"
             subtitle="This action is on-chain and will not be reversible."
             request={request}
-            mutate={mutate}
+            mutateRequest={mutateRequest}
           />
         ) : (
-          <CastYourVote request={request} optimisticVote={mutate} />
+          <CastYourVote request={request} mutateRequest={mutateRequest} />
         )}
       </div>
     </>

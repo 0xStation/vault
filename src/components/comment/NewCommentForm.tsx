@@ -8,11 +8,7 @@ import { useForm } from "react-hook-form"
 import useStore from "../../hooks/stores/useStore"
 import { useCreateComment } from "../../models/activity/hooks"
 
-export const NewCommentForm = ({
-  optimisticAddComment,
-}: {
-  optimisticAddComment: (commentActivity: any) => void
-}) => {
+export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
   const activeUser = useStore((state) => state.activeUser)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -27,14 +23,16 @@ export const NewCommentForm = ({
   } = useForm()
   const onSubmit = async (data: any) => {
     setLoading(true)
-    await createComment({ ...data, address: activeUser?.address as string })
     const commentActivity = {
       requestId: router.query.requestId as string,
       variant: ActivityVariant.COMMENT_ON_REQUEST,
       address: activeUser?.address,
       data,
     }
-    optimisticAddComment(commentActivity)
+    mutateRequest(
+      createComment({ ...data, address: activeUser?.address as string }),
+      commentActivity,
+    )
     setLoading(false)
   }
 

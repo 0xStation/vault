@@ -8,10 +8,10 @@ import { VoteDrawer } from "./VoteDrawer"
 
 export const CastYourVote = ({
   request,
-  optimisticVote,
+  mutateRequest,
 }: {
   request?: RequestFrob
-  optimisticVote: (newRequest: RequestFrob) => void
+  mutateRequest: any
 }) => {
   const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [approve, setApprove] = useState<boolean>(false)
@@ -24,7 +24,7 @@ export const CastYourVote = ({
         isOpen={isVoteOpen}
         setIsOpen={setIsVoteOpen}
         approve={approve}
-        optimisticVote={optimisticVote}
+        mutateRequest={mutateRequest}
       />
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation */}
       <div className="fixed bottom-0 w-full max-w-[580px] border-t border-slate-200 bg-white px-4 pt-3 pb-6">

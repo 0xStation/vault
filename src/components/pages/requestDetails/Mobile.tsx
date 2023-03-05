@@ -12,6 +12,23 @@ const RequestDetailsMobile = () => {
   if (!request) {
     return <></>
   }
+
+  const mutateRequest = ({
+    fn,
+    requestId,
+    payload,
+  }: {
+    fn: Promise<any>
+    requestId: string
+    payload: any
+  }) => {
+    mutate(fn, {
+      optimisticData: payload,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
+
   return (
     <>
       <div className="w-full max-w-[580px]">
@@ -24,7 +41,11 @@ const RequestDetailsMobile = () => {
           <Copy />
         </div>
       </div>
-      <RequestDetailsContent request={request} mutate={mutate} />
+      <RequestDetailsContent
+        request={request}
+        mutate={mutate}
+        mutateRequest={mutateRequest}
+      />
     </>
   )
 }
