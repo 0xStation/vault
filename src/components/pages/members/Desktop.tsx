@@ -1,24 +1,8 @@
-import { useRouter } from "next/router"
-import { useTerminalByChainIdAndSafeAddress } from "../../../models/terminal/hooks"
+import { Terminal } from "../../../models/terminal/types"
 import DesktopTerminalLayout from "../../terminal/DesktopTerminalLayout"
 import MembersPageContent from "./components/MembersPageContent"
 
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
-
-const Desktop = () => {
-  const router = useRouter()
-  const { chainNameAndSafeAddress } = router.query as {
-    chainNameAndSafeAddress: string
-  }
-  const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
-  const chainId = chainNameToChainId[chainName] as number
-  const { terminal } = useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
-
-  if (!terminal) return <></>
-
+const Desktop = ({ terminal }: { terminal: Terminal }) => {
   return (
     <DesktopTerminalLayout terminal={terminal}>
       <MembersPageContent terminal={terminal} />

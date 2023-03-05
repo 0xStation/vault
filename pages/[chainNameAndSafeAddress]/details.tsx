@@ -48,6 +48,8 @@ const DesktopTerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
 }
 
 const TerminalDetailsPage = ({ terminal }: { terminal: Terminal }) => {
+  const router = useRouter()
+
   return (
     <Breakpoint>
       {(isMobile) => {
