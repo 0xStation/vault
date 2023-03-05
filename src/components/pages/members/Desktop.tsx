@@ -21,7 +21,7 @@ const Desktop = () => {
 
   return (
     <DesktopTerminalLayout terminal={terminal}>
-      <MembersPageContent />
+      <MembersPageContent terminal={terminal} />
     </DesktopTerminalLayout>
   )
 }
