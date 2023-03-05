@@ -46,6 +46,7 @@ export const ExecuteWrapper = ({
   const { loadingToast, successToast, closeCurrentToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
+  // request.query.requestId is not found in the desktop version
   const { completeRequestExecution } = useCompleteRequestExecution(
     router.query.requestId as string,
   )
@@ -94,6 +95,7 @@ export const ExecuteWrapper = ({
         }
         return action
       })
+
       mutateRequest({
         fn: setActionPending,
         requestId: request.id,

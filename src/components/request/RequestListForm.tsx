@@ -6,7 +6,10 @@ import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
 import { listIntersection } from "../../lib/utils/listIntersection"
-import { removeQueryParam } from "../../lib/utils/updateQueryParam"
+import {
+  addQueryParam,
+  removeQueryParam,
+} from "../../lib/utils/updateQueryParam"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
@@ -106,6 +109,11 @@ const RequestListForm = ({
     }
   }
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
+  const closeDetailsSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "requestId")
+    }
+  }
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
@@ -198,8 +206,11 @@ const RequestListForm = ({
   useEffect(() => {
     if (router.query.sendTokenSliderOpen) {
       setSendTokensSliderOpen(true)
+    } else if (router.query.requestId) {
+      setDetailsSliderOpen(true)
     } else {
       setSendTokensSliderOpen(false)
+      setDetailsSliderOpen(false)
     }
   }, [router.query])
 
@@ -215,7 +226,7 @@ const RequestListForm = ({
   return (
     <>
       {requestForDetails && (
-        <RightSlider open={detailsSliderOpen} setOpen={setDetailsSliderOpen}>
+        <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
           <RequestDetailsContent
             request={requestForDetails}
             mutateRequest={mutateRequest}
@@ -286,6 +297,7 @@ const RequestListForm = ({
                       }
                       request={request}
                       triggerDetails={(request) => {
+                        addQueryParam(router, "requestId", request.id)
                         setRequestForDetails(request)
                         setDetailsSliderOpen(true)
                       }}
