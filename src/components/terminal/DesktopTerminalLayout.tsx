@@ -1,10 +1,9 @@
-import { Button } from "@ui/Button"
 import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
-import { AvatarAddress } from "../../components/core/AvatarAddress"
+import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
 import { StationLogo } from "../../components/icons"
 import { Terminal } from "../../models/terminal/types"
@@ -65,15 +64,6 @@ const DesktopTerminalLayout = ({
       <div className=" relative h-full w-[300px] border-r border-slate-200">
         <section className="flex flex-row items-center justify-between p-4">
           <StationLogo size="lg" />
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              router.push("/terminal/new")
-            }}
-          >
-            + New Terminal
-          </Button>
         </section>
         <section className="mt-4 p-4">
           <div className="rounded border border-slate-200">
@@ -123,16 +113,12 @@ const DesktopTerminalLayout = ({
             )
           })}
         </section>
-        {/* todo -- dropdown (dropup?) */}
-        <section className="absolute bottom-0 p-4">
-          <AvatarAddress
-            address={address as string}
-            size="sm"
-            interactive={false}
-          />
-        </section>
       </div>
-      <div className={`grow ${assumeDefaultPadding ? "p-12" : "p-0"}`}>
+      <div className={`grow ${assumeDefaultPadding ? "px-12 py-4" : "p-0"}`}>
+        <div className="flex justify-end">
+          <AccountNavBar />
+        </div>
+
         {children}
       </div>
     </div>
