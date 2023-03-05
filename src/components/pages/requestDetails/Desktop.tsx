@@ -27,11 +27,7 @@ const RequestDetailsDesktop = () => {
     return <></>
   }
   return (
-    <RequestDetailsContent
-      request={request}
-      mutate={mutate}
-      mutateRequest={mutateRequest}
-    />
+    <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
   )
 }
 

@@ -1,3 +1,4 @@
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import {
   DropdownMenu,
@@ -8,6 +9,7 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/router"
 import useStore from "../../hooks/stores/useStore"
+import { addQueryParam } from "../../lib/utils/updateQueryParam"
 import { useCreateFakeSendTokensRequest } from "../../models/request/hooks"
 import { parseGlobalId } from "../../models/terminal/utils"
 
@@ -30,11 +32,28 @@ export const CreateRequestDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2">
         <DropdownMenuItem className="cursor-pointer focus:bg-white">
-          <Link
-            href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/new`}
-          >
-            Send tokens
-          </Link>
+          <Breakpoint>
+            {(isMobile) => {
+              if (isMobile) {
+                return (
+                  <Link
+                    href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/new`}
+                  >
+                    Send tokens
+                  </Link>
+                )
+              }
+              return (
+                <span
+                  onClick={() => {
+                    addQueryParam(router, "sendTokenSliderOpen", "true")
+                  }}
+                >
+                  Send tokens
+                </span>
+              )
+            }}
+          </Breakpoint>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer focus:bg-white">
           <Link

@@ -1,5 +1,4 @@
 import { ActionStatus, RequestVariantType } from "@prisma/client"
-
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
 import { AvatarAddress } from "../../../../components/core/AvatarAddress"
@@ -13,11 +12,9 @@ import { RequestFrob } from "../../../../models/request/types"
 
 const RequestDetailsContent = ({
   request,
-  mutate,
   mutateRequest,
 }: {
   request: RequestFrob
-  mutate: any
   mutateRequest: ({
     fn,
     requestId,
@@ -42,7 +39,6 @@ const RequestDetailsContent = ({
 
   return (
     <>
-      {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, remove breakpointed classnames when doing actual desktop implementation */}
       <div className="divide-y divide-slate-200">
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">

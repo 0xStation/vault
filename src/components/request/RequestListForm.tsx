@@ -2,8 +2,11 @@ import { Transition } from "@headlessui/react"
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
-import { useReducer, useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useReducer, useState } from "react"
+import { KeyedMutator } from "swr"
 import { listIntersection } from "../../lib/utils/listIntersection"
+import { removeQueryParam } from "../../lib/utils/updateQueryParam"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
@@ -11,6 +14,7 @@ import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
+import { SendTokensContent } from "../pages/sendTokens/components/SendTokensContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
@@ -75,9 +79,10 @@ const RequestListForm = ({
   isProfile = false,
 }: {
   requests: RequestFrob[]
-  mutate: any
+  mutate: KeyedMutator<RequestFrob[] | undefined>
   isProfile?: boolean
 }) => {
+  const router = useRouter()
   const [drawerManagerState, setDrawerManagerState] = useState({
     batchVoteDrawer: false,
     batchExecuteDrawer: false,
@@ -93,6 +98,13 @@ const RequestListForm = ({
   const [requestForDetails, setRequestForDetails] = useState<
     RequestFrob | undefined
   >(undefined)
+  const [sendTokensSliderOpen, setSendTokensSliderOpen] =
+    useState<boolean>(false)
+  const closeSendTokensSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "sendTokenSliderOpen")
+    }
+  }
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
@@ -175,12 +187,21 @@ const RequestListForm = ({
       }
       return request
     })
+
     mutate(fn, {
       optimisticData: updatedRequests,
       populateCache: false,
       revalidate: false,
     })
   }
+
+  useEffect(() => {
+    if (router.query.sendTokenSliderOpen) {
+      setSendTokensSliderOpen(true)
+    } else {
+      setSendTokensSliderOpen(false)
+    }
+  }, [router.query])
 
   if (requests.length === 0) {
     return (
@@ -197,11 +218,20 @@ const RequestListForm = ({
         <RightSlider open={detailsSliderOpen} setOpen={setDetailsSliderOpen}>
           <RequestDetailsContent
             request={requestForDetails}
-            mutate={() => mutate()}
             mutateRequest={mutateRequest}
           />
         </RightSlider>
       )}
+      {
+        <RightSlider
+          open={sendTokensSliderOpen}
+          setOpen={closeSendTokensSlider}
+        >
+          <div className="px-4">
+            <SendTokensContent />
+          </div>
+        </RightSlider>
+      }
       <form>
         <ul>
           {requests.map((request, idx) => {

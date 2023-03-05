@@ -1,6 +1,8 @@
-import { RequestVariantType } from "@prisma/client"
+import { ActionStatus, RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
+import LoadingSpinner from "@ui/LoadingSpinner"
 import { timeSince } from "../../lib/utils"
+import { Action } from "../../models/action/types"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { valueToAmount } from "../../models/token/utils"
 import Checkbox from "../form/Checkbox"
@@ -39,6 +41,11 @@ const RequestTableRow = ({
   onCheckboxChange?: (e: any) => void
   triggerDetails: (request: RequestFrob) => void
 }) => {
+  const hasPendingActions =
+    request.actions.filter((action: Action) => {
+      return action.status === ActionStatus.PENDING
+    }).length > 0
+
   return (
     <div
       className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-slate-200 py-3 px-4 hover:bg-slate-100 ${
@@ -47,12 +54,17 @@ const RequestTableRow = ({
       onClick={() => triggerDetails(request)}
     >
       {onCheckboxChange && (
-        <Checkbox
-          className="hidden"
-          onChange={onCheckboxChange}
-          name={request.id}
-          isDisabled={disabled || false}
-        />
+        <>
+          {hasPendingActions ? (
+            <LoadingSpinner />
+          ) : (
+            <Checkbox
+              onChange={onCheckboxChange}
+              name={request.id}
+              isDisabled={disabled || false}
+            />
+          )}
+        </>
       )}
       <div className="text-xs text-slate-500">#{request.number}</div>
       <Avatar size="sm" address={request.data.createdBy} />
