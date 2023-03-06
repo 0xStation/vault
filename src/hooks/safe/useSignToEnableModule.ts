@@ -7,34 +7,35 @@ import { useSafeMetadata } from "./useSafeMetadata"
 export const useSignToEnableModule = ({
   address,
   chainId,
-  senderAddress,
+  nonce,
 }: {
   address: string
   chainId: number
-  senderAddress: string
+  nonce: string
 }) => {
-  const { nonce } = useGetSafeNonce({ address, chainId })
   const { safeMetadata } = useSafeMetadata({ address, chainId })
   const { signMessage } = useSignature()
 
   const signToEnableModule = async () => {
+    console.log("nonce!", nonce)
     try {
-      const message = addConductorMessage({
-        chainId,
-        safeAddress: address,
-        nonce,
-        contractVersion: safeMetadata.contractVersion,
-      })
+      let message
+      if (safeMetadata?.contractVersion || !nonce) {
+        message = addConductorMessage({
+          chainId,
+          safeAddress: address,
+          nonce: `${nonce}`,
+          contractVersion: safeMetadata?.contractVersion,
+        })
+      } else {
+        throw Error(
+          `Safe ${address} contract version pr ${nonce} is not defined`,
+        )
+      }
 
       const signature = await signMessage(message)
-      const data = await createTransaction({
-        chainId,
-        address,
-        signature,
-        message,
-        senderAddress,
-      })
-      return data
+
+      return { signature, message, nonce }
     } catch (err: any) {
       if (err.name === "ConnectorNotFoundError") {
         console.error(
@@ -43,6 +44,7 @@ export const useSignToEnableModule = ({
       } else {
         console.error("Signature to enable module failed", err)
       }
+      throw err
     }
   }
 

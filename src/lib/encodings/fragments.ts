@@ -71,6 +71,11 @@ export const swapOwner = fn(
   "swapOwner(address prevOwner, address oldOwner, address newOwner)",
 )
 
+// https://github.com/safe-global/safe-contracts/blob/131f0d25135c1b98c185c940ae37fb0275ac4062/contracts/base/ModuleManager.sol#L130
+export const isModuleEnabled = fn(
+  "isModuleEnabled(address module) public view returns (bool)",
+)
+
 // EVENTS
 
 // https://github.com/safe-global/safe-contracts/blob/96a4e280876c33c53a09b5ef6ee78201a101ff58/contracts/proxies/SafeProxyFactory.sol#L12

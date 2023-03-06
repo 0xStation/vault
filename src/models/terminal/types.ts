@@ -6,7 +6,7 @@ type TerminalMetadata = {
   description: string
   url: string
   nonce?: number // if we need to enable a module on an existing safe, we should save the nonce
-  safeTxns: any[]
+  safeTxnHash?: string
 }
 
 export type Terminal = PrismaTerminal & {

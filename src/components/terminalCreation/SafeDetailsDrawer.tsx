@@ -2,8 +2,8 @@ import { UserGroupIcon } from "@heroicons/react/24/outline"
 import BottomDrawer from "@ui/BottomDrawer"
 import truncateString from "lib/utils"
 import { Dispatch, ReactNode, SetStateAction } from "react"
-import { useGetSafeBalance } from "../../../hooks/safe/useSafeBalance"
-import { useSafeMetadata } from "../../../hooks/safe/useSafeMetadata"
+import { useGetSafeBalance } from "../../hooks/safe/useSafeBalance"
+import { useSafeMetadata } from "../../hooks/safe/useSafeMetadata"
 
 const MetadataPill = ({ children }: { children: ReactNode }) => {
   return (

@@ -1,5 +1,4 @@
 import axios from "axios"
-import { safeEndpoint } from "lib/api/safe/utils"
 import { getHash } from "lib/signatures/utils"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 
@@ -16,9 +15,9 @@ const createTransaction = async ({
   message: any
   senderAddress: string
 }) => {
-  const url = `${safeEndpoint(
-    chainId,
-  )}/chains/${chainId}/transactions/${toChecksumAddress(address)}/propose`
+  const url = `https://safe-client.safe.global/v1/chains/${chainId}/transactions/${toChecksumAddress(
+    address,
+  )}/propose`
 
   try {
     const response = await axios.post<any[]>(url, {

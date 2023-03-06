@@ -5,7 +5,7 @@ export type RawCall = {
   to: string
   value: string
   data: string
-  operation: number // 0 for call, 1 for delegatecall
+  operation?: number // 0 for call, 1 for delegatecall. This property is optional mainly because it causese the safe execution transaction to fail if it's included
 }
 
 // used for signing

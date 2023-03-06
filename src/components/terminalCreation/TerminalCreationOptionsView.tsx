@@ -11,8 +11,8 @@ import LoadingSpinner from "../core/LoadingSpinner"
 import { SelectorCard } from "../core/SelectorCard"
 import SelectWithLabel from "../form/SelectWithLabel"
 import { ExistingSafeCard } from "./ExistingSafeCard"
-import { SafeDetailsDrawer } from "./import/SafeDetailsDrawer"
 import Layout from "./Layout"
+import { SafeDetailsDrawer } from "./SafeDetailsDrawer"
 
 export const TerminalCreationOptionsView = ({
   setView,
@@ -46,6 +46,13 @@ export const TerminalCreationOptionsView = ({
   })
 
   const watchChainId = watch("chainId")
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      chainId: chain?.id,
+    })
+  }, [])
 
   useEffect(() => {
     const switchNetwork = async () => {

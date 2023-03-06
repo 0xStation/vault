@@ -14,8 +14,8 @@ export const useSafeMetadata = ({
   address,
   chainId,
 }: {
-  address: string
-  chainId: number
+  address?: string
+  chainId?: number
 }) => {
   const { isLoading, data: safeData } = useSWR(
     address && chainId
@@ -25,13 +25,15 @@ export const useSafeMetadata = ({
   )
 
   return {
-    safeMetadata: {
-      chainId,
-      address,
-      quorum: (safeData as unknown as Safe)?.threshold,
-      signers: (safeData as unknown as Safe)?.owners,
-      contractVersion: (safeData as unknown as Safe)?.version,
-    },
+    safeMetadata: safeData
+      ? {
+          chainId,
+          address,
+          quorum: (safeData as unknown as Safe)?.threshold,
+          signers: (safeData as unknown as Safe)?.owners,
+          contractVersion: (safeData as unknown as Safe)?.version,
+        }
+      : null,
     isLoading,
   }
 }

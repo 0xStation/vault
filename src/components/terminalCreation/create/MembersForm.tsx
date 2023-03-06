@@ -9,7 +9,12 @@ import { networks } from "lib/utils/networks"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
-import { useNetwork, useSendTransaction, useWaitForTransaction } from "wagmi"
+import {
+  useNetwork,
+  useSendTransaction,
+  useSwitchNetwork,
+  useWaitForTransaction,
+} from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useSignToEnableModule } from "../../../hooks/safe/useSignToEnableModule"
@@ -86,6 +91,7 @@ export const MembersView = ({
   const formData = useTerminalCreationStore((state) => state.formData)
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const { chain } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const { members } = formData
   const [showLoadingScreen, setShowLoadingScreen] = useState<boolean>(false)
@@ -96,11 +102,6 @@ export const MembersView = ({
   const [terminalCreationError, setTerminalCreationError] = useState<string>("")
   const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
   const router = useRouter()
-  const { signToEnableModule, nonce } = useSignToEnableModule({
-    chainId: formData.chainId as number,
-    address: formData?.address as string,
-    senderAddress: activeUser?.address as string,
-  })
 
   useWaitForTransaction({
     confirmations: 1,
@@ -150,34 +151,6 @@ export const MembersView = ({
   })
 
   const onSubmit = async (data: any) => {
-    if (formData.address) {
-      try {
-        const safeTransactionData = await signToEnableModule()
-
-        const terminal = await createTerminal({
-          safeAddress: formData.address,
-          name: formData.name,
-          chainId: formData.chainId as number,
-          description: formData.about,
-          url: formData.url,
-          transactionData: safeTransactionData,
-          nonce: nonce,
-        })
-
-        router.push(
-          `/${globalId(
-            terminal.chainId,
-            terminal.safeAddress,
-          )}/getting-started`,
-        )
-      } catch (err) {
-        console.error("Failed to create Terminal", err)
-        setTerminalCreationError("Failed to create Terminal.")
-        setTxnHash(undefined)
-      }
-      return
-    }
-    console.log(chain?.id, formData?.chainId)
     if (chain?.id !== formData?.chainId) {
       const networkErrMessage = formData?.chainId
         ? `Wrong network. Please switch to ${
@@ -188,8 +161,31 @@ export const MembersView = ({
         isError: true,
         message: networkErrMessage,
       })
+
+      try {
+        await switchNetworkAsync?.(formData?.chainId)
+        setFormMessage({
+          isError: false,
+          message: "",
+        })
+      } catch (e: any) {
+        setFormMessage({
+          isError: true,
+          message: `Please check your wallet to switch to ${
+            (networks as any)[formData?.chainId?.toString() || ""]?.name ||
+            "specified chain"
+          }.`,
+        })
+        if (e.name === "ConnectorNotFoundError") {
+          setFormMessage({
+            isError: true,
+            message: `Please ensure your wallet is connected.`,
+          })
+        }
+      }
       return
     }
+
     setFormMessage({
       isError: false,
       message: "Check your wallet to confirm. This action costs gas.",

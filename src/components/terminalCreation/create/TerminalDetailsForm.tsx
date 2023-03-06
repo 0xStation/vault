@@ -1,11 +1,14 @@
 import { Button } from "@ui/Button"
 import networks from "lib/utils/networks"
 import { isValidUrl } from "lib/validations"
+import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
-import { useNetwork } from "wagmi"
+import { useNetwork, useSwitchNetwork } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
+import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
+import { globalId } from "../../../models/terminal/utils"
 import { InputWithLabel } from "../../form"
 import TextareaWithLabel from "../../form/TextareaWithLabel"
 
@@ -16,6 +19,7 @@ export const TerminalDetailsForm = ({
     SetStateAction<CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS>
   >
 }) => {
+  const router = useRouter()
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
   const [formMessage, setFormMessage] = useState<{
@@ -23,6 +27,7 @@ export const TerminalDetailsForm = ({
     message: string
   }>({ isError: false, message: "" })
   const { chain } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
   const { name, chainId, about, url } = formData
 
   const {
@@ -37,9 +42,7 @@ export const TerminalDetailsForm = ({
     } as FieldValues,
   })
 
-  const onSubmit = (fieldValues: any) => {
-    console.log(chain?.id, chainId)
-    console.log(fieldValues)
+  const onSubmit = async (fieldValues: any) => {
     if (chain?.id !== chainId) {
       const networkErrMessage = chainId
         ? `Wrong network. Please switch to ${(networks as any)[chainId]?.name}.`
@@ -48,6 +51,28 @@ export const TerminalDetailsForm = ({
         isError: true,
         message: networkErrMessage,
       })
+
+      try {
+        await switchNetworkAsync?.(chainId)
+        setFormMessage({
+          isError: false,
+          message: "",
+        })
+      } catch (e: any) {
+        setFormMessage({
+          isError: true,
+          message: `Please check your wallet to switch to ${
+            (networks as any)[chainId?.toString() || ""]?.name ||
+            "specified chain"
+          }.`,
+        })
+        if (e.name === "ConnectorNotFoundError") {
+          setFormMessage({
+            isError: true,
+            message: `Please ensure your wallet is connected.`,
+          })
+        }
+      }
       return
     }
 
@@ -55,6 +80,31 @@ export const TerminalDetailsForm = ({
       ...formData,
       ...fieldValues,
     })
+
+    // if importing
+    if (formData.address && fieldValues.name) {
+      try {
+        await createTerminal({
+          safeAddress: formData.address,
+          name: fieldValues.name,
+          chainId: formData.chainId as number,
+          description: formData.about,
+          url: formData.url,
+        })
+        router.push(
+          `/${globalId(formData.chainId as number, formData.address)}`,
+        )
+      } catch (err) {
+        console.error("Failed to create terminal", err)
+        setFormMessage({
+          isError: true,
+          message: `Something went wrong.`,
+        })
+      }
+
+      return
+    }
+
     setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
   }
   const onError = (errors: any) => {

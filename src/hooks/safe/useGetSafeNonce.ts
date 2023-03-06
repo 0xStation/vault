@@ -12,8 +12,8 @@ export const useGetSafeNonce = ({
   address,
   chainId,
 }: {
-  address: string
-  chainId: number
+  address?: string
+  chainId?: number
 }) => {
   const { isLoading, data, error } = useSWR(
     address && chainId
@@ -23,8 +23,6 @@ export const useGetSafeNonce = ({
       : null,
     fetcher,
   )
-
-  console.log("safeNonce", data)
 
   return {
     nonce: data,
