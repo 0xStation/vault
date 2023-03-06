@@ -157,9 +157,9 @@ const TransactionItem = ({
         <div className="flex flex-col">
           <p>{name ?? from.slice(0, 6) + "..." + from.slice(-3)}</p>
           <div className="flex flex-row">
-            <p className="text-xs text-slate-500">
+            <p className="pr-1 text-xs text-slate-500">
               {date}
-              {" . "}
+              {" · "}
             </p>
             <Hyperlink
               href={`${blockExplorer}/tx/${hash}`}
@@ -180,7 +180,7 @@ type TransferItem = {
   to: string
   value: number | null
   asset: string | null
-  category: "external" | "erc20" | "erc721" | "erc1155"
+  category: "external" | "internal" | "erc20" | "erc721" | "erc1155"
   metadata: {
     blockTimestamp: string
   }
@@ -191,6 +191,8 @@ const formatAssetValue = (tx: TransferItem): string => {
     case "erc20":
       return tx.value + " " + tx.asset
     case "external":
+      return tx.value + " ETH"
+    case "internal":
       return tx.value + " ETH"
     case "erc721":
     case "erc1155":
@@ -238,7 +240,7 @@ const AssetTransfersTab = ({
           chainId={terminal.chainId}
           value={formatAssetValue(tx)}
           date={formatTxDate(tx)}
-          from={tx.from}
+          from={direction === TransferDirection.INBOUND ? tx.from : tx.to}
         />
       ))}
     </section>
