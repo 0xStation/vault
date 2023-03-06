@@ -49,7 +49,11 @@ interface nTokenInfoType {
   tokenValue: number
 }
 
-export const SendTokensContent = () => {
+export const SendTokensContent = ({
+  successCallback,
+}: {
+  successCallback?: () => void
+}) => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
@@ -165,7 +169,7 @@ export const SendTokensContent = () => {
         return
       }
 
-      await axios.post(
+      const { request } = await axios.post(
         `/api/v1/terminal/${chainId}/${address}/request/createApprovedRequest`,
         {
           chainId: chainId as number,
@@ -184,8 +188,12 @@ export const SendTokensContent = () => {
           },
         },
       )
-      // TODO: show toast
-      router.push(`/${chainNameAndSafeAddress}/requests`)
+      if (successCallback) {
+        successCallback()
+      } else {
+        // TODO: show toast
+        router.push(`/${chainNameAndSafeAddress}/requests`)
+      }
     } catch (err: any) {
       console.error(err)
       if (

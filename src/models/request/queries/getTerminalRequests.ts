@@ -62,6 +62,9 @@ export const getTerminalRequests = async ({
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     })
 
     const queries = await db.$transaction([terminalQuery, requestsQuery])
