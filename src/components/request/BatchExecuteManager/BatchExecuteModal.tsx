@@ -161,7 +161,7 @@ const BatchExecuteWrapper = ({
           <div>This action is on-chain and will not be reversible.</div>
         </div>
 
-        <div className="space-y-4">
+        <div className="max-h-[400px] space-y-4 overflow-scroll">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (

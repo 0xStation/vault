@@ -1,4 +1,9 @@
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActionStatus,
+  ActionVariant,
+  ActivityVariant,
+  RequestVariantType,
+} from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
@@ -18,6 +23,7 @@ import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
 import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
+import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
@@ -117,6 +123,17 @@ export const ExecuteWrapper = ({
         }
         return action
       })
+
+      const executeActivity: Activity = {
+        id: "optimistic-vote",
+        requestId: router.query.requestId as string,
+        variant: ActivityVariant.EXECUTE_REQUEST,
+        address: activeUser?.address as string,
+        data: {},
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
       mutateRequest({
         fn: completeRequestExecution({
           ...formData, // todo: clarify what formdata is here...
@@ -125,6 +142,8 @@ export const ExecuteWrapper = ({
         requestId: request.id,
         payload: {
           ...request,
+          activities: [...request?.activities!, executeActivity],
+          isExecuted: true,
           actions: updatedActions,
         },
       })
