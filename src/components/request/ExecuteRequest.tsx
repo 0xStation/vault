@@ -5,7 +5,9 @@ import {
   RequestVariantType,
 } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
+import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
@@ -49,7 +51,8 @@ export const ExecuteWrapper = ({
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
-  const { loadingToast, successToast, closeCurrentToast } = useToast()
+  const { loadingToast, successToast, errorToast, closeCurrentToast } =
+    useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
   // request.query.requestId is not found in the desktop version
@@ -58,7 +61,7 @@ export const ExecuteWrapper = ({
   )
   const { setActionPending } = useSetActionPending(actionToExecute.id)
 
-  const { config } = usePrepareSendTransaction({
+  const { config, error } = usePrepareSendTransaction({
     request: {
       to: txPayload.to,
       value: BigNumber.from(txPayload.value),
@@ -66,6 +69,13 @@ export const ExecuteWrapper = ({
     },
     chainId: request.chainId,
   })
+
+  if (error) {
+    // need to parse the error because there could be many but this seems most common
+    // errorToast({ message: "Chain mismatch" })
+  }
+
+  console.log(error)
 
   const {
     data: txData,
@@ -177,10 +187,10 @@ export const ExecuteWrapper = ({
     resetField("comment")
   }
 
-  return (
-    <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+  const FormContent = () => {
+    return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-6">
+        <div className="space-y-6 pb-[70px]">
           <div className="text-lg font-bold">{title}</div>
           <div>{subtitle}</div>
           {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
@@ -207,7 +217,26 @@ export const ExecuteWrapper = ({
           </p>
         </div>
       </form>
-    </BottomDrawer>
+    )
+  }
+
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) {
+          return (
+            <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+              <FormContent />
+            </BottomDrawer>
+          )
+        }
+        return (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <FormContent />
+          </Modal>
+        )
+      }}
+    </Breakpoint>
   )
 }
 
