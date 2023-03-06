@@ -1,9 +1,6 @@
 import { icon, IconProps } from "./utils"
 
-export const Contract = ({
-  size = "base",
-  color = "stroke-slate-500",
-}: IconProps) => {
+export const Contract = ({ size = "base", color = "slate-500" }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
