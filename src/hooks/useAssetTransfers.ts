@@ -33,7 +33,7 @@ const alchemyFetcher = async ([address, chainId, direction]: [
     const params: GetAssetTransfersParams = {
       fromBlock: "0x0",
       toBlock: "latest",
-      category: ["external", "erc20", "erc721", "erc1155"],
+      category: ["external", "internal", "erc20", "erc721", "erc1155"],
       withMetadata: true,
       excludeZeroValue: true,
       maxCount: "0x3e8",
