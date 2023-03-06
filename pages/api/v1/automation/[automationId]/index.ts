@@ -105,7 +105,7 @@ export default async function handler(
           value: (parseInt(split.allocation) * 100) / 1_000_000,
           tokens: split.tokens.map((obj: any) => ({
             address: obj.token,
-            symbol: obj.token === ZERO_ADDRESS ? "ETH" : "OTHER",
+            symbol: obj.token === ZERO_ADDRESS ? "ETH" : "WETH",
             decimals: 18,
             totalClaimed: obj.totalClaimed,
             totalUnclaimed: subtractValues(

@@ -101,29 +101,29 @@ export const TerminalAutomationDetailPage = () => {
                   ))}
                 </div>
               </div>
-              <div className="border-t border-slate-200 px-4">
+              <div className="mb-24 border-t border-slate-200 px-4">
                 <h3 className="mt-4">Balance</h3>
-                <div className="mt-3 flex flex-row items-center space-x-2 sm:space-x-4">
-                  <LabelCard
-                    className="w-full"
-                    label="Total claimed"
-                    description={`${valueToAmount(
-                      automation?.balances?.[0].totalClaimed || "0",
-                      automation?.balances?.[0].decimals || 0,
-                    )
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ETH`} // regex for adding commas
-                  />
-                  <LabelCard
-                    className="w-full"
-                    label="Unclaimed balance"
-                    description={`${valueToAmount(
-                      automation?.balances?.[0].totalUnclaimed || "0",
-                      automation?.balances?.[0].decimals || 0,
-                    )
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ETH`} // regex for adding commas
-                  />
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-4">
+                  {automation?.balances?.map((token) => (
+                    <>
+                      <LabelCard
+                        className="w-full"
+                        label={`Total ${token.symbol} claimed`}
+                        description={`${valueToAmount(
+                          token.totalClaimed || "0",
+                          token.decimals || 0,
+                        )} ${token.symbol}`}
+                      />
+                      <LabelCard
+                        className="w-full"
+                        label={`Unclaimed ${token.symbol} balance`}
+                        description={`${valueToAmount(
+                          token.totalUnclaimed || "0",
+                          token.decimals || 0,
+                        )} ${token.symbol}`}
+                      />
+                    </>
+                  ))}
                 </div>
               </div>
             </>
