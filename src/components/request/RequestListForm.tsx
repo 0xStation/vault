@@ -18,7 +18,6 @@ import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
-import { SendTokensContent } from "../pages/sendTokens/components/SendTokensContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
@@ -103,13 +102,7 @@ const RequestListForm = ({
   const [requestForDetails, setRequestForDetails] = useState<
     RequestFrob | undefined
   >(undefined)
-  const [sendTokensSliderOpen, setSendTokensSliderOpen] =
-    useState<boolean>(false)
-  const closeSendTokensSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "sendTokenSliderOpen")
-    }
-  }
+
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const closeDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
@@ -206,12 +199,9 @@ const RequestListForm = ({
   }
 
   useEffect(() => {
-    if (router.query.sendTokenSliderOpen) {
-      setSendTokensSliderOpen(true)
-    } else if (router.query.requestId) {
+    if (router.query.requestId) {
       setDetailsSliderOpen(true)
     } else {
-      setSendTokensSliderOpen(false)
       setDetailsSliderOpen(false)
     }
   }, [router.query])
@@ -235,24 +225,7 @@ const RequestListForm = ({
           />
         </RightSlider>
       )}
-      {
-        <RightSlider
-          open={sendTokensSliderOpen}
-          setOpen={closeSendTokensSlider}
-        >
-          <div className="px-4">
-            <SendTokensContent
-              successCallback={() => {
-                closeSendTokensSlider(false)
-                successToast({
-                  message: "Created request",
-                })
-                mutate()
-              }}
-            />
-          </div>
-        </RightSlider>
-      }
+
       <form>
         <ul>
           {requests.map((request, idx) => {
