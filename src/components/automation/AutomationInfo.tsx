@@ -4,6 +4,7 @@ import { Network } from "@ui/Network"
 import { TabsContent } from "@ui/Tabs"
 import truncateString from "lib/utils"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import { useAutomation } from "../../models/automation/hooks"
 import { parseGlobalId } from "../../models/terminal/utils"
@@ -54,43 +55,47 @@ export const AutomationInfo = () => {
                     <AvatarAddress address={split.address} size="sm" />
                     <p className="text-slate-500">{split.value}%</p>
                   </div>
-                  {split.tokens.map((token, index) => (
-                    <div
-                      className="ml-8 text-sm text-slate-500"
-                      key={`${split.address}-${index}`}
-                    >{`${valueToAmount(token.totalClaimed, token.decimals)} ${
-                      token.symbol
-                    } Claimed · ${valueToAmount(
-                      token.totalUnclaimed,
-                      token.decimals,
-                    )} ${token.symbol} Unclaimed`}</div>
-                  ))}
                 </div>
               ))}
             </div>
           </div>
-          <div className="mb-24 border-t border-slate-200 px-4">
+          <div className="mb-24 mt-4 border-t border-slate-200 px-4">
             <h3 className="mt-4">Balance</h3>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-4">
-              {automation?.balances?.map((token) => (
-                <>
-                  <LabelCard
-                    className="w-full"
-                    label={`Total ${token.symbol} claimed`}
-                    description={`${valueToAmount(
-                      token.totalClaimed || "0",
-                      token.decimals || 0,
-                    )} ${token.symbol}`}
-                  />
-                  <LabelCard
-                    className="w-full"
-                    label={`Unclaimed ${token.symbol} balance`}
-                    description={`${valueToAmount(
-                      token.totalUnclaimed || "0",
-                      token.decimals || 0,
-                    )} ${token.symbol}`}
-                  />
-                </>
+            <div className="space-y-3">
+              <LabelCard
+                className="mt-3 w-full"
+                label={"Total balance value"}
+                description={`$${automation?.unclaimedBalances
+                  ?.reduce((acc, balance) => acc + balance.usdAmount, 0)
+                  .toFixed(2)}`}
+              />
+              {automation?.unclaimedBalances?.map((balance, index) => (
+                <div
+                  className="flex flex-row items-center justify-between"
+                  key={`balance-${index}`}
+                >
+                  <div className="flex flex-row items-center space-x-2">
+                    <div className="relative h-6 w-6 rounded-full">
+                      {balance.imageUrl ? (
+                        <Image
+                          src={balance.imageUrl}
+                          alt={"Logo for token"}
+                          fill={true}
+                          className="block rounded-full object-contain"
+                        />
+                      ) : (
+                        <span className="block h-6 w-6 rounded-full bg-slate-200"></span>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <p>{balance.symbol}</p>
+                      <p className="text-xs text-slate-500">
+                        {valueToAmount(balance.value, balance.decimals)}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-lg">${balance.usdAmount.toFixed(2)}</p>
+                </div>
               ))}
             </div>
           </div>

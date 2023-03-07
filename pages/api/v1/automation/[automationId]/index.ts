@@ -1,50 +1,12 @@
 import { AutomationVariant } from "@prisma/client"
 import db from "db"
-import { GraphQLClient } from "graphql-request"
-import gql from "graphql-tag"
-import { ZERO_ADDRESS } from "lib/constants"
 import { NextApiRequest, NextApiResponse } from "next"
+import { getRevShareSplits } from "../../../../../src/models/automation/queries/getRevShareSplits"
 import { Automation } from "../../../../../src/models/automation/types"
-import {
-  addValues,
-  subtractValues,
-} from "../../../../../src/models/token/utils"
-
-type SplitsDetailsResponse = {
-  split: {
-    id: string
-    recipients: {
-      recipient: {
-        id: string
-      }
-      allocation: string
-      tokens: {
-        token: string
-        totalDistributed: string
-        totalClaimed: string
-      }[]
-    }[]
-  } | null
-}
-
-export const SPLIT_DETAILS_QUERY = gql`
-  query split($id: ID!) {
-    split(id: $id) {
-      id
-      recipients {
-        recipient {
-          id
-        }
-        allocation
-        tokens {
-          token
-          totalDistributed
-          totalClaimed
-        }
-      }
-    }
-  }
-`
+import { getFungibleTokenBalances } from "../../../../../src/models/token/queries/getFungibleTokenBalances"
+import { getFungibleTokenDetails } from "../../../../../src/models/token/queries/getFungibleTokenDetails"
+import { FungibleToken } from "../../../../../src/models/token/types"
+import { addValues, valueToAmount } from "../../../../../src/models/token/utils"
 
 export default async function handler(
   req: NextApiRequest,
@@ -74,77 +36,86 @@ export default async function handler(
     return res.end(JSON.stringify("Failure fetching automation"))
   }
 
-  console.log("automation", automation)
-
   if (automation?.variant === AutomationVariant.REV_SHARE) {
+    const chainId = automation.chainId
+    const address = automation.data.meta.address
+
     try {
-      const graphlQLClient = new GraphQLClient(
-        "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
-        {
-          method: "POST",
-          headers: new Headers({
-            "Content-Type": "application/json",
-          }),
-        },
-      )
+      let [balances, splits] = await Promise.all([
+        getFungibleTokenBalances(chainId, address),
+        getRevShareSplits(chainId, address),
+      ])
 
-      const response: SplitsDetailsResponse = await graphlQLClient.request(
-        SPLIT_DETAILS_QUERY,
-        {
-          id: automation.data.meta.address.toLowerCase(),
-        },
-      )
+      // Get metadata for all tokens by merging splits and balance
 
-      if (!response?.split) {
-        throw Error("no split found")
-      }
+      const splitTokenAddresses = splits
+        .reduce(
+          (acc, split) => [
+            ...acc,
+            ...split.tokens.map((token) => token.address),
+          ],
+          [] as string[],
+        )
+        .filter((v, i, values) => values.indexOf(v) === i)
 
-      const splits = response?.split?.recipients.map((split: any) => {
-        return {
-          address: split.recipient.id,
-          value: (parseInt(split.allocation) * 100) / 1_000_000,
-          tokens: split.tokens.map((obj: any) => ({
-            address: obj.token,
-            symbol: obj.token === ZERO_ADDRESS ? "ETH" : "WETH",
-            decimals: 18,
-            totalClaimed: obj.totalClaimed,
-            totalUnclaimed: subtractValues(
-              obj.totalDistributed,
-              obj.totalClaimed,
-            ),
-          })),
+      const balanceTokenAddresses = balances.map((balance) => balance.address)
+
+      const allTokenAddresses = [
+        ...splitTokenAddresses,
+        ...balanceTokenAddresses,
+      ].filter((v, i, values) => values.indexOf(v) === i)
+
+      const tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
+
+      // Sum unclaimed split values and current balance to form total unclaimed accumulator
+
+      const unclaimedBalancesAcc: Record<
+        string,
+        FungibleToken & { value: string; usdRate: number }
+      > = {}
+      tokens.forEach((token) => {
+        unclaimedBalancesAcc[token.address] = {
+          ...token,
+          value: "0",
         }
       })
-
-      let balances: any = {}
-      splits.forEach((split: any) => {
-        split.tokens.forEach((token: any) => {
-          console.log("balances", balances)
-          if (!balances[token.address]) {
-            balances[token.address] = JSON.parse(JSON.stringify(token))
-          } else {
-            balances[token.address].totalUnclaimed = addValues(
-              balances[token.address].totalUnclaimed,
-              token.totalUnclaimed,
-            )
-            balances[token.address].totalClaimed = addValues(
-              balances[token.address].totalClaimed,
-              token.totalClaimed,
-            )
-          }
+      splits.forEach((split) => {
+        split.tokens.forEach((token) => {
+          unclaimedBalancesAcc[token.address].value = addValues(
+            unclaimedBalancesAcc[token.address].value,
+            token.unclaimed,
+          )
         })
       })
+      balances.forEach((balance) => {
+        unclaimedBalancesAcc[balance.address].value = addValues(
+          unclaimedBalancesAcc[balance.address].value,
+          balance.value,
+        )
+      })
+
+      // apply usd rates to unclaimed values for usd amount
+
+      const unclaimedBalances = Object.values(unclaimedBalancesAcc).map(
+        (balance) => ({
+          ...balance,
+          usdAmount:
+            parseFloat(valueToAmount(balance.value, balance.decimals)) *
+            balance.usdRate,
+        }),
+      )
 
       automation = {
         ...automation,
-        splits,
-        balances: Object.values(balances),
+        splits: splits.map((split) => ({
+          address: split.address,
+          value: split.value,
+        })),
+        unclaimedBalances: unclaimedBalances,
       }
-    } catch (err) {
+    } catch (e) {
       res.statusCode = 500
-      return res.end(
-        JSON.stringify("Failure fetching split details from subgraph"),
-      )
+      return res.end(JSON.stringify(e))
     }
   }
 

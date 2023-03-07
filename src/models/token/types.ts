@@ -7,6 +7,16 @@ export type Token = {
   decimals?: number
 }
 
+export type FungibleToken = {
+  chainId: number
+  address: string
+  type: TokenType
+  name: string
+  symbol: string
+  decimals: number
+  imageUrl?: string
+}
+
 export enum TokenType {
   COIN = "COIN",
   ERC20 = "ERC20",

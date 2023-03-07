@@ -1,7 +1,7 @@
 import axios from "axios"
 import useSWR from "swr"
 import useSWRMutation from "swr/mutation"
-import { Automation } from "./types"
+import { Automation, RevShareFrob } from "./types"
 
 export const useAutomations = (chainId: number, terminalAddress: string) => {
   const fetcher = async (url: string) => {
@@ -54,5 +54,5 @@ export const useAutomation = (automationId: string) => {
     fetcher,
   )
 
-  return { isLoading, automation, mutate }
+  return { isLoading, automation: automation as RevShareFrob, mutate }
 }

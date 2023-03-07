@@ -1,25 +1,19 @@
 import { Automation as PrismaAutomation } from "@prisma/client"
+import { FungibleToken } from "../token/types"
 
 export type Automation = PrismaAutomation & {
   data: AutomationMetadata
-  splits?: {
+}
+
+export type RevShareFrob = Automation & {
+  splits: {
     address: string
     value: number
-    tokens: {
-      address: string
-      symbol: string
-      decimals: number
-      totalClaimed: string
-      totalUnclaimed: string
-    }[]
   }[]
-  balances?: {
-    address: string
-    symbol: string
-    decimals: number
-    totalClaimed: string
-    totalUnclaimed: string
-  }[]
+  unclaimedBalances: (FungibleToken & {
+    value: string
+    usdAmount: number
+  })[]
 }
 
 export type AutomationMetadata = {
