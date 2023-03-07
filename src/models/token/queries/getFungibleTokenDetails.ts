@@ -1,11 +1,11 @@
 import axios from "axios"
 import { ZERO_ADDRESS } from "lib/constants"
-import { Token, TokenType } from "../types"
+import { FungibleToken, TokenType } from "../types"
 
 export const getFungibleTokenDetails = async (
   chainId: number,
   addresses: string[],
-): Promise<(Token & { usdRate: number })[]> => {
+): Promise<(FungibleToken & { usdRate: number })[]> => {
   const chainNameToChainId: Record<number, string | undefined> = {
     1: "ethereum",
     5: "gor",

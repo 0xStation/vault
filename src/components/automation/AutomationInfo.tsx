@@ -45,21 +45,6 @@ export const AutomationInfo = () => {
                 text={toChecksumAddress(automation?.data.meta.address)}
               />
             </div>
-            <LabelCard
-              className="mt-4 w-full"
-              label={"Total distributed"}
-              description={`$${automation.balances
-                ?.reduce(
-                  (acc, balance) =>
-                    acc +
-                    parseFloat(
-                      valueToAmount(balance.totalClaimed, balance.decimals),
-                    ) *
-                      (automation.tokenUsdRates?.[balance.address] ?? 0),
-                  0,
-                )
-                .toFixed(2)}`}
-            />
             <div className="mt-4">
               {automation?.splits!.map((split) => (
                 <div className="py-3" key={`split-${split.address}`}>
@@ -70,38 +55,6 @@ export const AutomationInfo = () => {
                     <AvatarAddress address={split.address} size="sm" />
                     <p className="text-slate-500">{split.value}%</p>
                   </div>
-                  <div className="ml-8 text-sm text-slate-500">{`$${split.tokens
-                    .reduce(
-                      (acc, token) =>
-                        acc +
-                        parseFloat(
-                          valueToAmount(token.totalClaimed, token.decimals),
-                        ) *
-                          (automation?.tokenUsdRates?.[token.address] ?? 0),
-                      0,
-                    )
-                    .toFixed(2)} Claimed · $${split.tokens
-                    .reduce(
-                      (acc, token) =>
-                        acc +
-                        parseFloat(
-                          valueToAmount(token.totalUnclaimed, token.decimals),
-                        ) *
-                          (automation?.tokenUsdRates?.[token.address] ?? 0),
-                      0,
-                    )
-                    .toFixed(2)} Unclaimed`}</div>
-                  {/* {split.tokens.map((token, index) => (
-                    <div
-                      className="ml-8 text-sm text-slate-500"
-                      key={`${split.address}-${index}`}
-                    >{`${valueToAmount(token.totalClaimed, token.decimals)} ${
-                      token.symbol
-                    } Claimed · ${valueToAmount(
-                      token.totalUnclaimed,
-                      token.decimals,
-                    )} ${token.symbol} Unclaimed`}</div>
-                  ))} */}
                 </div>
               ))}
             </div>
@@ -112,19 +65,11 @@ export const AutomationInfo = () => {
               <LabelCard
                 className="mt-3 w-full"
                 label={"Total balance value"}
-                description={`$${automation.balances
-                  ?.reduce(
-                    (acc, balance) =>
-                      acc +
-                      parseFloat(
-                        valueToAmount(balance.totalUnclaimed, balance.decimals),
-                      ) *
-                        (automation.tokenUsdRates?.[balance.address] ?? 0),
-                    0,
-                  )
+                description={`$${automation?.unclaimedBalances
+                  ?.reduce((acc, balance) => acc + balance.usdAmount, 0)
                   .toFixed(2)}`}
               />
-              {automation.balances?.map((balance, index) => (
+              {automation?.unclaimedBalances?.map((balance, index) => (
                 <div
                   className="flex flex-row items-center justify-between"
                   key={`balance-${index}`}
@@ -145,21 +90,11 @@ export const AutomationInfo = () => {
                     <div className="flex flex-col">
                       <p>{balance.symbol}</p>
                       <p className="text-xs text-slate-500">
-                        {valueToAmount(
-                          balance.totalUnclaimed,
-                          balance.decimals,
-                        )}
+                        {valueToAmount(balance.value, balance.decimals)}
                       </p>
                     </div>
                   </div>
-                  <p className="text-lg">
-                    $
-                    {(
-                      parseFloat(
-                        valueToAmount(balance.totalUnclaimed, balance.decimals),
-                      ) * (automation?.tokenUsdRates?.[balance.address] ?? 0)
-                    ).toFixed(2)}
-                  </p>
+                  <p className="text-lg">${balance.usdAmount.toFixed(2)}</p>
                 </div>
               ))}
             </div>

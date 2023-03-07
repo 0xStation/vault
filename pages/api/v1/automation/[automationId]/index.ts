@@ -5,10 +5,8 @@ import { getRevShareSplits } from "../../../../../src/models/automation/queries/
 import { Automation } from "../../../../../src/models/automation/types"
 import { getFungibleTokenBalances } from "../../../../../src/models/token/queries/getFungibleTokenBalances"
 import { getFungibleTokenDetails } from "../../../../../src/models/token/queries/getFungibleTokenDetails"
-import {
-  addValues,
-  percentOfValue,
-} from "../../../../../src/models/token/utils"
+import { FungibleToken } from "../../../../../src/models/token/types"
+import { addValues, valueToAmount } from "../../../../../src/models/token/utils"
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,8 +35,6 @@ export default async function handler(
     res.statusCode = 500
     return res.end(JSON.stringify("Failure fetching automation"))
   }
-
-  console.log("automation", automation)
 
   if (automation?.variant === AutomationVariant.REV_SHARE) {
     const chainId = automation.chainId
@@ -69,43 +65,29 @@ export default async function handler(
 
       const tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
 
-      let balanceValuesObj: Record<string, string> = {}
-      balances.forEach((balance) => {
-        balanceValuesObj[balance.address] = balance.value
-      })
-      let tokensObj: Record<string, any> = {}
+      const unclaimedBalancesAcc: Record<
+        string,
+        FungibleToken & { value: string }
+      > = {}
       tokens.forEach((token) => {
-        tokensObj[token.address] = token
+        unclaimedBalancesAcc[token.address] = {
+          ...token,
+          value: "0",
+        }
       })
-
-      const splitsAddUnclaimedBalance = splits.map((split) => ({
-        ...split,
-        tokens: split.tokens.map((token) => ({
-          ...tokensObj[token.address],
-          totalClaimed: token.totalClaimed,
-          totalUnclaimed: addValues(
+      splits.forEach((split) => {
+        split.tokens.forEach((token) => {
+          unclaimedBalancesAcc[token.address].value = addValues(
+            unclaimedBalancesAcc[token.address].value,
             token.unclaimed,
-            percentOfValue(split.value, balanceValuesObj[token.address] ?? "0"),
-          ),
-        })),
-      }))
-
-      let balanceTotals: any = {}
-      splitsAddUnclaimedBalance.forEach((split: any) => {
-        split.tokens.forEach((token: any) => {
-          if (!balanceTotals[token.address]) {
-            balanceTotals[token.address] = JSON.parse(JSON.stringify(token))
-          } else {
-            balanceTotals[token.address].totalClaimed = addValues(
-              balanceTotals[token.address].totalClaimed,
-              token.totalClaimed,
-            )
-            balanceTotals[token.address].totalUnclaimed = addValues(
-              balanceTotals[token.address].totalUnclaimed,
-              token.totalUnclaimed,
-            )
-          }
+          )
         })
+      })
+      balances.forEach((balance) => {
+        unclaimedBalancesAcc[balance.address].value = addValues(
+          unclaimedBalancesAcc[balance.address].value,
+          balance.value,
+        )
       })
 
       let tokenUsdRates: Record<string, number> = {}
@@ -113,11 +95,22 @@ export default async function handler(
         tokenUsdRates[token.address] = token.usdRate
       })
 
+      const unclaimedBalances = Object.values(unclaimedBalancesAcc).map(
+        (balance) => ({
+          ...balance,
+          usdAmount:
+            parseFloat(valueToAmount(balance.value, balance.decimals)) *
+            (tokenUsdRates[balance.address] ?? 0),
+        }),
+      )
+
       automation = {
         ...automation,
-        splits: splitsAddUnclaimedBalance,
-        balances: Object.values(balanceTotals),
-        tokenUsdRates,
+        splits: splits.map((split) => ({
+          address: split.address,
+          value: split.value,
+        })),
+        unclaimedBalances: unclaimedBalances,
       }
     } catch (e) {
       res.statusCode = 500
