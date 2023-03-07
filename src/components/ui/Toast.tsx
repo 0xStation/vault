@@ -1,6 +1,7 @@
-import { ArrowUpRight, CheckIcon } from "@icons"
+import { CheckIcon } from "@icons"
 import { cva, VariantProps } from "class-variance-authority"
 import useStore from "../../hooks/stores/useStore"
+import { Hyperlink } from "./Hyperlink"
 import LoadingSpinner from "./LoadingSpinner"
 
 const toast = cva(
@@ -39,19 +40,7 @@ export const Toast = () => {
           {variant === "loading" && <LoadingSpinner />}
           <span className="text-sm">{message}</span>
         </div>
-        {action && (
-          <div className="flex cursor-pointer items-center space-x-2 border-b border-dotted">
-            <a
-              href={action.href}
-              className="text-sm"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {action.label}
-            </a>
-            <ArrowUpRight size="sm" />
-          </div>
-        )}
+        {action && <Hyperlink {...action} />}
       </div>
     </div>
   )
