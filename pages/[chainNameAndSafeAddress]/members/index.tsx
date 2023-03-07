@@ -51,7 +51,7 @@ const MembersPage = () => {
   const { data } = useGetSignerQuorumRequestChanges({
     chainId: chainId as number,
     address: address as string,
-    currentQuorum: safeMetadata?.quorum,
+    currentQuorum: safeMetadata?.quorum as number,
   })
 
   return (

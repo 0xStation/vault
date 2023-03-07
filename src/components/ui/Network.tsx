@@ -39,8 +39,8 @@ const config: Record<number, any> = {
 export const Network = ({ chainId }: NetworkProps) => {
   return (
     <div className="flex flex-row items-center space-x-1.5">
-      {config[chainId].icon}
-      <span className="text-xs">{config[chainId].name}</span>
+      {config[chainId]?.icon}
+      <span className="text-xs">{config[chainId]?.name}</span>
     </div>
   )
 }

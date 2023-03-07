@@ -7,6 +7,7 @@ type TerminalCreationFormData = {
   url: string
   members: { address: string }[]
   quorum: undefined | number
+  address: undefined | string
 }
 
 interface TerminalCreationFormState {
@@ -23,6 +24,7 @@ export const useTerminalCreationStore = create<TerminalCreationFormState>(
       url: "",
       members: [],
       quorum: undefined,
+      address: "",
     },
     setFormData: (formData: TerminalCreationFormData) => {
       set(() => {

@@ -5,7 +5,7 @@ import useStore from "../../src/hooks/stores/useStore"
 
 export enum VIEW {
   CREATION_OPTIONS = "creation_options",
-  CREATE_FORM = "form",
+  CREATE_FORM = "create_form",
 }
 
 export const TerminalCreationPage = () => {
@@ -26,7 +26,6 @@ export const TerminalCreationPage = () => {
         <TerminalCreationOptionsView setView={setView} />
       )}
       {view === VIEW.CREATE_FORM && <TerminalCreationForm setView={setView} />}
-      {/* TODO: {view === VIEW.IMPORT_FORM && <TerminalImportForm setView={setView}/>} */}
     </>
   )
 }

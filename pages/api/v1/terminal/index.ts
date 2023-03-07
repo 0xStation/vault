@@ -13,17 +13,27 @@ export default async function handler(
     chainId: string
   }
 
-  const { safeAddress, name, chainId, description, url } = body as {
-    safeAddress: string
-    name: string
-    chainId: number
-    description?: string
-    url?: string
-  }
-
   let terminal
   switch (method) {
     case "PUT":
+      const {
+        safeAddress,
+        name,
+        chainId,
+        description,
+        url,
+        transactionData,
+        nonce,
+      } = body as {
+        safeAddress: string
+        name: string
+        chainId: number
+        description?: string
+        url?: string
+        transactionData?: any
+        nonce?: number
+      }
+
       try {
         terminal = await db.terminal.create({
           data: {
@@ -33,6 +43,8 @@ export default async function handler(
               name,
               description,
               url,
+              safeTxns: transactionData ? [transactionData] : [],
+              nonce,
             },
           },
         })
