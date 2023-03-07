@@ -76,9 +76,9 @@ export const AutomationInfo = () => {
                 >
                   <div className="flex flex-row items-center space-x-2">
                     <div className="relative h-6 w-6 rounded-full">
-                      {false ? (
+                      {balance.imageUrl ? (
                         <Image
-                          src={""}
+                          src={balance.imageUrl}
                           alt={"Logo for token"}
                           fill={true}
                           className="block rounded-full object-contain"

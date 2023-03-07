@@ -46,6 +46,8 @@ export default async function handler(
         getRevShareSplits(chainId, address),
       ])
 
+      // Get metadata for all tokens by merging splits and balance
+
       const splitTokenAddresses = splits
         .reduce(
           (acc, split) => [
@@ -65,9 +67,11 @@ export default async function handler(
 
       const tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
 
+      // Sum unclaimed split values and current balance to form total unclaimed accumulator
+
       const unclaimedBalancesAcc: Record<
         string,
-        FungibleToken & { value: string }
+        FungibleToken & { value: string; usdRate: number }
       > = {}
       tokens.forEach((token) => {
         unclaimedBalancesAcc[token.address] = {
@@ -90,17 +94,14 @@ export default async function handler(
         )
       })
 
-      let tokenUsdRates: Record<string, number> = {}
-      tokens.forEach((token) => {
-        tokenUsdRates[token.address] = token.usdRate
-      })
+      // apply usd rates to unclaimed values for usd amount
 
       const unclaimedBalances = Object.values(unclaimedBalancesAcc).map(
         (balance) => ({
           ...balance,
           usdAmount:
             parseFloat(valueToAmount(balance.value, balance.decimals)) *
-            (tokenUsdRates[balance.address] ?? 0),
+            balance.usdRate,
         }),
       )
 

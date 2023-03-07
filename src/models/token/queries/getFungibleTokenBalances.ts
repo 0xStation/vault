@@ -17,8 +17,6 @@ export const getFungibleTokenBalances = async (
 
   const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/fungibles?includeMetadata=true&chainID=${chainNameToChainId[chainId]}&filterDust=true&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
 
-  console.log(endpoint)
-
   const response = await axios.get<any[]>(endpoint)
 
   const balances = response.data.map((res) => ({

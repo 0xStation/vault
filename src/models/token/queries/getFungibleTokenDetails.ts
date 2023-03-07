@@ -17,8 +17,6 @@ export const getFungibleTokenDetails = async (
     process.env.NEXT_PUBLIC_N_XYZ_API_KEY
   }`
 
-  console.log(endpoint)
-
   const response = await axios.get<any[]>(endpoint)
 
   let tokens = response.data.map((res) => ({
@@ -29,6 +27,7 @@ export const getFungibleTokenDetails = async (
     name: res.name,
     symbol: res.symbol,
     decimals: res.decimals,
+    imageUrl: res.symbolLogos?.[0]?.URI ?? null,
     usdRate:
       res.currentFiat?.find((v: any) => v.symbol === "USD")?.tokenValue ?? 0,
   }))
@@ -49,6 +48,8 @@ export const getFungibleTokenDetails = async (
           name: "Goerli ETH",
           symbol: "ETH",
           decimals: 18,
+          imageUrl:
+            "https://c.neevacdn.net/image/upload/tokenLogos/ethereum/ethereum.png",
           usdRate: 1420.69,
         },
       ]

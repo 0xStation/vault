@@ -45,7 +45,7 @@ export const useAutomation = (automationId: string) => {
     return (await axios.get<Automation>(url)).data
   }
 
-  let {
+  const {
     isLoading,
     data: automation,
     mutate,
