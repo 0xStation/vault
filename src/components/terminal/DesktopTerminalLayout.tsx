@@ -95,7 +95,9 @@ const DesktopTerminalLayout = ({
                 return (
                   <Link
                     href={option.href}
-                    className="block"
+                    className={`block ${
+                      option.href === router.asPath && "font-bold"
+                    }`}
                     key={`link-${idx}`}
                   >
                     <div className="cursor-pointer py-3 px-4 hover:bg-slate-100">
