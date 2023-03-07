@@ -19,6 +19,7 @@ import { CREATE_TERMINAL_VIEW } from "."
 import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
+import useWindowSize from "../../../hooks/useWindowSize"
 import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
 import { globalId } from "../../../models/terminal/utils"
 import LoadingSpinner from "../../core/LoadingSpinner"
@@ -260,6 +261,17 @@ export const MembersView = ({
     } as FieldValues,
   })
 
+  const windowSize = useWindowSize()
+
+  // TODO: figure out good height settings for mobile.
+  // These height settings are to temporarily deal with the different mobile heights
+  const formHeight =
+    windowSize.height < 730
+      ? "max-h-[430px]"
+      : windowSize.height < 800
+      ? "max-h-[500px]"
+      : "max-h-[600px]"
+
   const {
     fields: memberFields,
     append,
@@ -290,7 +302,7 @@ export const MembersView = ({
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
       >
-        <div className="flex max-h-[420px] grow flex-col overflow-scroll">
+        <div className={`flex ${formHeight} grow flex-col overflow-scroll`}>
           <div className="mb-6">
             <label className="text-sm font-bold">Members*</label>
             <div className="w-full">

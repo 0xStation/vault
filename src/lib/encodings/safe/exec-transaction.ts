@@ -30,6 +30,6 @@ export const prepareExecuteSafeTransaction = (
       ZERO_ADDRESS, // refundReceiver
       signatures,
     ]),
-    // operation: 0, //no delegate call
+    // operation: 0, //no delegate call. commenting this out because an error is thrown if this is included.
   }
 }

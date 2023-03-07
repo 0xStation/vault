@@ -23,10 +23,6 @@ export default async function handler(
 
   let safesByOwner
   try {
-    // get safes for user
-    // check in our db where there are safes
-    // filter out where there are safes and return safe metadata for each of the filtered on safes
-
     const response = await axios.get<any[]>(url)
     safesByOwner = (response.data as any)?.safes
   } catch (err) {

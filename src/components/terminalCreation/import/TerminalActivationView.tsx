@@ -34,10 +34,10 @@ const getTxnStatus = ({
 }) => {
   const { CREATE_TRANSACTION, EXECUTION_BLOCKED, READY_TO_EXECUTE } =
     ENABLE_MODULE_STATUS
-  let enableModuleStatus = CREATE_TRANSACTION // terminalNonce < executionNonce
+  let enableModuleStatus = CREATE_TRANSACTION
 
-  if (!executionNonce || !terminalNonce) {
-    return ""
+  if (!terminalNonce || !executionNonce) {
+    return enableModuleStatus
   }
 
   if (executionNonce === terminalNonce) {
@@ -338,10 +338,8 @@ export const TerminalActivationView = ({
         terminalNonce: terminal?.data?.nonce as number,
       }) === "CREATE_TRANSACTION"
     ) {
-      console.log("create transaction~")
-      let transaction
       try {
-        transaction = await createTransaction({
+        await createTransaction({
           chainId: terminal?.chainId,
           address: terminal?.safeAddress,
           signature,
@@ -444,8 +442,7 @@ export const TerminalActivationView = ({
               error={error}
             />
           )
-        )}{" "}
-        {/* TODO: show an error screen if status isn't defined */}
+        )}
       </div>
     </Overlay>
   )
