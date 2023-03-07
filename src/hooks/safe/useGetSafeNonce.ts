@@ -15,7 +15,7 @@ export const useGetSafeNonce = ({
   address?: string
   chainId?: number
 }) => {
-  const { isLoading, data, error } = useSWR(
+  const { isLoading, data, error, mutate } = useSWR(
     address && chainId
       ? `${safeEndpoint(chainId)}/safes/${toChecksumAddress(
           address,
@@ -26,6 +26,7 @@ export const useGetSafeNonce = ({
 
   return {
     nonce: data,
+    mutate,
     isLoading,
     error,
   }

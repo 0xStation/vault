@@ -17,5 +17,5 @@ export const useIsModuleEnabled = ({
     args: [CONDUCTOR_ADDRESS],
   })
 
-  return response?.data || false
+  return response
 }

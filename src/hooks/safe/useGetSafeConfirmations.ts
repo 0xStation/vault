@@ -14,7 +14,7 @@ export const useGetSafeConfirmations = ({
   safeTxnHash: string
   chainId: number
 }) => {
-  const { isLoading, data, error } = useSWR(
+  const { isLoading, data, error, mutate } = useSWR(
     safeTxnHash && chainId
       ? `${safeEndpoint(
           chainId,
@@ -27,6 +27,7 @@ export const useGetSafeConfirmations = ({
     confirmations: data,
     isLoading,
     error,
+    mutate,
   }
 }
 

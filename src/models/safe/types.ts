@@ -4,6 +4,7 @@ export type Safe = {
   threshold: number
   owners: string[]
   version: string
+  nonce: number
 }
 
 export type SafeMetadata = {
@@ -11,4 +12,5 @@ export type SafeMetadata = {
   address: string
   quorum: number
   signers: string[]
+  nonce: number
 }

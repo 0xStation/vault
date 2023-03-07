@@ -1,29 +1,27 @@
 import axios from "axios"
-import { safeEndpoint } from "lib/api/safe/utils"
+import { SAFE_CLIENT_ENDPOINT } from "lib/constants"
 import useSWR from "swr"
 
 const fetcher = async (url: string | null, nonce?: string) => {
-  if (!url) {
-    return null
-  }
+  if (!url) return
   const response = await axios.get<any>(url, {
-    params: nonce,
+    params: { nonce },
   })
   return response.data
 }
 
-export const useGetSafeTransaction = ({
-  safeTxnHash,
+export const useGetSafeTxnStatus = ({
+  address,
   chainId,
   nonce,
 }: {
-  safeTxnHash: string
+  address: string
   chainId: number
-  nonce: string
+  nonce?: string
 }) => {
   const url =
-    safeTxnHash && chainId
-      ? `${safeEndpoint(chainId)}/multisig-transactions/${safeTxnHash}`
+    address && chainId
+      ? `${SAFE_CLIENT_ENDPOINT}/${chainId}/safes/${address}/multisig-transactions`
       : null
   const { isLoading, data, error, mutate } = useSWR(
     [url, nonce],
@@ -31,11 +29,11 @@ export const useGetSafeTransaction = ({
   )
 
   return {
-    transaction: data,
+    transactionStatusResults: data?.results,
     isLoading,
     error,
     mutate,
   }
 }
 
-export default useGetSafeTransaction
+export default useGetSafeTxnStatus

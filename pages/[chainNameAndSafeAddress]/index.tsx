@@ -25,11 +25,11 @@ const TerminalPage = () => {
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { terminal } = useGetTerminal({
+  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
     chainId: chainId as number,
     address: address as string,
   })
-  const isModuleEnabled = useIsModuleEnabled({
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
     address: terminal?.safeAddress,
     chainId: terminal?.chainId,
   })
@@ -76,8 +76,9 @@ const TerminalPage = () => {
 
   return (
     <>
-      {!isModuleEnabled && (
+      {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
+          mutateGetTerminal={mutateGetTerminal}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           terminal={terminal}

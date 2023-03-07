@@ -1,7 +1,5 @@
 import { addConductorMessage } from "lib/signatures/safe"
-import createTransaction from "../../models/safe/mutations/createTransaction"
 import useSignature from "../useSignature"
-import { useGetSafeNonce } from "./useGetSafeNonce"
 import { useSafeMetadata } from "./useSafeMetadata"
 
 export const useSignToEnableModule = ({
@@ -25,7 +23,7 @@ export const useSignToEnableModule = ({
           chainId,
           safeAddress: address,
           nonce: `${nonce}`,
-          contractVersion: safeMetadata?.contractVersion,
+          contractVersion: safeMetadata?.contractVersion as string,
         })
       } else {
         throw Error(

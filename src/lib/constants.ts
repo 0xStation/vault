@@ -17,3 +17,7 @@ export const REJECTION_CALL = {
 }
 
 export const SENTINEL_ADDRESS = "0x0000000000000000000000000000000000000001"
+
+export const SAFE_CLIENT_ENDPOINT = "https://safe-client.safe.global/v1/chains"
+
+export const SAFE_URL = "https://app.safe.global"

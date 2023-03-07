@@ -13,13 +13,14 @@ export const useGetTerminal = ({
   address: string
   chainId: number
 }) => {
-  const { isLoading, data, error } = useSWR(
+  const { isLoading, data, error, mutate } = useSWR(
     address && chainId ? `/api/v1/terminal/${chainId}/${address}` : null,
     fetcher,
   )
 
   return {
     terminal: data,
+    mutate,
     isLoading,
     error,
   }

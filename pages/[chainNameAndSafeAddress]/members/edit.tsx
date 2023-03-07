@@ -45,8 +45,8 @@ export const EditMembersPage = () => {
   const activeUser = useStore((state) => state.activeUser)
   const { signMessage } = useSignature()
   const nextNonce = useGetNextNonce({
-    chainId: safeMetadata.chainId,
-    address: safeMetadata.address,
+    chainId: safeMetadata?.chainId as number,
+    address: safeMetadata?.address as string,
   })
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
@@ -58,7 +58,7 @@ export const EditMembersPage = () => {
   )
 
   const onSubmit = async (data: any) => {
-    const existingSignersState = [...safeMetadata?.signers]
+    const existingSignersState = [...(safeMetadata?.signers || [])]
 
     // We need to keep track of the addresses of the signers
     // w.r.t to their indices since the signers exist
@@ -66,7 +66,7 @@ export const EditMembersPage = () => {
     // certain operations like "remove" and "add" we need to know
     // what the prev signer address that is pointing to the current
     // value to update the linked list structure.
-    let updatedSignersState = [...safeMetadata?.signers]
+    let updatedSignersState = [...(safeMetadata?.signers || [])]
     const signersToRemoveArray = Array.from(signersToRemove)
 
     // Format the values from the field data, so we can
@@ -77,7 +77,7 @@ export const EditMembersPage = () => {
 
     // all addresses, filtering out any duplicates just in case
     const allAddresses = [
-      ...safeMetadata?.signers,
+      ...(safeMetadata?.signers || []),
       ...addressesFromMembersFields,
     ].filter((v, i, addresses) => addresses.indexOf(v) === i)
 
@@ -140,7 +140,7 @@ export const EditMembersPage = () => {
       const newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
 
       const { swapOwnerCall } = prepareSwapCallAndUpdateVariant({
-        safeAddress: safeMetadata.address,
+        safeAddress: safeMetadata?.address as string,
         prevSignerAddress,
         oldSignerAddress: signersToBeRemoved[i],
         newSignerAddress: newSignerAddress as string,
@@ -160,7 +160,7 @@ export const EditMembersPage = () => {
             ownerAddress: signersToBeRemoved[i],
           })
         const removeOwnerCall = prepareRemoveOwnerCall(
-          safeMetadata.address,
+          safeMetadata?.address as string,
           prevSignerAddress,
           signersToBeRemoved[i],
           i === signersToBeRemoved.length - 1
@@ -177,7 +177,7 @@ export const EditMembersPage = () => {
       while (i < signersToBeAdded.length) {
         const newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
         const addOwnerCall = prepareAddOwnerWithThresholdCall(
-          safeMetadata.address,
+          safeMetadata?.address as string,
           newSignerAddress as string,
           i === signersToBeRemoved.length - 1
             ? safeMetadata?.quorum
@@ -192,15 +192,15 @@ export const EditMembersPage = () => {
 
     if (shouldChangeQuorumWithSeparateCall) {
       const changeThresholdCall = prepareChangeThresholdCall(
-        safeMetadata.address,
+        safeMetadata?.address as string,
         data.quorum,
       )
       preparedCalls.push(changeThresholdCall)
     }
 
     const { root, message } = newActionTree({
-      chainId: safeMetadata.chainId,
-      safe: safeMetadata.address,
+      chainId: safeMetadata?.chainId as number,
+      safe: safeMetadata?.address as string,
       nonce: nextNonce?.nonce as number,
       executor: ZERO_ADDRESS,
       calls: [...preparedCalls],
@@ -216,10 +216,10 @@ export const EditMembersPage = () => {
       }
 
       await axios.post(
-        `/api/v1/terminal/${safeMetadata.chainId}/${safeMetadata.address}/request/createApprovedRequest`,
+        `/api/v1/terminal/${safeMetadata?.chainId}/${safeMetadata?.address}/request/createApprovedRequest`,
         {
-          chainId: safeMetadata.chainId,
-          address: safeMetadata.address,
+          chainId: safeMetadata?.chainId,
+          address: safeMetadata?.address,
           requestVariantType: RequestVariantType.SIGNER_QUORUM,
           meta: signerQuorumVariantMeta,
           createdBy: activeUser?.address,
@@ -293,7 +293,9 @@ export const EditMembersPage = () => {
   }, [signersToRemove])
 
   const updatedQuorum =
-    safeMetadata?.signers?.length - signersToRemove.size + watchMembers.length
+    (safeMetadata?.signers?.length || 0) -
+    signersToRemove.size +
+    watchMembers.length
 
   // TODO: figure out good height settings for mobile.
   // These height settings are to temporarily deal with the different mobile heights
@@ -377,7 +379,7 @@ export const EditMembersPage = () => {
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
                         Member{" "}
-                        {safeMetadata?.signers?.length -
+                        {(safeMetadata?.signers?.length as number) -
                           signersToRemove.size +
                           index +
                           1}
@@ -413,7 +415,7 @@ export const EditMembersPage = () => {
                               (val, i) => memberAddresses.indexOf(val) !== i,
                             ) &&
                               !addressesAreEqual(activeUser?.address, addy) &&
-                              !activeSigners.includes(addy as string)) ||
+                              !activeSigners?.includes(addy as string)) ||
                             "Member already added."
                           )
                         },
