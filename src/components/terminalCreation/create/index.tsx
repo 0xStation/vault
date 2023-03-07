@@ -1,6 +1,8 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useNetwork } from "wagmi"
+import { VIEW } from "../../../../pages/terminal/new"
+import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import Layout from "../Layout"
-import { VIEW } from "../TerminalCreationOptionsView"
 import { MembersView } from "./MembersForm"
 import { TerminalDetailsForm } from "./TerminalDetailsForm"
 
@@ -17,6 +19,14 @@ export const TerminalCreationForm = ({
   const [createTerminalView, setCreateTerminalView] = useState<
     CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS
   >(CREATE_TERMINAL_VIEW.DETAILS)
+  const { chain } = useNetwork()
+
+  const setFormData = useTerminalCreationStore((state) => state.setFormData)
+  const formData = useTerminalCreationStore((state) => state.formData)
+
+  useEffect(() => {
+    setFormData({ ...formData, chainId: formData?.chainId || chain?.id })
+  }, [])
 
   return (
     <>

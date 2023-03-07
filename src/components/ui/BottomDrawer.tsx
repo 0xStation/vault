@@ -5,7 +5,7 @@ interface BottomDrawerProps {
   isOpen: boolean
   setIsOpen: any
   children?: ReactNode
-  size?: "sm" | "base" | "lg"
+  size?: "xs" | "sm" | "base" | "lg"
 }
 
 export const BottomDrawer = ({
@@ -16,13 +16,15 @@ export const BottomDrawer = ({
 }: BottomDrawerProps) => {
   // TODO: add cva
   const transitionChildStyles = {
-    ["sm"]: "translate-y-[35%]",
+    ["xs"]: "translate-y-[200%]",
+    ["sm"]: "translate-y-[75%]",
     ["base"]: "translate-y-[15%]",
     ["lg"]: "translate-y-[4%]",
   }
 
   const modalBodyStyles = {
-    ["sm"]: "h-[60%]",
+    ["xs"]: "h-[20%]",
+    ["sm"]: "h-[40%]",
     ["base"]: "h-[80%]",
     ["lg"]: "h-[95%]",
   }
@@ -50,11 +52,11 @@ export const BottomDrawer = ({
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="translate-y-full"
+              enterFrom="translate-y-[300%]"
               enterTo={transitionChildStyles[size]}
               leave="ease-in duration-200"
               leaveFrom="translate-y-0"
-              leaveTo="translate-y-full"
+              leaveTo="translate-y-[300%]"
             >
               {/* TODO: max-w-[580px] made to shrink for mobile size on large screens, reverse later */}
               <div

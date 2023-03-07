@@ -71,6 +71,11 @@ export const swapOwner = fn(
   "swapOwner(address prevOwner, address oldOwner, address newOwner)",
 )
 
+// https://github.com/safe-global/safe-contracts/blob/131f0d25135c1b98c185c940ae37fb0275ac4062/contracts/base/ModuleManager.sol#L130
+export const isModuleEnabled = fn(
+  "isModuleEnabled(address module) public view returns (bool)",
+)
+
 // https://github.com/0xSplits/splits-contracts/blob/main/contracts/SplitMain.sol#L256
 export const splitsCreateSplit = fn(
   "createSplit(address[] calldata accounts, uint32[] calldata percentAllocations, uint32 distributorFee, address controller)",

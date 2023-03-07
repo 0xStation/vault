@@ -18,6 +18,12 @@ export const getTerminalByChainIdAndAddress = async (
     },
   })) as Terminal
 
+  if (!terminal) {
+    return new Error(
+      "No terminals found in database for this chainId + safeAddress combo.",
+    )
+  }
+
   const terminalFrob = await toFrob(terminal)
   return terminalFrob
 }

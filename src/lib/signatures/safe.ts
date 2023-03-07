@@ -25,7 +25,7 @@ export const safeMessage = ({
   value: string
   data: string
   operation: number
-  nonce: number
+  nonce: string
   contractVersion: string
 }): EIP712Message => {
   return {
@@ -79,7 +79,7 @@ export const addConductorMessage = ({
 }: {
   chainId: number
   safeAddress: string
-  nonce: number
+  nonce: string
   contractVersion: string
 }) => {
   const to = safeAddress

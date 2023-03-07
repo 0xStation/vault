@@ -13,7 +13,7 @@ export const useGetTokens = ({
     chainId,
   )
   const { data: tokenData = [], error: fungibleTokenError } =
-    useFungibleTokenData(address, chainId)
+    useFungibleTokenData(chainId, address)
 
   const tokens = [...(nftData as []), ...(tokenData as [])]
   return { tokens, nftError, fungibleTokenError }

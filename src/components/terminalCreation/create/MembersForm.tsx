@@ -1,21 +1,28 @@
 import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
-import { LoadingSpinner } from "@icons/LoadingSpinner"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
 import { getTransactionLink } from "lib/utils/getTransactionLink"
+import { networks } from "lib/utils/networks"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FieldValues, useFieldArray, useForm } from "react-hook-form"
-import { useSendTransaction, useWaitForTransaction } from "wagmi"
+import {
+  useNetwork,
+  useSendTransaction,
+  useSwitchNetwork,
+  useWaitForTransaction,
+} from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
+import useWindowSize from "../../../hooks/useWindowSize"
 import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
 import { globalId } from "../../../models/terminal/utils"
+import LoadingSpinner from "../../core/LoadingSpinner"
 import AddressInput from "../../form/AddressInput"
 import QuorumInput from "../../form/QuorumInput"
 import Layout from "../Layout"
@@ -85,6 +92,8 @@ export const MembersView = ({
   const activeUser = useStore((state) => state.activeUser)
   const formData = useTerminalCreationStore((state) => state.formData)
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
+  const { chain } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const { members } = formData
   const [showLoadingScreen, setShowLoadingScreen] = useState<boolean>(false)
@@ -144,6 +153,41 @@ export const MembersView = ({
   })
 
   const onSubmit = async (data: any) => {
+    if (chain?.id !== formData?.chainId) {
+      const networkErrMessage = formData?.chainId
+        ? `Wrong network. Please switch to ${
+            (networks as any)?.[formData?.chainId]?.name
+          }.`
+        : "Wrong network. Please switch to the selected network."
+      setFormMessage({
+        isError: true,
+        message: networkErrMessage,
+      })
+
+      try {
+        await switchNetworkAsync?.(formData?.chainId)
+        setFormMessage({
+          isError: false,
+          message: "",
+        })
+      } catch (e: any) {
+        setFormMessage({
+          isError: true,
+          message: `Please check your wallet to switch to ${
+            (networks as any)[formData?.chainId?.toString() || ""]?.name ||
+            "specified chain"
+          }.`,
+        })
+        if (e.name === "ConnectorNotFoundError") {
+          setFormMessage({
+            isError: true,
+            message: "Please ensure your wallet is connected.",
+          })
+        }
+      }
+      return
+    }
+
     setFormMessage({
       isError: false,
       message: "Check your wallet to confirm. This action costs gas.",
@@ -217,6 +261,17 @@ export const MembersView = ({
     } as FieldValues,
   })
 
+  const windowSize = useWindowSize()
+
+  // TODO: figure out good height settings for mobile.
+  // These height settings are to temporarily deal with the different mobile heights
+  const formHeight =
+    windowSize.height < 730
+      ? "max-h-[430px]"
+      : windowSize.height < 800
+      ? "max-h-[500px]"
+      : "max-h-[600px]"
+
   const {
     fields: memberFields,
     append,
@@ -247,7 +302,7 @@ export const MembersView = ({
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
       >
-        <div className="flex max-h-[420px] grow flex-col overflow-scroll">
+        <div className={`flex ${formHeight} grow flex-col overflow-scroll`}>
           <div className="mb-6">
             <label className="text-sm font-bold">Members*</label>
             <div className="w-full">
