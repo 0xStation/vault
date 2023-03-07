@@ -2,6 +2,9 @@ import { Automation as PrismaAutomation } from "@prisma/client"
 
 export type Automation = PrismaAutomation & {
   data: AutomationMetadata
+}
+
+export type AutomationFrob = Automation & {
   splits?: {
     address: string
     value: number
@@ -17,9 +20,11 @@ export type Automation = PrismaAutomation & {
     address: string
     symbol: string
     decimals: number
+    imageUrl?: string
     totalClaimed: string
     totalUnclaimed: string
   }[]
+  tokenUsdRates?: Record<string, number> // token address => rate per token
 }
 
 export type AutomationMetadata = {

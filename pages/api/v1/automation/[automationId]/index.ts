@@ -1,50 +1,14 @@
 import { AutomationVariant } from "@prisma/client"
 import db from "db"
-import { GraphQLClient } from "graphql-request"
-import gql from "graphql-tag"
-import { ZERO_ADDRESS } from "lib/constants"
 import { NextApiRequest, NextApiResponse } from "next"
+import { getRevShareSplits } from "../../../../../src/models/automation/queries/getRevShareSplits"
 import { Automation } from "../../../../../src/models/automation/types"
+import { getFungibleTokenBalances } from "../../../../../src/models/token/queries/getFungibleTokenBalances"
+import { getFungibleTokenDetails } from "../../../../../src/models/token/queries/getFungibleTokenDetails"
 import {
   addValues,
-  subtractValues,
+  percentOfValue,
 } from "../../../../../src/models/token/utils"
-
-type SplitsDetailsResponse = {
-  split: {
-    id: string
-    recipients: {
-      recipient: {
-        id: string
-      }
-      allocation: string
-      tokens: {
-        token: string
-        totalDistributed: string
-        totalClaimed: string
-      }[]
-    }[]
-  } | null
-}
-
-export const SPLIT_DETAILS_QUERY = gql`
-  query split($id: ID!) {
-    split(id: $id) {
-      id
-      recipients {
-        recipient {
-          id
-        }
-        allocation
-        tokens {
-          token
-          totalDistributed
-          totalClaimed
-        }
-      }
-    }
-  }
-`
 
 export default async function handler(
   req: NextApiRequest,
@@ -77,74 +41,87 @@ export default async function handler(
   console.log("automation", automation)
 
   if (automation?.variant === AutomationVariant.REV_SHARE) {
+    const chainId = automation.chainId
+    const address = automation.data.meta.address
+
     try {
-      const graphlQLClient = new GraphQLClient(
-        "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
-        {
-          method: "POST",
-          headers: new Headers({
-            "Content-Type": "application/json",
-          }),
-        },
-      )
+      let [balances, splits] = await Promise.all([
+        getFungibleTokenBalances(chainId, address),
+        getRevShareSplits(chainId, address),
+      ])
 
-      const response: SplitsDetailsResponse = await graphlQLClient.request(
-        SPLIT_DETAILS_QUERY,
-        {
-          id: automation.data.meta.address.toLowerCase(),
-        },
-      )
+      const splitTokenAddresses = splits
+        .reduce(
+          (acc, split) => [
+            ...acc,
+            ...split.tokens.map((token) => token.address),
+          ],
+          [] as string[],
+        )
+        .filter((v, i, values) => values.indexOf(v) === i)
 
-      if (!response?.split) {
-        throw Error("no split found")
-      }
+      const balanceTokenAddresses = balances.map((balance) => balance.address)
 
-      const splits = response?.split?.recipients.map((split: any) => {
-        return {
-          address: split.recipient.id,
-          value: (parseInt(split.allocation) * 100) / 1_000_000,
-          tokens: split.tokens.map((obj: any) => ({
-            address: obj.token,
-            symbol: obj.token === ZERO_ADDRESS ? "ETH" : "WETH",
-            decimals: 18,
-            totalClaimed: obj.totalClaimed,
-            totalUnclaimed: subtractValues(
-              obj.totalDistributed,
-              obj.totalClaimed,
-            ),
-          })),
-        }
+      const allTokenAddresses = [
+        ...splitTokenAddresses,
+        ...balanceTokenAddresses,
+      ].filter((v, i, values) => values.indexOf(v) === i)
+
+      const tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
+
+      let balanceValuesObj: Record<string, string> = {}
+      balances.forEach((balance) => {
+        balanceValuesObj[balance.address] = balance.value
+      })
+      let tokensObj: Record<string, any> = {}
+      tokens.forEach((token) => {
+        tokensObj[token.address] = token
       })
 
-      let balances: any = {}
-      splits.forEach((split: any) => {
+      const splitsAddUnclaimedBalance = splits.map((split) => ({
+        ...split,
+        tokens: split.tokens.map((token) => ({
+          ...tokensObj[token.address],
+          totalClaimed: token.totalClaimed,
+          totalUnclaimed: addValues(
+            token.unclaimed,
+            percentOfValue(split.value, balanceValuesObj[token.address] ?? "0"),
+          ),
+        })),
+      }))
+
+      let balanceTotals: any = {}
+      splitsAddUnclaimedBalance.forEach((split: any) => {
         split.tokens.forEach((token: any) => {
-          console.log("balances", balances)
-          if (!balances[token.address]) {
-            balances[token.address] = JSON.parse(JSON.stringify(token))
+          if (!balanceTotals[token.address]) {
+            balanceTotals[token.address] = JSON.parse(JSON.stringify(token))
           } else {
-            balances[token.address].totalUnclaimed = addValues(
-              balances[token.address].totalUnclaimed,
-              token.totalUnclaimed,
-            )
-            balances[token.address].totalClaimed = addValues(
-              balances[token.address].totalClaimed,
+            balanceTotals[token.address].totalClaimed = addValues(
+              balanceTotals[token.address].totalClaimed,
               token.totalClaimed,
+            )
+            balanceTotals[token.address].totalUnclaimed = addValues(
+              balanceTotals[token.address].totalUnclaimed,
+              token.totalUnclaimed,
             )
           }
         })
       })
 
+      let tokenUsdRates: Record<string, number> = {}
+      tokens.forEach((token) => {
+        tokenUsdRates[token.address] = token.usdRate
+      })
+
       automation = {
         ...automation,
-        splits,
-        balances: Object.values(balances),
+        splits: splitsAddUnclaimedBalance,
+        balances: Object.values(balanceTotals),
+        tokenUsdRates,
       }
-    } catch (err) {
+    } catch (e) {
       res.statusCode = 500
-      return res.end(
-        JSON.stringify("Failure fetching split details from subgraph"),
-      )
+      return res.end(JSON.stringify(e))
     }
   }
 
