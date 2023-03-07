@@ -5,6 +5,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { InputWithLabel } from "../../../src/components/form"
 import Layout from "../../../src/components/terminalCreation/Layout"
+import useSignature from "../../../src/hooks/useSignature"
+import { formatUpdateTerminalValues } from "../../../src/lib/signatures/terminal"
 import {
   useTerminalByChainIdAndSafeAddress,
   useUpdateTerminal,
@@ -13,14 +15,17 @@ import { parseGlobalId } from "../../../src/models/terminal/utils"
 
 const TerminalDetailsEditPage = () => {
   const router = useRouter()
+  const { signMessage } = useSignature()
   const { chainId, address } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  console.log("chain", chainId)
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
     message: string
-  }>({ isError: false, message: "" })
+  }>({
+    isError: false,
+    message: "You’ll be directed to confirm. This action does not cost gas.",
+  })
 
   const { terminal } = useTerminalByChainIdAndSafeAddress(address, chainId)
 
@@ -31,13 +36,13 @@ const TerminalDetailsEditPage = () => {
         .then((res) => res.data),
   })
 
-  console.log(formState)
-
   const { errors } = formState
 
   const { updateTerminal } = useUpdateTerminal(address, chainId)
 
   const onSubmit = async (data: any) => {
+    // this is mostly just theatre because we aren't actually doing anything with the signature?
+    await signMessage(formatUpdateTerminalValues(data))
     await updateTerminal(data)
     router.back()
   }
