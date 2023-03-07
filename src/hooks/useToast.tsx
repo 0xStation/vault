@@ -8,10 +8,12 @@ export const useToast = () => {
     message,
     action,
     timeout = defaultTimeout,
+    useTimeout = true,
   }: {
     message: string
     action?: { href: string; label: string }
     timeout?: number
+    useTimeout?: boolean
   }) => {
     setToastState({
       isToastShowing: true,
@@ -20,7 +22,7 @@ export const useToast = () => {
       action,
     })
 
-    if (timeout) {
+    if (useTimeout) {
       setTimeout(() => {
         closeCurrentToast()
       }, timeout)
@@ -31,10 +33,12 @@ export const useToast = () => {
     message,
     action,
     timeout = defaultTimeout,
+    useTimeout = true,
   }: {
     message: string
     action?: { href: string; label: string }
     timeout?: number
+    useTimeout?: boolean
   }) => {
     setToastState({
       isToastShowing: true,
@@ -43,7 +47,7 @@ export const useToast = () => {
       action,
     })
 
-    if (timeout) {
+    if (useTimeout) {
       setTimeout(() => {
         closeCurrentToast()
       }, timeout)
@@ -54,10 +58,12 @@ export const useToast = () => {
     message,
     action,
     timeout = defaultTimeout,
+    useTimeout = true,
   }: {
     message: string
     action?: { href: string; label: string }
     timeout?: number
+    useTimeout?: boolean
   }) => {
     setToastState({
       isToastShowing: true,
@@ -66,7 +72,7 @@ export const useToast = () => {
       action,
     })
 
-    if (timeout) {
+    if (useTimeout) {
       setTimeout(() => {
         closeCurrentToast()
       }, timeout)

@@ -90,7 +90,7 @@ const TerminalRequestsPage = () => {
       </div>
       <TerminalRequestTypeTabBar>
         <RequestTypeContent tab={TerminalRequestTypeTab.ALL} />
-        <RequestTypeContent tab={TerminalRequestTypeTab.ASSETS} />
+        <RequestTypeContent tab={TerminalRequestTypeTab.TOKENS} />
         <RequestTypeContent tab={TerminalRequestTypeTab.MEMBERS} />
       </TerminalRequestTypeTabBar>
     </>

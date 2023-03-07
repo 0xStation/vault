@@ -374,7 +374,7 @@ export const EditMembersPage = () => {
                 return (
                   <div
                     key={item.id + item.address}
-                    className="mb-1 rounded bg-slate-200 p-3"
+                    className="mb-1 rounded bg-slate-50 p-3"
                   >
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm font-bold text-slate-500">
@@ -394,7 +394,7 @@ export const EditMembersPage = () => {
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-slate-200 [&>input]:placeholder:text-slate-500"
+                      className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {

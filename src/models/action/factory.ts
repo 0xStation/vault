@@ -4,6 +4,8 @@ import { Action, SwapChoice } from "./types"
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
+type ActionData = Omit<Action, "proofs">
+
 // defaults to a eth transfer to 0x65a
 export const createAction = ({
   requestId,
@@ -58,15 +60,15 @@ export const createAction = ({
         isRejection
           ? rejectionCall
           : {
-            to: to ?? sendEthCall.to,
-            value: value ?? sendEthCall.value,
-            data: data ?? sendEthCall.data,
-            operation: operation ?? sendEthCall.operation,
-          },
+              to: to ?? sendEthCall.to,
+              value: value ?? sendEthCall.value,
+              data: data ?? sendEthCall.data,
+              operation: operation ?? sendEthCall.operation,
+            },
       ],
       minDate: minDate ?? +new Date(),
       recipient: recipient ?? faker.finance.ethereumAddress(),
       swapChoice: SwapChoice.NONE,
     },
-  } as Action
+  } as ActionData
 }

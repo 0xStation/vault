@@ -17,7 +17,6 @@ import {
 } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
-import { useSignToEnableModule } from "../../../hooks/safe/useSignToEnableModule"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
@@ -60,8 +59,10 @@ const LoadingScreen = ({
         </>
       ) : (
         <>
-          <LoadingSpinner className="mb-8" />
-          <p className="mb-2 animate-pulse font-bold">Building your Terminal</p>
+          <LoadingSpinner />
+          <p className="mt-8 mb-2 animate-pulse font-bold">
+            Building your Terminal
+          </p>
           <p className="animate-pulse text-sm">
             Please do not leave or refresh the page.
           </p>
@@ -179,7 +180,7 @@ export const MembersView = ({
         if (e.name === "ConnectorNotFoundError") {
           setFormMessage({
             isError: true,
-            message: `Please ensure your wallet is connected.`,
+            message: "Please ensure your wallet is connected.",
           })
         }
       }

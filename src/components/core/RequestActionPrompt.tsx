@@ -41,7 +41,6 @@ const RequestActionPrompt = ({
     label: "Execute",
     onClick: (e: any) => {
       e.stopPropagation()
-      console.log("executed")
       takeActionOnRequest("execute", request)
     },
   }
@@ -50,7 +49,6 @@ const RequestActionPrompt = ({
     label: "Approve",
     onClick: (e: any) => {
       e.stopPropagation()
-      console.log("approved")
       takeActionOnRequest("approve", request)
     },
   }
@@ -59,7 +57,7 @@ const RequestActionPrompt = ({
     label: "Reject",
     onClick: (e: any) => {
       e.stopPropagation()
-      console.log("rejected")
+
       takeActionOnRequest("reject", request)
     },
   }

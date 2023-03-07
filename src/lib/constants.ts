@@ -21,3 +21,6 @@ export const SENTINEL_ADDRESS = "0x0000000000000000000000000000000000000001"
 export const SAFE_CLIENT_ENDPOINT = "https://safe-client.safe.global/v1/chains"
 
 export const SAFE_URL = "https://app.safe.global"
+
+export const SPLITS_MAIN_ADDRESS = "0x2ed6c4B5dA6378c7897AC67Ba9e43102Feb694EE"
+export const SPLITS_PERCENTAGE_SCALE = 1e6

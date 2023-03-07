@@ -1,11 +1,69 @@
 import { Transition } from "@headlessui/react"
-import { Button } from "@ui/Button"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { ActionVariant } from "@prisma/client"
+import { useReducer, useState } from "react"
+import { listIntersection } from "../../lib/utils/listIntersection"
+import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
+import { XMark } from "../icons"
+import BatchExecuteDrawer from "../request/BatchExecuteDrawer"
+import BatchVoteDrawer from "../request/BatchVoteDrawer"
 import { VoteDrawer } from "./VoteDrawer"
+
+const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
+
+type BatchState = {
+  selectedRequests: RequestFrob[]
+  validActions: any[]
+  batchVariant: "VOTE" | "EXECUTE" | undefined
+}
+const initialBatchState = {
+  selectedRequests: [],
+  validActions: DEFAULT_EXECUTION_ACTIONS,
+  batchVariant: undefined,
+} as BatchState
+
+const batchReducer = (
+  state: BatchState,
+  action: { type: string; request?: RequestFrob },
+) => {
+  switch (action.type) {
+    case "ADD_REQUEST":
+      if (action.request) {
+        return {
+          ...state,
+          validActions: listIntersection(
+            state.validActions,
+            action.request.validActions ?? [],
+          ),
+          batchVariant: action.request.stage ?? "VOTE",
+          selectedRequests: [...state.selectedRequests, action.request],
+        }
+      }
+      return state
+    case "REMOVE_REQUEST":
+      const remainingRequests = state.selectedRequests.filter(
+        (r) => r.id !== action?.request?.id,
+      )
+      if (remainingRequests.length === 0) {
+        return initialBatchState
+      }
+
+      return {
+        ...state,
+        validActions: remainingRequests
+          .map((r) => r.validActions)
+          .reduce((a, b) => a.filter((c) => b.includes(c))),
+        selectedRequests: remainingRequests,
+      }
+
+    case "RESET":
+      return initialBatchState
+    default:
+      return state
+  }
+}
 
 const RequestListForm = ({
   requests,
@@ -13,29 +71,86 @@ const RequestListForm = ({
   isProfile = false,
 }: {
   requests: RequestFrob[]
-  mutate: (data: any) => void
+  mutate: any
   isProfile?: boolean
 }) => {
-  const [selectedRequests, setSelectedRequests] = useState<any[]>([])
-  const { register, handleSubmit, watch, reset } = useForm()
-
-  watch((data) => {
-    const checkBoxEntries = Object.entries(data)
-    const checkedBoxes = checkBoxEntries.filter(([_key, v]) => v)
-    setSelectedRequests(checkedBoxes)
+  const [drawerManagerState, setDrawerManagerState] = useState({
+    batchVoteDrawer: false,
+    batchExecuteDrawer: false,
+    voteDrawer: false,
   })
-
-  const requestIsSelected = (id: string) => {
-    return selectedRequests.find(([rId, _v]: [string, boolean]) => rId === id)
+  const toggleDrawer = (drawerKey: string, state: boolean) => {
+    setDrawerManagerState({
+      ...drawerManagerState,
+      [drawerKey]: state,
+    })
   }
 
-  const onSubmit = (data: any) => console.log(data)
+  const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
+  const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
+  const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
+  const reset = () => dispatch({ type: "RESET" })
 
-  const [isVoteOpen, setIsVoteOpen] = useState<boolean>(false)
   const [promptAction, setPromptAction] = useState<
     "approve" | "reject" | "execute"
   >()
   const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
+
+  const onCheckboxChange = (e: any) => {
+    const requestId = e.target.name
+    const isChecked = e.target.checked
+    const request = requests.find((r) => r.id === requestId)
+
+    if (request) {
+      dispatch({ type: isChecked ? "ADD_REQUEST" : "REMOVE_REQUEST", request })
+    }
+  }
+
+  const mutateSelectedRequests = ({
+    selectedRequests,
+    approve,
+    fn,
+    updateActionPayload,
+    updateRequestPayload,
+  }: {
+    selectedRequests: RequestFrob[]
+    approve: boolean
+    fn: Promise<any>
+    updateActionPayload?: any
+    updateRequestPayload?: any
+  }) => {
+    const requestIdsToUpdate = selectedRequests.map(
+      (request: RequestFrob) => request.id,
+    )
+    const updatedRequests = requests.map((request: RequestFrob) => {
+      if (requestIdsToUpdate.includes(request.id)) {
+        const updatedActions = request.actions.map((action: Action) => {
+          if (
+            (action.variant === ActionVariant.APPROVAL && approve) ||
+            (action.variant === ActionVariant.REJECTION && !approve)
+          ) {
+            return {
+              ...action,
+              ...updateActionPayload,
+            }
+          }
+          return action
+        })
+        return {
+          ...request,
+          ...updateRequestPayload,
+          actions: updatedActions,
+        }
+      }
+      return request
+    })
+
+    mutate(fn, {
+      optimisticData: updatedRequests,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
 
   if (requests.length === 0) {
     return (
@@ -48,17 +163,26 @@ const RequestListForm = ({
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <ul>
           {requests.map((request, idx) => {
             return (
               <RequestCard
+                onCheckboxChange={onCheckboxChange}
                 disabled={
-                  selectedRequests.length > 0 && !requestIsSelected(request.id)
+                  (batchState.batchVariant &&
+                    request.stage !== batchState.batchVariant) ||
+                  (request.stage === "EXECUTE" &&
+                    listIntersection(
+                      request.validActions as (
+                        | "EXECUTE-REJECT"
+                        | "EXECUTE-APPROVE"
+                      )[],
+                      batchState.validActions,
+                    ).length === 0)
                 }
                 key={`request-${idx}`}
                 request={request}
-                formRegister={register}
                 showTerminal={isProfile ? request.terminal : undefined}
                 takeActionOnRequest={(
                   action: "approve" | "reject" | "execute",
@@ -69,7 +193,7 @@ const RequestListForm = ({
                   if (action === "execute") {
                     // set ExecuteDrawer open
                   } else {
-                    setIsVoteOpen(true)
+                    toggleDrawer("voteDrawer", true)
                   }
                 }}
               />
@@ -79,8 +203,10 @@ const RequestListForm = ({
       </form>
       <VoteDrawer
         request={requestActedOn}
-        isOpen={isVoteOpen}
-        setIsOpen={setIsVoteOpen}
+        isOpen={drawerManagerState.voteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("voteDrawer", state)
+        }}
         approve={promptAction === "approve"}
         optimisticVote={(newRequest) => {
           const newArray = requests.map((request) =>
@@ -89,9 +215,28 @@ const RequestListForm = ({
           mutate(newArray)
         }}
       />
+      <BatchVoteDrawer
+        requestsToApprove={batchState.selectedRequests}
+        isOpen={drawerManagerState.batchVoteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("batchVoteDrawer", state)
+        }}
+        approve={isVotingApproval}
+        clearSelectedRequests={reset}
+      />
+      <BatchExecuteDrawer
+        requestsToApprove={batchState.selectedRequests}
+        isOpen={drawerManagerState.batchExecuteDrawer}
+        setIsOpen={(state: boolean) => {
+          toggleDrawer("batchExecuteDrawer", state)
+        }}
+        approve={isExecutingApproval}
+        mutateSelectedRequests={mutateSelectedRequests}
+        clearSelectedRequests={reset}
+      />
       <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
         <Transition
-          show={selectedRequests.length > 0}
+          show={batchState.selectedRequests.length > 0}
           enter="transform transition ease-in-out duration-300 sm:duration-500"
           enterFrom="translate-y-[200%]"
           enterTo="translate-y-0"
@@ -101,11 +246,62 @@ const RequestListForm = ({
         >
           <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
             <p className="text-sm text-white">
-              {selectedRequests.length} selected
+              {batchState.selectedRequests.length} selected
             </p>
-            <Button size="sm" variant="secondary" onClick={() => reset()}>
-              Cancel
-            </Button>
+            <div className="flex flex-row items-center space-x-3">
+              {batchState.batchVariant === "EXECUTE" &&
+                batchState.validActions.includes("EXECUTE-APPROVE") && (
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setIsExecutingApproval(true)
+                      toggleDrawer("batchExecuteDrawer", true)
+                    }}
+                  >
+                    Execute Approval
+                  </button>
+                )}
+              {batchState.batchVariant === "EXECUTE" &&
+                batchState.validActions.includes("EXECUTE-REJECT") && (
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setIsExecutingApproval(false)
+                      toggleDrawer("batchExecuteDrawer", true)
+                    }}
+                  >
+                    Execute Rejection
+                  </button>
+                )}
+              {batchState.batchVariant === "VOTE" && (
+                <>
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setIsVotingApproval(true)
+                      toggleDrawer("batchVoteDrawer", true)
+                    }}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    className="text-sm text-white"
+                    onClick={() => {
+                      setIsVotingApproval(false)
+                      toggleDrawer("batchVoteDrawer", true)
+                    }}
+                  >
+                    Rejection
+                  </button>
+                </>
+              )}
+              <div
+                onClick={() => reset()}
+                className="cursor-pointer text-slate-200"
+              >
+                <XMark size="sm" />
+              </div>
+            </div>
           </div>
         </Transition>
       </div>

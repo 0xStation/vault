@@ -76,6 +76,11 @@ export const isModuleEnabled = fn(
   "isModuleEnabled(address module) public view returns (bool)",
 )
 
+// https://github.com/0xSplits/splits-contracts/blob/main/contracts/SplitMain.sol#L256
+export const splitsCreateSplit = fn(
+  "createSplit(address[] calldata accounts, uint32[] calldata percentAllocations, uint32 distributorFee, address controller)",
+)
+
 // EVENTS
 
 // https://github.com/safe-global/safe-contracts/blob/96a4e280876c33c53a09b5ef6ee78201a101ff58/contracts/proxies/SafeProxyFactory.sol#L12
