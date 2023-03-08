@@ -1,8 +1,9 @@
 import { ArrowLeft } from "@icons"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { ClaimRequest } from "../../../../src/components/claim/ClaimRequest"
+import { ClaimRevShare } from "../../../../src/components/claim/ClaimRevShare"
 import AccountNavBar from "../../../../src/components/core/AccountNavBar"
-import { ClaimItem } from "../../../../src/components/core/ClaimItem"
 import { EmptyList } from "../../../../src/components/core/EmptyList"
 import { useAccountItemsToClaim } from "../../../../src/models/account/hooks"
 
@@ -20,15 +21,18 @@ const ProfileClaimPage = ({}: {}) => {
       </Link>
       {isLoading ? (
         <></>
-      ) : items?.length === 0 ? (
+      ) : items?.requests.length === 0 && items?.splits.length === 0 ? (
         <EmptyList
           title="No items ready to claim"
           subtitle="Requests will show here when approved"
         />
       ) : (
         <ul className="mt-3">
-          {items?.map((item, idx) => (
-            <ClaimItem item={item} key={`claim-item-${idx}`} />
+          {items?.splits.map((split, idx) => (
+            <ClaimRevShare split={split} key={`claim-item-${idx}`} />
+          ))}
+          {items?.requests.map((request, index) => (
+            <ClaimRequest request={request} key={`request-${index}`} />
           ))}
         </ul>
       )}

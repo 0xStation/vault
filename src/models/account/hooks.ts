@@ -1,12 +1,31 @@
 import axios from "axios"
 import useSWR from "swr"
 import { RequestFrob } from "../request/types"
+import { FungibleToken } from "../token/types"
 
 export const useAccountItemsToClaim = (
   address: string,
-): { isLoading: boolean; items: RequestFrob[] | undefined; error: any } => {
+): {
+  isLoading: boolean
+  items:
+    | {
+        requests: RequestFrob[]
+        splits: (FungibleToken & {
+          totalValue: string
+          splits: { value: string; name?: string }[]
+        })[]
+      }
+    | undefined
+  error: any
+} => {
   const fetcher = async (url: string) => {
-    const response = await axios.get<RequestFrob[]>(url)
+    const response = await axios.get<{
+      requests: RequestFrob[]
+      splits: (FungibleToken & {
+        totalValue: string
+        splits: { value: string; name?: string }[]
+      })[]
+    }>(url)
     return response.data
   }
 
