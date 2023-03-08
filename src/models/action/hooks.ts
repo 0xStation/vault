@@ -4,7 +4,10 @@ import useSWRMutation from "swr/mutation"
 // optimization / cleanup nit
 // could maybe reuse this for both and pass single element array in for single case
 export const useSetActionsPending = () => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    { arg }: { arg: { txHash: string; actionIds: string[] } },
+  ) => {
     try {
       const response = await axios.post<any>(url, arg)
       if (response.status === 200) {

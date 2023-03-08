@@ -66,8 +66,13 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={button({ variant, size, fullWidth, disabled })}
-      disabled={Boolean(disabled)}
+      className={button({
+        variant,
+        size,
+        fullWidth,
+        disabled: disabled || loading,
+      })}
+      disabled={Boolean(disabled || loading)}
       {...props}
     >
       <>

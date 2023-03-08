@@ -14,7 +14,7 @@ import { RequestFrob } from "../../../../src/models/request/types"
 const ProfileClaimPage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
-  const { isLoading, items } = useAccountItemsToClaim(accountAddress)
+  const { isLoading, items, mutate } = useAccountItemsToClaim(accountAddress)
   const [claimDrawerOpen, setClaimDrawerOpen] = useState<boolean>(false)
   const [selectedRevShareWithdraws, setSelectedRevShareWithdraws] = useState<
     RevShareWithdraw[]
@@ -28,6 +28,22 @@ const ProfileClaimPage = ({}: {}) => {
         setIsOpen={setClaimDrawerOpen}
         revShareWithdraws={selectedRevShareWithdraws}
         requests={selectedRequests}
+        optimisticallyShow={(
+          updatedItems: {
+            requests: RequestFrob[]
+            revShareWithdraws: RevShareWithdraw[]
+          },
+          mutation: Promise<any>,
+        ) => {
+          // TODO: thread together existing items with updated items
+          const optimisticItems = updatedItems
+
+          mutate(mutation, {
+            optimisticData: optimisticItems,
+            populateCache: false,
+            revalidate: false,
+          })
+        }}
       />
       <AccountNavBar />
       <Link href={`/u/${accountAddress}/profile`} className="block w-fit px-4">

@@ -1,4 +1,4 @@
-import { ActionVariant } from "@prisma/client"
+import { ActionStatus, ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { REJECTION_CALL } from "lib/constants"
@@ -9,7 +9,10 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
+import { useSetActionsPending } from "../../models/action/hooks"
+import { Action } from "../../models/action/types"
 import { RevShareWithdraw } from "../../models/automation/types"
+import { useCompleteRequestsExecution } from "../../models/request/hooks"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { TokenTransfer } from "../../models/token/types"
 import { addValues, transferId } from "../../models/token/utils"
@@ -83,11 +86,19 @@ export const ClaimItemsDrawer = ({
   setIsOpen,
   revShareWithdraws,
   requests,
+  optimisticallyShow,
 }: {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   revShareWithdraws: RevShareWithdraw[]
   requests: RequestFrob[]
+  optimisticallyShow: (
+    updatedItems: {
+      requests: RequestFrob[]
+      revShareWithdraws: RevShareWithdraw[]
+    },
+    mutation: Promise<any>,
+  ) => void
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [items, setItems] = useState<ClaimableItem[]>(
@@ -105,6 +116,9 @@ export const ClaimItemsDrawer = ({
     )
   }, [requests, revShareWithdraws, router.query.address])
 
+  const { setActionsPending } = useSetActionsPending()
+  const { completeRequestsExecution } = useCompleteRequestsExecution()
+
   const { ready, trigger, transactionHash } = usePreparedTransaction({
     chainId: 5,
     txPayload: claimCall,
@@ -116,11 +130,46 @@ export const ClaimItemsDrawer = ({
       console.log("send success")
       setLoading(false)
       setIsOpen(false)
-      // optimistic stuff
+
+      // optimistic updates
+      let setActionIdsPending: string[] = []
+      const updatedRequests = requests.map((request: RequestFrob) => {
+        let updatedActions: Action[] = []
+        request.actions.forEach((action: Action) => {
+          if (action.variant === ActionVariant.APPROVAL) {
+            updatedActions.push({
+              ...action,
+              status: ActionStatus.PENDING,
+              txHash: transactionHash as string,
+            })
+            setActionIdsPending.push(action.id)
+          } else {
+            updatedActions.push(action)
+          }
+        })
+        return {
+          ...request,
+          actions: updatedActions,
+        }
+      }) as RequestFrob[]
+
+      let updatedItems: {
+        requests: RequestFrob[]
+        revShareWithdraws: RevShareWithdraw[]
+      } = { requests: updatedRequests, revShareWithdraws }
+
+      optimisticallyShow(
+        updatedItems,
+        setActionsPending({
+          actionIds: setActionIdsPending,
+          txHash: transactionHash as string,
+        }),
+      )
     },
     onWaitSuccess: () => {
       console.log("wait success")
-      // optimistic stuff
+
+      // optimistic updates
     },
   })
 
@@ -136,16 +185,20 @@ export const ClaimItemsDrawer = ({
         setIsOpen(v)
       }}
     >
-      <h1 className="mb-6">Claim tokens</h1>
-      <TokenTransfersAccordion
-        transfers={reduceTransfers(
-          items.reduce(
-            (acc: TokenTransfer[], item) => [...acc, ...item.transfers],
-            [],
-          ),
-        )}
-      />
-      <div className="mt-6 space-y-8 border-t border-slate-200 pt-6">
+      <h1>Claim tokens</h1>
+      {items.length > 1 && (
+        <div className="mt-6 border-b border-slate-200 pb-6">
+          <TokenTransfersAccordion
+            transfers={reduceTransfers(
+              items.reduce(
+                (acc: TokenTransfer[], item) => [...acc, ...item.transfers],
+                [],
+              ),
+            )}
+          />
+        </div>
+      )}
+      <div className="mt-6 space-y-8">
         {items.map((item, index) => (
           <div
             className="space-y-3 rounded-lg bg-slate-50 p-4"

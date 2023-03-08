@@ -386,7 +386,8 @@ export const NewTokensPage = () => {
                                     },
                                     isLessThanDecimals: (v: any) => {
                                       const decimals =
-                                        getErc20FieldTokenData(0)?.decimals || 0
+                                        getErc20FieldTokenData(index)
+                                          ?.decimals || 0
                                       return (
                                         v.split(".")[1]?.length < decimals ||
                                         `Cannot have more than ${decimals} decimal places.`

@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline"
 import { ChevronRightIcon } from "@heroicons/react/24/solid"
 import { cn } from "lib/utils"
 import { useState } from "react"
-import { TokenTransfer } from "../../models/token/types"
+import { TokenTransfer, TokenType } from "../../models/token/types"
 import { valueToAmount } from "../../models/token/utils"
 
 export const TokenTransfersAccordion = ({
@@ -43,9 +43,17 @@ export const TokenTransfersAccordion = ({
                   transferBgGray ? "bg-slate-50" : "bg-white",
                 )}
               >
-                <span>{transfer.token.symbol}</span>
                 <span>
-                  {valueToAmount(transfer.value!, transfer.token.decimals!)}
+                  {transfer.token.symbol}
+                  {transfer.token.type === TokenType.ERC1155 ||
+                  transfer.token.type === TokenType.ERC721
+                    ? ` #${transfer.tokenId}`
+                    : ""}
+                </span>
+                <span>
+                  {transfer.token.type === TokenType.ERC721
+                    ? 1
+                    : valueToAmount(transfer.value!, transfer.token.decimals!)}
                 </span>
               </div>
             )

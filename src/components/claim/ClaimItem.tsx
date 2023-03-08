@@ -7,9 +7,11 @@ import { addValues, valueToAmount } from "../../models/token/utils"
 export const ClaimItem = ({
   transfers,
   showDetails,
+  pendingExecution = false,
 }: {
   transfers: { token: Token; value?: string; tokenId?: string }[]
   showDetails: () => void
+  pendingExecution?: boolean
 }) => {
   const formatTransfers = (
     transfers: { token: Token; value?: string; tokenId?: string }[],
@@ -59,12 +61,21 @@ export const ClaimItem = ({
     <div className="px-4 py-3">
       <div>{formatTransfers(transfers)}</div>
       <div className="mt-1 flex flex-row items-center justify-between">
-        <button onClick={showDetails}>
-          <div className="w-fit border-b border-dotted text-xs hover:text-slate-500">
-            View details
-          </div>
-        </button>
-        <Button variant="secondary" size="sm" onClick={showDetails}>
+        {pendingExecution ? (
+          <div></div>
+        ) : (
+          <button onClick={showDetails}>
+            <div className="w-fit border-b border-dotted text-xs hover:text-slate-500">
+              View details
+            </div>
+          </button>
+        )}
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={showDetails}
+          loading={pendingExecution}
+        >
           Claim
         </Button>
       </div>
