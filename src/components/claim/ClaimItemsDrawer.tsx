@@ -156,7 +156,13 @@ export const ClaimItemsDrawer = ({
       let updatedItems: {
         requests: RequestFrob[]
         revShareWithdraws: RevShareWithdraw[]
-      } = { requests: updatedRequests, revShareWithdraws }
+      } = {
+        requests: updatedRequests,
+        revShareWithdraws: revShareWithdraws.map((rs) => ({
+          ...rs,
+          pendingExecution: true,
+        })),
+      }
 
       optimisticallyShow(
         updatedItems,
