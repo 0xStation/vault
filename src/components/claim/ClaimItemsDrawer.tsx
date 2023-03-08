@@ -126,10 +126,8 @@ export const ClaimItemsDrawer = ({
     txPayload: claimCall,
     onError: () => {
       setLoading(false)
-      console.log("error")
     },
     onSendSuccess: () => {
-      console.log("send success")
       setLoading(false)
       setIsOpen(false)
 
@@ -169,10 +167,7 @@ export const ClaimItemsDrawer = ({
       )
     },
     onWaitSuccess: () => {
-      console.log("wait success")
-
       // optimistic updates
-
       let setActionIdsPending: string[] = []
       const updatedRequests = requests.map((request: RequestFrob) => {
         let updatedActions: Action[] = []

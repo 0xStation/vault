@@ -32,4 +32,5 @@ export type RevShareVariant = {
 export type RevShareWithdraw = FungibleToken & {
   totalValue: string
   splits: { value: string; name?: string }[]
+  pendingExecution?: boolean
 }

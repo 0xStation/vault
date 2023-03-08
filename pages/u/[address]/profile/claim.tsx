@@ -1,4 +1,5 @@
 import { ArrowLeft } from "@icons"
+import { ActionStatus, ActionVariant } from "@prisma/client"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -36,10 +37,53 @@ const ProfileClaimPage = ({}: {}) => {
           mutation: Promise<any>,
         ) => {
           // TODO: thread together existing items with updated items
+          let optimisticRequests: RequestFrob[] = []
+          let optimisticRevShares: RevShareWithdraw[] = []
+
+          items?.requests.forEach((request) => {
+            const updatedRequest = updatedItems.requests.find(
+              (r) => r.id === request.id,
+            )
+            if (!updatedRequest) {
+              optimisticRequests.push(request)
+            } else if (
+              updatedRequest.actions.some(
+                (action) =>
+                  action.variant === ActionVariant.APPROVAL &&
+                  (action.status === ActionStatus.SUCCESS ||
+                    action.status === ActionStatus.FAILURE),
+              )
+            ) {
+              // request was updated with transaction completion, remove from array by not pushing
+              return
+            } else {
+              optimisticRequests.push(updatedRequest)
+            }
+          })
+          items?.revShareWithdraws.forEach((revShare) => {
+            const updatedRevShare = updatedItems.revShareWithdraws.find(
+              (rs) =>
+                rs.address === revShare.address &&
+                rs.chainId === revShare.chainId,
+            )
+            if (!updatedRevShare) {
+              optimisticRevShares.push(revShare)
+            } else if (updatedRevShare.pendingExecution) {
+              // pendingExecution switched on
+              optimisticRevShares.push(updatedRevShare)
+            } else {
+              // updated Rev Share, but pendingExecution false -> successful execution, remove by not pushing
+              return
+            }
+          })
+
           const optimisticItems = updatedItems
 
           mutate(mutation, {
-            optimisticData: optimisticItems,
+            optimisticData: {
+              requests: optimisticRequests,
+              revShareWithdraws: optimisticRevShares,
+            },
             populateCache: false,
             revalidate: false,
           })
