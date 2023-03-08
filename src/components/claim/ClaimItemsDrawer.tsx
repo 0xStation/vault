@@ -7,6 +7,7 @@ import { RawCall } from "lib/transactions/call"
 import { callAction } from "lib/transactions/conductor"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import useStore from "../../hooks/stores/useStore"
 import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
 import { useSetActionsPending } from "../../models/action/hooks"
@@ -118,6 +119,7 @@ export const ClaimItemsDrawer = ({
 
   const { setActionsPending } = useSetActionsPending()
   const { completeRequestsExecution } = useCompleteRequestsExecution()
+  const activeUser = useStore((state) => state.activeUser)
 
   const { ready, trigger, transactionHash } = usePreparedTransaction({
     chainId: 5,
@@ -170,10 +172,48 @@ export const ClaimItemsDrawer = ({
       console.log("wait success")
 
       // optimistic updates
+
+      let setActionIdsPending: string[] = []
+      const updatedRequests = requests.map((request: RequestFrob) => {
+        let updatedActions: Action[] = []
+        request.actions.forEach((action: Action) => {
+          if (action.variant === ActionVariant.APPROVAL) {
+            updatedActions.push({
+              ...action,
+              status: ActionStatus.SUCCESS,
+              txHash: transactionHash as string,
+            })
+            setActionIdsPending.push(action.id)
+          } else {
+            updatedActions.push(action)
+          }
+        })
+        return {
+          ...request,
+          actions: updatedActions,
+        }
+      }) as RequestFrob[]
+
+      let updatedItems: {
+        requests: RequestFrob[]
+        revShareWithdraws: RevShareWithdraw[]
+      } = {
+        requests: updatedRequests,
+        revShareWithdraws: revShareWithdraws.map((rs) => ({
+          ...rs,
+          pendingExecution: false,
+        })),
+      }
+
+      optimisticallyShow(
+        updatedItems,
+        completeRequestsExecution({
+          address: activeUser?.address,
+          actionIds: setActionIdsPending,
+        }),
+      )
     },
   })
-
-  console.log("transactionHash", transactionHash)
 
   return (
     <BottomDrawer

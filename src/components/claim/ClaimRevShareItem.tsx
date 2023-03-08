@@ -14,6 +14,7 @@ export const ClaimRevShareItem = ({
         { token: revShareWithdraw, value: revShareWithdraw.totalValue },
       ]}
       showDetails={showDetails}
+      pendingExecution={(revShareWithdraw as any).pendingExecution ?? false}
     />
   )
 }
