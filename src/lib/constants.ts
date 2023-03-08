@@ -13,7 +13,7 @@ export const REJECTION_CALL = {
   to: ZERO_ADDRESS,
   value: "0",
   data: "0x",
-  operation: "0",
+  operation: 0,
 }
 
 export const SENTINEL_ADDRESS = "0x0000000000000000000000000000000000000001"

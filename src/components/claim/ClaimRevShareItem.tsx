@@ -1,33 +1,19 @@
-import { FungibleToken, Token } from "../../models/token/types"
+import { RevShareWithdraw } from "../../models/automation/types"
 import { ClaimItem } from "./ClaimItem"
 
 export const ClaimRevShareItem = ({
-  split,
+  revShareWithdraw,
   showDetails,
 }: {
-  split: FungibleToken & {
-    totalValue: string
-    splits: { value: string; name?: string }[]
-  }
-  showDetails: (
-    items: {
-      note: string
-      transfers: { token: Token; value?: string; tokenId?: string }[]
-    }[],
-  ) => void
+  revShareWithdraw: RevShareWithdraw
+  showDetails: () => void
 }) => {
   return (
     <ClaimItem
-      transfers={[{ token: split, value: split.totalValue }]}
-      showDetails={() => {
-        console.log("claim rev share")
-        showDetails(
-          split.splits.map((v) => ({
-            note: v.name as string,
-            transfers: [{ token: split, value: v.value }],
-          })),
-        )
-      }}
+      transfers={[
+        { token: revShareWithdraw, value: revShareWithdraw.totalValue },
+      ]}
+      showDetails={showDetails}
     />
   )
 }

@@ -1,4 +1,8 @@
-import { RequestVariantType, SubscriptionVariant } from "@prisma/client"
+import {
+  ActionStatus,
+  RequestVariantType,
+  SubscriptionVariant,
+} from "@prisma/client"
 import { BigNumber } from "ethers"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { NextApiRequest, NextApiResponse } from "next"
@@ -31,7 +35,7 @@ export default async function handler(
 
   // for now, only executable items are requests, to be changed after "Automations" added
   let requests: RequestFrob[] = []
-  let splits: {
+  let revShareWithdraws: {
     address: string
     totalValue: string
     splits: { value: string; name?: string }[]
@@ -53,6 +57,15 @@ export default async function handler(
             {
               // redundancy check that the request is a token transfer
               variant: RequestVariantType.TOKEN_TRANSFER,
+            },
+            {
+              actions: {
+                none: {
+                  status: {
+                    in: [ActionStatus.SUCCESS, ActionStatus.FAILURE],
+                  },
+                },
+              },
             },
           ],
         },
@@ -120,7 +133,7 @@ export default async function handler(
       })
     })
 
-    splits = Object.values(splitTokensAcc)
+    revShareWithdraws = Object.values(splitTokensAcc)
   } catch (e) {
     console.error(e)
     res.statusCode = 500
@@ -135,9 +148,12 @@ export default async function handler(
       ).length >= request.quorum,
   )
 
-  const claimableSplits = splits.filter((split) =>
-    BigNumber.from(split.totalValue).gt(0),
+  const claimableRevShareWithdraws = revShareWithdraws.filter(
+    (revShareWithdraw) => BigNumber.from(revShareWithdraw.totalValue).gt(0),
   )
 
-  res.status(200).json({ requests: claimableRequests, splits: claimableSplits })
+  res.status(200).json({
+    requests: claimableRequests,
+    revShareWithdraws: claimableRevShareWithdraws,
+  })
 }

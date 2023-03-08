@@ -1,7 +1,7 @@
 import axios from "axios"
 import useSWR from "swr"
+import { RevShareWithdraw } from "../automation/types"
 import { RequestFrob } from "../request/types"
-import { FungibleToken } from "../token/types"
 
 export const useAccountItemsToClaim = (
   address: string,
@@ -10,10 +10,7 @@ export const useAccountItemsToClaim = (
   items:
     | {
         requests: RequestFrob[]
-        splits: (FungibleToken & {
-          totalValue: string
-          splits: { value: string; name?: string }[]
-        })[]
+        revShareWithdraws: RevShareWithdraw[]
       }
     | undefined
   error: any
@@ -21,10 +18,7 @@ export const useAccountItemsToClaim = (
   const fetcher = async (url: string) => {
     const response = await axios.get<{
       requests: RequestFrob[]
-      splits: (FungibleToken & {
-        totalValue: string
-        splits: { value: string; name?: string }[]
-      })[]
+      revShareWithdraws: RevShareWithdraw[]
     }>(url)
     return response.data
   }

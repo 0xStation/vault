@@ -28,6 +28,15 @@ export const getProfileRequests = async ({
             createdAt: "desc", // sort to determine most recent vote per signer
           },
         },
+        actions: {
+          include: {
+            proofs: {
+              include: {
+                signature: true,
+              },
+            },
+          },
+        },
       },
     })) as unknown as (Request & { terminal: Terminal })[]
   } catch {

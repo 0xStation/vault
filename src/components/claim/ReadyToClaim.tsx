@@ -7,7 +7,8 @@ export const ReadyToClaim = () => {
   const router = useRouter()
   const accountAddress = router.query.address as string
   const { isLoading, items } = useAccountItemsToClaim(accountAddress)
-  const itemsCount = (items?.requests.length ?? 0) + (items?.splits.length ?? 0)
+  const itemsCount =
+    (items?.requests.length ?? 0) + (items?.revShareWithdraws.length ?? 0)
 
   return !isLoading && items && itemsCount > 0 ? (
     <Link href={`/u/${accountAddress}/profile/claim`}>

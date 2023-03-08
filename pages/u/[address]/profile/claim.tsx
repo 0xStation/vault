@@ -8,21 +8,26 @@ import { ClaimRevShareItem } from "../../../../src/components/claim/ClaimRevShar
 import AccountNavBar from "../../../../src/components/core/AccountNavBar"
 import { EmptyList } from "../../../../src/components/core/EmptyList"
 import { useAccountItemsToClaim } from "../../../../src/models/account/hooks"
-import { ClaimableItem } from "../../../../src/models/account/types"
+import { RevShareWithdraw } from "../../../../src/models/automation/types"
+import { RequestFrob } from "../../../../src/models/request/types"
 
 const ProfileClaimPage = ({}: {}) => {
   const router = useRouter()
   const accountAddress = router.query.address as string
   const { isLoading, items } = useAccountItemsToClaim(accountAddress)
   const [claimDrawerOpen, setClaimDrawerOpen] = useState<boolean>(false)
-  const [claimDrawerItems, setClaimDrawerItems] = useState<ClaimableItem[]>([])
+  const [selectedRevShareWithdraws, setSelectedRevShareWithdraws] = useState<
+    RevShareWithdraw[]
+  >([])
+  const [selectedRequests, setSelectedRequests] = useState<RequestFrob[]>([])
 
   return (
     <>
       <ClaimItemsDrawer
         isOpen={claimDrawerOpen}
         setIsOpen={setClaimDrawerOpen}
-        items={claimDrawerItems}
+        revShareWithdraws={selectedRevShareWithdraws}
+        requests={selectedRequests}
       />
       <AccountNavBar />
       <Link href={`/u/${accountAddress}/profile`} className="block w-fit px-4">
@@ -30,18 +35,20 @@ const ProfileClaimPage = ({}: {}) => {
       </Link>
       {isLoading ? (
         <></>
-      ) : items?.requests.length === 0 && items?.splits.length === 0 ? (
+      ) : items?.requests.length === 0 &&
+        items?.revShareWithdraws.length === 0 ? (
         <EmptyList
           title="No items ready to claim"
           subtitle="Requests will show here when approved"
         />
       ) : (
         <ul className="mt-3">
-          {items?.splits.map((split, idx) => (
+          {items?.revShareWithdraws.map((revShareWithdraw, idx) => (
             <ClaimRevShareItem
-              split={split}
-              showDetails={(items) => {
-                setClaimDrawerItems(items)
+              revShareWithdraw={revShareWithdraw}
+              showDetails={() => {
+                setSelectedRevShareWithdraws([revShareWithdraw])
+                setSelectedRequests([])
                 setClaimDrawerOpen(true)
               }}
               key={`claim-item-${idx}`}
@@ -51,8 +58,9 @@ const ProfileClaimPage = ({}: {}) => {
             <ClaimRequestItem
               request={request}
               key={`request-${index}`}
-              showDetails={(items) => {
-                setClaimDrawerItems(items)
+              showDetails={() => {
+                setSelectedRevShareWithdraws([])
+                setSelectedRequests([request])
                 setClaimDrawerOpen(true)
               }}
             />

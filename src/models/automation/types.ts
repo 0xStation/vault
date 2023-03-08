@@ -28,3 +28,8 @@ export type RevShareVariant = {
     value: number
   }[]
 }
+
+export type RevShareWithdraw = FungibleToken & {
+  totalValue: string
+  splits: { value: string; name?: string }[]
+}
