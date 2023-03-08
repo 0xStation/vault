@@ -123,10 +123,14 @@ export const NewTokensPage = () => {
             symbol: nTokenInfo?.symbol,
             decimals: nTokenInfo?.decimals,
           }
-          let amount = decimalToBigNumber(
-            parseFloat(tokenField?.amount as string),
-            nTokenInfo?.decimals || 0,
-          )
+
+          let amount =
+            token.type === TokenType.ERC721
+              ? "0"
+              : decimalToBigNumber(
+                  parseFloat(tokenField?.amount as string),
+                  nTokenInfo?.decimals || 0,
+                )
 
           const preparedTokenTransferCall = encodeTokenTransfer({
             sender: address as string,
@@ -400,7 +404,8 @@ export const NewTokensPage = () => {
                                     },
                                     isLessThanDecimals: (v: any) => {
                                       const decimals =
-                                        getErc20FieldTokenData(0)?.decimals || 0
+                                        getErc20FieldTokenData(index)
+                                          ?.decimals || 0
                                       return (
                                         v.split(".")[1]?.length < decimals ||
                                         `Cannot have more than ${decimals} decimal places.`

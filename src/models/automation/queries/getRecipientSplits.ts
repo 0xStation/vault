@@ -1,0 +1,97 @@
+import { GraphQLClient } from "graphql-request"
+import gql from "graphql-tag"
+import { subtractValues } from "../../token/utils"
+
+type GraphQLResponse = {
+  recipient: {
+    id: string
+    splits: {
+      split: {
+        id: string
+      }
+      allocation: string
+      tokens: {
+        token: string
+        totalDistributed: string
+        totalClaimed: string
+      }[]
+    }[]
+  } | null
+}
+
+export const CLAIM_SPLITS_QUERY = gql`
+  query recipient($id: ID!) {
+    recipient(id: $id) {
+      id
+      splits {
+        split {
+          id
+        }
+        allocation
+        tokens {
+          token
+          totalDistributed
+          totalClaimed
+        }
+      }
+    }
+  }
+`
+
+type RecipientSplit = {
+  address: string // split
+  value: number // allocation
+  tokens: {
+    address: string
+    totalClaimed: string
+    unclaimed: string
+  }[]
+}
+
+export const getRecipientSplits = async (
+  chainId: number,
+  address: string,
+): Promise<RecipientSplit[]> => {
+  // TODO: add subgraphs for other chains
+  if (chainId !== 5) {
+    throw Error("only goerli rev shares are supported right now")
+  }
+  try {
+    const graphlQLClient = new GraphQLClient(
+      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
+      {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      },
+    )
+
+    const response: GraphQLResponse = await graphlQLClient.request(
+      CLAIM_SPLITS_QUERY,
+      {
+        id: address.toLowerCase(), // The Graph lower cases all addresses
+      },
+    )
+
+    if (!response?.recipient) {
+      throw Error("no recipient found")
+    }
+
+    const splits = response?.recipient?.splits.map((split: any) => {
+      return {
+        address: split.split.id,
+        value: (parseInt(split.allocation) * 100) / 1_000_000,
+        tokens: split.tokens.map((obj: any) => ({
+          address: obj.token,
+          totalClaimed: obj.totalClaimed,
+          unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
+        })),
+      }
+    })
+
+    return splits
+  } catch (err) {
+    throw Error("Failure fetching recipient's splits from subgraph")
+  }
+}
