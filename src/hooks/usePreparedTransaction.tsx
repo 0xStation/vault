@@ -69,7 +69,7 @@ export const usePreparedTransaction = ({
     if (isWaitForTransactionSuccess) {
       closeCurrentToast() // loading toast
       successToast({
-        message: "Request successfully executed!",
+        message: "Successfully executed!",
         action: {
           href: `${getNetworkExplorer(chainId)}/tx/${txData?.hash}`,
           label: "View on etherscan",

@@ -2,8 +2,10 @@ import { ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { REJECTION_CALL } from "lib/constants"
+import { prepareSplitsWithdrawCall } from "lib/transactions/0xsplits"
 import { RawCall } from "lib/transactions/call"
 import { callAction } from "lib/transactions/conductor"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
@@ -60,6 +62,7 @@ const reduceItems = (
 const genClaimCall = (
   requests: RequestFrob[],
   revShareWithdraws: RevShareWithdraw[],
+  recipient: string,
 ): RawCall => {
   if (requests.length > 0) {
     const action = requests[0].actions.filter(
@@ -70,7 +73,7 @@ const genClaimCall = (
       proofs: action.proofs,
     })
   } else if (revShareWithdraws.length > 0) {
-    return REJECTION_CALL
+    return prepareSplitsWithdrawCall(recipient, [revShareWithdraws[0].address])
   }
   return REJECTION_CALL
 }
@@ -90,14 +93,17 @@ export const ClaimItemsDrawer = ({
   const [items, setItems] = useState<ClaimableItem[]>(
     reduceItems(requests, revShareWithdraws),
   )
+  const router = useRouter()
   const [claimCall, setClaimCall] = useState<RawCall>(
-    genClaimCall(requests, revShareWithdraws),
+    genClaimCall(requests, revShareWithdraws, router.query.address as string),
   )
 
   useEffect(() => {
     setItems(reduceItems(requests, revShareWithdraws))
-    setClaimCall(genClaimCall(requests, revShareWithdraws))
-  }, [requests, revShareWithdraws])
+    setClaimCall(
+      genClaimCall(requests, revShareWithdraws, router.query.address as string),
+    )
+  }, [requests, revShareWithdraws, router.query.address])
 
   const { ready, trigger, transactionHash } = usePreparedTransaction({
     chainId: 5,

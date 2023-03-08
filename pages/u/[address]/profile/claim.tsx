@@ -39,7 +39,7 @@ const ProfileClaimPage = ({}: {}) => {
         items?.revShareWithdraws.length === 0 ? (
         <EmptyList
           title="No items ready to claim"
-          subtitle="Requests will show here when approved"
+          subtitle="Claimable funds across Terminals will show here"
         />
       ) : (
         <ul className="mt-3">
