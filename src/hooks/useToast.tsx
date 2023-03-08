@@ -58,7 +58,7 @@ export const useToast = () => {
     message,
     action,
     timeout = defaultTimeout,
-    useTimeout = true,
+    useTimeout = false,
   }: {
     message: string
     action?: { href: string; label: string }
