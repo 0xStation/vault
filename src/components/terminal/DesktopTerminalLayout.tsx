@@ -68,13 +68,13 @@ const DesktopTerminalLayout = ({
           <section className="mt-4 p-4">
             <div className="rounded border border-slate-200">
               <div className="border-b border-slate-200 bg-slate-100 p-4">
-                <h1 className="text-xl font-bold">{terminal.data.name}</h1>
+                <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
                 <div className="mt-2 flex flex-row items-center space-x-1">
-                  <Network chainId={terminal.chainId} />
+                  <Network chainId={terminal?.chainId} />
                   <span className="text-xs">
-                    · {truncateString(terminal.safeAddress)}
+                    · {truncateString(terminal?.safeAddress)}
                   </span>
-                  <CopyToClipboard text={terminal.safeAddress} />
+                  <CopyToClipboard text={terminal?.safeAddress} />
                 </div>
               </div>
               <div className="bg-slate-50 p-4">
