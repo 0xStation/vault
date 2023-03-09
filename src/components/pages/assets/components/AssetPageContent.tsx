@@ -10,8 +10,8 @@ const TerminalAssetsPageContent = ({ terminal }: { terminal: Terminal }) => {
     terminal.chainId,
   )
   const { data: tokenData } = useFungibleTokenData(
-    terminal.safeAddress,
     terminal.chainId,
+    terminal.safeAddress,
   )
 
   if (!tokenData || !nftData) {

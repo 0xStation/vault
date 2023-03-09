@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react"
+import { VIEW } from "../../../../../pages/terminal/new"
 import useStore from "../../../../hooks/stores/useStore"
 import TerminalCreationForm from "../../../terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../../terminalCreation/TerminalCreationOptionsView"
-
-export enum VIEW {
-  CREATION_OPTIONS = "creation_options",
-  CREATE_FORM = "form",
-}
 
 export const TerminalCreationPage = () => {
   const [view, setView] = useState<VIEW.CREATION_OPTIONS | VIEW.CREATE_FORM>(

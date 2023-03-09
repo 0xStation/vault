@@ -103,7 +103,7 @@ const BatchExecuteWrapper = ({
         approve,
         fn: setActionsPending({
           actionIds: actionsToExecute.map((action) => action.id),
-          txHash: txData?.hash,
+          txHash: txData?.hash as string,
         }),
         updateActionPayload: {
           status: ActionStatus.PENDING,

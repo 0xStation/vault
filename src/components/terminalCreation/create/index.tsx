@@ -14,7 +14,7 @@ export enum CREATE_TERMINAL_VIEW {
 export const TerminalCreationForm = ({
   setView,
 }: {
-  setView: Dispatch<SetStateAction<VIEW.CREATION_OPTIONS | VIEW.CREATE_FORM>>
+  setView: Dispatch<SetStateAction<VIEW>>
 }) => {
   const [createTerminalView, setCreateTerminalView] = useState<
     CREATE_TERMINAL_VIEW.DETAILS | CREATE_TERMINAL_VIEW.MEMBERS
