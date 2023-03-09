@@ -63,6 +63,7 @@ export default async function handler(
           safeAddressQuery,
         )
         res.send(terminal)
+        break
       } catch (err) {
         console.error("Error finding terminal", err)
         res.statusCode = 500
