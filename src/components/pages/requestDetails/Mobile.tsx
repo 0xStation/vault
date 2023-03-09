@@ -22,10 +22,6 @@ const RequestDetailsMobile = () => {
     requestId: string
     payload: any
   }) => {
-    console.log(fn)
-    console.log(requestId)
-    console.log(payload)
-
     mutate(fn, {
       optimisticData: payload,
       populateCache: false,
