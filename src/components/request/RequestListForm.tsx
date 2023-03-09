@@ -19,8 +19,8 @@ import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
-import BatchVoteDrawer from "./BatchVoteManager/BatchVoteDrawer"
-import { VoteDrawer } from "./VoteDrawer"
+import BatchVoteManager from "./BatchVoteManager"
+import VoteManager from "./VoteManager"
 
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
 
@@ -293,7 +293,7 @@ const RequestListForm = ({
           })}
         </ul>
       </form>
-      <VoteDrawer
+      <VoteManager
         request={requestActedOn}
         isOpen={drawerManagerState.voteDrawer}
         setIsOpen={(state: boolean) => {
@@ -302,7 +302,7 @@ const RequestListForm = ({
         approve={promptAction === "approve"}
         mutateRequest={mutateRequest}
       />
-      <BatchVoteDrawer
+      <BatchVoteManager
         requestsToApprove={batchState.selectedRequests}
         isOpen={drawerManagerState.batchVoteDrawer}
         setIsOpen={(state: boolean) => {

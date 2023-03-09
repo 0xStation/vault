@@ -4,7 +4,7 @@ import { RoundedPill } from "@ui/RoundedPill"
 import { useState } from "react"
 import useStore from "../../hooks/stores/useStore"
 import { RequestFrob } from "../../models/request/types"
-import { VoteDrawer } from "./VoteDrawer"
+import VoteManager from "../request/VoteManager"
 
 export const CastYourVote = ({
   request,
@@ -19,7 +19,7 @@ export const CastYourVote = ({
 
   return (
     <>
-      <VoteDrawer
+      <VoteManager
         request={request}
         isOpen={isVoteOpen}
         setIsOpen={setIsVoteOpen}
