@@ -96,7 +96,9 @@ const DesktopTerminalLayout = ({
                   <Link
                     href={option.href}
                     className={`block ${
-                      option.href === router.asPath && "font-bold"
+                      option.href ===
+                        decodeURIComponent(router.asPath.split("?")[0]) &&
+                      "font-bold"
                     }`}
                     key={`link-${idx}`}
                   >
