@@ -1,15 +1,26 @@
 import { Transition } from "@headlessui/react"
 import { ActionVariant } from "@prisma/client"
-import { useReducer, useState } from "react"
+import Breakpoint from "@ui/Breakpoint"
+import RightSlider from "@ui/RightSlider"
+import { useRouter } from "next/router"
+import { useEffect, useReducer, useState } from "react"
+import { KeyedMutator } from "swr"
+import { useToast } from "../../hooks/useToast"
 import { listIntersection } from "../../lib/utils/listIntersection"
+import {
+  addQueryParam,
+  removeQueryParam,
+} from "../../lib/utils/updateQueryParam"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
+import RequestTableRow from "../core/RequestTableRow"
 import { XMark } from "../icons"
-import BatchExecuteDrawer from "../request/BatchExecuteDrawer"
-import BatchVoteDrawer from "../request/BatchVoteDrawer"
-import { VoteDrawer } from "./VoteDrawer"
+import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
+import BatchExecuteManager from "./BatchExecuteManager"
+import BatchVoteManager from "./BatchVoteManager"
+import VoteManager from "./VoteManager"
 
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
 
@@ -71,9 +82,11 @@ const RequestListForm = ({
   isProfile = false,
 }: {
   requests: RequestFrob[]
-  mutate: any
+  mutate: KeyedMutator<RequestFrob[] | undefined>
   isProfile?: boolean
 }) => {
+  const router = useRouter()
+  const { successToast } = useToast()
   const [drawerManagerState, setDrawerManagerState] = useState({
     batchVoteDrawer: false,
     batchExecuteDrawer: false,
@@ -86,6 +99,16 @@ const RequestListForm = ({
     })
   }
 
+  const [requestForDetails, setRequestForDetails] = useState<
+    RequestFrob | undefined
+  >(undefined)
+
+  const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
+  const closeDetailsSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "requestId")
+    }
+  }
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
@@ -152,6 +175,37 @@ const RequestListForm = ({
     })
   }
 
+  const mutateRequest = ({
+    fn,
+    requestId,
+    payload,
+  }: {
+    fn: Promise<any>
+    requestId: string
+    payload: any
+  }) => {
+    const updatedRequests = requests.map((request: RequestFrob) => {
+      if (request.id === requestId) {
+        return payload
+      }
+      return request
+    })
+
+    mutate(fn, {
+      optimisticData: updatedRequests,
+      populateCache: false,
+      revalidate: false,
+    })
+  }
+
+  useEffect(() => {
+    if (router.query.requestId) {
+      setDetailsSliderOpen(true)
+    } else {
+      setDetailsSliderOpen(false)
+    }
+  }, [router.query])
+
   if (requests.length === 0) {
     return (
       <EmptyList
@@ -163,59 +217,92 @@ const RequestListForm = ({
 
   return (
     <>
+      {requestForDetails && (
+        <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
+          <RequestDetailsContent
+            request={requestForDetails}
+            mutateRequest={mutateRequest}
+          />
+        </RightSlider>
+      )}
+
       <form>
         <ul>
           {requests.map((request, idx) => {
             return (
-              <RequestCard
-                onCheckboxChange={onCheckboxChange}
-                disabled={
-                  (batchState.batchVariant &&
-                    request.stage !== batchState.batchVariant) ||
-                  (request.stage === "EXECUTE" &&
-                    listIntersection(
-                      request.validActions as (
-                        | "EXECUTE-REJECT"
-                        | "EXECUTE-APPROVE"
-                      )[],
-                      batchState.validActions,
-                    ).length === 0)
-                }
-                key={`request-${idx}`}
-                request={request}
-                showTerminal={isProfile ? request.terminal : undefined}
-                takeActionOnRequest={(
-                  action: "approve" | "reject" | "execute",
-                  request,
-                ) => {
-                  setRequestActedOn(request)
-                  setPromptAction(action)
-                  if (action === "execute") {
-                    // set ExecuteDrawer open
-                  } else {
-                    toggleDrawer("voteDrawer", true)
-                  }
+              <Breakpoint key={`request-${idx}`}>
+                {(isMobile) => {
+                  if (isMobile)
+                    return (
+                      <RequestCard
+                        onCheckboxChange={onCheckboxChange}
+                        disabled={
+                          (batchState.batchVariant &&
+                            request.stage !== batchState.batchVariant) ||
+                          (request.stage === "EXECUTE" &&
+                            listIntersection(
+                              request.validActions as (
+                                | "EXECUTE-REJECT"
+                                | "EXECUTE-APPROVE"
+                              )[],
+                              batchState.validActions,
+                            ).length === 0)
+                        }
+                        request={request}
+                        showTerminal={isProfile ? request.terminal : undefined}
+                        takeActionOnRequest={(
+                          action: "approve" | "reject" | "execute",
+                          request,
+                        ) => {
+                          setRequestActedOn(request)
+                          setPromptAction(action)
+                          if (action === "execute") {
+                            // set ExecuteDrawer open
+                          } else {
+                            toggleDrawer("voteDrawer", true)
+                          }
+                        }}
+                      />
+                    )
+                  return (
+                    <RequestTableRow
+                      disabled={
+                        (batchState.batchVariant &&
+                          request.stage !== batchState.batchVariant) ||
+                        (request.stage === "EXECUTE" &&
+                          listIntersection(
+                            request.validActions as (
+                              | "EXECUTE-REJECT"
+                              | "EXECUTE-APPROVE"
+                            )[],
+                            batchState.validActions,
+                          ).length === 0)
+                      }
+                      request={request}
+                      triggerDetails={(request) => {
+                        addQueryParam(router, "requestId", request.id)
+                        setRequestForDetails(request)
+                        setDetailsSliderOpen(true)
+                      }}
+                      onCheckboxChange={onCheckboxChange}
+                    />
+                  )
                 }}
-              />
+              </Breakpoint>
             )
           })}
         </ul>
       </form>
-      <VoteDrawer
+      <VoteManager
         request={requestActedOn}
         isOpen={drawerManagerState.voteDrawer}
         setIsOpen={(state: boolean) => {
           toggleDrawer("voteDrawer", state)
         }}
         approve={promptAction === "approve"}
-        optimisticVote={(newRequest) => {
-          const newArray = requests.map((request) =>
-            request.id === newRequest.id ? newRequest : request,
-          )
-          mutate(newArray)
-        }}
+        mutateRequest={mutateRequest}
       />
-      <BatchVoteDrawer
+      <BatchVoteManager
         requestsToApprove={batchState.selectedRequests}
         isOpen={drawerManagerState.batchVoteDrawer}
         setIsOpen={(state: boolean) => {
@@ -224,7 +311,7 @@ const RequestListForm = ({
         approve={isVotingApproval}
         clearSelectedRequests={reset}
       />
-      <BatchExecuteDrawer
+      <BatchExecuteManager
         requestsToApprove={batchState.selectedRequests}
         isOpen={drawerManagerState.batchExecuteDrawer}
         setIsOpen={(state: boolean) => {

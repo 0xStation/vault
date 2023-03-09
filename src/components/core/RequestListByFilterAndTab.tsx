@@ -20,6 +20,8 @@ const RequestListByFilterAndTab = ({
     tab,
   })
 
+  console.log(requests)
+
   if (!requests) return <LoadingCardList />
 
   if (filter === "needs-attention") {

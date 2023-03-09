@@ -6,6 +6,7 @@ import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 
 export const ProfileRequestsList = ({ address }: { address: string }) => {
   const { isLoading, requests } = useRequestsCreatedByAccount(address)
+  console.log(requests)
 
   return (
     <TabsContent value={ProfileTab.REQUESTS}>

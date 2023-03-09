@@ -1,16 +1,8 @@
 import truncateString from "lib/utils"
-import { Dispatch, ReactNode, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { VIEW } from "../../../pages/terminal/new"
 import { useTerminalCreationStore } from "../../hooks/stores/useTerminalCreationStore"
 import SelectorCard from "../core/SelectorCard"
-
-const MetadataPill = ({ children }: { children: ReactNode }) => {
-  return (
-    <span className="mr-3 flex h-fit w-fit flex-row rounded-full bg-slate-50 py-1 px-2">
-      {children}
-    </span>
-  )
-}
 
 export const ExistingSafeCard = ({
   safeAddress,

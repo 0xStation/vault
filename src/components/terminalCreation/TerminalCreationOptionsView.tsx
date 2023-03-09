@@ -17,7 +17,7 @@ import { SafeDetailsDrawer } from "./SafeDetailsDrawer"
 export const TerminalCreationOptionsView = ({
   setView,
 }: {
-  setView: Dispatch<SetStateAction<VIEW.CREATION_OPTIONS | VIEW.CREATE_FORM>>
+  setView: Dispatch<SetStateAction<VIEW.CREATE_FORM | VIEW.CREATION_OPTIONS>>
 }) => {
   const router = useRouter()
   const { chain } = useNetwork()

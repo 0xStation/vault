@@ -14,10 +14,10 @@ import { AvatarAddress } from "./AvatarAddress"
 
 const ActivityItem = ({
   activity,
-  optimisticEditComment,
+  mutateRequest,
 }: {
   activity: Activity
-  optimisticEditComment: any
+  mutateRequest: any
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -34,7 +34,7 @@ const ActivityItem = ({
         <div className="mt-1 ml-6 rounded-md bg-slate-50 px-3 py-2">
           {isEditing ? (
             <EditCommentForm
-              optimisticEditComment={optimisticEditComment}
+              mutateRequest={mutateRequest}
               activityId={activity.id}
               initialValue={activity.data.comment}
               close={() => setIsEditing(false)}

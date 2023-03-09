@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { ReactNode, useEffect } from "react"
 import { useAccount, useDisconnect } from "wagmi"
 import { useSetActiveUser } from "../../hooks/account/useSetActiveUser"
@@ -36,7 +37,23 @@ export const AppLayout = ({
 
   return (
     <>
-      <div className="mx-auto max-w-[580px]">{children}</div>
+      <Head>
+        <title>{title || "Station"}</title>
+        <link rel="icon" href="/station-logo-favicon.ico" />
+        <meta
+          name="description"
+          content="Doing work with people who share your mission."
+        />
+        <meta name="twitter:site" content="@0xStation" />
+        <meta name="twitter:title" content="STATION" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="twitter:description"
+          content="Toolkit for digital orgs to curate and reward the best people and projects."
+        />
+        <link rel="apple-touch-icon" href="/station-logo-favicon.ico" />
+      </Head>
+      {children}
       <Toast />
     </>
   )

@@ -1,6 +1,13 @@
-import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActionStatus,
+  ActionVariant,
+  ActivityVariant,
+  RequestVariantType,
+} from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
+import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
@@ -18,6 +25,7 @@ import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
 import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
+import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
@@ -30,7 +38,7 @@ export const ExecuteWrapper = ({
   isOpen,
   setIsOpen,
   txPayload,
-  mutate,
+  mutateRequest,
 }: {
   title: string
   subtitle: string
@@ -39,19 +47,21 @@ export const ExecuteWrapper = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   txPayload: RawCall
-  mutate: any
+  mutateRequest: any
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
-  const { loadingToast, successToast, closeCurrentToast } = useToast()
+  const { loadingToast, successToast, errorToast, closeCurrentToast } =
+    useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
+  // request.query.requestId is not found in the desktop version
   const { completeRequestExecution } = useCompleteRequestExecution(
     router.query.requestId as string,
   )
   const { setActionPending } = useSetActionPending(actionToExecute.id)
 
-  const { config } = usePrepareSendTransaction({
+  const { config, error } = usePrepareSendTransaction({
     request: {
       to: txPayload.to,
       value: BigNumber.from(txPayload.value),
@@ -59,6 +69,13 @@ export const ExecuteWrapper = ({
     },
     chainId: request.chainId,
   })
+
+  if (error) {
+    // need to parse the error because there could be many but this seems most common
+    // errorToast({ message: "Chain mismatch" })
+  }
+
+  console.log(error)
 
   const {
     data: txData,
@@ -82,6 +99,7 @@ export const ExecuteWrapper = ({
           href: `https://www.etherscan.io/tx/${txData?.hash}`,
           label: "View on etherscan",
         },
+        useTimeout: false,
       })
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
@@ -93,13 +111,11 @@ export const ExecuteWrapper = ({
         }
         return action
       })
-      mutate(setActionPending, {
-        optimisticData: {
-          ...request,
-          actions: updatedActions,
-        },
-        populateCache: false,
-        revalidate: false,
+
+      mutateRequest({
+        fn: setActionPending,
+        requestId: request.id,
+        payload: { ...request, actions: updatedActions },
       })
     }
   }, [isSendTransactionSuccess])
@@ -117,20 +133,31 @@ export const ExecuteWrapper = ({
         }
         return action
       })
-      mutate(
-        completeRequestExecution({
+
+      const executeActivity: Activity = {
+        id: "optimistic-vote",
+        requestId: router.query.requestId as string,
+        variant: ActivityVariant.EXECUTE_REQUEST,
+        address: activeUser?.address as string,
+        data: {},
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
+      mutateRequest({
+        fn: completeRequestExecution({
           ...formData, // todo: clarify what formdata is here...
           actionId: actionToExecute.id,
         }),
-        {
-          optimisticData: {
-            ...request,
-            actions: updatedActions,
-          },
-          populateCache: false,
-          revalidate: false,
+        requestId: request.id,
+        payload: {
+          ...request,
+          activities: [...request?.activities!, executeActivity],
+          isExecuted: true,
+          actions: updatedActions,
         },
-      )
+      })
+
       closeCurrentToast() // loading toast
       successToast({
         message: "Request successfully executed!",
@@ -160,10 +187,10 @@ export const ExecuteWrapper = ({
     resetField("comment")
   }
 
-  return (
-    <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+  const FormContent = () => {
+    return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-6">
+        <div className="space-y-6 pb-[70px]">
           <div className="text-lg font-bold">{title}</div>
           <div>{subtitle}</div>
           {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
@@ -190,7 +217,26 @@ export const ExecuteWrapper = ({
           </p>
         </div>
       </form>
-    </BottomDrawer>
+    )
+  }
+
+  return (
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) {
+          return (
+            <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+              <FormContent />
+            </BottomDrawer>
+          )
+        }
+        return (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <FormContent />
+          </Modal>
+        )
+      }}
+    </Breakpoint>
   )
 }
 
@@ -201,7 +247,7 @@ export const ExecuteRequest = ({
   isOpen,
   setIsOpen,
   approve,
-  mutate,
+  mutateRequest,
 }: {
   title: string
   subtitle: string
@@ -209,7 +255,7 @@ export const ExecuteRequest = ({
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   approve: boolean
-  mutate: any
+  mutateRequest: any
 }) => {
   let actionsToExecute: any[] = []
   request?.actions.forEach((action: Action) => {
@@ -238,7 +284,7 @@ export const ExecuteRequest = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       txPayload={txPayload}
-      mutate={mutate}
+      mutateRequest={mutateRequest}
     />
   )
 }
