@@ -6,6 +6,10 @@ export const getFungibleTokenDetails = async (
   chainId: number,
   addresses: string[],
 ): Promise<(FungibleToken & { usdRate: number })[]> => {
+  if (addresses.length === 0) {
+    return []
+  }
+
   const chainNameToChainId: Record<number, string | undefined> = {
     1: "ethereum",
     5: "gor",
