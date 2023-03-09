@@ -11,7 +11,7 @@ type GraphQLResponse = {
       }
       allocation: string
       tokens: {
-        token: string
+        tokenAddress: string
         totalDistributed: string
         totalClaimed: string
       }[]
@@ -29,7 +29,7 @@ export const SPLIT_DETAILS_QUERY = gql`
         }
         allocation
         tokens {
-          token
+          tokenAddress
           totalDistributed
           totalClaimed
         }
@@ -78,12 +78,12 @@ export const getRevShareSplits = async (
       throw Error("no split found")
     }
 
-    const splits = response?.split?.recipients.map((split: any) => {
+    const splits = response?.split?.recipients.map((split) => {
       return {
         address: split.recipient.id,
         value: (parseInt(split.allocation) * 100) / 1_000_000,
-        tokens: split.tokens.map((obj: any) => ({
-          address: obj.token,
+        tokens: split.tokens.map((obj) => ({
+          address: obj.tokenAddress,
           totalClaimed: obj.totalClaimed,
           unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
         })),

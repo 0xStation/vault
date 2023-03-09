@@ -19,7 +19,7 @@ type GraphQLResponse = {
         }[]
       }
       tokens: {
-        token: string
+        tokenAddress: string
         totalDistributed: string
         totalClaimed: string
       }[]
@@ -44,7 +44,7 @@ export const CLAIM_SPLITS_QUERY = gql`
           }
         }
         tokens {
-          token
+          tokenAddress
           totalDistributed
           totalClaimed
         }
@@ -107,8 +107,8 @@ export const getRecipientSplits = async (
           address: recipient.recipient.id,
           allocation: parseInt(recipient.allocation) / SPLITS_PERCENTAGE_SCALE,
         })),
-        tokens: split.tokens.map((obj: any) => ({
-          address: obj.token,
+        tokens: split.tokens.map((obj) => ({
+          address: obj.tokenAddress,
           totalClaimed: obj.totalClaimed,
           unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
         })),
