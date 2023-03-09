@@ -1,7 +1,16 @@
-import { SPLITS_MAIN_ADDRESS, SPLITS_PERCENTAGE_SCALE } from "lib/constants"
+import {
+  SPLITS_MAIN_ADDRESS,
+  SPLITS_PERCENTAGE_SCALE,
+  ZERO_ADDRESS,
+} from "lib/constants"
 import { RawCall } from "lib/transactions/call"
 import { compareAddresses } from "lib/utils/compareAddresses"
-import { splitsCreateSplit } from "./fragments"
+import {
+  splitsCreateSplit,
+  splitsDistributeErc20,
+  splitsDistributeEth,
+  splitsWithdraw,
+} from "./fragments"
 import { encodeFunctionData } from "./utils"
 
 export const prepareCreateSplitCall = (
@@ -27,5 +36,66 @@ export const prepareCreateSplitCall = (
       terminalAddress, // controller, able to change split
     ]),
     operation: 0,
+  }
+}
+
+export const prepareSplitsWithdrawCall = (
+  accountAddress: string,
+  tokenAddresses: string[],
+): RawCall => {
+  const erc20Addresses = tokenAddresses.filter(
+    (address) => address !== ZERO_ADDRESS,
+  )
+
+  return {
+    to: SPLITS_MAIN_ADDRESS,
+    value: "0",
+    data: encodeFunctionData(splitsWithdraw, [
+      accountAddress,
+      erc20Addresses.length < tokenAddresses.length ? 1 : 0, // zero address present, flip bit to withdraw ETH
+      erc20Addresses,
+    ]),
+    operation: 0, // no need to delegatecall Conductor
+  }
+}
+
+export const prepareSplitsDistributeCall = (
+  splitAddress: string,
+  tokenAddress: string,
+  recipients: { address: string; allocation: number }[],
+  distributorFee: string,
+  distributorAddress: string,
+) => {
+  let recipientAddresses: string[] = []
+  let recipientAllocations: number[] = []
+  recipients
+    .sort((a, b) => compareAddresses(a.address, b.address))
+    .forEach((recipient) => {
+      recipientAddresses.push(recipient.address)
+      recipientAllocations.push(recipient.allocation * SPLITS_PERCENTAGE_SCALE)
+    })
+
+  const distributeEthData = encodeFunctionData(splitsDistributeEth, [
+    splitAddress,
+    recipientAddresses,
+    recipientAllocations,
+    distributorFee,
+    distributorAddress,
+  ])
+  const distributeErc20Data = encodeFunctionData(splitsDistributeErc20, [
+    splitAddress,
+    tokenAddress,
+    recipientAddresses,
+    recipientAllocations,
+    distributorFee,
+    distributorAddress,
+  ])
+
+  return {
+    to: SPLITS_MAIN_ADDRESS,
+    value: "0",
+    data:
+      tokenAddress === ZERO_ADDRESS ? distributeEthData : distributeErc20Data,
+    operation: 0, // no need to delegatecall
   }
 }

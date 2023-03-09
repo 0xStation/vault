@@ -1,15 +1,23 @@
 import { GraphQLClient } from "graphql-request"
 import gql from "graphql-tag"
+import { SPLITS_PERCENTAGE_SCALE } from "lib/constants"
 import { subtractValues } from "../../token/utils"
 
 type GraphQLResponse = {
   recipient: {
     id: string
     splits: {
+      allocation: string
       split: {
         id: string
+        distributorFee: string
+        recipients: {
+          recipient: {
+            id: string
+          }
+          allocation: string
+        }[]
       }
-      allocation: string
       tokens: {
         token: string
         totalDistributed: string
@@ -24,10 +32,17 @@ export const CLAIM_SPLITS_QUERY = gql`
     recipient(id: $id) {
       id
       splits {
+        allocation
         split {
           id
+          distributorFee
+          recipients {
+            recipient {
+              id
+            }
+            allocation
+          }
         }
-        allocation
         tokens {
           token
           totalDistributed
@@ -40,7 +55,12 @@ export const CLAIM_SPLITS_QUERY = gql`
 
 type RecipientSplit = {
   address: string // split
-  value: number // allocation
+  distributorFee: string
+  allocation: number // [0, 1]
+  recipients: {
+    address: string
+    allocation: number // [0, 1]
+  }[]
   tokens: {
     address: string
     totalClaimed: string
@@ -78,10 +98,15 @@ export const getRecipientSplits = async (
       throw Error("no recipient found")
     }
 
-    const splits = response?.recipient?.splits.map((split: any) => {
+    const splits = response?.recipient?.splits.map((split) => {
       return {
         address: split.split.id,
-        value: (parseInt(split.allocation) * 100) / 1_000_000,
+        distributorFee: split.split.distributorFee,
+        allocation: parseInt(split.allocation) / SPLITS_PERCENTAGE_SCALE,
+        recipients: split.split.recipients.map((recipient) => ({
+          address: recipient.recipient.id,
+          allocation: parseInt(recipient.allocation) / SPLITS_PERCENTAGE_SCALE,
+        })),
         tokens: split.tokens.map((obj: any) => ({
           address: obj.token,
           totalClaimed: obj.totalClaimed,

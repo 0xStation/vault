@@ -31,6 +31,17 @@ export type RevShareVariant = {
 
 export type RevShareWithdraw = FungibleToken & {
   totalValue: string
-  splits: { value: string; name?: string }[]
+  splits: {
+    address: string
+    undistributedValue: string
+    unclaimedValue: string
+    name?: string
+    // below required for calling distribution contract functions
+    recipients: {
+      address: string
+      allocation: number
+    }[]
+    distributorFee: string // uint256
+  }[]
   pendingExecution?: boolean
 }

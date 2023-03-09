@@ -1,8 +1,11 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
+import { BigNumber } from "ethers"
 import { REJECTION_CALL } from "lib/constants"
+import { prepareSplitsDistributeCall } from "lib/encodings/0xsplits"
 import { prepareSplitsWithdrawCall } from "lib/transactions/0xsplits"
+import { batchCalls } from "lib/transactions/batch"
 import { RawCall } from "lib/transactions/call"
 import { callAction } from "lib/transactions/conductor"
 import { useRouter } from "next/router"
@@ -55,7 +58,12 @@ const reduceItems = (
         ...acc,
         ...revShareWithdraw.splits.map((v) => ({
           note: v.name as string,
-          transfers: [{ token: revShareWithdraw, value: v.value }],
+          transfers: [
+            {
+              token: revShareWithdraw,
+              value: addValues(v.unclaimedValue, v.undistributedValue),
+            },
+          ],
         })),
       ],
       [],
@@ -77,7 +85,23 @@ const genClaimCall = (
       proofs: action.proofs,
     })
   } else if (revShareWithdraws.length > 0) {
-    return prepareSplitsWithdrawCall(recipient, [revShareWithdraws[0].address])
+    const rs = revShareWithdraws[0]
+    const requiresDistribution = rs.splits.filter((split) =>
+      BigNumber.from(split.undistributedValue).gt(0),
+    )
+
+    return batchCalls([
+      ...requiresDistribution.map((split) =>
+        prepareSplitsDistributeCall(
+          split.address,
+          rs.address,
+          split.recipients,
+          split.distributorFee,
+          recipient,
+        ),
+      ),
+      prepareSplitsWithdrawCall(recipient, [revShareWithdraws[0].address]),
+    ])
   }
   return REJECTION_CALL
 }
@@ -239,7 +263,7 @@ export const ClaimItemsDrawer = ({
           />
         </div>
       )}
-      <div className="mt-6 space-y-8">
+      <div className="mt-6 space-y-2">
         {items.map((item, index) => (
           <div
             className="space-y-3 rounded-lg bg-slate-50 p-4"
