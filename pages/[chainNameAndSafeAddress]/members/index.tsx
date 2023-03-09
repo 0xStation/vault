@@ -10,9 +10,9 @@ const chainNameToChainId: Record<string, number | undefined> = {
 
 const MembersPage = () => {
   // router.query doesn't work during pre-rendering unless we are using ssr
-  const chainNameAndSafeAddress = window.location.pathname.split(
-    "/",
-  )[1] as string
+  const chainNameAndSafeAddress = decodeURIComponent(
+    window.location.pathname.split("/")[1],
+  ) as string
 
   const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
   const chainId = chainNameToChainId[chainName] as number
