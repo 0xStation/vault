@@ -50,7 +50,14 @@ export const VoteDrawer = ({
           : action.variant === ActionVariant.REJECTION,
       ),
     )
-    let signature = await signMessage(message)
+
+    let signature
+    try {
+      signature = await signMessage(message)
+    } catch {
+      setLoading(false)
+      return
+    }
 
     const voteActivity: Activity = {
       id: "optimistic-vote",

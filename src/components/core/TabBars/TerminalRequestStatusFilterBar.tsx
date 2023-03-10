@@ -1,7 +1,7 @@
 import { TabBar } from "../TabBar"
 
 export enum TerminalRequestStatusFilter {
-  NEEDS_ATTENTION = "needs-attention",
+  NEEDS_ACTION = "needs-action",
   AWAITING_OTHERS = "awaiting-others",
   CLOSED = "closed",
 }
@@ -20,8 +20,8 @@ export const TerminalRequestStatusFilterBar = ({
 }) => {
   const options = [
     {
-      value: TerminalRequestStatusFilter.NEEDS_ATTENTION,
-      label: "Needs attention",
+      value: TerminalRequestStatusFilter.NEEDS_ACTION,
+      label: "Needs action",
     },
     {
       value: TerminalRequestStatusFilter.AWAITING_OTHERS,
@@ -35,7 +35,7 @@ export const TerminalRequestStatusFilterBar = ({
       className={className}
       style="filter"
       showBorder={true}
-      defaultValue={TerminalRequestStatusFilter.NEEDS_ATTENTION}
+      defaultValue={TerminalRequestStatusFilter.NEEDS_ACTION}
       options={options}
     >
       {children}

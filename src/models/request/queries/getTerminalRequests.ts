@@ -1,4 +1,8 @@
-import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import {
+  ActionStatus,
+  ActivityVariant,
+  RequestVariantType,
+} from "@prisma/client"
 import db from "db"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
 import { Activity } from "../../activity/types"
@@ -86,7 +90,11 @@ export const getTerminalRequests = async ({
     const approveActivities: Activity[] = []
     const rejectActivities: Activity[] = []
     const commentActivities: Activity[] = []
-    let isExecuted: boolean = false
+    const isExecuted = request.actions.some(
+      (action) =>
+        action.status === ActionStatus.SUCCESS ||
+        action.status === ActionStatus.FAILURE,
+    )
 
     request.activities.forEach((activity) => {
       switch (activity.variant) {
@@ -94,7 +102,6 @@ export const getTerminalRequests = async ({
           commentActivities.push(activity)
           break
         case ActivityVariant.EXECUTE_REQUEST:
-          isExecuted = true
           break
         case ActivityVariant.APPROVE_REQUEST:
           if (!signatureAccounted[activity.address]) {
@@ -134,6 +141,7 @@ export const getTerminalRequests = async ({
 
     return {
       ...request,
+      activities: request.activities.reverse(),
       terminal,
       isExecuted,
       stage,

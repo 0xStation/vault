@@ -1,14 +1,14 @@
 import { ActionStatus, RequestVariantType } from "@prisma/client"
+import { timeSince } from "lib/utils"
+import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
 import { AvatarAddress } from "../../../../components/core/AvatarAddress"
-import { CastYourVote } from "../../../../components/request/CastYourVote"
-import { ExecuteAction } from "../../../../components/request/ExecuteAction"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
-import { timeSince } from "../../../../lib/utils"
 import { Action } from "../../../../models/action/types"
 import { RequestFrob } from "../../../../models/request/types"
+import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
 
 const RequestDetailsContent = ({
   request,
@@ -25,13 +25,13 @@ const RequestDetailsContent = ({
     payload: any
   }) => void
 }) => {
+  const { address } = useAccount()
+
   if (!request) {
     return <></>
   }
 
-  const canExecute =
-    request.rejectActivities.length >= request.quorum ||
-    request.approveActivities.length >= request.quorum
+  const connectedUserIsSigner = request.signers?.includes(address as string)
 
   const activeActions = request.actions.some((action: Action, idx: number) => {
     return action.status !== ActionStatus.NONE
@@ -168,15 +168,11 @@ const RequestDetailsContent = ({
         </section>
       </div>
       <div className={`${activeActions ? "hidden" : "block"}`}>
-        {canExecute ? (
-          <ExecuteAction
-            title="Execute Approval"
-            subtitle="This action is on-chain and will not be reversible."
+        {connectedUserIsSigner && !request.isExecuted && (
+          <RequestDetailsActions
             request={request}
             mutateRequest={mutateRequest}
           />
-        ) : (
-          <CastYourVote request={request} mutateRequest={mutateRequest} />
         )}
       </div>
     </>

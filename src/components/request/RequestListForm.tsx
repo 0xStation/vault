@@ -20,7 +20,6 @@ import { XMark } from "../icons"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
-import VoteManager from "./VoteManager"
 
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
 
@@ -113,11 +112,6 @@ const RequestListForm = ({
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
   const reset = () => dispatch({ type: "RESET" })
-
-  const [promptAction, setPromptAction] = useState<
-    "approve" | "reject" | "execute"
-  >()
-  const [requestActedOn, setRequestActedOn] = useState<RequestFrob>()
 
   const onCheckboxChange = (e: any) => {
     const requestId = e.target.name
@@ -250,18 +244,6 @@ const RequestListForm = ({
                         }
                         request={request}
                         showTerminal={isProfile ? request.terminal : undefined}
-                        takeActionOnRequest={(
-                          action: "approve" | "reject" | "execute",
-                          request,
-                        ) => {
-                          setRequestActedOn(request)
-                          setPromptAction(action)
-                          if (action === "execute") {
-                            // set ExecuteDrawer open
-                          } else {
-                            toggleDrawer("voteDrawer", true)
-                          }
-                        }}
                       />
                     )
                   return (
@@ -293,15 +275,6 @@ const RequestListForm = ({
           })}
         </ul>
       </form>
-      <VoteManager
-        request={requestActedOn}
-        isOpen={drawerManagerState.voteDrawer}
-        setIsOpen={(state: boolean) => {
-          toggleDrawer("voteDrawer", state)
-        }}
-        approve={promptAction === "approve"}
-        mutateRequest={mutateRequest}
-      />
       <BatchVoteManager
         requestsToApprove={batchState.selectedRequests}
         isOpen={drawerManagerState.batchVoteDrawer}

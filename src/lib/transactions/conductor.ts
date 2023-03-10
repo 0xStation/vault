@@ -1,6 +1,6 @@
-import { BigNumber } from "@ethersproject/bignumber"
 import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
 import { encodeFunctionData } from "lib/encodings/utils"
+import { compareAddresses } from "lib/utils/compareAddresses"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
 import { conductorExecute } from "../encodings/fragments"
@@ -48,12 +48,19 @@ export const callAction = ({
   proofs: Proof[]
 }): RawCall => {
   const formattedProofs = proofs
-    .sort((a, b) => {
-      const addressA = BigNumber.from(a.signature.signerAddress)
-      const addressB = BigNumber.from(b.signature.signerAddress)
-
-      return addressA.gt(addressB) ? 1 : -1
-    })
+    // filter out duplicate signatures from the same address
+    // happens when vote -> change vote -> change vote back
+    .filter(
+      (proof, i, values) =>
+        values
+          .map((v) => v.signature.signerAddress)
+          .indexOf(proof.signature.signerAddress) === i,
+    )
+    // sort objects by increasing address for contract validation
+    .sort((a, b) =>
+      compareAddresses(a.signature.signerAddress, b.signature.signerAddress),
+    )
+    // return cleaned structs that contract expects
     .map((proof) => ({
       path: proof.path,
       signature: proof.signature.data.signature,

@@ -51,7 +51,7 @@ const RequestTabContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
     <TabsContent value={tab}>
       <TerminalRequestStatusFilterBar>
         <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.NEEDS_ATTENTION}
+          filter={TerminalRequestStatusFilter.NEEDS_ACTION}
           tab={tab}
         />
         <RequestContentForFilterAndTab
