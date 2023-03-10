@@ -129,6 +129,16 @@ export const MembersView = ({
           description: formData.about,
           url: formData.url,
         })
+        // reset form data if user comes back to create a new terminal
+        setFormData({
+          name: "",
+          chainId: undefined,
+          about: "",
+          url: "",
+          members: [],
+          quorum: undefined,
+          address: "",
+        })
         router.push(
           `/${globalId(
             terminal.chainId,
