@@ -27,7 +27,9 @@ const RequestDetailsDesktop = () => {
     return <></>
   }
   return (
-    <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
+    <div className="mx-auto w-full max-w-[580px]">
+      <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
+    </div>
   )
 }
 

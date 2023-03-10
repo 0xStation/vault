@@ -80,6 +80,7 @@ export const ExecuteWrapper = ({
   const {
     data: txData,
     isSuccess: isSendTransactionSuccess,
+    isError,
     sendTransaction,
   } = useSendTransaction(config)
 
@@ -88,6 +89,12 @@ export const ExecuteWrapper = ({
     chainId: request.chainId,
     enabled: !!txData?.hash,
   })
+
+  useEffect(() => {
+    if (isError) {
+      setLoading(false)
+    }
+  }, [isError])
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
@@ -241,16 +248,12 @@ export const ExecuteWrapper = ({
 }
 
 export const ExecuteRequest = ({
-  title,
-  subtitle,
   request,
   isOpen,
   setIsOpen,
   approve,
   mutateRequest,
 }: {
-  title: string
-  subtitle: string
   request: RequestFrob
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
@@ -277,8 +280,8 @@ export const ExecuteRequest = ({
 
   return (
     <ExecuteWrapper
-      title={title}
-      subtitle={subtitle}
+      title={`Execute ${approve ? "approvel" : "rejection"}`}
+      subtitle="This action is on-chain and will not be reversible."
       request={request}
       actionToExecute={actionsToExecute?.[0]}
       isOpen={isOpen}

@@ -121,6 +121,7 @@ export const getProfileRequests = async ({
 
     return {
       ...request,
+      activities: request.activities.reverse(),
       isExecuted,
       approveActivities,
       rejectActivities,

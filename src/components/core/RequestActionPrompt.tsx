@@ -1,75 +1,45 @@
+import { ChevronRight } from "@icons"
+import { ActionStatus } from "@prisma/client"
+import { addressesAreEqual } from "lib/utils"
+import { useAccount } from "wagmi"
 import { RequestFrob } from "../../models/request/types"
-import ActionPrompt from "./ActionPrompt"
 
-const RequestActionPrompt = ({
-  request,
-  takeActionOnRequest,
-}: {
-  request: RequestFrob
-  takeActionOnRequest: (
-    action: "approve" | "reject" | "execute",
-    request: RequestFrob,
-  ) => void
-}) => {
-  let executePrompt = `Execute ${[
-    ...(request.approveActivities.length > request.quorum ? ["approval"] : []),
-    ...(request.rejectActivities.length > request.quorum ? ["rejection"] : []),
-  ].join(" or ")}`
+const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
+  const { address } = useAccount()
 
-  const approvalsRemaining = request.quorum - request.approveActivities.length
-  const rejectionsRemaining = request.quorum - request.rejectActivities.length
+  const approvalQuorum = request.approveActivities.length >= request.quorum
+  const rejectionQuorum = request.rejectActivities.length >= request.quorum
+  const hasVoted = [
+    ...request.approveActivities,
+    ...request.rejectActivities,
+  ].some((activity) => addressesAreEqual(address, activity.address))
 
-  const votePrompt = `Needs ${
-    approvalsRemaining >= rejectionsRemaining
-      ? `${approvalsRemaining}`
-      : `${rejectionsRemaining}`
-  } ${
-    approvalsRemaining >= rejectionsRemaining
-      ? `approval${approvalsRemaining > 1 ? "s" : ""}`
-      : `rejection${rejectionsRemaining > 1 ? "s" : ""}`
-  }`
-
-  const actionState =
-    request.approveActivities.length >= request.quorum ||
-    request.rejectActivities.length >= request.quorum
-      ? "EXECUTE"
-      : "VOTE"
-
-  const prompt = actionState === "EXECUTE" ? executePrompt : votePrompt
-
-  const executeAction = {
-    label: "Execute",
-    onClick: (e: any) => {
-      e.stopPropagation()
-      takeActionOnRequest("execute", request)
-    },
+  let prompt
+  if (approvalQuorum && rejectionQuorum) {
+    prompt = "Execute approval or rejection"
+  } else if (!approvalQuorum && !rejectionQuorum && !hasVoted) {
+    prompt = "Cast your vote"
+  } else if (approvalQuorum) {
+    prompt = "Execute approval"
+    if (!hasVoted) prompt += " or cast your vote"
+  } else if (rejectionQuorum) {
+    prompt = "Execute rejection"
+    if (!hasVoted) prompt += " or cast your vote"
   }
 
-  const approveAction = {
-    label: "Approve",
-    onClick: (e: any) => {
-      e.stopPropagation()
-      takeActionOnRequest("approve", request)
-    },
-  }
+  const actionExecuted = request.actions.some(
+    (action) =>
+      action.status === ActionStatus.SUCCESS ||
+      action.status === ActionStatus.FAILURE,
+  )
 
-  const rejectAction = {
-    label: "Reject",
-    onClick: (e: any) => {
-      e.stopPropagation()
-
-      takeActionOnRequest("reject", request)
-    },
-  }
-
-  return (
-    <ActionPrompt
-      prompt={prompt}
-      actions={[
-        ...(actionState === "EXECUTE" ? [executeAction] : []),
-        ...(actionState === "VOTE" ? [approveAction, rejectAction] : []),
-      ]}
-    />
+  return !actionExecuted ? (
+    <div className="flex flex-row items-center justify-between rounded-md bg-slate-100 px-2 py-1">
+      <h4 className="text-sm text-slate-500">{prompt}</h4>
+      <ChevronRight size="sm" color="slate-500" />
+    </div>
+  ) : (
+    <></>
   )
 }
 

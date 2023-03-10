@@ -17,16 +17,11 @@ const RequestCard = ({
   disabled,
   request,
   showTerminal,
-  takeActionOnRequest,
   onCheckboxChange,
 }: {
   disabled?: boolean
   request: RequestFrob
   showTerminal?: Terminal
-  takeActionOnRequest?: (
-    action: "approve" | "reject" | "execute",
-    request: RequestFrob,
-  ) => void
   onCheckboxChange?: (e: any) => void
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
@@ -54,10 +49,7 @@ const RequestCard = ({
           {showTerminal ? (
             <RequestTerminalLink terminal={showTerminal} />
           ) : (
-            <RequestActionPrompt
-              request={request}
-              takeActionOnRequest={takeActionOnRequest!}
-            />
+            <RequestActionPrompt request={request} />
           )}
           <div className="flex w-full items-center space-x-2">
             {!showTerminal && onCheckboxChange && (
