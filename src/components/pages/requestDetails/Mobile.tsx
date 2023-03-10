@@ -29,12 +29,18 @@ const RequestDetailsMobile = () => {
     })
   }
 
+  console.log(router)
+
   return (
     <>
       <div className="w-full max-w-[580px]">
         <AccountNavBar />
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-slate-200 py-2 px-4">
-          <button onClick={() => router.back()}>
+          <button
+            onClick={() =>
+              router.push(`/${router.query.chainNameAndSafeAddress}/requests`)
+            }
+          >
             <ArrowLeft />
           </button>
           <h4 className="text-xs text-slate-500">#{request?.number}</h4>
