@@ -93,7 +93,8 @@ export const getTerminalRequests = async ({
     const isExecuted = request.actions.some(
       (action) =>
         action.status === ActionStatus.SUCCESS ||
-        action.status === ActionStatus.FAILURE,
+        action.status === ActionStatus.FAILURE ||
+        action.status === ActionStatus.PENDING,
     )
 
     request.activities.forEach((activity) => {

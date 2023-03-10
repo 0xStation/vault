@@ -122,7 +122,11 @@ export const ExecuteWrapper = ({
       mutateRequest({
         fn: setActionPending,
         requestId: request.id,
-        payload: { ...request, actions: updatedActions },
+        payload: {
+          ...request,
+          isExecuted: true,
+          actions: updatedActions,
+        },
       })
     }
   }, [isSendTransactionSuccess])
@@ -160,7 +164,6 @@ export const ExecuteWrapper = ({
         payload: {
           ...request,
           activities: [...request?.activities!, executeActivity],
-          isExecuted: true,
           actions: updatedActions,
         },
       })
