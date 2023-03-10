@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
-import { TerminalLogo } from "../../components/icons"
+import { StationLogo } from "../../components/icons"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { Terminal } from "../../models/terminal/types"
@@ -92,7 +92,7 @@ const DesktopTerminalLayout = ({
       <div className="flex h-screen flex-row">
         <div className=" relative h-full w-[300px] border-r border-slate-200">
           <section className="flex flex-row items-center justify-between p-4">
-            <TerminalLogo size="lg" />
+            <StationLogo size="lg" />
           </section>
           <section className="mt-4 p-4">
             <div className="rounded border border-slate-200">
