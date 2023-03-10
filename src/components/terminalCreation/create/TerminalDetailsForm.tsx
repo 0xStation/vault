@@ -69,7 +69,7 @@ export const TerminalDetailsForm = ({
         if (e.name === "ConnectorNotFoundError") {
           setFormMessage({
             isError: true,
-            message: `Please ensure your wallet is connected.`,
+            message: "Please ensure your wallet is connected.",
           })
         }
       }
@@ -91,6 +91,17 @@ export const TerminalDetailsForm = ({
           description: formData.about,
           url: formData.url,
         })
+
+        // reset form data if user comes back to create or import a new terminal
+        setFormData({
+          name: "",
+          chainId: undefined,
+          about: "",
+          url: "",
+          members: [],
+          quorum: undefined,
+          address: "",
+        })
         router.push(
           `/${globalId(formData.chainId as number, formData.address)}`,
         )
@@ -98,7 +109,7 @@ export const TerminalDetailsForm = ({
         console.error("Failed to create terminal", err)
         setFormMessage({
           isError: true,
-          message: `Something went wrong.`,
+          message: "Something went wrong.",
         })
       }
 
