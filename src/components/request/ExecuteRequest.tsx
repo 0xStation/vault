@@ -80,6 +80,7 @@ export const ExecuteWrapper = ({
   const {
     data: txData,
     isSuccess: isSendTransactionSuccess,
+    isError,
     sendTransaction,
   } = useSendTransaction(config)
 
@@ -88,6 +89,12 @@ export const ExecuteWrapper = ({
     chainId: request.chainId,
     enabled: !!txData?.hash,
   })
+
+  useEffect(() => {
+    if (isError) {
+      setLoading(false)
+    }
+  }, [isError])
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
