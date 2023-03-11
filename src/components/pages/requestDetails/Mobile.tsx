@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { AccountNavBar } from "../../../components/core/AccountNavBar"
-import { ArrowLeft, Copy } from "../../../components/icons"
+import { ArrowLeft } from "../../../components/icons"
 import { useRequest } from "../../../models/request/hooks"
 import RequestDetailsContent from "./components/RequestDetailsContent"
 
@@ -38,7 +38,8 @@ const RequestDetailsMobile = () => {
             <ArrowLeft />
           </button>
           <h4 className="text-xs text-slate-500">#{request?.number}</h4>
-          <Copy />
+          {/* empty span to keep number centered */}
+          <span></span>
         </div>
       </div>
       <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
