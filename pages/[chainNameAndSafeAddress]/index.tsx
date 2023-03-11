@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ChevronRight } from "../../src/components/icons"
@@ -13,6 +14,8 @@ import TerminalActivationView from "../../src/components/terminalCreation/import
 import LabelCard from "../../src/components/ui/LabelCard"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
+import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
+import { useRequests } from "../../src/hooks/useRequests"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
 import { convertGlobalId } from "../../src/models/terminal/utils"
@@ -27,32 +30,32 @@ type TerminalNavOption = {
 const options = (router: any) =>
   [
     {
-      label: "Requests",
-      description: "Description to educate users (replace this!)",
+      label: "Proposals",
+      description: "Vote and execute to distribute tokens",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/requests`,
     },
     {
       label: "Assets",
-      description: "Description to educate users (replace this!)",
+      description: "Assets and collectibles you and your collective own",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/assets`,
     },
     {
       label: "Members",
-      description: "Description to educate users (replace this!)",
+      description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
       label: "Automations",
-      description: "Description to educate users (replace this!)",
+      description: "Automate NFT sales and sponsorship revenue-sharing",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       label: "About",
-      description: "Description to educate users (replace this!)",
+      description: "About the terminal",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/details`,
     },
@@ -60,6 +63,7 @@ const options = (router: any) =>
 
 const MobileTerminalIndexPage = () => {
   const router = useRouter()
+  const { address: userAddress } = useAccount()
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
@@ -72,6 +76,28 @@ const MobileTerminalIndexPage = () => {
     chainId: terminal?.chainId,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+
+  const { data: tokenData } = useFungibleTokenData(chainId || 1, address)
+
+  const totalAssetValue = tokenData?.reduce((sum: number, token: any) => {
+    if (token.fiat) sum += token.fiat?.[0].tokenValue
+    return sum
+  }, 0)
+
+  let { data: requests } = useRequests(chainId || 1, address || "", {
+    tab: "ALL",
+  })
+
+  const requestsNeedingAttention = requests?.filter(
+    (r) =>
+      !r.isExecuted &&
+      (!(
+        r.approveActivities.some((a) => a.address === userAddress) ||
+        r.rejectActivities.some((a) => a.address === userAddress)
+      ) ||
+        r.approveActivities.length >= r.quorum ||
+        r.rejectActivities.length >= r.quorum),
+  )
 
   return (
     <>
@@ -97,8 +123,13 @@ const MobileTerminalIndexPage = () => {
       </section>
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">
-          {/* TODO: get data for description (total value) */}
-          <LabelCard label="Total assets value" description="TODO" />
+          <LabelCard
+            label="Total balance value"
+            description={`$${totalAssetValue
+              ?.toFixed(2)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
+          />
           <LabelCard
             label="Members"
             description={String(terminal?.signers?.length)}
@@ -117,7 +148,15 @@ const MobileTerminalIndexPage = () => {
                       {option.description}
                     </span>
                   </div>
-                  <ChevronRight />
+                  <div className="flex flex-row items-center space-x-2">
+                    {option.label === "Proposals" &&
+                      requestsNeedingAttention && (
+                        <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-sm text-orange">
+                          {requestsNeedingAttention.length}
+                        </span>
+                      )}
+                    <ChevronRight />
+                  </div>
                 </div>
               </Link>
             )

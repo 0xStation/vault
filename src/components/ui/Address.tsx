@@ -11,7 +11,7 @@ const textSizeMap: { [key: string]: string } = {
   ["xs"]: "text-xs",
   ["sm"]: "text-base",
   ["base"]: "text-base",
-  ["lg"]: "text-lg font-bold",
+  ["lg"]: "text-2xl font-bold",
 }
 
 export const Address = ({
@@ -31,9 +31,9 @@ export const Address = ({
         // if address is interactive, enable copy on click
         interactive
           ? (e) => {
-            e.preventDefault()
-            navigator.clipboard.writeText(address)
-          }
+              e.preventDefault()
+              navigator.clipboard.writeText(address)
+            }
           : () => {}
       }
     >

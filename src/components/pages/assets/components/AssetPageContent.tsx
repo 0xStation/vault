@@ -37,7 +37,7 @@ const AssetsPageContent = ({ terminal }: { terminal: Terminal }) => {
   return (
     <>
       <section className="mt-4 px-4">
-        <h3 className="mb-2 text-lg font-bold">Assets</h3>
+        <h3 className="mb-2 text-2xl font-bold">Assets</h3>
       </section>
       <TerminalAssetsTabBar>
         <CurrentAssetsTab terminal={terminal} />

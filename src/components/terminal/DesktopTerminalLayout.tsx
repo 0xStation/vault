@@ -2,9 +2,12 @@ import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
 import { StationLogo } from "../../components/icons"
+import useFungibleTokenData from "../../hooks/useFungibleTokenData"
+import { useRequests } from "../../hooks/useRequests"
 import { Terminal } from "../../models/terminal/types"
 
 type TerminalNavOption = {
@@ -16,32 +19,32 @@ type TerminalNavOption = {
 const options = (router: any) =>
   [
     {
-      label: "Requests",
-      description: "Description to educate users (replace this!)",
+      label: "Proposals",
+      description: "Vote and execute to distribute tokens",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/requests`,
     },
     {
       label: "Assets",
-      description: "Description to educate users (replace this!)",
+      description: "Assets and collectibles you and your collective own",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/assets`,
     },
     {
       label: "Members",
-      description: "Description to educate users (replace this!)",
+      description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
       label: "Automations",
-      description: "Coming soon",
-      active: false,
+      description: "Automate NFT sales and sponsorship revenue-sharing",
+      active: true,
       href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       label: "About",
-      description: "Description to educate users (replace this!)",
+      description: "About the terminal",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/details`,
     },
@@ -57,6 +60,32 @@ const DesktopTerminalLayout = ({
   children?: React.ReactNode
 }) => {
   const router = useRouter()
+  const { address } = useAccount()
+
+  const { data: tokenData } = useFungibleTokenData(
+    terminal.chainId,
+    terminal.safeAddress,
+  )
+
+  const totalAssetValue = tokenData?.reduce((sum: number, token: any) => {
+    if (token.fiat) sum += token.fiat?.[0].tokenValue
+    return sum
+  }, 0)
+
+  let { data: requests } = useRequests(terminal.chainId, terminal.safeAddress, {
+    tab: "ALL",
+  })
+
+  const requestsNeedingAttention = requests?.filter(
+    (r) =>
+      !r.isExecuted &&
+      (!(
+        r.approveActivities.some((a) => a.address === address) ||
+        r.rejectActivities.some((a) => a.address === address)
+      ) ||
+        r.approveActivities.length >= r.quorum ||
+        r.rejectActivities.length >= r.quorum),
+  )
 
   return (
     <>
@@ -79,13 +108,14 @@ const DesktopTerminalLayout = ({
               </div>
               <div className="bg-slate-50 p-4">
                 <h4 className="mb-1 text-xs text-slate-500">
-                  Total Asset Value
+                  Total balance value
                 </h4>
-                {/* todo replace */}
-                <span>$1500</span>
+                <span>{`$${totalAssetValue
+                  ?.toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
                 <h4 className="mb-1 mt-4 text-xs text-slate-500">Members</h4>
-                {/* todo replace */}
-                <span>4</span>
+                <span>{terminal.signers.length}</span>
               </div>
             </div>
           </section>
@@ -102,8 +132,14 @@ const DesktopTerminalLayout = ({
                     }`}
                     key={`link-${idx}`}
                   >
-                    <div className="cursor-pointer py-3 px-4 hover:bg-slate-100">
+                    <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-slate-100">
                       <span>{option.label}</span>
+                      {option.label === "Proposals" &&
+                        requestsNeedingAttention && (
+                          <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-sm text-orange">
+                            {requestsNeedingAttention.length}
+                          </span>
+                        )}
                     </div>
                   </Link>
                 )

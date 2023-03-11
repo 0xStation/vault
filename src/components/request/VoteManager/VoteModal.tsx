@@ -121,7 +121,7 @@ const VoteModal = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6 pb-[70px]">
-          <div className="text-lg font-bold">
+          <div className="text-2xl font-bold">
             {approve ? "Approve" : "Reject"} request
           </div>
           <div>
