@@ -47,12 +47,17 @@ export const getProfileRequests = async ({
 
   const uniqueTerminals = requests
     .map((request) => request.terminal)
-    .filter((v, i, values) => values.indexOf(v) === i)
+    .map((terminal) => `${terminal.chainId}:${terminal.safeAddress}`)
+    .filter((v, i, values) => values.indexOf(v) === i) // filtering does not work on objects, must be primitive type
+    .map((chainIdAddress) => ({
+      chainId: parseInt(chainIdAddress.split(":")[0]),
+      address: chainIdAddress.split(":")[1],
+    }))
 
   const safeCalls = await Promise.all(
     uniqueTerminals.map(
-      ({ chainId, safeAddress }: { chainId: number; safeAddress: string }) =>
-        getSafeDetails(chainId, safeAddress),
+      ({ chainId, address }: { chainId: number; address: string }) =>
+        getSafeDetails(chainId, address),
     ),
   )
 
