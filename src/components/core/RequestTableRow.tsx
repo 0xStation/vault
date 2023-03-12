@@ -1,6 +1,6 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
-import { timeSince } from "../../lib/utils"
+import { cn, timeSince } from "../../lib/utils"
 import {
   RequestFrob,
   RequestStatus,
@@ -45,62 +45,81 @@ const RequestTableRow = ({
   triggerDetails: (request: RequestFrob) => void
 }) => {
   return (
-    <div
-      className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-slate-200 py-3 px-4 hover:bg-slate-100 ${
-        disabled ? "opacity-30" : "hover:bg-slate-50"
-      }`}
+    <tr
+      className={cn(
+        "h-14 cursor-pointer border-b border-slate-200 hover:bg-slate-100",
+        disabled ? "disabled:opacity-30" : "hover:bg-slate-50",
+      )}
       onClick={() => triggerDetails(request)}
     >
-      {onCheckboxChange && (
-        <Checkbox
-          onChange={onCheckboxChange}
-          name={request.id}
-          isDisabled={disabled || false}
-          className={
-            request.status === RequestStatus.EXECUTION_PENDING
-              ? "invisible"
-              : ""
-          }
-        />
-      )}
-      <div className="text-xs text-slate-500">#{request.number}</div>
-      <RequestStatusIcon status={request.status} />
-      <Avatar size="sm" address={request.data.createdBy} />
-      <div className="min-w-0 grow">
-        <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {request.data.note}
-        </div>
-      </div>
-      <div className=" basis-1/4">
-        {request.variant === RequestVariantType.TOKEN_TRANSFER && (
-          <RequestTransferContent request={request} />
+      <td className="px-4">
+        {onCheckboxChange && (
+          <Checkbox
+            onChange={onCheckboxChange}
+            name={request.id}
+            isDisabled={disabled || false}
+            className={
+              request.status === RequestStatus.EXECUTION_PENDING
+                ? "invisible"
+                : ""
+            }
+          />
         )}
-      </div>
+      </td>
+      <td className="text-left text-xs text-slate-500">#{request.number}</td>
+      <td className="px-3">
+        <RequestStatusIcon status={request.status} />
+      </td>
+      <td className="w-6">
+        <Avatar size="sm" address={request.data.createdBy} />
+      </td>
+      <td className="px-3">
+        <div className="w-80">
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {request.data.note}
+            {/* Claiming COIN, ERC20, ERC721, Claiming COIN, ERC20, ERC721, */}
+          </div>
+        </div>
+      </td>
+      <td className="pr-3">
+        <div>
+          {request.variant === RequestVariantType.TOKEN_TRANSFER && (
+            <RequestTransferContent request={request} />
+          )}
+        </div>
+      </td>
+      <td className="text-right">
+        <div className="w-20 space-x-1">
+          <span className="text-sm font-bold text-black">
+            {request.approveActivities.length}
+          </span>
 
-      <div className="space-x-1">
-        <span className="text-sm font-bold text-black">
-          {request.approveActivities.length}
-        </span>
+          <span className="text-sm text-slate-500">Approved</span>
+        </div>
+      </td>
+      <td className="text-right">
+        <div className="w-20 space-x-1">
+          <span className="text-sm font-bold text-black">
+            {request.rejectActivities.length}
+          </span>
+          <span className="text-sm text-slate-500">Rejected</span>
+        </div>
+      </td>
 
-        <span className="text-sm text-slate-500">Approved</span>
-      </div>
-      <div className="space-x-1">
-        <span className="text-sm font-bold text-black">
-          {request.rejectActivities.length}
-        </span>
-        <span className="text-sm text-slate-500">Rejected</span>
-      </div>
-
-      <div className="flex cursor-pointer flex-row items-center space-x-1">
-        <ChatBubble size={"sm"} />
-        <span className="text-sm text-slate-500">
-          {request.commentActivities.length}
-        </span>
-      </div>
-      <div className="basis-16 text-right text-xs text-slate-500">
-        {timeSince(request.createdAt)}
-      </div>
-    </div>
+      <td className="px-6">
+        <div className="flex flex-row items-center space-x-1">
+          <ChatBubble size={"sm"} />
+          <span className="text-sm text-slate-500">
+            {request.commentActivities.length}
+          </span>
+        </div>
+      </td>
+      <td className="pr-6">
+        <div className="w-10 text-right text-xs text-slate-500">
+          {timeSince(request.createdAt)}
+        </div>
+      </td>
+    </tr>
   )
 }
 
