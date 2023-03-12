@@ -1,10 +1,19 @@
+import { isAddress } from "@ethersproject/address"
 import { XMarkIcon } from "@heroicons/react/24/solid"
+import { Address } from "@ui/Address"
 import { Button } from "@ui/Button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/Select"
 import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
-import { isEns } from "lib/utils"
+import truncateString, { isEns } from "lib/utils"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useState } from "react"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { TransactionLoadingPage } from "../../../src/components/core/TransactionLoadingPage"
 import { InputWithLabel } from "../../../src/components/form"
@@ -15,6 +24,7 @@ import { useResolveEnsAddress } from "../../../src/hooks/ens/useResolveEns"
 import useStore from "../../../src/hooks/stores/useStore"
 import { useToast } from "../../../src/hooks/useToast"
 import { useCreateAutomation } from "../../../src/models/automation/hooks"
+import { useTerminalByChainIdAndSafeAddress } from "../../../src/models/terminal/hooks"
 import { parseGlobalId } from "../../../src/models/terminal/utils"
 
 const sumSplits = (splits: { value: number }[]) => {
@@ -40,6 +50,11 @@ const NewAutomationPage = () => {
   const { chainId, address: terminalAddress } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const { terminal } = useTerminalByChainIdAndSafeAddress(
+    terminalAddress,
+    chainId,
+  )
+
   const { isMutating, createAutomation } = useCreateAutomation(
     chainId,
     terminalAddress,
@@ -50,7 +65,7 @@ const NewAutomationPage = () => {
     isError: boolean
     message: string
   }>({ isError: false, message: "" })
-
+  const [splitsFieldError, setSplitsFieldError] = useState<string>()
   const { data: txData, sendTransactionAsync } = useSendTransaction({
     mode: "recklesslyUnprepared",
   })
@@ -83,8 +98,21 @@ const NewAutomationPage = () => {
 
     const addressSplits = await Promise.all(
       formValues.splits.map(
-        async ({ address, value }: { address: string; value: string }) => ({
-          address: isEns(address) ? await resolveEnsAddress(address) : address,
+        async ({
+          recipient,
+          address,
+          value,
+        }: {
+          recipient: string
+          value: string
+          address?: string
+        }) => ({
+          address:
+            recipient !== "other"
+              ? recipient
+              : isEns(address!)
+              ? await resolveEnsAddress(address!)
+              : address!,
           value,
         }),
       ),
@@ -137,10 +165,23 @@ const NewAutomationPage = () => {
     handleSubmit,
     control,
     watch,
-    trigger,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     criteriaMode: "all",
+    defaultValues: {
+      splits: [
+        {
+          recipient: "",
+          value: 0,
+          address: "",
+        },
+        {
+          recipient: "",
+          value: 0,
+          address: "",
+        },
+      ],
+    },
   })
 
   const {
@@ -151,31 +192,58 @@ const NewAutomationPage = () => {
     control, // contains methods for registering components into React Hook Form
     name: "splits",
     rules: {
-      validate: (splits) => {
+      validate: async (values) => {
+        let splits = values as {
+          recipient: string
+          address?: string
+          value: number
+        }[]
+        // validate address uniqueness
+        const recipients: string[] = await Promise.all(
+          splits.map(async (split) =>
+            split.recipient !== "other"
+              ? split.recipient
+              : isEns(split.address!)
+              ? ((await resolveEnsAddress(split.address!)) as string)
+              : split.address!,
+          ),
+        )
+
+        const addresses = recipients.filter((address) => isAddress(address))
         // validate number of recipients
-        if (splits?.length < 2) {
-          return "Must have more than 2 split recipients"
+        if (addresses.length < 2) {
+          if (isDirty) setSplitsFieldError("Must have more than 2 recipients")
+          return "Must have more than 2 recipients"
         }
+
+        const uniqueAddresses = addresses.filter(
+          (v, i, values) => values.indexOf(v) === i,
+        )
+        if (uniqueAddresses.length !== addresses.length) {
+          if (isDirty) setSplitsFieldError("Duplicate recipients detected")
+          return "Duplicate recipients detected"
+        }
+
         // validate split sum
         const sum = sumSplits(splits as { value: number }[])
         if (sum > 100) {
+          if (isDirty) setSplitsFieldError("Splits exceeds 100%: " + sum)
           return "Splits exceeds 100%: " + sum
         } else if (sum < 100) {
+          if (isDirty) setSplitsFieldError("Splits below 100%: " + sum)
           return "Splits below 100%: " + sum
-        } else {
-          return true
         }
+
+        setSplitsFieldError("")
+        return true
       },
     },
   })
   const watchSplits = watch("splits", [])
-  // when split values change, trigger validation for error rendering
-  useEffect(
-    () => {
-      trigger("splits")
-    },
-    watchSplits.map((split: { value: number }) => split.value),
-  )
+
+  const isRecipientFieldOther = (index: number) => {
+    return watchSplits[index]?.recipient === "other"
+  }
 
   return txData?.hash ? (
     <TransactionLoadingPage
@@ -220,29 +288,77 @@ const NewAutomationPage = () => {
                 title={`Recipient ${index + 1}`}
                 remove={() => remove(index)}
               >
-                <AddressInput
-                  name={`splits.${index}.address`}
-                  register={register}
-                  errors={errors}
-                  label="Wallet or ENS address*"
-                  placeholder="Enter a wallet or ENS address"
-                  className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
-                  required
-                  validations={{
-                    noDuplicates: async (v: string) => {
-                      const address = await resolveEnsAddress(v)
-                      const recipients: string[] = watchSplits.map(
-                        (split: { address: string }) => split.address,
-                      )
-
-                      return (
-                        !recipients.some(
-                          (val, i) => recipients.indexOf(val) !== i,
-                        ) || "Recipient already added."
-                      )
-                    },
-                  }}
+                <Controller
+                  control={control}
+                  name={`splits.${index}.recipient`}
+                  render={({ field: { onChange, ref } }) => (
+                    <Select onValueChange={onChange} required>
+                      <SelectTrigger ref={ref}>
+                        <SelectValue placeholder="Select one" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem ref={ref} value={terminalAddress}>
+                          <div className="group">
+                            <span
+                              className={
+                                "flex flex-row items-center group-hover:hidden"
+                              }
+                            >
+                              This Terminal
+                            </span>
+                            <span
+                              // show on hover
+                              className={
+                                "flex hidden flex-row items-center group-hover:block"
+                              }
+                            >
+                              {truncateString(terminalAddress)}
+                            </span>
+                          </div>
+                          {/* This Terminal */}
+                        </SelectItem>
+                        {terminal?.signers?.map((signer: string, i) => {
+                          return (
+                            <SelectItem key={signer} ref={ref} value={signer}>
+                              <Address address={signer} size="sm" />
+                            </SelectItem>
+                          )
+                        })}
+                        <SelectItem ref={ref} value="other">
+                          Other
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
                 />
+                {isRecipientFieldOther(index) && (
+                  <AddressInput
+                    name={`splits.${index}.address`}
+                    register={register}
+                    errors={errors}
+                    label="Wallet or ENS address*"
+                    placeholder="Enter a wallet or ENS address"
+                    className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
+                    required
+                    validations={{
+                      noDuplicates: async (v: string) => {
+                        const address = await resolveEnsAddress(v)
+                        const recipients: string[] = watchSplits.map(
+                          (split: { recipient: string; address: string }) =>
+                            split.recipient === "other"
+                              ? split.address
+                              : split.recipient,
+                        )
+
+                        return (
+                          !recipients.some(
+                            (val, i) => recipients.indexOf(val) !== i,
+                          ) || "Recipient already added."
+                        )
+                      },
+                    }}
+                  />
+                )}
                 <PercentInput
                   name={`splits.${index}.value`}
                   register={register}
@@ -261,12 +377,12 @@ const NewAutomationPage = () => {
             variant="tertiary"
             fullWidth={true}
             size="lg"
-            onClick={() => append({ address: "", value: "" })}
+            onClick={() => append({ recipient: "", value: 0, address: "" })}
           >
             + Add recipient
           </Button>
           <p className="text-center text-xs text-red">
-            {(errors.splits?.root?.message as string) || ""}
+            {(splitsFieldError as string) || ""}
           </p>
         </div>
         <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white px-5 py-3 text-center">

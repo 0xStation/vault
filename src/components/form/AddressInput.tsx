@@ -1,6 +1,6 @@
 import { isAddress as ethersIsAddress } from "@ethersproject/address"
 import { isEns } from "lib/utils"
-import { FieldValues, UseFormRegister } from "react-hook-form"
+import { UseFormRegister } from "react-hook-form"
 import useEnsInput from "../../hooks/ens/useEnsInput"
 import InputWithLabel from "./InputWithLabel"
 
@@ -17,7 +17,7 @@ export const AddressInput = ({
   onBlur,
 }: {
   label: string
-  register: UseFormRegister<FieldValues>
+  register: UseFormRegister<any>
   placeholder?: string
   name: string
   required?: boolean

@@ -1,5 +1,5 @@
 import get from "lodash.get"
-import { FieldValues, RegisterOptions, UseFormRegister } from "react-hook-form"
+import { RegisterOptions, UseFormRegister } from "react-hook-form"
 
 // TODO: extend native html props
 export const PercentInput = ({
@@ -16,7 +16,7 @@ export const PercentInput = ({
   ...rest
 }: {
   label: string
-  register: UseFormRegister<FieldValues>
+  register: UseFormRegister<any>
   placeholder?: string
   name: string
   required?: boolean
