@@ -1,6 +1,5 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
-import LoadingSpinner from "@ui/LoadingSpinner"
 import Link from "next/link"
 import { timeSince } from "../../lib/utils"
 import {
@@ -51,17 +50,16 @@ const RequestCard = ({
           )}
           <div className="flex w-full items-center space-x-2">
             {!showTerminal && onCheckboxChange && (
-              <>
-                {request.status === RequestStatus.EXECUTION_PENDING ? (
-                  <LoadingSpinner />
-                ) : (
-                  <Checkbox
-                    onChange={onCheckboxChange}
-                    name={request.id}
-                    isDisabled={disabled || false}
-                  />
-                )}
-              </>
+              <Checkbox
+                onChange={onCheckboxChange}
+                name={request.id}
+                isDisabled={disabled || false}
+                className={
+                  request.status === RequestStatus.EXECUTION_PENDING
+                    ? "invisible"
+                    : ""
+                }
+              />
             )}
             <Avatar size="sm" address={request.data.createdBy} />
 
