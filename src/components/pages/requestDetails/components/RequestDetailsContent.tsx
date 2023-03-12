@@ -9,6 +9,7 @@ import { TokenTransferRequestContent } from "../../../../components/request/Toke
 import { Action } from "../../../../models/action/types"
 import { RequestFrob } from "../../../../models/request/types"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
+import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
 const RequestDetailsContent = ({
   request,
@@ -43,7 +44,7 @@ const RequestDetailsContent = ({
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
-              <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
+              <RequestStatusIcon status={request.status} />
               {request ? (
                 <AvatarAddress size="sm" address={request?.data.createdBy} />
               ) : (

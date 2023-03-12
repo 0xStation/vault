@@ -4,6 +4,7 @@ import db from "../../../../prisma/client"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
+import { getStatus } from "../utils"
 
 const safeKey = (chainId: number, address: string) => `${chainId}-${address}`
 
@@ -109,6 +110,13 @@ export const getProfileRequests = async ({
         safeKey(request.terminal.chainId, request.terminal.safeAddress)
       ]
 
+    const status = getStatus(
+      request.actions,
+      approveActivities,
+      rejectActivities,
+      quorum,
+    )
+
     const stage = (
       approveActivities.length >= safeDetails.quorum ||
       rejectActivities.length >= safeDetails.quorum
@@ -132,9 +140,10 @@ export const getProfileRequests = async ({
       rejectActivities,
       commentActivities,
       quorum,
+      signers,
+      status,
       stage,
       validActions,
-      signers,
       addressesThatHaveNotSigned: signers.filter(
         (address: string) => !signatureAccounted[address],
       ),

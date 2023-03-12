@@ -4,6 +4,7 @@ import db from "../../../../prisma/client"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
+import { getStatus } from "../utils"
 
 // FROB for fetching requests for the purpose of a profile page
 export const getRequestById = async (
@@ -47,6 +48,7 @@ export const getRequestById = async (
     request.terminal.chainId,
     request.terminal.safeAddress,
   )
+  const { quorum, signers } = safeDetails
 
   // 3. construct FROB
 
@@ -85,7 +87,12 @@ export const getRequestById = async (
     }
   })
 
-  const { quorum, signers } = safeDetails
+  const status = getStatus(
+    request.actions,
+    approveActivities,
+    rejectActivities,
+    quorum,
+  )
 
   const stage = (
     approveActivities.length >= safeDetails.quorum ||
@@ -111,6 +118,7 @@ export const getRequestById = async (
     commentActivities,
     quorum,
     signers,
+    status,
     stage,
     validActions,
     addressesThatHaveNotSigned: signers.filter(
