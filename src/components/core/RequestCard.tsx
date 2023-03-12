@@ -1,10 +1,13 @@
-import { ActionStatus, RequestVariantType } from "@prisma/client"
+import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import LoadingSpinner from "@ui/LoadingSpinner"
 import Link from "next/link"
 import { timeSince } from "../../lib/utils"
-import { Action } from "../../models/action/types"
-import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
+import {
+  RequestFrob,
+  RequestStatus,
+  TokenTransferVariant,
+} from "../../models/request/types"
 import { Terminal } from "../../models/terminal/types"
 import { globalId } from "../../models/terminal/utils"
 import { valueToAmount } from "../../models/token/utils"
@@ -28,11 +31,6 @@ const RequestCard = ({
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
     ?.length
 
-  const hasPendingActions =
-    request.actions.filter((action: Action) => {
-      return action.status === ActionStatus.PENDING
-    }).length > 0
-
   return (
     <Link
       href={`/${globalId(
@@ -54,7 +52,7 @@ const RequestCard = ({
           <div className="flex w-full items-center space-x-2">
             {!showTerminal && onCheckboxChange && (
               <>
-                {hasPendingActions ? (
+                {request.status === RequestStatus.EXECUTION_PENDING ? (
                   <LoadingSpinner />
                 ) : (
                   <Checkbox
