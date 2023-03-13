@@ -1,4 +1,4 @@
-import { RequestVariantType } from "@prisma/client"
+import { ActionStatus, RequestVariantType } from "@prisma/client"
 import db from "db"
 import { NextApiRequest, NextApiResponse } from "next"
 import {
@@ -42,7 +42,14 @@ export default async function handler(
         terminalAddress: body?.address,
         chainId: body?.chainId,
         variant: RequestVariantType.SIGNER_QUORUM,
-        txnHash: undefined,
+        actions: {
+          every: {
+            status: {
+              // Grab all actions that aren't in a completed state
+              equals: ActionStatus.NONE,
+            },
+          },
+        },
       },
     })
   } catch (err) {
