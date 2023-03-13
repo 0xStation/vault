@@ -1,0 +1,55 @@
+import { Address } from "@ui/Address"
+import { Avatar } from "@ui/Avatar"
+import { useRouter } from "next/router"
+import { useTerminalsBySigner } from "../../models/terminal/hooks"
+import { AccountNavBar } from "../core/AccountNavBar/AccountDropdown"
+import { StationLogo } from "../icons"
+
+const DesktopProfileLayout = ({
+  assumeDefaultPadding = true,
+  children,
+}: {
+  assumeDefaultPadding?: boolean
+  children?: React.ReactNode
+}) => {
+  const router = useRouter()
+  const { address: accountAddress } = router.query
+  const { isLoading, count } = useTerminalsBySigner(accountAddress as string)
+
+  return (
+    <>
+      <div className="flex h-screen flex-row">
+        <div className=" relative h-full w-[300px] border-r border-slate-200">
+          <section className="flex flex-row items-center justify-between p-4">
+            <StationLogo size="lg" />
+          </section>
+          <section className="mt-4 p-4">
+            <div className="rounded border border-slate-200">
+              <div className="flex flex-row items-center space-x-2 border-b border-slate-200 bg-slate-100 p-4">
+                <Avatar address={accountAddress as string} size="lg" />
+                <Address address={accountAddress as string} size="lg" />
+              </div>
+              <div className="bg-slate-50 p-4">
+                <h4 className="mb-1 text-xs text-slate-500">Terminals</h4>
+                <span>{count}</span>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div
+          className={`h-full grow overflow-scroll ${
+            assumeDefaultPadding ? "px-12 py-4" : "p-0"
+          }`}
+        >
+          <div className="flex justify-end">
+            <AccountNavBar />
+          </div>
+
+          {children}
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default DesktopProfileLayout

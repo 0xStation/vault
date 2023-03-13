@@ -53,7 +53,7 @@ export const TabBar = ({
       {style === "tab" ? (
         <TabsList
           className={cn(
-            "sticky top-0 z-10 bg-white px-4 pt-2",
+            "sticky top-0 z-10 bg-white px-4 pt-2 sm:top-[-16px]",
             showBorder ? "border-b border-slate-200" : "",
           )}
         >

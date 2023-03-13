@@ -4,7 +4,6 @@ import RightSlider from "@ui/RightSlider"
 import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
-import { useToast } from "../../hooks/useToast"
 import { listIntersection } from "../../lib/utils/listIntersection"
 import {
   addQueryParam,
@@ -84,7 +83,6 @@ const RequestListForm = ({
   isProfile?: boolean
 }) => {
   const router = useRouter()
-  const { successToast } = useToast()
   const [drawerManagerState, setDrawerManagerState] = useState({
     batchVoteDrawer: false,
     batchExecuteDrawer: false,
