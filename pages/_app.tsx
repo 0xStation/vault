@@ -3,7 +3,6 @@ import {
   FilterAndSortWallets,
 } from "@dynamic-labs/sdk-react"
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector"
-import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import NextHead from "next/head"
 import { useEffect, useState } from "react"
