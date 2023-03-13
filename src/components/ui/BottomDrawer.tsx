@@ -17,14 +17,14 @@ export const BottomDrawer = ({
   // TODO: add cva
   const transitionChildStyles = {
     ["xs"]: "translate-y-[200%]",
-    ["sm"]: "translate-y-[75%]",
+    ["sm"]: "translate-y-[45%]",
     ["base"]: "translate-y-[15%]",
     ["lg"]: "translate-y-[4%]",
   }
 
   const modalBodyStyles = {
     ["xs"]: "h-[20%]",
-    ["sm"]: "h-[40%]",
+    ["sm"]: "h-[60%]",
     ["base"]: "h-[80%]",
     ["lg"]: "h-[95%]",
   }
