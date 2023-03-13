@@ -20,7 +20,7 @@ import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import useWindowSize from "../../../hooks/useWindowSize"
-import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
+import { useCreateTerminal } from "../../../models/terminal/hooks"
 import { globalId } from "../../../models/terminal/utils"
 import LoadingSpinner from "../../core/LoadingSpinner"
 import AddressInput from "../../form/AddressInput"
@@ -104,6 +104,7 @@ export const MembersView = ({
   const [terminalCreationError, setTerminalCreationError] = useState<string>("")
   const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
   const router = useRouter()
+  const { createTerminal } = useCreateTerminal()
 
   useWaitForTransaction({
     confirmations: 1,

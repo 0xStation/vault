@@ -7,7 +7,7 @@ import { FieldValues, useForm } from "react-hook-form"
 import { useNetwork, useSwitchNetwork } from "wagmi"
 import { CREATE_TERMINAL_VIEW } from "."
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
-import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
+import { useCreateTerminal } from "../../../models/terminal/hooks"
 import { globalId } from "../../../models/terminal/utils"
 import { InputWithLabel } from "../../form"
 import TextareaWithLabel from "../../form/TextareaWithLabel"
@@ -29,6 +29,7 @@ export const TerminalDetailsForm = ({
   const { chain } = useNetwork()
   const { switchNetworkAsync } = useSwitchNetwork()
   const { name, chainId, about, url } = formData
+  const { createTerminal } = useCreateTerminal()
 
   const {
     register,

@@ -25,10 +25,9 @@ export default async function handler(
         res.statusCode = 500
         return res.end(err)
       }
-      break
+    // NOTE: this case should return and not enter the PUT case
     case "PUT":
       const {
-        terminalId,
         safeAddress,
         name,
         chainId,
@@ -37,7 +36,6 @@ export default async function handler(
         safeTxnHash,
         nonce,
       } = body as {
-        terminalId: string
         safeAddress: string
         name: string
         chainId: number
@@ -50,7 +48,10 @@ export default async function handler(
       try {
         terminal = await db.terminal.upsert({
           where: {
-            id: terminalId,
+            chainId_safeAddress: {
+              chainId,
+              safeAddress,
+            },
           },
           update: {
             safeAddress: safeAddress,

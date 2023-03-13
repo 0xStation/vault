@@ -1,7 +1,11 @@
-import { useConnectModal } from "@rainbow-me/rainbowkit"
+import {
+  DynamicConnectButton,
+  DynamicUserProfile,
+  useDynamicContext,
+} from "@dynamic-labs/sdk-react"
 import { Avatar } from "@ui/Avatar"
 import Breakpoint from "@ui/Breakpoint"
-import { Button } from "@ui/Button"
+import { Button, buttonStyles } from "@ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +16,7 @@ import RightSlider from "@ui/RightSlider"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useAccount, useDisconnect } from "wagmi"
+import { useAccount } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
 import {
   addQueryParam,
@@ -30,10 +34,15 @@ export const AccountNavBar = () => {
       removeQueryParam(router, "createTerminalSliderOpen")
     }
   }
-  const { openConnectModal } = useConnectModal()
-  const { address, isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
+  const { address } = useAccount()
   const setActiveUser = useStore((state) => state.setActiveUser)
+  const {
+    handleLogOut,
+    setShowDynamicUserProfile,
+    authToken,
+    isAuthenticated,
+    user,
+  } = useDynamicContext()
 
   useEffect(() => {
     if (router.query.createTerminalSliderOpen) {
@@ -52,8 +61,9 @@ export const AccountNavBar = () => {
         <CreateTerminalContent />
       </RightSlider>
       <DropdownMenu>
-        {isConnected ? (
+        {isAuthenticated ? (
           <div className="flex flex-row items-center space-x-3">
+            <DynamicUserProfile />
             <div>
               <Breakpoint>
                 {(isMobile) => {
@@ -94,12 +104,14 @@ export const AccountNavBar = () => {
               <Avatar size="base" address={address as string} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-2">
-              <DropdownMenuItem className="focus:bg-white">
-                <AvatarAddress
-                  address={address as string}
-                  size="sm"
-                  interactive={false}
-                />
+              <DropdownMenuItem>
+                <button onClick={() => setShowDynamicUserProfile(true)}>
+                  <AvatarAddress
+                    address={address as string}
+                    size="sm"
+                    interactive={false}
+                  />
+                </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link href={`/u/${address}/profile`} className="w-full">
@@ -109,27 +121,30 @@ export const AccountNavBar = () => {
               <DropdownMenuItem>
                 <button
                   onClick={() => {
-                    disconnect()
+                    handleLogOut()
                     setActiveUser(null)
                   }}
                   className="w-full text-left"
                 >
-                  Disconnect
+                  Log out
                 </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </div>
         ) : (
-          <>
-            {openConnectModal && (
-              // set height to same as Avatar to reduce cumulative layout shift
-              <div className="flex min-h-[32px] items-center">
-                <Button size="sm" onClick={() => openConnectModal()}>
-                  Connect wallet
-                </Button>
-              </div>
-            )}
-          </>
+          // set height to same as Avatar to reduce cumulative layout shift
+          <div className="flex max-h-[32px] items-center">
+            <DynamicConnectButton
+              buttonContainerClassName={buttonStyles({
+                variant: "primary",
+                size: "sm",
+                fullWidth: false,
+                disabled: false,
+              })}
+            >
+              Connect wallet
+            </DynamicConnectButton>
+          </div>
         )}
       </DropdownMenu>
     </>

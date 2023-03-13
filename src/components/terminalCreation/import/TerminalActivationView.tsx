@@ -14,7 +14,7 @@ import useStore from "../../../hooks/stores/useStore"
 import addConfirmationToTransaction from "../../../models/safe/mutations/addConfirmationToTransaction"
 import createTransaction from "../../../models/safe/mutations/createTransaction"
 import { SafeMetadata } from "../../../models/safe/types"
-import { updateTerminal } from "../../../models/terminal/mutations/updateTerminal"
+import { useUpdateTerminal } from "../../../models/terminal/hooks"
 import { Terminal } from "../../../models/terminal/types"
 import { AvatarAddress } from "../../core/AvatarAddress"
 import Overlay from "../../core/Overlay"
@@ -36,7 +36,8 @@ const getTxnStatus = ({
     ENABLE_MODULE_STATUS
   let enableModuleStatus = CREATE_TRANSACTION
 
-  if (!terminalNonce || !executionNonce) {
+  // check if `undefined` rather than falsy check since nonces can be 0
+  if (terminalNonce === undefined || executionNonce === undefined) {
     return enableModuleStatus
   }
 
@@ -258,6 +259,10 @@ export const TerminalActivationView = ({
     mode: "recklesslyUnprepared",
   })
   const [txnHash, setTxnHash] = useState<string>("")
+  const { updateTerminal } = useUpdateTerminal(
+    terminal?.safeAddress as string,
+    terminal?.chainId as number,
+  )
 
   useWaitForTransaction({
     confirmations: 1,
@@ -394,8 +399,6 @@ export const TerminalActivationView = ({
           throw Error("Invalid safe Tx hash")
         }
         mutateGetSafeTransaction()
-        // mutateGetSafeConfirmations()
-        // mutateEnableModuleStatus()
         setApproveLoading(false)
         return
       } catch (err) {
