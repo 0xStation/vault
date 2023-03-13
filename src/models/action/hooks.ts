@@ -51,7 +51,7 @@ export const useSetActionPending = (actionId: string) => {
   }
 
   const { trigger: setActionPending, isMutating } = useSWRMutation(
-    `/api/v1/action/${actionId}/pending`,
+    actionId ? `/api/v1/action/${actionId}/pending` : null,
     fetcher,
   )
 

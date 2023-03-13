@@ -7,7 +7,8 @@ import { AvatarAddress } from "../../../../components/core/AvatarAddress"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
 import { Action } from "../../../../models/action/types"
-import { RequestFrob, RequestStatus } from "../../../../models/request/types"
+import { RequestFrob } from "../../../../models/request/types"
+import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
@@ -170,17 +171,12 @@ const RequestDetailsContent = ({
         </section>
       </div>
       <div className={`${activeActions ? "hidden" : "block"}`}>
-        {connectedUserIsSigner &&
-          !(
-            request.status === RequestStatus.EXECUTION_PENDING ||
-            request.status === RequestStatus.EXECUTED_APPROVAL ||
-            request.status === RequestStatus.EXECUTED_REJECTION
-          ) && (
-            <RequestDetailsActions
-              request={request}
-              mutateRequest={mutateRequest}
-            />
-          )}
+        {connectedUserIsSigner && !isExecuted(request) && (
+          <RequestDetailsActions
+            request={request}
+            mutateRequest={mutateRequest}
+          />
+        )}
       </div>
     </>
   )

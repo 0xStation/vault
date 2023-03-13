@@ -33,7 +33,6 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
       createdAt: new Date(),
       data,
     }
-    console.log(newCommentId)
     mutateRequest(
       createComment({
         comment: data.comment,

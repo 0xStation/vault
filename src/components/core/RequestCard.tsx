@@ -2,11 +2,8 @@ import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import Link from "next/link"
 import { timeSince } from "../../lib/utils"
-import {
-  RequestFrob,
-  RequestStatus,
-  TokenTransferVariant,
-} from "../../models/request/types"
+import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
+import { isExecuted } from "../../models/request/utils"
 import { Terminal } from "../../models/terminal/types"
 import { globalId } from "../../models/terminal/utils"
 import { valueToAmount } from "../../models/token/utils"
@@ -54,11 +51,7 @@ const RequestCard = ({
                 onChange={onCheckboxChange}
                 name={request.id}
                 isDisabled={disabled || false}
-                className={
-                  request.status === RequestStatus.EXECUTION_PENDING
-                    ? "invisible"
-                    : ""
-                }
+                className={isExecuted(request) ? "invisible" : ""}
               />
             )}
             <Avatar size="sm" address={request.data.createdBy} />

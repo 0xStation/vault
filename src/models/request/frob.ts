@@ -98,7 +98,6 @@ const toFrob = async (request: Request) => {
     ...sortedVotingActivities,
     commentActivities,
     addressesThatHaveNotSigned: addressesThatHaveNotSigned || [],
-    isExecuted: executingActivites.length > 0,
     quorum: quorum,
     stage,
     terminal,

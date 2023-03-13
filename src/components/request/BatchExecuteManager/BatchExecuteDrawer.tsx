@@ -19,7 +19,7 @@ import { useSetActionsPending } from "../../../models/action/hooks"
 import { Action } from "../../../models/action/types"
 import { Proof } from "../../../models/proof/types"
 import { useCompleteRequestsExecution } from "../../../models/request/hooks"
-import { RequestFrob } from "../../../models/request/types"
+import { RequestFrob, RequestStatus } from "../../../models/request/types"
 import { SignerQuorumRequestContent } from "../SignerQuorumRequestContent"
 import { TokenTransferRequestCard } from "../TokenTransferRequestCard"
 
@@ -110,6 +110,9 @@ const BatchExecuteWrapper = ({
           status: ActionStatus.PENDING,
           txHash: txData?.hash,
         },
+        updateRequestPayload: {
+          status: RequestStatus.EXECUTION_PENDING,
+        },
       })
     }
   }, [isSendTransactionSuccess])
@@ -129,7 +132,9 @@ const BatchExecuteWrapper = ({
           status: ActionStatus.SUCCESS,
         },
         updateRequestPayload: {
-          isExecuted: true,
+          status: approve
+            ? RequestStatus.EXECUTED_APPROVAL
+            : RequestStatus.EXECUTED_REJECTION,
         },
       })
       closeCurrentToast() // loading toast

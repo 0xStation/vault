@@ -74,7 +74,6 @@ export const getProfileRequests = async ({
     const approveActivities: Activity[] = []
     const rejectActivities: Activity[] = []
     const commentActivities: Activity[] = []
-    let isExecuted: boolean = false
 
     request.activities.forEach((activity) => {
       switch (activity.variant) {
@@ -82,7 +81,6 @@ export const getProfileRequests = async ({
           commentActivities.push(activity)
           break
         case ActivityVariant.EXECUTE_REQUEST:
-          isExecuted = true
           break
         case ActivityVariant.APPROVE_REQUEST:
           if (!signatureAccounted[activity.address]) {
@@ -135,7 +133,6 @@ export const getProfileRequests = async ({
     return {
       ...request,
       activities: request.activities.reverse(),
-      isExecuted,
       approveActivities,
       rejectActivities,
       commentActivities,
