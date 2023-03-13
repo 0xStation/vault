@@ -109,7 +109,6 @@ export const ExecuteWrapper = ({
           href: `${getNetworkExplorer(request.chainId)}/tx/${transactionHash}`,
           label: "View on Etherscan",
         },
-        useTimeout: false,
       })
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {

@@ -26,7 +26,7 @@ export const Hyperlink = ({ href, label, size = "sm" }: HyperlinkProps) => {
       >
         {label}
       </a>
-      <ArrowUpRight size="xs" />
+      <ArrowUpRight size={size} />
     </div>
   )
 }

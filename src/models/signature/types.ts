@@ -1,14 +1,11 @@
 import { Signature as PrismaSignature } from "@prisma/client"
-
-type SignatureMetadata = {
-  message: {
-    domain: any
-    types: any
-    values: any
-  }
-  signature: string
-}
+import { EIP712Message } from "lib/signatures/utils"
 
 export type Signature = PrismaSignature & {
   data: SignatureMetadata
+}
+
+export type SignatureMetadata = {
+  message: EIP712Message
+  signature: string
 }

@@ -123,6 +123,8 @@ const RequestListForm = ({
     }
   }
 
+  console.log(requestForDetails)
+
   const mutateSelectedRequests = ({
     selectedRequests,
     approve,

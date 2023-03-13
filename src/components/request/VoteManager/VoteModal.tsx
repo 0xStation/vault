@@ -1,6 +1,7 @@
 import { ActionVariant, ActivityVariant } from "@prisma/client"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
+import { hashAction } from "lib/signatures/action"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -9,9 +10,11 @@ import useSignature from "../../../hooks/useSignature"
 import { useToast } from "../../../hooks/useToast"
 import { actionsTree } from "../../../lib/signatures/tree"
 import { Activity } from "../../../models/activity/types"
+import { Proof } from "../../../models/proof/types"
 import { RequestFrob } from "../../../models/request/types"
 import { getStatus } from "../../../models/request/utils"
 import { useVote } from "../../../models/signature/hooks"
+import { Signature } from "../../../models/signature/types"
 import { TextareaWithLabel } from "../../form/TextareaWithLabel"
 
 const VoteModal = ({
@@ -44,7 +47,7 @@ const VoteModal = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const { message } = actionsTree(
+    const { message, proofs } = actionsTree(
       request?.actions.filter((action) =>
         approve
           ? action.variant === ActionVariant.APPROVAL
@@ -59,6 +62,39 @@ const VoteModal = ({
       setLoading(false)
       return
     }
+
+    // add optimistic proof for execution
+
+    const mockSignature = {
+      id: "optimistic-signature",
+      signerAddress: activeUser?.address as string,
+      data: {
+        message,
+        signature,
+      },
+    }
+
+    const updatedActions = request?.actions.map((action) => {
+      if (
+        (approve && action.variant === ActionVariant.APPROVAL) ||
+        (!approve && action.variant === ActionVariant.REJECTION)
+      ) {
+        const mockProof: Proof = {
+          id: "optimistic-proof",
+          actionId: action.id,
+          path: proofs[hashAction(action)],
+          signatureId: mockSignature.id,
+          signature: mockSignature as Signature,
+        }
+        return {
+          ...action,
+          proofs: [...action.proofs, mockProof],
+        }
+      }
+      return action
+    })
+
+    // add optimistic activity
 
     const voteActivity: Activity = {
       id: "optimistic-vote",
@@ -93,6 +129,7 @@ const VoteModal = ({
 
     const newRequest = {
       ...request!,
+      actions: updatedActions,
       activities: [...request?.activities!, voteActivity],
       approveActivities,
       rejectActivities,
