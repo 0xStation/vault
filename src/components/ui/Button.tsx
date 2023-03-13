@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority"
 import { ButtonHTMLAttributes } from "react"
 
-const button = cva("relative font-medium rounded", {
+export const buttonStyles = cva("relative font-medium rounded", {
   variants: {
     variant: {
       primary: "text-white border",
@@ -43,7 +43,7 @@ const button = cva("relative font-medium rounded", {
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
-    VariantProps<typeof button> {
+    VariantProps<typeof buttonStyles> {
   children: React.ReactNode
   loading?: boolean
 }
@@ -59,7 +59,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={button({
+      className={buttonStyles({
         variant,
         size,
         fullWidth,

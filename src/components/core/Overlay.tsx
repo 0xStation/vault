@@ -42,7 +42,9 @@ export const Overlay = ({
             >
               {/* TODO: max-w-[580px] made to shrink for mobile size on large screens, reverse later */}
               <div
-                className={`pointer-events-auto h-full w-full max-w-[580px] text-left`}
+                className={
+                  "pointer-events-auto h-full w-full max-w-[580px] text-left"
+                }
               >
                 {children}
               </div>

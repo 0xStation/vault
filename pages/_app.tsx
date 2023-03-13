@@ -1,16 +1,15 @@
-import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit"
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react"
+import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector"
 import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import NextHead from "next/head"
 import { useEffect, useState } from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { SWRConfig } from "swr"
-import { WagmiConfig } from "wagmi"
 import "../styles/globals.css"
 
 import AppLayout from "../src/components/core/AppLayout"
 import { useIsRouterLoading } from "../src/hooks/useIsRouterLoading"
-import { chains, client } from "../src/wagmi"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,26 +45,39 @@ const Spinner = () => {
   )
 }
 
+const cssOverrides = `
+.button--primary {
+    color: #0D0E11;
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .button--rounded {
+    border-radius: 0.25rem;
+  }
+`
+
 function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const [loading] = useIsRouterLoading()
   return (
     <SWRConfig value={{ provider: () => new Map() }}>
-      <WagmiConfig client={client}>
-        <RainbowKitProvider
-          appInfo={{
-            appName: "Station",
-          }}
-          chains={chains}
-          theme={lightTheme({
-            accentColor: "#AD72FF",
-            accentColorForeground: "white",
-            borderRadius: "small",
-            fontStack: "system",
-            overlayBlur: "small",
-          })}
-        >
+      <DynamicContextProvider
+        settings={{
+          environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "",
+          appName: "Station",
+          cssOverrides,
+          appLogoUrl:
+            "https://station-images.nyc3.digitaloceanspaces.com/terminal-logo.svg",
+          privacyPolicyUrl:
+            "https://www.notion.so/Privacy-Policy-b5ad456df88746c893f852f778f16104",
+          termsOfServiceUrl:
+            "https://www.notion.so/Terms-of-Service-f61ca68c69aa4c429f703cc69cde152e",
+        }}
+      >
+        <DynamicWagmiConnector>
           <NextHead>
             <title>Station</title>
           </NextHead>
@@ -79,8 +91,8 @@ function App({ Component, pageProps }: AppProps) {
                 </AppLayout>
               ))}
           </QueryClientProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
+        </DynamicWagmiConnector>
+      </DynamicContextProvider>
     </SWRConfig>
   )
 }

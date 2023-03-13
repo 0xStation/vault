@@ -1,3 +1,4 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
@@ -20,7 +21,7 @@ import { useResolveEnsAddress } from "../../../hooks/ens/useResolveEns"
 import { useStore } from "../../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import useWindowSize from "../../../hooks/useWindowSize"
-import { createTerminal } from "../../../models/terminal/mutations/createTerminal"
+import { useCreateTerminal } from "../../../models/terminal/hooks"
 import { globalId } from "../../../models/terminal/utils"
 import LoadingSpinner from "../../core/LoadingSpinner"
 import AddressInput from "../../form/AddressInput"
@@ -104,7 +105,9 @@ export const MembersView = ({
   const [terminalCreationError, setTerminalCreationError] = useState<string>("")
   const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
   const router = useRouter()
+  const { createTerminal } = useCreateTerminal()
 
+  const { authToken } = useDynamicContext()
   useWaitForTransaction({
     confirmations: 1,
     hash: txnHash,
@@ -122,6 +125,7 @@ export const MembersView = ({
       })
       const proxyAddress = decodedProxyEvent?.[0]
       try {
+        console.log("calling create Terminal")
         const terminal = await createTerminal({
           safeAddress: proxyAddress,
           name: formData.name,

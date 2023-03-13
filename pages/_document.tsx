@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Station</title>
         <link
           rel="preload"
           href="/fonts/favoritpro-bold-webfont.woff2"
