@@ -42,6 +42,7 @@ export default async function handler(
         terminalAddress: body?.address,
         chainId: body?.chainId,
         variant: RequestVariantType.SIGNER_QUORUM,
+        txnHash: undefined,
       },
     })
   } catch (err) {
