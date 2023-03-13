@@ -7,7 +7,7 @@ import { AvatarAddress } from "../../../../components/core/AvatarAddress"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
 import { Action } from "../../../../models/action/types"
-import { RequestFrob } from "../../../../models/request/types"
+import { RequestFrob, RequestStatus } from "../../../../models/request/types"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
@@ -118,8 +118,9 @@ const RequestDetailsContent = ({
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
-                activity={activity}
                 key={`activity-${idx}`}
+                activity={activity}
+                chainId={request.chainId}
                 mutateRequest={(
                   fn: Promise<any>,
                   update: {
@@ -169,12 +170,17 @@ const RequestDetailsContent = ({
         </section>
       </div>
       <div className={`${activeActions ? "hidden" : "block"}`}>
-        {connectedUserIsSigner && !request.isExecuted && (
-          <RequestDetailsActions
-            request={request}
-            mutateRequest={mutateRequest}
-          />
-        )}
+        {connectedUserIsSigner &&
+          !(
+            request.status === RequestStatus.EXECUTION_PENDING ||
+            request.status === RequestStatus.EXECUTED_APPROVAL ||
+            request.status === RequestStatus.EXECUTED_REJECTION
+          ) && (
+            <RequestDetailsActions
+              request={request}
+              mutateRequest={mutateRequest}
+            />
+          )}
       </div>
     </>
   )

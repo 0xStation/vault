@@ -102,6 +102,7 @@ const BatchExecuteWrapper = ({
         selectedRequests: requestsToApprove,
         approve,
         fn: setActionsPending({
+          address: activeUser?.address as string,
           actionIds: actionsToExecute.map((action) => action.id),
           txHash: txData?.hash as string,
         }),
@@ -122,7 +123,6 @@ const BatchExecuteWrapper = ({
         selectedRequests: requestsToApprove,
         approve,
         fn: completeRequestsExecution({
-          address: activeUser?.address,
           actionIds: actionsToExecute.map((action) => action.id),
         }),
         updateActionPayload: {

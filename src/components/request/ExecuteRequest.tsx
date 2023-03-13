@@ -9,6 +9,7 @@ import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
+import { getNetworkExplorer } from "lib/utils/networks"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -23,7 +24,7 @@ import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
-import { useSetActionPending } from "../../models/action/hooks"
+import { useSetActionsPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
@@ -60,7 +61,7 @@ export const ExecuteWrapper = ({
   const { completeRequestExecution } = useCompleteRequestExecution(
     router.query.requestId as string,
   )
-  const { setActionPending } = useSetActionPending(actionToExecute.id)
+  const { setActionsPending } = useSetActionsPending()
 
   const { config, error } = usePrepareSendTransaction({
     request: {
@@ -99,13 +100,14 @@ export const ExecuteWrapper = ({
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
+      const transactionHash = txData?.hash as string
       setLoading(false)
       setIsOpen(false)
       loadingToast({
-        message: "loading...",
+        message: "Loading...",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(request.chainId)}/tx/${transactionHash}`,
+          label: "View on Etherscan",
         },
         useTimeout: false,
       })
@@ -114,19 +116,42 @@ export const ExecuteWrapper = ({
           return {
             ...actionToExecute,
             status: ActionStatus.PENDING,
-            txHash: txData?.hash,
+            txHash: transactionHash,
           }
         }
         return action
       })
 
+      const executeActivity: Activity = {
+        id: "optimistic-vote",
+        requestId: router.query.requestId as string,
+        variant: ActivityVariant.EXECUTE_REQUEST,
+        address: activeUser?.address as string,
+        data: {
+          comment: formData.comment,
+          transactionHash,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
       mutateRequest({
-        fn: setActionPending,
+        fn: setActionsPending({
+          address: activeUser?.address as string,
+          txHash: transactionHash,
+          actionIds: [actionToExecute.id],
+        }),
         requestId: request.id,
         payload: {
           ...request,
-          isExecuted: true,
+          activities: [...request?.activities!, executeActivity],
           actions: updatedActions,
+          status: getStatus(
+            updatedActions,
+            request.approveActivities,
+            request.rejectActivities,
+            request.quorum,
+          ),
         },
       })
     }
@@ -146,25 +171,13 @@ export const ExecuteWrapper = ({
         return action
       })
 
-      const executeActivity: Activity = {
-        id: "optimistic-vote",
-        requestId: router.query.requestId as string,
-        variant: ActivityVariant.EXECUTE_REQUEST,
-        address: activeUser?.address as string,
-        data: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
       mutateRequest({
         fn: completeRequestExecution({
-          ...formData, // todo: clarify what formdata is here...
           actionId: actionToExecute.id,
         }),
         requestId: request.id,
         payload: {
           ...request,
-          activities: [...request?.activities!, executeActivity],
           actions: updatedActions,
           status: getStatus(
             updatedActions,
@@ -179,8 +192,8 @@ export const ExecuteWrapper = ({
       successToast({
         message: "Request successfully executed!",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(request.chainId)}/tx/${txData?.hash}`,
+          label: "View on Etherscan",
         },
         timeout: 5000,
       })

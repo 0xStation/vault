@@ -71,7 +71,10 @@ export const useCreateFakeSendTokensRequest = (
 }
 
 export const useCompleteRequestsExecution = () => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    { arg }: { arg: { actionIds: string[] } },
+  ) => {
     try {
       const response = await axios.post<any>(url, arg)
       if (response.status === 200) {
@@ -91,7 +94,10 @@ export const useCompleteRequestsExecution = () => {
 }
 
 export const useCompleteRequestExecution = (requestId: string) => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    { arg }: { arg: { actionId: string } },
+  ) => {
     try {
       const response = await axios.post<any>(url, arg)
       if (response.status === 200) {

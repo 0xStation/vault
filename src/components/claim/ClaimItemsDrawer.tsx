@@ -191,6 +191,7 @@ export const ClaimItemsDrawer = ({
       optimisticallyShow(
         updatedItems,
         setActionsPending({
+          address: activeUser?.address as string,
           actionIds: setActionIdsPending,
           txHash: transactionHash as string,
         }),
@@ -233,7 +234,6 @@ export const ClaimItemsDrawer = ({
       optimisticallyShow(
         updatedItems,
         completeRequestsExecution({
-          address: activeUser?.address,
           actionIds: setActionIdsPending,
         }),
       )
