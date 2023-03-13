@@ -9,7 +9,6 @@ export type RequestFrob = Request & {
   approveActivities: Activity[]
   rejectActivities: Activity[]
   commentActivities: Activity[]
-  isExecuted: boolean
   quorum: number
   terminal: Terminal
   signers: string[]

@@ -2,7 +2,7 @@ import useStore from "./stores/useStore"
 
 export const useToast = () => {
   const setToastState = useStore((state) => state.setToastState)
-  const defaultTimeout = 2000
+  const defaultTimeout = 3000
 
   const successToast = ({
     message,
@@ -58,7 +58,7 @@ export const useToast = () => {
     message,
     action,
     timeout = defaultTimeout,
-    useTimeout = false,
+    useTimeout = true, // prevent loading toast from sticking forever on useWaitForTransaction
   }: {
     message: string
     action?: { href: string; label: string }

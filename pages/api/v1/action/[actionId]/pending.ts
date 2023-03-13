@@ -1,4 +1,4 @@
-import { ActionStatus } from "@prisma/client"
+import { ActionStatus, ActivityVariant } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
 
@@ -18,9 +18,30 @@ export default async function handler(
     return res.end(JSON.stringify("No action id provided"))
   }
 
-  const { txHash } = body
+  const { txHash, comment, newActivityId, address } = body
 
-  await db.action.update({
+  const action = await db.action.findUnique({
+    where: {
+      id: query.actionId as string,
+    },
+  })
+
+  if (!action) {
+    res.statusCode = 404
+    return res.end(JSON.stringify("No action found"))
+  }
+
+  const newActivity = db.activity.create({
+    data: {
+      id: newActivityId,
+      address,
+      variant: ActivityVariant.EXECUTE_REQUEST,
+      requestId: action.requestId,
+      data: { comment, transactionHash: txHash },
+    },
+  })
+
+  const updateAction = db.action.update({
     where: {
       id: query.actionId as string,
     },
@@ -29,6 +50,8 @@ export default async function handler(
       txHash: txHash,
     },
   })
+
+  await db.$transaction([newActivity, updateAction])
 
   res.status(200).json({})
 }

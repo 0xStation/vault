@@ -1,6 +1,7 @@
-import { ActionStatus } from "@prisma/client"
+import { ActionStatus, ActivityVariant } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../prisma/client"
+import { Action } from "../../../../src/models/action/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +14,7 @@ export default async function handler(
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  const { txHash, actionIds } = body
+  const { address, txHash, actionIds } = body
 
   if (!actionIds || actionIds.length === 0) {
     res.statusCode = 500
@@ -22,7 +23,30 @@ export default async function handler(
     )
   }
 
-  await db.action.updateMany({
+  const actions = (await db.action.findMany({
+    where: {
+      id: {
+        in: actionIds,
+      },
+    },
+  })) as Action[]
+
+  const uniqueRequestIdsFromActions = Array.from(
+    new Set(actions.map((action) => action.requestId)),
+  )
+
+  const createActivities = uniqueRequestIdsFromActions.map((requestId) => {
+    return db.activity.create({
+      data: {
+        address,
+        variant: ActivityVariant.EXECUTE_REQUEST,
+        requestId,
+        data: { transactionHash: txHash },
+      },
+    })
+  })
+
+  const updateActions = db.action.updateMany({
     where: {
       id: {
         in: actionIds,
@@ -33,6 +57,8 @@ export default async function handler(
       txHash: txHash,
     },
   })
+
+  await db.$transaction([updateActions, ...createActivities])
 
   res.status(200).json({})
 }

@@ -8,6 +8,7 @@ import { SignerQuorumRequestContent } from "../../../../components/request/Signe
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
 import { Action } from "../../../../models/action/types"
 import { RequestFrob } from "../../../../models/request/types"
+import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
@@ -118,8 +119,9 @@ const RequestDetailsContent = ({
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
-                activity={activity}
                 key={`activity-${idx}`}
+                activity={activity}
+                chainId={request.chainId}
                 mutateRequest={(
                   fn: Promise<any>,
                   update: {
@@ -169,7 +171,7 @@ const RequestDetailsContent = ({
         </section>
       </div>
       <div className={`${activeActions ? "hidden" : "block"}`}>
-        {connectedUserIsSigner && !request.isExecuted && (
+        {connectedUserIsSigner && !isExecuted(request) && (
           <RequestDetailsActions
             request={request}
             mutateRequest={mutateRequest}

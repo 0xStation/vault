@@ -3,7 +3,12 @@ import useSWRMutation from "swr/mutation"
 import { Activity } from "./types"
 
 export const useCreateComment = (requestId: string) => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    {
+      arg,
+    }: { arg: { comment: string; address: string; newActivityId: string } },
+  ) => {
     try {
       const response = await axios.post<Activity>(url, arg)
       if (response.status === 200) {
@@ -23,7 +28,10 @@ export const useCreateComment = (requestId: string) => {
 }
 
 export const useEditComment = (activityId: string) => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    { arg }: { arg: { comment: string } },
+  ) => {
     try {
       const response = await axios.put<Activity>(url, arg)
       if (response.status === 200) {

@@ -178,6 +178,9 @@ const RequestListForm = ({
     requestId: string
     payload: any
   }) => {
+    // set state used by Request in slider
+    setRequestForDetails(payload)
+
     const updatedRequests = requests.map((request: RequestFrob) => {
       if (request.id === requestId) {
         return payload

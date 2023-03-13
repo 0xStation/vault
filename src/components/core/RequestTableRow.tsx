@@ -1,11 +1,8 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import { cn, timeSince } from "../../lib/utils"
-import {
-  RequestFrob,
-  RequestStatus,
-  TokenTransferVariant,
-} from "../../models/request/types"
+import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
+import { isExecuted } from "../../models/request/utils"
 import { valueToAmount } from "../../models/token/utils"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
@@ -58,11 +55,7 @@ const RequestTableRow = ({
             onChange={onCheckboxChange}
             name={request.id}
             isDisabled={disabled || false}
-            className={
-              request.status === RequestStatus.EXECUTION_PENDING
-                ? "invisible"
-                : ""
-            }
+            className={isExecuted(request) ? "invisible" : ""}
           />
         )}
       </td>
@@ -74,11 +67,8 @@ const RequestTableRow = ({
         <Avatar size="sm" address={request.data.createdBy} />
       </td>
       <td className="px-3">
-        <div className="w-80">
-          <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-            {request.data.note}
-            {/* Claiming COIN, ERC20, ERC721, Claiming COIN, ERC20, ERC721, */}
-          </div>
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+          {request.data.note}
         </div>
       </td>
       <td className="pr-3">

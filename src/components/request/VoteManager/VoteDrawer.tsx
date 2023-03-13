@@ -1,16 +1,21 @@
 import { ActionVariant, ActivityVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
+import { hashAction } from "lib/signatures/action"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { v4 as uuid } from "uuid"
 import useStore from "../../../hooks/stores/useStore"
 import useSignature from "../../../hooks/useSignature"
 import { useToast } from "../../../hooks/useToast"
 import { actionsTree } from "../../../lib/signatures/tree"
 import { Activity } from "../../../models/activity/types"
+import { Proof } from "../../../models/proof/types"
 import { RequestFrob } from "../../../models/request/types"
+import { getStatus } from "../../../models/request/utils"
 import { useVote } from "../../../models/signature/hooks"
+import { Signature } from "../../../models/signature/types"
 import { TextareaWithLabel } from "../../form/TextareaWithLabel"
 
 const VoteDrawer = ({
@@ -43,23 +48,63 @@ const VoteDrawer = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const { message } = actionsTree(
+    const { message, proofs } = actionsTree(
       request?.actions.filter((action) =>
         approve
           ? action.variant === ActionVariant.APPROVAL
           : action.variant === ActionVariant.REJECTION,
       ),
     )
-    let signature = await signMessage(message)
 
+    let signature
+    try {
+      signature = await signMessage(message)
+    } catch {
+      setLoading(false)
+      return
+    }
+
+    // add optimistic proof object to use in execution
+
+    const mockSignature = {
+      id: "optimistic-signature",
+      signerAddress: activeUser?.address as string,
+      data: {
+        message,
+        signature,
+      },
+    }
+
+    const updatedActions = request?.actions.map((action) => {
+      if (
+        (approve && action.variant === ActionVariant.APPROVAL) ||
+        (!approve && action.variant === ActionVariant.REJECTION)
+      ) {
+        const mockProof: Proof = {
+          id: "optimistic-proof",
+          actionId: action.id,
+          path: proofs[hashAction(action)],
+          signatureId: mockSignature.id,
+          signature: mockSignature as Signature,
+        }
+        return {
+          ...action,
+          proofs: [...action.proofs, mockProof],
+        }
+      }
+      return action
+    })
+
+    // add optimistic vote activity
+    const newActivityId = uuid()
     const voteActivity: Activity = {
-      id: "optimistic-vote",
+      id: newActivityId,
       requestId: router.query.requestId as string,
       variant: approve
         ? ActivityVariant.APPROVE_REQUEST
         : ActivityVariant.REJECT_REQUEST,
       address: activeUser?.address as string,
-      data,
+      data: { comment: data.comment },
       createdAt: new Date(),
       updatedAt: new Date(),
     }
@@ -85,20 +130,28 @@ const VoteDrawer = ({
 
     const newRequest = {
       ...request!,
+      actions: updatedActions,
       activities: [...request?.activities!, voteActivity],
       approveActivities,
       rejectActivities,
       addressesThatHaveNotSigned: request!.addressesThatHaveNotSigned.filter(
         (address) => address !== activeUser?.address,
       ),
+      status: getStatus(
+        request!.actions,
+        approveActivities,
+        rejectActivities,
+        request!.quorum,
+      ),
     }
 
     mutateRequest({
       fn: vote({
         signature,
-        address: activeUser?.address,
+        address: activeUser?.address as string,
         approve,
         comment: data.comment,
+        newActivityId,
       }),
       requestId: request?.id,
       payload: newRequest,

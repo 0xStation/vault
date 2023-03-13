@@ -16,6 +16,7 @@ import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import { useRequests } from "../../src/hooks/useRequests"
+import { isExecuted } from "../../src/models/request/utils"
 import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
 import { Terminal } from "../../src/models/terminal/types"
 import { convertGlobalId } from "../../src/models/terminal/utils"
@@ -90,10 +91,10 @@ const MobileTerminalIndexPage = () => {
 
   const requestsNeedingAttention = requests?.filter(
     (r) =>
-      !r.isExecuted &&
+      !isExecuted(r) &&
       (!(
-        r.approveActivities.some((a) => a.address === userAddress) ||
-        r.rejectActivities.some((a) => a.address === userAddress)
+        r.approveActivities.some((a) => a.address === address) ||
+        r.rejectActivities.some((a) => a.address === address)
       ) ||
         r.approveActivities.length >= r.quorum ||
         r.rejectActivities.length >= r.quorum),

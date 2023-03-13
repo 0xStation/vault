@@ -8,6 +8,7 @@ import CopyToClipboard from "../../components/core/CopyToClipboard"
 import { StationLogo } from "../../components/icons"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
+import { isExecuted } from "../../models/request/utils"
 import { Terminal } from "../../models/terminal/types"
 
 type TerminalNavOption = {
@@ -78,7 +79,7 @@ const DesktopTerminalLayout = ({
 
   const requestsNeedingAttention = requests?.filter(
     (r) =>
-      !r.isExecuted &&
+      !isExecuted(r) &&
       (!(
         r.approveActivities.some((a) => a.address === address) ||
         r.rejectActivities.some((a) => a.address === address)

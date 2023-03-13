@@ -1,5 +1,6 @@
 import { useAccount } from "wagmi"
 import { useRequests } from "../../hooks/useRequests"
+import { isExecuted } from "../../models/request/utils"
 import RequestListForm from "../request/RequestListForm"
 import LoadingCardList from "./LoadingCardList"
 import { TerminalRequestStatusFilter } from "./TabBars/TerminalRequestStatusFilterBar"
@@ -26,7 +27,7 @@ const RequestListByFilterAndTab = ({
   if (filter === TerminalRequestStatusFilter.NEEDS_ACTION) {
     requests = requests.filter(
       (r) =>
-        !r.isExecuted &&
+        !isExecuted(r) &&
         (!(
           r.approveActivities.some((a) => a.address === address) ||
           r.rejectActivities.some((a) => a.address === address)
@@ -39,7 +40,7 @@ const RequestListByFilterAndTab = ({
   if (filter === TerminalRequestStatusFilter.AWAITING_OTHERS) {
     requests = requests.filter(
       (r) =>
-        !r.isExecuted &&
+        !isExecuted(r) &&
         (r.approveActivities.some((a) => a.address === address) ||
           r.rejectActivities.some((a) => a.address === address)) &&
         r.approveActivities.length < r.quorum &&
@@ -48,7 +49,7 @@ const RequestListByFilterAndTab = ({
   }
 
   if (filter === TerminalRequestStatusFilter.CLOSED) {
-    requests = requests.filter((r) => r.isExecuted)
+    requests = requests.filter((r) => isExecuted(r))
   }
 
   return <RequestListForm requests={requests} mutate={mutate} />

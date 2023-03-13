@@ -9,9 +9,11 @@ import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
+import { getNetworkExplorer } from "lib/utils/networks"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { v4 as uuid } from "uuid"
 import {
   usePrepareSendTransaction,
   useSendTransaction,
@@ -28,6 +30,7 @@ import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
+import { getStatus } from "../../models/request/utils"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
 export const ExecuteWrapper = ({
@@ -98,34 +101,59 @@ export const ExecuteWrapper = ({
 
   useEffect(() => {
     if (isSendTransactionSuccess) {
+      const transactionHash = txData?.hash as string
       setLoading(false)
       setIsOpen(false)
       loadingToast({
-        message: "loading...",
+        message: "Loading...",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(request.chainId)}/tx/${transactionHash}`,
+          label: "View on Etherscan",
         },
-        useTimeout: false,
       })
       const updatedActions = request.actions.map((action: Action) => {
         if (action.id === actionToExecute.id) {
           return {
             ...actionToExecute,
             status: ActionStatus.PENDING,
-            txHash: txData?.hash,
+            txHash: transactionHash,
           }
         }
         return action
       })
 
+      const newActivityId = uuid()
+      const executeActivity: Activity = {
+        id: newActivityId,
+        requestId: router.query.requestId as string,
+        variant: ActivityVariant.EXECUTE_REQUEST,
+        address: activeUser?.address as string,
+        data: {
+          comment: formData.comment,
+          transactionHash,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
       mutateRequest({
-        fn: setActionPending,
+        fn: setActionPending({
+          address: activeUser?.address as string,
+          txHash: transactionHash,
+          comment: formData.comment,
+          newActivityId,
+        }),
         requestId: request.id,
         payload: {
           ...request,
-          isExecuted: true,
+          activities: [...request?.activities!, executeActivity],
           actions: updatedActions,
+          status: getStatus(
+            updatedActions,
+            request.approveActivities,
+            request.rejectActivities,
+            request.quorum,
+          ),
         },
       })
     }
@@ -145,26 +173,20 @@ export const ExecuteWrapper = ({
         return action
       })
 
-      const executeActivity: Activity = {
-        id: "optimistic-vote",
-        requestId: router.query.requestId as string,
-        variant: ActivityVariant.EXECUTE_REQUEST,
-        address: activeUser?.address as string,
-        data: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
       mutateRequest({
         fn: completeRequestExecution({
-          ...formData, // todo: clarify what formdata is here...
           actionId: actionToExecute.id,
         }),
         requestId: request.id,
         payload: {
           ...request,
-          activities: [...request?.activities!, executeActivity],
           actions: updatedActions,
+          status: getStatus(
+            updatedActions,
+            request.approveActivities,
+            request.rejectActivities,
+            request.quorum,
+          ),
         },
       })
 
@@ -172,8 +194,8 @@ export const ExecuteWrapper = ({
       successToast({
         message: "Request successfully executed!",
         action: {
-          href: `https://www.etherscan.io/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(request.chainId)}/tx/${txData?.hash}`,
+          label: "View on Etherscan",
         },
         timeout: 5000,
       })

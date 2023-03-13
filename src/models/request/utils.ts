@@ -1,7 +1,7 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import { Action } from "../action/types"
 import { Activity } from "../activity/types"
-import { RequestStatus } from "./types"
+import { RequestFrob, RequestStatus } from "./types"
 
 export const getStatus = (
   actions: Action[],
@@ -39,4 +39,12 @@ export const getStatus = (
   } else {
     return RequestStatus.QUORUM_NOT_MET
   }
+}
+
+export const isExecuted = (request: RequestFrob) => {
+  return (
+    request.status === RequestStatus.EXECUTION_PENDING ||
+    request.status === RequestStatus.EXECUTED_APPROVAL ||
+    request.status === RequestStatus.EXECUTED_REJECTION
+  )
 }
