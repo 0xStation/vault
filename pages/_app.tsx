@@ -1,4 +1,7 @@
-import { DynamicContextProvider } from "@dynamic-labs/sdk-react"
+import {
+  DynamicContextProvider,
+  FilterAndSortWallets,
+} from "@dynamic-labs/sdk-react"
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector"
 import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
@@ -69,6 +72,12 @@ function App({ Component, pageProps }: AppProps) {
           environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "",
           appName: "Station",
           cssOverrides,
+          walletsFilter: FilterAndSortWallets([
+            "metamask",
+            "rainbow",
+            "coinbase",
+            "walletconnect",
+          ]),
         }}
       >
         <DynamicWagmiConnector>
