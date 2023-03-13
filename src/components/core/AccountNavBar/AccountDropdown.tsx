@@ -36,13 +36,8 @@ export const AccountNavBar = () => {
   }
   const { address } = useAccount()
   const setActiveUser = useStore((state) => state.setActiveUser)
-  const {
-    handleLogOut,
-    setShowDynamicUserProfile,
-    authToken,
-    isAuthenticated,
-    user,
-  } = useDynamicContext()
+  const { handleLogOut, setShowDynamicUserProfile, isAuthenticated } =
+    useDynamicContext()
 
   useEffect(() => {
     if (router.query.createTerminalSliderOpen) {
