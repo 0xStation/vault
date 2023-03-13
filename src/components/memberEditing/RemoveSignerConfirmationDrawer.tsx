@@ -45,7 +45,7 @@ export const RemoveSignerConfirmationDrawer = ({
           <h2 className="font-bold">{title}</h2>
           <p className="mt-3">{subtitle}</p>
         </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-5 w-full px-5 text-center">
+        <div className="absolute bottom-12 right-0 left-0 mx-auto mb-5 w-full px-5 text-center">
           <Button
             type="button"
             fullWidth={true}

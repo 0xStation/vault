@@ -91,7 +91,7 @@ const MembersPageContent = () => {
 
                 {activeRequest?.length ? (
                   <p className="flex items-center text-xs text-slate-500">
-                    Pending entry · {"  "}
+                    Pending entry ·&nbsp;
                     <a
                       className="text-xs text-black underline decoration-dotted"
                       href={`/${chainNameAndSafeAddress}/requests/${activeRequest[0]}`}
@@ -103,6 +103,39 @@ const MembersPageContent = () => {
               </div>
             )
           })}
+          {/* Pending new members */}
+          {data?.modifiedChangesToRequests?.modifiedAddresses &&
+            Object.entries(
+              data?.modifiedChangesToRequests?.modifiedAddresses,
+            ).map(([key, requestIds]) => {
+              return !safeMetadata?.signers?.includes(key) ? (
+                <div key={key} className="mb-2 flex flex-row justify-between">
+                  <AvatarAddress
+                    size="sm"
+                    address={key}
+                    className={`${
+                      (requestIds as string[])?.length
+                        ? "opacity-70"
+                        : "opacity-100"
+                    }`}
+                  />
+
+                  {(requestIds as string[])?.length ? (
+                    <p className="flex items-center text-xs text-slate-500">
+                      Pending entry ·&nbsp;
+                      <a
+                        className="text-xs text-black underline decoration-dotted"
+                        href={`/${chainNameAndSafeAddress}/requests/${
+                          (requestIds as string[])?.[0]
+                        }`}
+                      >
+                        View request
+                      </a>
+                    </p>
+                  ) : null}
+                </div>
+              ) : null
+            })}
         </div>
         <div className="mt-4">
           <p className="text-sm font-bold">Quorum</p>
@@ -112,7 +145,7 @@ const MembersPageContent = () => {
             </p>
             {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
               <p className="text-xs text-slate-500">
-                Pending update · {"  "}
+                Pending update ·&nbsp;
                 <a
                   className="text-xs text-black underline decoration-dotted"
                   href={`/${chainNameAndSafeAddress}/requests/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}

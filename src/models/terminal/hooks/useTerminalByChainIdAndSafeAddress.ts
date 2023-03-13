@@ -1,3 +1,4 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import axios from "axios"
 import useSWR from "swr"
 import { Terminal } from "../types"
@@ -6,9 +7,14 @@ export const useTerminalByChainIdAndSafeAddress = (
   address: string,
   chainId: number,
 ) => {
+  const { authToken } = useDynamicContext()
   const fetcher = async (url: string) => {
     try {
-      const response = await axios.get<Terminal>(url)
+      const response = await axios.get<Terminal>(url, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
       if (response.status === 200) {
         return response.data
       }
