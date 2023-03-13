@@ -1,4 +1,3 @@
-import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
@@ -107,7 +106,6 @@ export const MembersView = ({
   const router = useRouter()
   const { createTerminal } = useCreateTerminal()
 
-  const { authToken } = useDynamicContext()
   useWaitForTransaction({
     confirmations: 1,
     hash: txnHash,
@@ -125,7 +123,6 @@ export const MembersView = ({
       })
       const proxyAddress = decodedProxyEvent?.[0]
       try {
-        console.log("calling create Terminal")
         const terminal = await createTerminal({
           safeAddress: proxyAddress,
           name: formData.name,

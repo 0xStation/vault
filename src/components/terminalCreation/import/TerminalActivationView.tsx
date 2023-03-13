@@ -36,6 +36,7 @@ const getTxnStatus = ({
     ENABLE_MODULE_STATUS
   let enableModuleStatus = CREATE_TRANSACTION
 
+  // check if `undefined` rather than falsy check since nonces can be 0
   if (terminalNonce === undefined || executionNonce === undefined) {
     return enableModuleStatus
   }

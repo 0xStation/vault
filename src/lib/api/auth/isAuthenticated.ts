@@ -16,7 +16,7 @@ export const isAuthenticated = async (
     })
     return decoded
   } catch (err: any) {
-    // If user is not authenticated, this function will throw.
+    // If user is not authenticated, `jwt.verify` will throw.
     console.warn(`JWT failed to verify with error ${err}.`)
     return res.status(401).json({ message: `Invalid Token: ${err?.message}` })
   }

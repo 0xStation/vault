@@ -69,12 +69,6 @@ function App({ Component, pageProps }: AppProps) {
           environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "",
           appName: "Station",
           cssOverrides,
-          appLogoUrl:
-            "https://station-images.nyc3.digitaloceanspaces.com/terminal-logo.svg",
-          privacyPolicyUrl:
-            "https://www.notion.so/Privacy-Policy-b5ad456df88746c893f852f778f16104",
-          termsOfServiceUrl:
-            "https://www.notion.so/Terms-of-Service-f61ca68c69aa4c429f703cc69cde152e",
         }}
       >
         <DynamicWagmiConnector>

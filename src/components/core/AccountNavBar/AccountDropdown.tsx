@@ -34,17 +34,15 @@ export const AccountNavBar = () => {
       removeQueryParam(router, "createTerminalSliderOpen")
     }
   }
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const setActiveUser = useStore((state) => state.setActiveUser)
   const {
     handleLogOut,
     setShowDynamicUserProfile,
-    authToken: getAuthToken,
+    authToken,
     isAuthenticated,
     user,
   } = useDynamicContext()
-
-  console.log("user", user)
 
   useEffect(() => {
     if (router.query.createTerminalSliderOpen) {
@@ -144,7 +142,7 @@ export const AccountNavBar = () => {
                 disabled: false,
               })}
             >
-              Connect wallet{" "}
+              Connect wallet
             </DynamicConnectButton>
           </div>
         )}
