@@ -178,6 +178,9 @@ const RequestListForm = ({
     requestId: string
     payload: any
   }) => {
+    // set state used by Request in slider
+    setRequestForDetails(payload)
+
     const updatedRequests = requests.map((request: RequestFrob) => {
       if (request.id === requestId) {
         return payload
@@ -221,33 +224,15 @@ const RequestListForm = ({
       )}
 
       <form>
-        <ul>
-          {requests.map((request, idx) => {
-            return (
-              <Breakpoint key={`request-${idx}`}>
-                {(isMobile) => {
-                  if (isMobile)
-                    return (
-                      <RequestCard
-                        onCheckboxChange={onCheckboxChange}
-                        disabled={
-                          (batchState.batchVariant &&
-                            request.stage !== batchState.batchVariant) ||
-                          (request.stage === "EXECUTE" &&
-                            listIntersection(
-                              request.validActions as (
-                                | "EXECUTE-REJECT"
-                                | "EXECUTE-APPROVE"
-                              )[],
-                              batchState.validActions,
-                            ).length === 0)
-                        }
-                        request={request}
-                        showTerminal={isProfile ? request.terminal : undefined}
-                      />
-                    )
+        <Breakpoint>
+          {(isMobile: boolean) =>
+            isMobile ? (
+              <ul>
+                {requests.map((request, idx) => {
                   return (
-                    <RequestTableRow
+                    <RequestCard
+                      key={`request-${idx}`}
+                      onCheckboxChange={onCheckboxChange}
                       disabled={
                         (batchState.batchVariant &&
                           request.stage !== batchState.batchVariant) ||
@@ -261,19 +246,45 @@ const RequestListForm = ({
                           ).length === 0)
                       }
                       request={request}
-                      triggerDetails={(request) => {
-                        addQueryParam(router, "requestId", request.id)
-                        setRequestForDetails(request)
-                        setDetailsSliderOpen(true)
-                      }}
-                      onCheckboxChange={onCheckboxChange}
+                      showTerminal={isProfile ? request.terminal : undefined}
                     />
                   )
-                }}
-              </Breakpoint>
+                })}
+              </ul>
+            ) : (
+              <table className="w-full">
+                <tbody>
+                  {requests.map((request, idx) => {
+                    return (
+                      <RequestTableRow
+                        key={`request-${idx}`}
+                        disabled={
+                          (batchState.batchVariant &&
+                            request.stage !== batchState.batchVariant) ||
+                          (request.stage === "EXECUTE" &&
+                            listIntersection(
+                              request.validActions as (
+                                | "EXECUTE-REJECT"
+                                | "EXECUTE-APPROVE"
+                              )[],
+                              batchState.validActions,
+                            ).length === 0)
+                        }
+                        request={request}
+                        triggerDetails={(request) => {
+                          addQueryParam(router, "requestId", request.id)
+                          setRequestForDetails(request)
+                          setDetailsSliderOpen(true)
+                        }}
+                        onCheckboxChange={onCheckboxChange}
+                      />
+                    )
+                  })}
+                </tbody>
+              </table>
             )
-          })}
-        </ul>
+          }
+        </Breakpoint>
       </form>
       <BatchVoteManager
         requestsToApprove={batchState.selectedRequests}

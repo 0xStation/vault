@@ -6,7 +6,7 @@ import useSWRMutation from "swr/mutation"
 export const useSetActionsPending = () => {
   const fetcher = async (
     url: string,
-    { arg }: { arg: { txHash: string; actionIds: string[] } },
+    { arg }: { arg: { address: string; txHash: string; actionIds: string[] } },
   ) => {
     try {
       const response = await axios.post<any>(url, arg)
@@ -27,7 +27,19 @@ export const useSetActionsPending = () => {
 }
 
 export const useSetActionPending = (actionId: string) => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    {
+      arg,
+    }: {
+      arg: {
+        address: string
+        txHash: string
+        comment: string
+        newActivityId: string
+      }
+    },
+  ) => {
     try {
       const response = await axios.post<any>(url, arg)
       if (response.status === 200) {

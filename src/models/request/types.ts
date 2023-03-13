@@ -9,13 +9,23 @@ export type RequestFrob = Request & {
   approveActivities: Activity[]
   rejectActivities: Activity[]
   commentActivities: Activity[]
-  isExecuted: boolean
   quorum: number
   terminal: Terminal
   signers: string[]
+  status: RequestStatus
   stage: "VOTE" | "EXECUTE"
   validActions: ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
   addressesThatHaveNotSigned: string[]
+}
+
+export enum RequestStatus {
+  QUORUM_NOT_MET = "QUORUM_NOT_MET",
+  QUORUM_APPROVAL = "QUORUM_APPROVAL",
+  QUORUM_REJECTION = "QUORUM_REJECTION",
+  QUORUM_BOTH = "QUORUM_BOTH",
+  EXECUTION_PENDING = "EXECUTION_PENDING",
+  EXECUTED_APPROVAL = "EXECUTED_APPROVAL",
+  EXECUTED_REJECTION = "EXECUTED_REJECTION",
 }
 
 export type Request = PrismaRequest & {

@@ -22,7 +22,20 @@ export const useBatchVote = () => {
 }
 
 export const useVote = (requestId: string) => {
-  const fetcher = async (url: string, { arg }: { arg: any }) => {
+  const fetcher = async (
+    url: string,
+    {
+      arg,
+    }: {
+      arg: {
+        signature: string
+        address: string
+        approve: boolean
+        comment: string
+        newActivityId: string
+      }
+    },
+  ) => {
     try {
       const response = await axios.post<any>(url, arg)
       if (response.status === 200) {

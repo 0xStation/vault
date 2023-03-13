@@ -1,4 +1,4 @@
-import { ActionStatus, ActivityVariant } from "@prisma/client"
+import { ActionStatus } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
 
@@ -18,7 +18,7 @@ export default async function handler(
     return res.end(JSON.stringify("No request id provided"))
   }
 
-  const { address, comment, actionId } = body
+  const { actionId } = body
 
   await db.action.update({
     where: {
@@ -26,17 +26,6 @@ export default async function handler(
     },
     data: {
       status: ActionStatus.SUCCESS,
-    },
-  })
-
-  const executeActivity = await db.activity.create({
-    data: {
-      address,
-      variant: ActivityVariant.EXECUTE_REQUEST,
-      requestId: query.requestId as string,
-      data: {
-        comment,
-      },
     },
   })
 

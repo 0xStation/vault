@@ -19,7 +19,7 @@ import { useSetActionsPending } from "../../../models/action/hooks"
 import { Action } from "../../../models/action/types"
 import { Proof } from "../../../models/proof/types"
 import { useCompleteRequestsExecution } from "../../../models/request/hooks"
-import { RequestFrob } from "../../../models/request/types"
+import { RequestFrob, RequestStatus } from "../../../models/request/types"
 import { SignerQuorumRequestContent } from "../SignerQuorumRequestContent"
 import { TokenTransferRequestCard } from "../TokenTransferRequestCard"
 
@@ -102,12 +102,16 @@ const BatchExecuteWrapper = ({
         selectedRequests: requestsToApprove,
         approve,
         fn: setActionsPending({
+          address: activeUser?.address as string,
           actionIds: actionsToExecute.map((action) => action.id),
           txHash: txData?.hash as string,
         }),
         updateActionPayload: {
           status: ActionStatus.PENDING,
           txHash: txData?.hash,
+        },
+        updateRequestPayload: {
+          status: RequestStatus.EXECUTION_PENDING,
         },
       })
     }
@@ -122,14 +126,15 @@ const BatchExecuteWrapper = ({
         selectedRequests: requestsToApprove,
         approve,
         fn: completeRequestsExecution({
-          address: activeUser?.address,
           actionIds: actionsToExecute.map((action) => action.id),
         }),
         updateActionPayload: {
           status: ActionStatus.SUCCESS,
         },
         updateRequestPayload: {
-          isExecuted: true,
+          status: approve
+            ? RequestStatus.EXECUTED_APPROVAL
+            : RequestStatus.EXECUTED_REJECTION,
         },
       })
       closeCurrentToast() // loading toast

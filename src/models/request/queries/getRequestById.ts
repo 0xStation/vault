@@ -4,6 +4,7 @@ import db from "../../../../prisma/client"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
+import { getStatus } from "../utils"
 
 // FROB for fetching requests for the purpose of a profile page
 export const getRequestById = async (
@@ -47,6 +48,7 @@ export const getRequestById = async (
     request.terminal.chainId,
     request.terminal.safeAddress,
   )
+  const { quorum, signers } = safeDetails
 
   // 3. construct FROB
 
@@ -54,7 +56,6 @@ export const getRequestById = async (
   const approveActivities: Activity[] = []
   const rejectActivities: Activity[] = []
   const commentActivities: Activity[] = []
-  let isExecuted: boolean = false
 
   request.activities.forEach((activity) => {
     switch (activity.variant) {
@@ -62,7 +63,6 @@ export const getRequestById = async (
         commentActivities.push(activity)
         break
       case ActivityVariant.EXECUTE_REQUEST:
-        isExecuted = true
         break
       case ActivityVariant.APPROVE_REQUEST:
         if (!signatureAccounted[activity.address]) {
@@ -85,7 +85,12 @@ export const getRequestById = async (
     }
   })
 
-  const { quorum, signers } = safeDetails
+  const status = getStatus(
+    request.actions,
+    approveActivities,
+    rejectActivities,
+    quorum,
+  )
 
   const stage = (
     approveActivities.length >= safeDetails.quorum ||
@@ -105,12 +110,12 @@ export const getRequestById = async (
   return {
     ...request,
     activities: request.activities.reverse(),
-    isExecuted,
     approveActivities,
     rejectActivities,
     commentActivities,
     quorum,
     signers,
+    status,
     stage,
     validActions,
     addressesThatHaveNotSigned: signers.filter(

@@ -1,13 +1,10 @@
-import {
-  ActionStatus,
-  ActivityVariant,
-  RequestVariantType,
-} from "@prisma/client"
+import { ActivityVariant, RequestVariantType } from "@prisma/client"
 import db from "db"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
+import { getStatus } from "../utils"
 
 // FROB for fetching requests for the purpose of a profile page
 export const getTerminalRequests = async ({
@@ -82,6 +79,7 @@ export const getTerminalRequests = async ({
   // 2. fetch safe details for each unique terminal included in a request
 
   const safeDetails = await getSafeDetails(safeChainId, safeAddress)
+  const { quorum, signers } = safeDetails
 
   // 3. construct FROBs
 
@@ -90,12 +88,6 @@ export const getTerminalRequests = async ({
     const approveActivities: Activity[] = []
     const rejectActivities: Activity[] = []
     const commentActivities: Activity[] = []
-    const isExecuted = request.actions.some(
-      (action) =>
-        action.status === ActionStatus.SUCCESS ||
-        action.status === ActionStatus.FAILURE ||
-        action.status === ActionStatus.PENDING,
-    )
 
     request.activities.forEach((activity) => {
       switch (activity.variant) {
@@ -125,18 +117,24 @@ export const getTerminalRequests = async ({
       }
     })
 
+    const status = getStatus(
+      request.actions,
+      approveActivities,
+      rejectActivities,
+      quorum,
+    )
+
     const stage = (
-      approveActivities.length >= safeDetails.quorum ||
-      rejectActivities.length >= safeDetails.quorum
+      approveActivities.length >= quorum || rejectActivities.length >= quorum
         ? "EXECUTE"
         : "VOTE"
     ) as "EXECUTE" | "VOTE"
 
     let validActions = [] as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
-    if (approveActivities.length >= safeDetails.quorum) {
+    if (approveActivities.length >= quorum) {
       validActions.push("EXECUTE-APPROVE")
     }
-    if (rejectActivities.length >= safeDetails.quorum) {
+    if (rejectActivities.length >= quorum) {
       validActions.push("EXECUTE-REJECT")
     }
 
@@ -144,15 +142,15 @@ export const getTerminalRequests = async ({
       ...request,
       activities: request.activities.reverse(),
       terminal,
-      isExecuted,
+      status,
       stage,
       validActions,
       approveActivities,
       rejectActivities,
       commentActivities,
-      quorum: safeDetails.quorum,
-      signers: safeDetails.signers,
-      addressesThatHaveNotSigned: safeDetails.signers.filter(
+      quorum: quorum,
+      signers: signers,
+      addressesThatHaveNotSigned: signers.filter(
         (address: string) => !signatureAccounted[address],
       ),
     }

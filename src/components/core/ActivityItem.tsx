@@ -5,6 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
+import { Hyperlink } from "@ui/Hyperlink"
+import { getNetworkExplorer } from "lib/utils/networks"
 import { useState } from "react"
 import useStore from "../../hooks/stores/useStore"
 import { Activity } from "../../models/activity/types"
@@ -15,9 +17,11 @@ import { AvatarAddress } from "./AvatarAddress"
 const ActivityItem = ({
   activity,
   mutateRequest,
+  chainId,
 }: {
   activity: Activity
   mutateRequest: any
+  chainId: number
 }) => {
   const activeUser = useStore((state) => state.activeUser)
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -29,6 +33,15 @@ const ActivityItem = ({
         <p className="text-xs text-slate-500">
           {variantMessage(activity.variant, activity.createdAt)}
         </p>
+        {activity.data.transactionHash && (
+          <Hyperlink
+            label="View on Etherscan"
+            href={`${getNetworkExplorer(chainId)}/tx/${
+              activity.data.transactionHash
+            }`}
+            size="xs"
+          />
+        )}
       </div>
       {activity.data.comment && (
         <div className="mt-1 ml-6 rounded-md bg-slate-50 px-3 py-2">

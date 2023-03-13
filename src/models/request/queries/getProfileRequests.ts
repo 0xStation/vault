@@ -4,6 +4,7 @@ import db from "../../../../prisma/client"
 import { Activity } from "../../activity/types"
 import { Terminal } from "../../terminal/types"
 import { Request, RequestFrob } from "../types"
+import { getStatus } from "../utils"
 
 const safeKey = (chainId: number, address: string) => `${chainId}-${address}`
 
@@ -73,7 +74,6 @@ export const getProfileRequests = async ({
     const approveActivities: Activity[] = []
     const rejectActivities: Activity[] = []
     const commentActivities: Activity[] = []
-    let isExecuted: boolean = false
 
     request.activities.forEach((activity) => {
       switch (activity.variant) {
@@ -81,7 +81,6 @@ export const getProfileRequests = async ({
           commentActivities.push(activity)
           break
         case ActivityVariant.EXECUTE_REQUEST:
-          isExecuted = true
           break
         case ActivityVariant.APPROVE_REQUEST:
           if (!signatureAccounted[activity.address]) {
@@ -109,6 +108,13 @@ export const getProfileRequests = async ({
         safeKey(request.terminal.chainId, request.terminal.safeAddress)
       ]
 
+    const status = getStatus(
+      request.actions,
+      approveActivities,
+      rejectActivities,
+      quorum,
+    )
+
     const stage = (
       approveActivities.length >= safeDetails.quorum ||
       rejectActivities.length >= safeDetails.quorum
@@ -127,14 +133,14 @@ export const getProfileRequests = async ({
     return {
       ...request,
       activities: request.activities.reverse(),
-      isExecuted,
       approveActivities,
       rejectActivities,
       commentActivities,
       quorum,
+      signers,
+      status,
       stage,
       validActions,
-      signers,
       addressesThatHaveNotSigned: signers.filter(
         (address: string) => !signatureAccounted[address],
       ),

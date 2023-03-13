@@ -1,8 +1,8 @@
 import { ChevronRight } from "@icons"
-import { ActionStatus } from "@prisma/client"
 import { addressesAreEqual } from "lib/utils"
 import { useAccount } from "wagmi"
 import { RequestFrob } from "../../models/request/types"
+import { isExecuted } from "../../models/request/utils"
 
 const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
   const { address } = useAccount()
@@ -27,13 +27,7 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
     if (!hasVoted) prompt += " or cast your vote"
   }
 
-  const actionExecuted = request.actions.some(
-    (action) =>
-      action.status === ActionStatus.SUCCESS ||
-      action.status === ActionStatus.FAILURE,
-  )
-
-  return !actionExecuted ? (
+  return !isExecuted(request) ? (
     <div className="flex flex-row items-center justify-between rounded-md bg-slate-100 px-2 py-1">
       <h4 className="text-sm text-slate-500">{prompt}</h4>
       <ChevronRight size="sm" color="slate-500" />

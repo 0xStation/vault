@@ -22,7 +22,7 @@ export default async function handler(
     return res.end(JSON.stringify("No request id provided"))
   }
 
-  const { signature, address, approve, comment } = body
+  const { signature, address, approve, comment, newActivityId } = body
 
   const request = (await db.request.findUnique({
     where: {
@@ -80,6 +80,7 @@ export default async function handler(
 
   const activityCreate = db.activity.create({
     data: {
+      id: newActivityId,
       address,
       variant: approve
         ? ActivityVariant.APPROVE_REQUEST

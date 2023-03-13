@@ -8,7 +8,9 @@ import { SignerQuorumRequestContent } from "../../../../components/request/Signe
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
 import { Action } from "../../../../models/action/types"
 import { RequestFrob } from "../../../../models/request/types"
+import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
+import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
 const RequestDetailsContent = ({
   request,
@@ -43,7 +45,7 @@ const RequestDetailsContent = ({
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
-              <span className="block h-4 min-h-[1rem] w-4 min-w-[1rem] rounded-full bg-violet"></span>
+              <RequestStatusIcon status={request.status} />
               {request ? (
                 <AvatarAddress size="sm" address={request?.data.createdBy} />
               ) : (
@@ -117,8 +119,9 @@ const RequestDetailsContent = ({
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
-                activity={activity}
                 key={`activity-${idx}`}
+                activity={activity}
+                chainId={request.chainId}
                 mutateRequest={(
                   fn: Promise<any>,
                   update: {
@@ -168,7 +171,7 @@ const RequestDetailsContent = ({
         </section>
       </div>
       <div className={`${activeActions ? "hidden" : "block"}`}>
-        {connectedUserIsSigner && !request.isExecuted && (
+        {connectedUserIsSigner && !isExecuted(request) && (
           <RequestDetailsActions
             request={request}
             mutateRequest={mutateRequest}

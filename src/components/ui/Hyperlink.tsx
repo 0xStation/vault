@@ -17,7 +17,7 @@ interface HyperlinkProps extends VariantProps<typeof link> {
 
 export const Hyperlink = ({ href, label, size = "sm" }: HyperlinkProps) => {
   return (
-    <div className="flex cursor-pointer items-center space-x-2 border-b border-dotted">
+    <div className="flex cursor-pointer items-center space-x-1 border-b border-dotted">
       <a
         href={href}
         className={link({ size })}
@@ -26,7 +26,7 @@ export const Hyperlink = ({ href, label, size = "sm" }: HyperlinkProps) => {
       >
         {label}
       </a>
-      <ArrowUpRight size="xs" />
+      <ArrowUpRight size={size} />
     </div>
   )
 }

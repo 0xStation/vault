@@ -5,6 +5,7 @@ import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { v4 as uuid } from "uuid"
 import useStore from "../../hooks/stores/useStore"
 import { useCreateComment } from "../../models/activity/hooks"
 
@@ -23,14 +24,21 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
   } = useForm()
   const onSubmit = async (data: any) => {
     setLoading(true)
+    const newCommentId = uuid()
     const commentActivity = {
+      id: newCommentId,
       requestId: router.query.requestId as string,
       variant: ActivityVariant.COMMENT_ON_REQUEST,
       address: activeUser?.address,
+      createdAt: new Date(),
       data,
     }
     mutateRequest(
-      createComment({ ...data, address: activeUser?.address as string }),
+      createComment({
+        comment: data.comment,
+        address: activeUser?.address as string,
+        newActivityId: newCommentId,
+      }),
       commentActivity,
     )
     setLoading(false)
