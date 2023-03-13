@@ -25,3 +25,35 @@ export const useSetActionsPending = () => {
 
   return { isMutating, setActionsPending }
 }
+
+export const useSetActionPending = (actionId: string) => {
+  const fetcher = async (
+    url: string,
+    {
+      arg,
+    }: {
+      arg: {
+        address: string
+        txHash: string
+        comment: string
+        newActivityId: string
+      }
+    },
+  ) => {
+    try {
+      const response = await axios.post<any>(url, arg)
+      if (response.status === 200) {
+        return response.data
+      }
+    } catch (err) {
+      console.log("err:", err)
+    }
+  }
+
+  const { trigger: setActionPending, isMutating } = useSWRMutation(
+    `/api/v1/action/${actionId}/pending`,
+    fetcher,
+  )
+
+  return { isMutating, setActionPending }
+}

@@ -18,7 +18,7 @@ export default async function handler(
   }
 
   // TODO: grab address from auth
-  const { comment, address } = body
+  const { comment } = body
 
   const editedComment = await db.activity.update({
     where: {

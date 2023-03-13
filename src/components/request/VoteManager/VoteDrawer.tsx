@@ -5,6 +5,7 @@ import { hashAction } from "lib/signatures/action"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { v4 as uuid } from "uuid"
 import useStore from "../../../hooks/stores/useStore"
 import useSignature from "../../../hooks/useSignature"
 import { useToast } from "../../../hooks/useToast"
@@ -95,9 +96,9 @@ const VoteDrawer = ({
     })
 
     // add optimistic vote activity
-
+    const newActivityId = uuid()
     const voteActivity: Activity = {
-      id: "optimistic-vote",
+      id: newActivityId,
       requestId: router.query.requestId as string,
       variant: approve
         ? ActivityVariant.APPROVE_REQUEST
@@ -147,9 +148,10 @@ const VoteDrawer = ({
     mutateRequest({
       fn: vote({
         signature,
-        address: activeUser?.address,
+        address: activeUser?.address as string,
         approve,
         comment: data.comment,
+        newActivityId,
       }),
       requestId: request?.id,
       payload: newRequest,

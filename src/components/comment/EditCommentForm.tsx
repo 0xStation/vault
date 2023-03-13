@@ -29,10 +29,7 @@ export const EditCommentForm = ({
       activityId,
       comment: data.comment,
     }
-    mutateRequest(
-      editComment({ ...data, address: activeUser?.address as string }),
-      update,
-    )
+    mutateRequest(editComment({ comment: data.comment }), update)
     setLoading(false)
     close()
   }

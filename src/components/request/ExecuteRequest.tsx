@@ -13,6 +13,7 @@ import { getNetworkExplorer } from "lib/utils/networks"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { v4 as uuid } from "uuid"
 import {
   usePrepareSendTransaction,
   useSendTransaction,
@@ -24,7 +25,7 @@ import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/conductor"
-import { useSetActionsPending } from "../../models/action/hooks"
+import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
@@ -61,7 +62,7 @@ export const ExecuteWrapper = ({
   const { completeRequestExecution } = useCompleteRequestExecution(
     router.query.requestId as string,
   )
-  const { setActionsPending } = useSetActionsPending()
+  const { setActionPending } = useSetActionPending(actionToExecute.id)
 
   const { config, error } = usePrepareSendTransaction({
     request: {
@@ -121,8 +122,9 @@ export const ExecuteWrapper = ({
         return action
       })
 
+      const newActivityId = uuid()
       const executeActivity: Activity = {
-        id: "optimistic-vote",
+        id: newActivityId,
         requestId: router.query.requestId as string,
         variant: ActivityVariant.EXECUTE_REQUEST,
         address: activeUser?.address as string,
@@ -135,10 +137,11 @@ export const ExecuteWrapper = ({
       }
 
       mutateRequest({
-        fn: setActionsPending({
+        fn: setActionPending({
           address: activeUser?.address as string,
           txHash: transactionHash,
-          actionIds: [actionToExecute.id],
+          comment: formData.comment,
+          newActivityId,
         }),
         requestId: request.id,
         payload: {
