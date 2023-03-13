@@ -27,6 +27,7 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
       requestId: router.query.requestId as string,
       variant: ActivityVariant.COMMENT_ON_REQUEST,
       address: activeUser?.address,
+      createdAt: new Date(),
       data,
     }
     mutateRequest(

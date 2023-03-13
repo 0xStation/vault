@@ -28,6 +28,7 @@ import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"
 import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
+import { getStatus } from "../../models/request/utils"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
 
 export const ExecuteWrapper = ({
@@ -165,6 +166,12 @@ export const ExecuteWrapper = ({
           ...request,
           activities: [...request?.activities!, executeActivity],
           actions: updatedActions,
+          status: getStatus(
+            updatedActions,
+            request.approveActivities,
+            request.rejectActivities,
+            request.quorum,
+          ),
         },
       })
 

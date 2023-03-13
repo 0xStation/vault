@@ -10,6 +10,7 @@ import { useToast } from "../../../hooks/useToast"
 import { actionsTree } from "../../../lib/signatures/tree"
 import { Activity } from "../../../models/activity/types"
 import { RequestFrob } from "../../../models/request/types"
+import { getStatus } from "../../../models/request/utils"
 import { useVote } from "../../../models/signature/hooks"
 import { TextareaWithLabel } from "../../form/TextareaWithLabel"
 
@@ -97,6 +98,12 @@ const VoteModal = ({
       rejectActivities,
       addressesThatHaveNotSigned: request!.addressesThatHaveNotSigned.filter(
         (address) => address !== activeUser?.address,
+      ),
+      status: getStatus(
+        request!.actions,
+        approveActivities,
+        rejectActivities,
+        request!.quorum,
       ),
     }
 

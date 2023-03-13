@@ -25,10 +25,9 @@ export const EditCommentForm = ({
   })
   const onSubmit = async (data: any) => {
     setLoading(true)
-    await editComment({ ...data, address: activeUser?.address as string })
     const update = {
       activityId,
-      data: { ...data, edited: true },
+      comment: data.comment,
     }
     mutateRequest(
       editComment({ ...data, address: activeUser?.address as string }),
