@@ -29,8 +29,6 @@ const RequestDetailsMobile = () => {
     })
   }
 
-  console.log(router)
-
   return (
     <>
       <div className="w-full max-w-[580px]">
@@ -38,7 +36,7 @@ const RequestDetailsMobile = () => {
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-80 py-2 px-4">
           <button
             onClick={() =>
-              router.push(`/${router.query.chainNameAndSafeAddress}/requests`)
+              router.push(`/${router.query.chainNameAndSafeAddress}/proposals`)
             }
           >
             <ArrowLeft />

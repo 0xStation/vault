@@ -125,7 +125,7 @@ export const CreateRequestDropdown = () => {
                 if (isMobile) {
                   return (
                     <Link
-                      href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/new`}
+                      href={`/${router.query.chainNameAndSafeAddress}/proposals/tokens/new`}
                     >
                       Send tokens
                     </Link>
@@ -149,7 +149,7 @@ export const CreateRequestDropdown = () => {
                 if (isMobile) {
                   return (
                     <Link
-                      href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/request`}
+                      href={`/${router.query.chainNameAndSafeAddress}/proposals/tokens/request`}
                     >
                       Request tokens
                     </Link>
