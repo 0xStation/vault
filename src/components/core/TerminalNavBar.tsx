@@ -22,7 +22,7 @@ export const TerminalNavBar = () => {
           <NavigationMenuItem
             className={navigationMenuTriggerStyle({ size: "sm" })}
           >
-            <NavigationMenuLink>Requests</NavigationMenuLink>
+            <NavigationMenuLink>Proposals</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem
             className={navigationMenuTriggerStyle({

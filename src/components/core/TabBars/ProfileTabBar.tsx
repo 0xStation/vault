@@ -2,7 +2,7 @@ import { TabBar } from "../TabBar"
 
 export enum ProfileTab {
   TERMINALS = "terminals",
-  REQUESTS = "requests",
+  REQUESTS = "proposals",
 }
 
 export const ProfileTabBar = ({
@@ -14,7 +14,7 @@ export const ProfileTabBar = ({
 }) => {
   const options = [
     { value: ProfileTab.TERMINALS, label: "Terminals" },
-    { value: ProfileTab.REQUESTS, label: "Requests" },
+    { value: ProfileTab.REQUESTS, label: "Proposals" },
   ]
 
   return (
