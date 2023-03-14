@@ -23,7 +23,7 @@ const SlideOver = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-slate-500 bg-opacity-75 transition-opacity" />
+          <div className="bg-gray-2000 fixed inset-0 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">

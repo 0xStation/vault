@@ -35,7 +35,7 @@ const RequestDetailsMobile = () => {
     <>
       <div className="w-full max-w-[580px]">
         <AccountNavBar />
-        <div className="flex w-full items-center justify-between space-x-3 border-b border-b-slate-200 py-2 px-4">
+        <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-115 py-2 px-4">
           <button
             onClick={() =>
               router.push(`/${router.query.chainNameAndSafeAddress}/requests`)
@@ -43,7 +43,7 @@ const RequestDetailsMobile = () => {
           >
             <ArrowLeft />
           </button>
-          <h4 className="text-xs text-slate-500">#{request?.number}</h4>
+          <h4 className="text-xs text-gray">#{request?.number}</h4>
           {/* empty span to keep number centered */}
           <span></span>
         </div>

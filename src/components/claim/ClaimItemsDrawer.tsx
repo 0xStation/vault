@@ -252,7 +252,7 @@ export const ClaimItemsDrawer = ({
     >
       <h1>Claim tokens</h1>
       {items.length > 1 && (
-        <div className="mt-6 border-b border-slate-200 pb-6">
+        <div className="mt-6 border-b border-gray-115 pb-6">
           <TokenTransfersAccordion
             transfers={reduceTransfers(
               items.reduce(
@@ -266,11 +266,11 @@ export const ClaimItemsDrawer = ({
       <div className="mt-6 space-y-2">
         {items.map((item, index) => (
           <div
-            className="space-y-3 rounded-lg bg-slate-50 p-4"
+            className="space-y-3 rounded-lg bg-gray-200 p-4"
             key={`item-${index}`}
           >
             <div>
-              <p className="text-xs text-slate-500">Note</p>
+              <p className="text-xs text-gray">Note</p>
               <p className="mt-1">{item.note}</p>
             </div>
             <TokenTransfersAccordion
@@ -293,7 +293,7 @@ export const ClaimItemsDrawer = ({
           Claim
         </Button>
         {/* TODO change size of xs to match designs, needs to be smaller */}
-        <p className={"mt-1 text-xs text-slate-500"}>
+        <p className={"mt-1 text-xs text-gray"}>
           You’ll be directed to confirm. This action costs gas.
         </p>
       </div>

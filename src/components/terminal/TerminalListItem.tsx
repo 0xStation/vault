@@ -6,7 +6,7 @@ import { globalId } from "../../models/terminal/utils"
 const TerminalListItem = ({ terminal }: { terminal: Terminal }) => {
   return (
     <Link href={`/${globalId(terminal.chainId, terminal.safeAddress)}`}>
-      <div className="space-y-2 border-b border-slate-200 px-4 py-3 hover:bg-slate-50">
+      <div className="space-y-2 border-b border-gray-115 px-4 py-3 hover:bg-gray-200">
         <p className="font-bold">{terminal.data.name}</p>
         <div className="flex flex-row space-x-2">
           <Network chainId={terminal.chainId} />

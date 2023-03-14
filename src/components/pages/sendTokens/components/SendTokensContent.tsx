@@ -275,7 +275,7 @@ export const SendTokensContent = ({
             </label>
             <div className="mb-3">
               {nftError || fungibleTokenError ? (
-                <div className=" w-full rounded bg-slate-50 p-3 text-orange">
+                <div className=" w-full rounded bg-gray-200 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-sm">
                     We apologize for the inconvenience, there was an error
@@ -284,7 +284,7 @@ export const SendTokensContent = ({
                   </p>
                 </div>
               ) : !tokens.length ? (
-                <div className="w-full rounded bg-slate-50 p-4 text-center">
+                <div className="w-full rounded bg-gray-200 p-4 text-center">
                   <p className="font-bold">No tokens found</p>
                   <p className="pt-2 text-sm">
                     Look’s like your Terminal doesn’t have any tokens. Add
@@ -312,14 +312,12 @@ export const SendTokensContent = ({
                     return (
                       <div
                         key={item.id}
-                        className="mb-1 rounded bg-slate-50 p-3"
+                        className="mb-1 rounded bg-gray-200 p-3"
                       >
                         <div className="mb-5 flex flex-row justify-between">
-                          <p className="text-sm text-slate-500">
-                            Token {index + 1}
-                          </p>
+                          <p className="text-sm text-gray">Token {index + 1}</p>
                           <button type="button" onClick={() => remove(index)}>
-                            <XMarkIcon className="h-5 w-5 fill-slate-500" />
+                            <XMarkIcon className="fill-gray-2000 h-5 w-5" />
                           </button>
                         </div>
                         <label className="text-sm font-bold">Token*</label>
@@ -393,14 +391,14 @@ export const SendTokensContent = ({
                                 !(errors as any)?.tokens?.[index as number]
                                   ?.amount
                                   ? "border-b-orange"
-                                  : "border-b-slate-200"
-                              } bg-slate-50`}
+                                  : "border-b-gray-115"
+                              } bg-gray-200`}
                             >
                               <input
                                 required={Boolean(
                                   getErc20FieldTokenData(index),
                                 )}
-                                className="w-full bg-slate-50 placeholder:text-slate-400"
+                                className="w-full bg-gray-200 placeholder:text-slate-400"
                                 placeholder="Enter an amount"
                                 {...register(`tokens.${index}.amount`, {
                                   validate: {
@@ -488,7 +486,7 @@ export const SendTokensContent = ({
             </Button>
             <p
               className={`mt-1 text-xs  ${
-                formMessage?.isError ? "text-red" : "text-slate-500"
+                formMessage?.isError ? "text-red" : "text-gray"
               }`}
             >
               {formMessage.message ||

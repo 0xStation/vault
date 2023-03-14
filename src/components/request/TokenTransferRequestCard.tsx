@@ -16,13 +16,13 @@ export const TokenTransferRequestCard = ({
   const [showTokens, setShowTokens] = useState<boolean>(true)
   let tokenTransferMeta = request.data.meta as TokenTransferVariant
   return (
-    <div className="space-y-4 rounded bg-slate-100 p-4">
-      <span className="text-xs text-slate-500">#{request.number}</span>
+    <div className="space-y-4 rounded bg-gray-200 p-4">
+      <span className="text-xs text-gray">#{request.number}</span>
       <div
         className="flex flex-row items-center justify-between"
         onClick={() => setShowRecipients(!showRecipients)}
       >
-        <span className="text-xs text-slate-500">Recipient</span>
+        <span className="text-xs text-gray">Recipient</span>
         {showRecipients ? (
           <ChevronDownIcon className="ml-auto h-4 w-4" />
         ) : (
@@ -42,7 +42,7 @@ export const TokenTransferRequestCard = ({
         transfers={tokenTransferMeta.transfers}
         transferBgGray={false}
       />
-      <span className="block text-xs text-slate-500">Note</span>
+      <span className="block text-xs text-gray">Note</span>
       <div>{request.data.note}</div>
     </div>
   )

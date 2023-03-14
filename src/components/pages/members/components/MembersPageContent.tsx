@@ -15,7 +15,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-slate-200`}
+      className={`${className} h-fit p-2 hover:bg-gray-115`}
     >
       <PencilIcon className="w-2.5" />
     </button>
@@ -26,7 +26,7 @@ const AddButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       onClick={onClick}
-      className="h-[28px] rounded border border-slate-900 bg-slate-900 px-2 text-sm font-medium text-white"
+      className="h-[28px] rounded bg-violet px-2 text-sm font-medium text-black hover:bg-violet/80"
     >
       + Add
     </button>
@@ -66,7 +66,7 @@ const MembersPageContent = () => {
               onClick={() =>
                 router.push(`/${chainNameAndSafeAddress}/members/edit`)
               }
-              className="ml-2 rounded border border-slate-200"
+              className="ml-2 rounded border border-gray-115"
             />
           </div>
         </div>
@@ -90,10 +90,10 @@ const MembersPageContent = () => {
                 />
 
                 {activeRequest?.length ? (
-                  <p className="flex items-center text-xs text-slate-500">
+                  <p className="flex items-center text-xs text-gray">
                     Pending entry ·&nbsp;
                     <a
-                      className="text-xs text-black underline decoration-dotted"
+                      className="text-xs text-white underline decoration-dotted"
                       href={`/${chainNameAndSafeAddress}/requests/${activeRequest[0]}`}
                     >
                       View request
@@ -121,10 +121,10 @@ const MembersPageContent = () => {
                   />
 
                   {(requestIds as string[])?.length ? (
-                    <p className="flex items-center text-xs text-slate-500">
+                    <p className="flex items-center text-xs text-gray">
                       Pending entry ·&nbsp;
                       <a
-                        className="text-xs text-black underline decoration-dotted"
+                        className="text-xs text-white underline decoration-dotted"
                         href={`/${chainNameAndSafeAddress}/requests/${
                           (requestIds as string[])?.[0]
                         }`}
@@ -144,10 +144,10 @@ const MembersPageContent = () => {
               {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
             </p>
             {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-gray">
                 Pending update ·&nbsp;
                 <a
-                  className="text-xs text-black underline decoration-dotted"
+                  className="text-xs text-white underline decoration-dotted"
                   href={`/${chainNameAndSafeAddress}/requests/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
                   View request

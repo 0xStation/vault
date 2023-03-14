@@ -28,7 +28,7 @@ const Spinner = () => {
     <div className="mx-auto flex h-screen w-full max-w-[580px] flex-col items-center justify-center text-center align-middle">
       <div role="status">
         <svg
-          className="mr-2 inline h-10 w-10 animate-spin fill-black text-slate-300"
+          className="mr-2 inline h-10 w-10 animate-spin fill-black text-gray-115"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

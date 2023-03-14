@@ -25,7 +25,7 @@ const TerminalAutomationsPage = () => {
       >
         <ArrowLeft />
       </Link>
-      <div className="mt-4 flex flex-row items-center justify-between border-b border-slate-200 px-4 pb-4">
+      <div className="mt-4 flex flex-row items-center justify-between border-b border-gray-115 px-4 pb-4">
         <span className="text-2xl font-bold">Automations</span>
         <CreateAutomationDropdown />
       </div>

@@ -93,7 +93,7 @@ export const TerminalCreationOptionsView = ({
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
         <h2 className="font-bold">New Terminal</h2>
-        <p className="mb-7 mt-3 text-slate-500">
+        <p className="mb-7 mt-3 text-gray">
           Use an existing Safe, or create Terminal with a new address.
         </p>
         <SelectWithLabel
@@ -127,9 +127,7 @@ export const TerminalCreationOptionsView = ({
               onClick={() => setView(VIEW.CREATE_FORM)}
             >
               <p className="font-bold">Create a Terminal with a new address</p>
-              <p className="text-slate-500">
-                An address is unique to each terminal
-              </p>
+              <p className="text-gray">An address is unique to each terminal</p>
             </SelectorCard>
             <p className="mt-4 mb-3 text-sm font-bold">
               Select to use an existing safe:{" "}

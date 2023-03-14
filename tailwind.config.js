@@ -23,6 +23,12 @@ module.exports = {
           DEFAULT: "#0D0E11",
           100: "#0D0E11",
         },
+        gray: {
+          DEFAULT: "#646464",
+          100: "#646464", // concrete 100
+          115: "#4d4d4dff", // wet-concrete 115
+          200: "#2E2E2E", // wet-concrete
+        },
         slate: {
           50: "#F8FAFC",
           100: "#F1F5F9",

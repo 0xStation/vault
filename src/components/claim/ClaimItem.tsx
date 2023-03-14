@@ -65,7 +65,7 @@ export const ClaimItem = ({
           <div></div>
         ) : (
           <button onClick={showDetails}>
-            <div className="w-fit border-b border-dotted text-xs hover:text-slate-500">
+            <div className="w-fit border-b border-dotted text-xs hover:text-gray">
               View details
             </div>
           </button>

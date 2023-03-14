@@ -315,7 +315,7 @@ const RequestListForm = ({
           leaveFrom="translate-y-0"
           leaveTo="translate-y-[200%]"
         >
-          <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
+          <div className="bg-gray-2000 mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full px-4 py-2">
             <p className="text-sm text-white">
               {batchState.selectedRequests.length} selected
             </p>
@@ -368,7 +368,7 @@ const RequestListForm = ({
               )}
               <div
                 onClick={() => reset()}
-                className="cursor-pointer text-slate-200"
+                className="cursor-pointer text-gray-115"
               >
                 <XMark size="sm" />
               </div>

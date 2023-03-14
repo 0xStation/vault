@@ -19,7 +19,7 @@ export const TokenTransferRequestContent = ({
   return (
     <>
       <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Recipient(s)</span>
+        <span className="text-gray">Recipient(s)</span>
         <AvatarAddress
           className="mt-1"
           size="sm"
@@ -27,7 +27,7 @@ export const TokenTransferRequestContent = ({
         />
       </div>
       <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Tokens</span>
+        <span className="text-gray">Tokens</span>
         <div
           className="flex cursor-pointer flex-row items-center space-x-2"
           onClick={() => setShowTokens(!showTokens)}
@@ -46,7 +46,7 @@ export const TokenTransferRequestContent = ({
             return (
               <div
                 key={`transfer-${idx}`}
-                className="flex flex-row justify-between rounded bg-slate-100 p-2"
+                className="flex flex-row justify-between rounded bg-gray-200 p-2"
               >
                 <span>{transfer.token.symbol}</span>
                 <span>

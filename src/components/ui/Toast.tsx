@@ -11,7 +11,7 @@ const toast = cva(
       variant: {
         success: "bg-violet text-white",
         error: "bg-red text-white",
-        loading: "bg-slate-100 text-black",
+        loading: "bg-gray-200 text-white",
       },
     },
   },

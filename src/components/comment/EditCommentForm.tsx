@@ -39,7 +39,7 @@ export const EditCommentForm = ({
       <div className="flex flex-col space-y-2">
         <textarea
           {...register("comment", { required: true })}
-          className="resize-none bg-slate-50 text-sm"
+          className="resize-none bg-gray-200 text-sm"
           // autoFocus and onSelect together set height and cursor automatically on open
           autoFocus={true}
           onSelect={(e) => {

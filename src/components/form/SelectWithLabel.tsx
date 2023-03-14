@@ -27,7 +27,7 @@ export const SelectWithLabel = ({
         {label}
       </label>
       <select
-        className="border-b border-b-slate-300"
+        className="border-b border-b-gray-115"
         {...register(name, { ...registerOptions, ...requiredMessage })}
       >
         {children}

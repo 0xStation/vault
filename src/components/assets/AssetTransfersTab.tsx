@@ -37,7 +37,7 @@ const TransactionItem = ({
         <div className="flex flex-col">
           <Address address={address} interactive={false} />
           <div className="flex flex-row">
-            <p className="pr-1 text-xs text-slate-500">
+            <p className="pr-1 text-xs text-gray">
               {date}
               {" · "}
             </p>
@@ -49,7 +49,7 @@ const TransactionItem = ({
           </div>
         </div>
       </div>
-      <p className="text-lg text-slate-500">{value}</p>
+      <p className="text-lg text-gray">{value}</p>
     </div>
   )
 }

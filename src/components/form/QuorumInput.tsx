@@ -27,15 +27,15 @@ export const QuorumInput = ({
       <label className="text-sm font-bold" htmlFor={name}>
         {label}
       </label>
-      <div className="flex flex-row justify-between border-b border-b-slate-300">
+      <div className="flex flex-row justify-between border-b border-b-gray-115">
         <input
           type="number"
-          className="placeholder:text-slate-400"
+          className="bg-black placeholder:text-white"
           placeholder={placeholder}
           {...register(name, { ...registerOptions, ...requiredMessage })}
           {...rest}
         />
-        <p className="text-slate-400">out of {quorumSize} members</p>
+        <p className="text-white">out of {quorumSize} members</p>
       </div>
       <p className="text-xs text-red">
         {errors[name] && errors[name]?.message}

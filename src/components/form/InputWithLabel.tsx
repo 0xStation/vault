@@ -33,7 +33,7 @@ export const InputWithLabel = ({
       </label>
       <input
         type={type}
-        className="border-b border-b-slate-300 placeholder:text-slate-400"
+        className="border-b border-b-gray-115 placeholder:text-slate-400"
         placeholder={placeholder}
         {...register(name, { ...registerOptions, ...requiredMessage })}
         {...rest}

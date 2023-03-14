@@ -12,7 +12,7 @@ export const ReadyToClaim = () => {
 
   return (
     <Link href={`/u/${accountAddress}/profile/claim`}>
-      <div className="rounded-lg border-[0.5px] border-slate-200 bg-slate-100 p-3 ">
+      <div className="rounded-lg border-[0.5px] border-gray-115 bg-gray-200 p-3 ">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-3">
             <span className="h-2 w-2 rounded-full bg-orange" />
@@ -20,7 +20,7 @@ export const ReadyToClaim = () => {
               {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
             </div>
           </div>
-          <ChevronRight size="sm" color="slate-500" />
+          <ChevronRight size="sm" color="gray" />
         </div>
       </div>
     </Link>

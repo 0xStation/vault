@@ -24,14 +24,14 @@ export const TerminalAutomationDetailPage = () => {
           <ArrowLeft />
         </Link>
 
-        <h4 className="text-sm text-slate-500">{automation?.data.name}</h4>
+        <h4 className="text-sm text-gray">{automation?.data.name}</h4>
         {/* TODO: add editing */}
         <button
           onClick={() => {
             console.log("edit automation")
           }}
           className={
-            "h-6 w-6 items-center rounded-md border border-slate-200 px-1.5"
+            "h-6 w-6 items-center rounded-md border border-gray-115 px-1.5"
           }
         >
           <PencilIcon className="w-2.5" />
