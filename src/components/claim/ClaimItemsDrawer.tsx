@@ -1,6 +1,8 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
+import Modal from "@ui/Modal"
 import { Network } from "@ui/Network"
 import { BigNumber } from "ethers"
 import { REJECTION_CALL } from "lib/constants"
@@ -263,68 +265,150 @@ export const ClaimItemsDrawer = ({
   })
 
   return (
-    <BottomDrawer
-      isOpen={isOpen}
-      setIsOpen={(v: boolean) => {
-        if (!v) {
-          setLoading(v)
-        }
-        setIsOpen(v)
-      }}
-    >
-      <h1 className="pb-2">Claim tokens</h1>
-      <div className="h-full overflow-y-auto pb-32">
-        <div className="mt-4 space-y-2 border-b border-gray-80 pb-6">
-          <div className="flex flex-row space-x-2">
-            <span className="text-xs text-gray">Network</span>
-            <Network chainId={items?.[0]?.transfers?.[0]?.token?.chainId} />
-          </div>
-          <TokenTransfersAccordion
-            transfers={reduceTransfers(
-              items.reduce(
-                (acc: TokenTransfer[], item) => [...acc, ...item.transfers],
-                [],
-              ),
-            )}
-          />
-        </div>
-        <div className="mt-6 space-y-2">
-          {items.map((item, index) => (
-            <div
-              className="space-y-3 rounded-lg bg-gray-90 p-4"
-              key={`item-${index}`}
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) {
+          return (
+            <BottomDrawer
+              isOpen={isOpen}
+              setIsOpen={(v: boolean) => {
+                if (!v) {
+                  setLoading(v)
+                }
+                setIsOpen(v)
+              }}
             >
-              <div>
-                <p className="text-xs text-gray">Note</p>
-                <p className="mt-1">{item.note}</p>
+              <h1 className="pb-2">Claim tokens</h1>
+              <div className="h-full overflow-y-auto pb-32">
+                <div className="mt-4 space-y-2 border-b border-gray-80 pb-6">
+                  <div className="flex flex-row space-x-2">
+                    <span className="text-xs text-gray">Network</span>
+                    <Network
+                      chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
+                    />
+                  </div>
+                  <TokenTransfersAccordion
+                    transfers={reduceTransfers(
+                      items.reduce(
+                        (acc: TokenTransfer[], item) => [
+                          ...acc,
+                          ...item.transfers,
+                        ],
+                        [],
+                      ),
+                    )}
+                  />
+                </div>
+                <div className="mt-6 space-y-2">
+                  {items.map((item, index) => (
+                    <div
+                      className="space-y-3 rounded-lg bg-gray-90 p-4"
+                      key={`item-${index}`}
+                    >
+                      <div>
+                        <p className="text-xs text-gray">Note</p>
+                        <p className="mt-1">{item.note}</p>
+                      </div>
+                      <TokenTransfersAccordion
+                        transfers={item.transfers}
+                        transferBgGray={false}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {/* <div className="h-32"></div> */}
               </div>
-              <TokenTransfersAccordion
-                transfers={item.transfers}
-                transferBgGray={false}
-              />
+              <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-white px-5 pb-6 pt-3 text-center">
+                <Button
+                  fullWidth={true}
+                  loading={loading || executionPending}
+                  onClick={() => {
+                    setLoading(true)
+                    trigger()
+                  }}
+                  disabled={!ready || executionPending}
+                >
+                  Claim
+                </Button>
+                {/* TODO change size of xs to match designs, needs to be smaller */}
+                <p className={"mt-1 text-xs text-slate-500"}>
+                  You’ll be directed to confirm. This action costs gas.
+                </p>
+              </div>
+            </BottomDrawer>
+          )
+        }
+        return (
+          <Modal
+            isOpen={isOpen}
+            setIsOpen={(v: boolean) => {
+              if (!v) {
+                setLoading(v)
+              }
+              setIsOpen(v)
+            }}
+          >
+            <h1 className="pb-2">Claim tokens</h1>
+            <div className="h-full overflow-y-auto pb-32">
+              <div className="mt-4 space-y-2 border-b border-slate-200 pb-6">
+                <div className="flex flex-row space-x-2">
+                  <span className="text-xs text-slate-500">Network</span>
+                  <Network
+                    chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
+                  />
+                </div>
+                <TokenTransfersAccordion
+                  transfers={reduceTransfers(
+                    items.reduce(
+                      (acc: TokenTransfer[], item) => [
+                        ...acc,
+                        ...item.transfers,
+                      ],
+                      [],
+                    ),
+                  )}
+                />
+              </div>
+              <div className="mt-6 space-y-2">
+                {items.map((item, index) => (
+                  <div
+                    className="space-y-3 rounded-lg bg-slate-50 p-4"
+                    key={`item-${index}`}
+                  >
+                    <div>
+                      <p className="text-xs text-slate-500">Note</p>
+                      <p className="mt-1">{item.note}</p>
+                    </div>
+                    <TokenTransfersAccordion
+                      transfers={item.transfers}
+                      transferBgGray={false}
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* <div className="h-32"></div> */}
             </div>
-          ))}
-        </div>
-        {/* <div className="h-32"></div> */}
-      </div>
-      <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-gray-80 bg-black px-5 pb-6 pt-3 text-center">
-        <Button
-          fullWidth={true}
-          loading={loading || executionPending}
-          onClick={() => {
-            setLoading(true)
-            trigger()
-          }}
-          disabled={!ready || executionPending}
-        >
-          Claim
-        </Button>
-        {/* TODO change size of xs to match designs, needs to be smaller */}
-        <p className={"mt-1 text-xs text-gray"}>
-          You’ll be directed to confirm. This action costs gas.
-        </p>
-      </div>
-    </BottomDrawer>
+            <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-gray-80 bg-black px-5 pb-6 pt-3 text-center">
+              <Button
+                fullWidth={true}
+                loading={loading || executionPending}
+                onClick={() => {
+                  setLoading(true)
+                  trigger()
+                }}
+                disabled={!ready || executionPending}
+              >
+                Claim
+              </Button>
+              {/* TODO change size of xs to match designs, needs to be smaller */}
+              <p className={"mt-1 text-xs text-gray"}>
+                You’ll be directed to confirm. This action costs gas.
+              </p>
+            </div>
+          </Modal>
+        )
+      }}
+    </Breakpoint>
   )
 }
 export default ClaimItemsDrawer

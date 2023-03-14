@@ -22,19 +22,19 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form"
-import TextareaWithLabel from "../../../../src/components/form/TextareaWithLabel"
-import Layout from "../../../../src/components/terminalCreation/Layout"
-import useStore from "../../../../src/hooks/stores/useStore"
-import { useGetNextNonce } from "../../../../src/hooks/useGetNextNonce"
-import { useGetTokens } from "../../../../src/hooks/useGetTokens"
-import useSignature from "../../../../src/hooks/useSignature"
-import useWindowSize from "../../../../src/hooks/useWindowSize"
+import useStore from "../../../../../src/hooks/stores/useStore"
+import { useGetNextNonce } from "../../../../../src/hooks/useGetNextNonce"
+import { useGetTokens } from "../../../../../src/hooks/useGetTokens"
+import useSignature from "../../../../../src/hooks/useSignature"
+import useWindowSize from "../../../../../src/hooks/useWindowSize"
 import {
   FrequencyType,
   TokenTransferVariant,
-} from "../../../../src/models/request/types"
-import { convertGlobalId } from "../../../../src/models/terminal/utils"
-import { Token, TokenType } from "../../../../src/models/token/types"
+} from "../../../../../src/models/request/types"
+import { convertGlobalId } from "../../../../../src/models/terminal/utils"
+import { Token, TokenType } from "../../../../../src/models/token/types"
+import TextareaWithLabel from "../../../form/TextareaWithLabel"
+import Layout from "../../../terminalCreation/Layout"
 
 interface nTokenInfoType {
   name: string
@@ -249,7 +249,7 @@ export const NewTokensPage = () => {
             </label>
             <div className="mb-3">
               {nftError || fungibleTokenError ? (
-                <div className="w-full rounded bg-gray-90 p-3 text-orange">
+                <div className=" w-full rounded bg-slate-50 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-sm">
                     We apologize for the inconvenience, there was an error
@@ -258,7 +258,7 @@ export const NewTokensPage = () => {
                   </p>
                 </div>
               ) : !tokens.length ? (
-                <div className="w-full rounded bg-gray-90 p-4 text-center">
+                <div className="w-full rounded bg-slate-50 p-4 text-center">
                   <p className="font-bold">No tokens found</p>
                   <p className="pt-2 text-sm">
                     Look&apos;s like this Terminal doesn&apos;t have any tokens.
@@ -286,12 +286,14 @@ export const NewTokensPage = () => {
                     return (
                       <div
                         key={item.id}
-                        className="mb-1 rounded bg-gray-90 p-3"
+                        className="mb-1 rounded bg-slate-50 p-3"
                       >
                         <div className="mb-5 flex flex-row justify-between">
-                          <p className="text-sm text-gray">Token {index + 1}</p>
+                          <p className="text-sm text-slate-500">
+                            Token {index + 1}
+                          </p>
                           <button type="button" onClick={() => remove(index)}>
-                            <XMarkIcon className="h-5 w-5 fill-gray" />
+                            <XMarkIcon className="h-5 w-5 fill-slate-500" />
                           </button>
                         </div>
                         <label className="text-sm font-bold">Token*</label>
@@ -365,14 +367,14 @@ export const NewTokensPage = () => {
                                 !(errors as any)?.tokens?.[index as number]
                                   ?.amount
                                   ? "border-b-orange"
-                                  : "border-b-gray-80"
-                              } bg-gray-90`}
+                                  : "border-b-slate-200"
+                              } bg-slate-50`}
                             >
                               <input
                                 required={Boolean(
                                   getErc20FieldTokenData(index),
                                 )}
-                                className="placeholder:text-concrete w-full bg-gray-90"
+                                className="w-full bg-slate-50 placeholder:text-slate-400"
                                 placeholder="Enter an amount"
                                 {...register(`tokens.${index}.amount`, {
                                   validate: {
@@ -460,7 +462,7 @@ export const NewTokensPage = () => {
             </Button>
             <p
               className={`mt-1 text-xs  ${
-                formMessage?.isError ? "text-red" : "text-gray"
+                formMessage?.isError ? "text-red" : "text-slate-500"
               }`}
             >
               {formMessage.message ||
