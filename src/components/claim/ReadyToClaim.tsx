@@ -1,28 +1,25 @@
 import { ChevronRight } from "@icons"
-import Link from "next/link"
-import { useRouter } from "next/router"
+import { cn } from "lib/utils"
 import { useAccountItemsToClaim } from "../../models/account/hooks"
 
-export const ReadyToClaim = () => {
-  const router = useRouter()
-  const accountAddress = router.query.address as string
-  const { items } = useAccountItemsToClaim(accountAddress)
+export const ReadyToClaim = ({ address }: { address: string }) => {
+  const { items } = useAccountItemsToClaim(address)
   const itemsCount =
     (items?.requests.length ?? 0) + (items?.revShareWithdraws.length ?? 0)
 
   return (
-    <Link href={`/u/${accountAddress}/profile/claim`}>
-      <div className="rounded-lg border-[0.5px] border-gray-115 bg-gray-200 p-3 ">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row items-center space-x-3">
-            <span className="h-2 w-2 rounded-full bg-orange" />
-            <div className="text-base">
-              {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
-            </div>
+    <div className="rounded-lg border-[0.5px] border-gray-115 bg-gray-200 p-3 ">
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center space-x-3">
+          {!!itemsCount && (
+            <span className={cn("h-2 w-2 rounded-full bg-orange")} />
+          )}
+          <div className="text-base">
+            {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
           </div>
-          <ChevronRight size="sm" color="gray" />
         </div>
+        <ChevronRight size="sm" color="gray" />
       </div>
-    </Link>
+    </div>
   )
 }

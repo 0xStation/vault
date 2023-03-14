@@ -313,7 +313,7 @@ export const MembersView = ({
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
       >
-        <div className={`flex ${formHeight} grow flex-col overflow-scroll`}>
+        <div className={`flex ${formHeight} grow flex-col overflow-auto`}>
           <div className="mb-6">
             <label className="text-sm font-bold">Members*</label>
             <div className="w-full">

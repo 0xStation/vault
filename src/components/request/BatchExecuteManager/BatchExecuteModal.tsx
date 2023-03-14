@@ -157,7 +157,7 @@ const BatchExecuteWrapper = ({
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="overflow-scroll pb-[110px]">
+      <div className="overflow-auto pb-[110px]">
         <div className="mb-4 space-y-6">
           <div className="text-2xl font-bold">
             Execute ({`${approve ? "approve" : "reject"}`}){" "}
@@ -166,7 +166,7 @@ const BatchExecuteWrapper = ({
           <div>This action is on-chain and will not be reversible.</div>
         </div>
 
-        <div className="max-h-[400px] space-y-4 overflow-scroll">
+        <div className="max-h-[400px] space-y-4 overflow-auto">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (

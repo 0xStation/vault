@@ -1,6 +1,7 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
+import { Network } from "@ui/Network"
 import { BigNumber } from "ethers"
 import { REJECTION_CALL } from "lib/constants"
 import { prepareSplitsDistributeCall } from "lib/encodings/0xsplits"
@@ -76,34 +77,50 @@ const genClaimCall = (
   revShareWithdraws: RevShareWithdraw[],
   recipient: string,
 ): RawCall => {
-  if (requests.length > 0) {
-    const action = requests[0].actions.filter(
-      (action) => action.variant === ActionVariant.APPROVAL,
-    )?.[0]
-    return callAction({
-      action,
-      proofs: action.proofs,
-    })
-  } else if (revShareWithdraws.length > 0) {
-    const rs = revShareWithdraws[0]
-    const requiresDistribution = rs.splits.filter((split) =>
-      BigNumber.from(split.undistributedValue).gt(0),
-    )
+  // default state when loading page, should not occur
+  if (requests.length === 0 && revShareWithdraws.length === 0)
+    return REJECTION_CALL
 
-    return batchCalls([
-      ...requiresDistribution.map((split) =>
-        prepareSplitsDistributeCall(
-          split.address,
-          rs.address,
-          split.recipients,
-          split.distributorFee,
-          recipient,
-        ),
-      ),
-      prepareSplitsWithdrawCall(recipient, [revShareWithdraws[0].address]),
-    ])
-  }
-  return REJECTION_CALL
+  return batchCalls([
+    // call the APPROVAL action from requests
+    ...requests.map((request) => {
+      const action = request.actions.find(
+        (action) => action.variant === ActionVariant.APPROVAL,
+      )!
+      return callAction({
+        action,
+        proofs: action.proofs,
+      })
+    }),
+    // distribute all SplitWallets with an undistributed balance
+    ...revShareWithdraws.reduce(
+      (acc: RawCall[], rsw) => [
+        ...acc,
+        ...rsw.splits
+          .filter((split) => BigNumber.from(split.undistributedValue).gt(0))
+          .map((split) =>
+            prepareSplitsDistributeCall(
+              split.address,
+              rsw.address, // tokenAddress
+              split.recipients,
+              split.distributorFee,
+              recipient,
+            ),
+          ),
+      ],
+      [],
+    ),
+    // withdraw tokens from SplitMain
+    // note: this MUST occur after the distributions above in order to claim the funds to the recipient
+    ...(revShareWithdraws.length > 0
+      ? [
+          prepareSplitsWithdrawCall(
+            recipient,
+            revShareWithdraws.map((rsw) => rsw.address),
+          ),
+        ]
+      : []),
+  ])
 }
 
 export const ClaimItemsDrawer = ({
@@ -112,6 +129,8 @@ export const ClaimItemsDrawer = ({
   revShareWithdraws,
   requests,
   optimisticallyShow,
+  resetBatchState,
+  executionPending = false,
 }: {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
@@ -124,6 +143,8 @@ export const ClaimItemsDrawer = ({
     },
     mutation: Promise<any>,
   ) => void
+  resetBatchState: () => void
+  executionPending?: boolean
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [items, setItems] = useState<ClaimableItem[]>(
@@ -154,6 +175,7 @@ export const ClaimItemsDrawer = ({
     onSendSuccess: () => {
       setLoading(false)
       setIsOpen(false)
+      resetBatchState()
 
       // optimistic updates
       let setActionIdsPending: string[] = []
@@ -250,9 +272,13 @@ export const ClaimItemsDrawer = ({
         setIsOpen(v)
       }}
     >
-      <h1>Claim tokens</h1>
-      {items.length > 1 && (
-        <div className="mt-6 border-b border-gray-115 pb-6">
+      <h1 className="pb-2">Claim tokens</h1>
+      <div className="h-full overflow-y-auto pb-32">
+        <div className="mt-4 space-y-2 border-b border-gray-115 pb-6">
+          <div className="flex flex-row space-x-2">
+            <span className="text-xs text-gray-100">Network</span>
+            <Network chainId={items?.[0]?.transfers?.[0]?.token?.chainId} />
+          </div>
           <TokenTransfersAccordion
             transfers={reduceTransfers(
               items.reduce(
@@ -262,33 +288,34 @@ export const ClaimItemsDrawer = ({
             )}
           />
         </div>
-      )}
-      <div className="mt-6 space-y-2">
-        {items.map((item, index) => (
-          <div
-            className="space-y-3 rounded-lg bg-gray-200 p-4"
-            key={`item-${index}`}
-          >
-            <div>
-              <p className="text-xs text-gray">Note</p>
-              <p className="mt-1">{item.note}</p>
+        <div className="mt-6 space-y-2">
+          {items.map((item, index) => (
+            <div
+              className="space-y-3 rounded-lg bg-gray-200 p-4"
+              key={`item-${index}`}
+            >
+              <div>
+                <p className="text-xs text-gray">Note</p>
+                <p className="mt-1">{item.note}</p>
+              </div>
+              <TokenTransfersAccordion
+                transfers={item.transfers}
+                transferBgGray={false}
+              />
             </div>
-            <TokenTransfersAccordion
-              transfers={item.transfers}
-              transferBgGray={false}
-            />
-          </div>
-        ))}
+          ))}
+        </div>
+        {/* <div className="h-32"></div> */}
       </div>
-      <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 px-5 text-center">
+      <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-white px-5 pb-6 pt-3 text-center">
         <Button
           fullWidth={true}
-          loading={loading}
+          loading={loading || executionPending}
           onClick={() => {
             setLoading(true)
             trigger()
           }}
-          disabled={!ready}
+          disabled={!ready || executionPending}
         >
           Claim
         </Button>

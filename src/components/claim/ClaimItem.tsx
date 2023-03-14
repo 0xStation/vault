@@ -1,16 +1,27 @@
 import { Button } from "@ui/Button"
+import { Network } from "@ui/Network"
+import { cn } from "lib/utils"
 import { Token, TokenType } from "../../models/token/types"
 import { addValues, valueToAmount } from "../../models/token/utils"
+import Checkbox from "../form/Checkbox"
 
 // Right now, implementatoin assumes all items are requests
 // TODO: update when "automations" are supported
 export const ClaimItem = ({
   transfers,
+  name,
+  disabled,
   showDetails,
+  onCheckboxChange,
+  checked,
   pendingExecution = false,
 }: {
   transfers: { token: Token; value?: string; tokenId?: string }[]
-  showDetails: () => void
+  name: string
+  disabled: boolean
+  showDetails: (pendingExecution: boolean) => void
+  onCheckboxChange?: (e: any) => void
+  checked: boolean
   pendingExecution?: boolean
 }) => {
   const formatTransfers = (
@@ -58,26 +69,49 @@ export const ClaimItem = ({
   }
 
   return (
-    <div className="px-4 py-3">
-      <div>{formatTransfers(transfers)}</div>
-      <div className="mt-1 flex flex-row items-center justify-between">
-        {pendingExecution ? (
-          <div></div>
-        ) : (
-          <button onClick={showDetails}>
-            <div className="w-fit border-b border-dotted text-xs hover:text-gray">
-              View details
-            </div>
-          </button>
+    <div
+      className={cn(
+        "flex flex-row items-center space-x-4 px-4 py-3",
+        disabled ? "opacity-30" : "",
+      )}
+    >
+      <div className="h-4 w-4">
+        {onCheckboxChange && (
+          <Checkbox
+            onChange={onCheckboxChange}
+            name={name}
+            isDisabled={disabled || false}
+            className={pendingExecution ? "invisible" : ""}
+            checked={checked}
+          />
         )}
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={showDetails}
-          loading={pendingExecution}
-        >
-          Claim
-        </Button>
+      </div>
+      <div className="w-full">
+        <div>{formatTransfers(transfers)}</div>
+        <div className="mt-1 flex flex-row items-center justify-between">
+          <div className="flex w-full flex-row items-center space-x-1">
+            <Network chainId={transfers?.[0]?.token?.chainId} />
+            <div>·</div>
+            <button
+              onClick={() => {
+                showDetails(pendingExecution)
+              }}
+              className="w-fit border-b border-dotted text-xs hover:text-slate-500"
+            >
+              View details
+            </button>
+          </div>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              showDetails(pendingExecution)
+            }}
+            loading={pendingExecution}
+          >
+            Claim
+          </Button>
+        </div>
       </div>
     </div>
   )

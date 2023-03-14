@@ -1,15 +1,23 @@
+import { cn } from "lib/utils"
+
 const LabelCard = ({
   className = "",
   label,
   description,
+  boxWrap = true,
 }: {
   className?: string
   label: string
   description: string
+  boxWrap?: boolean
 }) => {
   return (
     <div
-      className={`flex flex-col rounded-lg bg-gray-200 px-3 py-2 ${className}`}
+      className={cn(
+        "flex flex-col",
+        boxWrap ? "rounded-lg bg-gray-200 px-3 py-2" : "",
+        className,
+      )}
     >
       <span className="text-xs text-gray">{label}</span>
       <span className="mt-1 text-2xl">{description}</span>

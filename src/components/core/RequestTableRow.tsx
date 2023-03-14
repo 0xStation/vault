@@ -35,11 +35,13 @@ const RequestTableRow = ({
   disabled,
   onCheckboxChange,
   triggerDetails,
+  checked,
 }: {
   request: RequestFrob
   disabled?: boolean
   onCheckboxChange?: (e: any) => void
   triggerDetails: (request: RequestFrob) => void
+  checked: boolean
 }) => {
   return (
     <tr
@@ -56,6 +58,7 @@ const RequestTableRow = ({
             name={request.id}
             isDisabled={disabled || false}
             className={isExecuted(request) ? "invisible" : ""}
+            checked={checked}
           />
         )}
       </td>
