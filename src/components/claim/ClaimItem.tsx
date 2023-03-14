@@ -96,7 +96,7 @@ export const ClaimItem = ({
               onClick={() => {
                 showDetails(pendingExecution)
               }}
-              className="w-fit border-b border-dotted text-xs hover:text-gray-90"
+              className="w-fit border-b border-dotted text-sm hover:text-gray-90"
             >
               View details
             </button>

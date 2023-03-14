@@ -23,7 +23,7 @@ export const SelectWithLabel = ({
   const requiredMessage = required ? { required: "Required." } : {}
   return (
     <div className={`${className} mb-3 grid w-full items-center gap-3`}>
-      <label className="text-sm font-bold" htmlFor={name}>
+      <label className="text-base font-bold" htmlFor={name}>
         {label}
       </label>
       <select
@@ -32,7 +32,7 @@ export const SelectWithLabel = ({
       >
         {children}
       </select>
-      <p className="text-xs text-red">
+      <p className="text-sm text-red">
         {errors[name] && errors[name]?.message}
       </p>
     </div>

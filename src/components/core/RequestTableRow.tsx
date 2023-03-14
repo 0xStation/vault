@@ -62,7 +62,7 @@ const RequestTableRow = ({
           />
         </td>
       )}
-      <td className="text-left text-xs text-gray">#{request.number}</td>
+      <td className="text-left text-sm text-gray">#{request.number}</td>
       <td className="px-3">
         <RequestStatusIcon status={request.status} />
       </td>
@@ -83,32 +83,32 @@ const RequestTableRow = ({
       </td>
       <td className="text-right">
         <div className="w-20 space-x-1">
-          <span className="text-sm font-bold text-white">
+          <span className="text-base font-bold text-white">
             {request.approveActivities.length}
           </span>
 
-          <span className="text-sm text-gray">Approved</span>
+          <span className="text-base text-gray">Approved</span>
         </div>
       </td>
       <td className="text-right">
         <div className="w-20 space-x-1">
-          <span className="text-sm font-bold text-white">
+          <span className="text-base font-bold text-white">
             {request.rejectActivities.length}
           </span>
-          <span className="text-sm text-gray">Rejected</span>
+          <span className="text-base text-gray">Rejected</span>
         </div>
       </td>
 
       <td className="px-6">
         <div className="flex flex-row items-center space-x-1">
           <ChatBubble size={"sm"} />
-          <span className="text-sm text-gray">
+          <span className="text-base text-gray">
             {request.commentActivities.length}
           </span>
         </div>
       </td>
       <td className="pr-6">
-        <div className="w-10 text-right text-xs text-gray">
+        <div className="w-10 text-right text-sm text-gray">
           {timeSince(request.createdAt)}
         </div>
       </td>

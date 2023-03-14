@@ -377,7 +377,7 @@ export const EditMembersContent = () => {
                     className="mb-1 rounded bg-slate-50 p-3"
                   >
                     <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-sm font-bold text-slate-500">
+                      <p className="text-base font-bold text-slate-500">
                         Member{" "}
                         {(safeMetadata?.signers?.length as number) -
                           signersToRemove.size +
@@ -476,7 +476,7 @@ export const EditMembersContent = () => {
               Edit
             </Button>
             <p
-              className={`mt-1 text-xs  ${
+              className={`mt-1 text-sm  ${
                 formMessage?.isError ? "text-red" : "text-slate-500"
               }`}
             >

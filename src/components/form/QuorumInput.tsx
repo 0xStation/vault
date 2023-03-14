@@ -24,7 +24,7 @@ export const QuorumInput = ({
   const requiredMessage = required ? { required: "Required." } : {}
   return (
     <div className="mb-3 grid w-full items-center gap-1.5">
-      <label className="text-sm font-bold" htmlFor={name}>
+      <label className="text-base font-bold" htmlFor={name}>
         {label}
       </label>
       <div className="flex flex-row justify-between border-b border-b-gray-80">
@@ -37,7 +37,7 @@ export const QuorumInput = ({
         />
         <p className="text-white">out of {quorumSize} members</p>
       </div>
-      <p className="text-xs text-red">
+      <p className="text-sm text-red">
         {errors[name] && errors[name]?.message}
       </p>
     </div>

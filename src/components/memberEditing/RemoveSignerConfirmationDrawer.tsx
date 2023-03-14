@@ -57,7 +57,7 @@ export const RemoveSignerConfirmationDrawer = ({
             Confirm
           </Button>
 
-          <p className="mt-3 text-center text-xs text-gray">
+          <p className="mt-3 text-center text-sm text-gray">
             This drawer will close following confirmation. This action does not
             cost gas.
           </p>

@@ -17,18 +17,18 @@ export const AutomationListItem = ({
       <div className="space-y-2 border-b border-gray-80 py-3 px-4 hover:bg-gray-90">
         <div className="flex flex-row items-center space-x-1">
           <span className="h-2 w-2 rounded-full bg-green"></span>
-          <span className="text-sm text-gray">Live</span>
+          <span className="text-base text-gray">Live</span>
         </div>
         <div className="flex flex-row items-center justify-between">
           <span>{automation.data.name}</span>
-          <span className="text-xs text-gray">
+          <span className="text-sm text-gray">
             {timeSince(automation.createdAt)}
           </span>
         </div>
         <div className="flex flex-row items-center space-x-1">
           {/* TODO: ArrowSplit isn't working for some reason :( */}
           <ArrowUpRight size="sm" color="gray" />
-          <span className="text-sm text-gray">Revenue Share</span>
+          <span className="text-base text-gray">Revenue Share</span>
         </div>
       </div>
     </Link>

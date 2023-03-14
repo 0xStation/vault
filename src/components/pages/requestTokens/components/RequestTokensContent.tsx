@@ -244,14 +244,14 @@ export const NewTokensPage = () => {
           <div
             className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
           >
-            <label className="mt-3 mb-2 text-sm font-bold" htmlFor="tokens">
+            <label className="mt-3 mb-2 text-base font-bold" htmlFor="tokens">
               Tokens*
             </label>
             <div className="mb-3">
               {nftError || fungibleTokenError ? (
                 <div className=" w-full rounded bg-slate-50 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
-                  <p className="pt-3 text-center text-sm">
+                  <p className="pt-3 text-center text-base">
                     We apologize for the inconvenience, there was an error
                     retrieving assets for you terminal. Please refresh the page
                     or try again later.
@@ -260,13 +260,13 @@ export const NewTokensPage = () => {
               ) : !tokens.length ? (
                 <div className="w-full rounded bg-slate-50 p-4 text-center">
                   <p className="font-bold">No tokens found</p>
-                  <p className="pt-2 text-sm">
+                  <p className="pt-2 text-base">
                     Look&apos;s like this Terminal doesn&apos;t have any tokens.
                     Add tokens by sending them to the Terminal&apos;s address.
                   </p>
                   <button
                     type="button"
-                    className="pt-2 text-sm font-bold text-violet"
+                    className="pt-2 text-base font-bold text-violet"
                     onClick={() => {
                       navigator.clipboard.writeText(address as string)
                       setAddressCopied(true)
@@ -289,14 +289,14 @@ export const NewTokensPage = () => {
                         className="mb-1 rounded bg-slate-50 p-3"
                       >
                         <div className="mb-5 flex flex-row justify-between">
-                          <p className="text-sm text-slate-500">
+                          <p className="text-base text-slate-500">
                             Token {index + 1}
                           </p>
                           <button type="button" onClick={() => remove(index)}>
                             <XMarkIcon className="h-5 w-5 fill-slate-500" />
                           </button>
                         </div>
-                        <label className="text-sm font-bold">Token*</label>
+                        <label className="text-base font-bold">Token*</label>
                         <Controller
                           control={control}
                           name={`tokens.${index}.address`}
@@ -346,7 +346,7 @@ export const NewTokensPage = () => {
                         {Boolean(getErc20FieldTokenData(index)) ? (
                           <div className="my-3 grid w-full items-center gap-1.5">
                             <label
-                              className="text-sm font-bold"
+                              className="text-base font-bold"
                               htmlFor={`token.${index}.amount`}
                             >
                               Amount*
@@ -403,7 +403,7 @@ export const NewTokensPage = () => {
                             </div>
                             {((errors as any)?.tokens?.[index as number]?.amount
                               ?.message as string) ? (
-                              <p className="text-xs text-red">
+                              <p className="text-sm text-red">
                                 {
                                   (errors as any)?.tokens?.[index as number]
                                     ?.amount?.message
@@ -412,7 +412,7 @@ export const NewTokensPage = () => {
                             ) : parseFloat(watchTokens?.[0 as number]?.amount) >
                               (getErc20FieldTokenData(index) as any)
                                 ?.tokenValue ? (
-                              <p className="text-xs text-orange">
+                              <p className="text-sm text-orange">
                                 The amount entered exceeds the current balance
                                 of{" "}
                                 {
@@ -461,7 +461,7 @@ export const NewTokensPage = () => {
               Create request
             </Button>
             <p
-              className={`mt-1 text-xs  ${
+              className={`mt-1 text-sm  ${
                 formMessage?.isError ? "text-red" : "text-slate-500"
               }`}
             >

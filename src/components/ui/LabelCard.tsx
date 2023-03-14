@@ -19,7 +19,7 @@ const LabelCard = ({
         className,
       )}
     >
-      <span className="text-xs text-gray">{label}</span>
+      <span className="text-sm text-gray">{label}</span>
       <span className="mt-1 text-2xl">{description}</span>
     </div>
   )

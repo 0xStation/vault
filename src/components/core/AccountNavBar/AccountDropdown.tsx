@@ -132,7 +132,7 @@ export const AccountNavBar = () => {
             <DynamicConnectButton
               buttonContainerClassName={buttonStyles({
                 variant: "primary",
-                size: "sm",
+                size: "base",
                 fullWidth: false,
                 disabled: false,
               })}

@@ -42,7 +42,7 @@ export const CastYourVote = ({
             <RoundedPill>
               <div className="flex flex-row items-center space-x-0.5">
                 <GasIcon />
-                <div className="text-xs">$0.00</div>
+                <div className="text-sm">$0.00</div>
               </div>
             </RoundedPill>
           </div>

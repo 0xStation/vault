@@ -8,7 +8,7 @@ interface AddressProps {
 }
 
 const textSizeMap: { [key: string]: string } = {
-  ["xs"]: "text-xs",
+  ["xs"]: "text-sm",
   ["sm"]: "text-base",
   ["base"]: "text-base",
   ["lg"]: "text-xl font-bold",

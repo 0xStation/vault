@@ -52,7 +52,7 @@ const RequestDetailsContent = ({
                 <></>
               )}
             </div>
-            <span className="ml-3 shrink-0 self-start text-xs text-gray">
+            <span className="ml-3 shrink-0 self-start text-sm text-gray">
               {timeSince(request?.createdAt || new Date())}
             </span>
           </div>
@@ -69,11 +69,11 @@ const RequestDetailsContent = ({
         <section className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
-            <span className="rounded-full bg-gray-90 px-2 py-1 text-sm">
+            <span className="rounded-full bg-gray-90 px-2 py-1 text-base">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>
-          <h4 className="mt-2 text-xs font-bold">
+          <h4 className="mt-2 text-sm font-bold">
             Approved ({request?.approveActivities?.length})
           </h4>
           {request?.approveActivities?.map((activity, idx) => {
@@ -87,7 +87,7 @@ const RequestDetailsContent = ({
             )
           })}
 
-          <h4 className="mt-3 text-xs font-bold">
+          <h4 className="mt-3 text-sm font-bold">
             Rejected ({request?.rejectActivities?.length})
           </h4>
           {request?.rejectActivities?.map((activity, idx) => {
@@ -100,7 +100,7 @@ const RequestDetailsContent = ({
               />
             )
           })}
-          <h4 className="mt-3 text-xs font-bold">
+          <h4 className="mt-3 text-sm font-bold">
             Has not voted ({request?.addressesThatHaveNotSigned?.length})
           </h4>
           {request?.addressesThatHaveNotSigned?.map((address, idx) => {

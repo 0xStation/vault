@@ -24,7 +24,7 @@ export const TerminalAutomationDetailPage = () => {
           <ArrowLeft />
         </Link>
 
-        <h4 className="text-sm text-gray">{automation?.data.name}</h4>
+        <h4 className="text-base text-gray">{automation?.data.name}</h4>
         {/* TODO: add editing */}
         <button
           onClick={() => {

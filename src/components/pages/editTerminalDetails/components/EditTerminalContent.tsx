@@ -112,7 +112,7 @@ const EditTerminalContent = () => {
             Save
           </Button>
           <p
-            className={`mt-1 text-sm  ${
+            className={`mt-1 text-base  ${
               formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >

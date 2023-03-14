@@ -22,7 +22,7 @@ export const BatchStatusBar = ({
         leaveTo="translate-y-[200%]"
       >
         <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-md bg-violet px-2 py-2">
-          <p className="text-sm text-white">{totalCount} selected</p>
+          <p className="text-base text-white">{totalCount} selected</p>
           <div className="flex flex-row items-center space-x-3 text-white">
             {children}
             <div onClick={() => resetBatchState()} className="cursor-pointer">

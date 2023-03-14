@@ -170,7 +170,7 @@ export const RequestDetailsActions = ({
             {buttonStatusProps[rejectButtonStatus].rejectCopy}
           </Button>
         </div>
-        <p className="mt-2 text-xs text-gray">
+        <p className="mt-2 text-sm text-gray">
           {
             buttonStatusComboProps[
               `${approveButtonStatus}-${rejectButtonStatus}`
