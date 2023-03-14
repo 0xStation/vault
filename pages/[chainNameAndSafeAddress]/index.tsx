@@ -1,10 +1,11 @@
 import Breakpoint from "@ui/Breakpoint"
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Network } from "@ui/Network"
 import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
@@ -188,6 +189,19 @@ const DesktopTerminalIndexPage = ({ terminal }: { terminal: Terminal }) => {
 }
 
 const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
+  const breakpoint = useBreakpoint()
+  const isMobile = breakpoint === "S"
+  const router = useRouter()
+  const { chainNameAndSafeAddress } = router.query
+
+  useEffect(() => {
+    if (breakpoint && !isMobile) {
+      router.push(`/${chainNameAndSafeAddress}/proposals`, undefined, {
+        shallow: true,
+      })
+    }
+  }, [breakpoint])
+
   return (
     <Breakpoint>
       {(isMobile) => {
