@@ -317,7 +317,7 @@ export const SendTokensContent = ({
                         <div className="mb-5 flex flex-row justify-between">
                           <p className="text-sm text-gray">Token {index + 1}</p>
                           <button type="button" onClick={() => remove(index)}>
-                            <XMarkIcon className="fill-gray-900 h-5 w-5" />
+                            <XMarkIcon className="h-5 w-5 fill-gray-90" />
                           </button>
                         </div>
                         <label className="text-sm font-bold">Token*</label>
