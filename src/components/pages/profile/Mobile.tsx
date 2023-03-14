@@ -31,7 +31,7 @@ const Mobile = () => {
           ) : (
             <div className="text-xs">
               <span className="font-bold">{count}</span>{" "}
-              <span className="text-gray-90">
+              <span className="text-gray">
                 Terminal{count === 1 ? "" : "s"}
               </span>
             </div>

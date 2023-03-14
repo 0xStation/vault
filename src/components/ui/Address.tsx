@@ -54,7 +54,7 @@ export const Address = ({
           {interactive && (
             <span
               // show on hover
-              className={`flex hidden flex-row items-center group-hover:block ${textSizeMap[size]}`}
+              className={`hidden flex-row items-center group-hover:flex ${textSizeMap[size]}`}
             >
               {truncateString(address)}
             </span>
