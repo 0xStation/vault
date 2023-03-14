@@ -1,5 +1,10 @@
-import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react"
+import {
+  DynamicUserProfile,
+  useDynamicContext,
+} from "@dynamic-labs/sdk-react"
+import { BellIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
+import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import {
@@ -17,6 +22,7 @@ import {
   addQueryParam,
   removeQueryParam,
 } from "../../../lib/utils/updateQueryParam"
+import EmailNotificationForm from "../../email/EmailNotificationForm"
 import CreateTerminalContent from "../../pages/createTerminal/components/CreateTerminalContent"
 import { AvatarAddress } from "../AvatarAddress"
 
@@ -29,6 +35,8 @@ export const AccountNavBar = () => {
       removeQueryParam(router, "createTerminalSliderOpen")
     }
   }
+
+  const [notificationOpen, setNotificationOpen] = useState<boolean>(false)
   const setActiveUser = useStore((state) => state.setActiveUser)
   const {
     handleLogOut,
@@ -54,6 +62,9 @@ export const AccountNavBar = () => {
       >
         <CreateTerminalContent />
       </RightSlider>
+      <BottomDrawer isOpen={notificationOpen} setIsOpen={setNotificationOpen}>
+        <EmailNotificationForm />
+      </BottomDrawer>
       <DropdownMenu>
         {isAuthenticated ? (
           <div className="flex flex-row items-center space-x-3">
@@ -94,6 +105,13 @@ export const AccountNavBar = () => {
                 }}
               </Breakpoint>
             </div>
+            <div
+              className="h-8 w-8 rounded bg-gray-80 p-1"
+              onClick={() => setNotificationOpen(true)}
+            >
+              <BellIcon />
+            </div>
+
             <DropdownMenuTrigger>
               <Avatar size="base" address={primaryWallet?.address as string} />
             </DropdownMenuTrigger>

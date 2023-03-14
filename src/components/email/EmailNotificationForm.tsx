@@ -1,0 +1,79 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
+import { Button } from "@ui/Button"
+import { updateUserEmail } from "lib/dynamic"
+import { useState } from "react"
+import { FieldValues, useForm } from "react-hook-form"
+import TextareaWithLabel from "../form/TextareaWithLabel"
+
+const EmailNotificationForm = () => {
+  const { user } = useDynamicContext()
+  console.log(user)
+  const [formMessage, setFormMessage] = useState<{
+    isError: boolean
+    message: string
+  }>({ isError: false, message: "" })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    control,
+    watch,
+  } = useForm({
+    mode: "all", // validate on all event handlers (onBlur, onChange, onSubmit)
+    defaultValues: {
+      email: "",
+    } as FieldValues,
+  })
+
+  const onSubmit = async (data: any) => {
+    if (user) {
+      const r = await updateUserEmail(user.userId || "", data.email)
+      console.log(r)
+    }
+  }
+  const onError = async (data: any) => {}
+
+  return (
+    <div>
+      <h2 className="mb-[30px] font-bold">Notifications</h2>
+      <p>
+        Enter your email to get notifications about your Terminals. We’ll never
+        spam you with useless emails.
+      </p>
+      <form
+        onSubmit={handleSubmit(onSubmit, onError)}
+        className="mt-8 flex h-[calc(100%-120px)] flex-col"
+      >
+        <TextareaWithLabel
+          label={"Email address*"}
+          register={register}
+          required
+          name="email"
+          errors={errors}
+          placeholder="0xyou@gmail.com"
+        />
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            fullWidth={true}
+            onBlur={() => setFormMessage({ isError: false, message: "" })}
+          >
+            Save
+          </Button>
+          <p
+            className={`mt-1 text-xs  ${
+              formMessage?.isError ? "text-red" : "text-gray"
+            }`}
+          >
+            {formMessage.message || "Complete the required fields to continue."}
+          </p>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default EmailNotificationForm
