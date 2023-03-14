@@ -25,6 +25,7 @@ module.exports = {
         },
         gray: {
           DEFAULT: "#646464",
+          40: "#979797", // concrete 115
           50: "#646464", // concrete 100
           80: "#4d4d4dff", // wet-concrete 115
           90: "#2E2E2E", // wet-concrete
