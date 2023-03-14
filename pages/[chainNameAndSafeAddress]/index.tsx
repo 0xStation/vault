@@ -93,8 +93,8 @@ const MobileTerminalIndexPage = () => {
     (r) =>
       !isExecuted(r) &&
       (!(
-        r.approveActivities.some((a) => a.address === address) ||
-        r.rejectActivities.some((a) => a.address === address)
+        r.approveActivities.some((a) => a.address === userAddress) ||
+        r.rejectActivities.some((a) => a.address === userAddress)
       ) ||
         r.approveActivities.length >= r.quorum ||
         r.rejectActivities.length >= r.quorum),

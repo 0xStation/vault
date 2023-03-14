@@ -1,4 +1,5 @@
 import { ChevronRight } from "@icons"
+import { cn } from "lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useAccountItemsToClaim } from "../../models/account/hooks"
@@ -15,7 +16,12 @@ export const ReadyToClaim = () => {
       <div className="rounded-lg border-[0.5px] border-slate-200 bg-slate-100 p-3 ">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-3">
-            <span className="h-2 w-2 rounded-full bg-orange" />
+            <span
+              className={cn(
+                "h-2 w-2 rounded-full bg-orange",
+                !itemsCount ? "invisible" : "",
+              )}
+            />
             <div className="text-base">
               {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
             </div>
