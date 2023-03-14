@@ -1,4 +1,3 @@
-import { Transition } from "@headlessui/react"
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
@@ -13,10 +12,10 @@ import {
 } from "../../lib/utils/updateQueryParam"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
+import { BatchStatusBar } from "../core/BatchStatusBar"
 import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
-import { XMark } from "../icons"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
@@ -111,7 +110,7 @@ const RequestListForm = ({
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
-  const reset = () => dispatch({ type: "RESET" })
+  const resetBatchState = () => dispatch({ type: "RESET" })
 
   const onCheckboxChange = (e: any) => {
     const requestId = e.target.name
@@ -247,6 +246,7 @@ const RequestListForm = ({
                       }
                       request={request}
                       showTerminal={isProfile ? request.terminal : undefined}
+                      checked={batchState.selectedRequests.includes(request)}
                     />
                   )
                 })}
@@ -277,6 +277,7 @@ const RequestListForm = ({
                           setDetailsSliderOpen(true)
                         }}
                         onCheckboxChange={onCheckboxChange}
+                        checked={batchState.selectedRequests.includes(request)}
                       />
                     )
                   })}
@@ -293,7 +294,7 @@ const RequestListForm = ({
           toggleDrawer("batchVoteDrawer", state)
         }}
         approve={isVotingApproval}
-        clearSelectedRequests={reset}
+        clearSelectedRequests={resetBatchState}
       />
       <BatchExecuteManager
         requestsToApprove={batchState.selectedRequests}
@@ -303,79 +304,59 @@ const RequestListForm = ({
         }}
         approve={isExecutingApproval}
         mutateSelectedRequests={mutateSelectedRequests}
-        clearSelectedRequests={reset}
+        clearSelectedRequests={resetBatchState}
       />
-      <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
-        <Transition
-          show={batchState.selectedRequests.length > 0}
-          enter="transform transition ease-in-out duration-300 sm:duration-500"
-          enterFrom="translate-y-[200%]"
-          enterTo="translate-y-0"
-          leave="transform transition ease-in-out duration-300 sm:duration-500"
-          leaveFrom="translate-y-0"
-          leaveTo="translate-y-[200%]"
-        >
-          <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
-            <p className="text-sm text-white">
-              {batchState.selectedRequests.length} selected
-            </p>
-            <div className="flex flex-row items-center space-x-3">
-              {batchState.batchVariant === "EXECUTE" &&
-                batchState.validActions.includes("EXECUTE-APPROVE") && (
-                  <button
-                    className="text-sm text-white"
-                    onClick={() => {
-                      setIsExecutingApproval(true)
-                      toggleDrawer("batchExecuteDrawer", true)
-                    }}
-                  >
-                    Execute Approval
-                  </button>
-                )}
-              {batchState.batchVariant === "EXECUTE" &&
-                batchState.validActions.includes("EXECUTE-REJECT") && (
-                  <button
-                    className="text-sm text-white"
-                    onClick={() => {
-                      setIsExecutingApproval(false)
-                      toggleDrawer("batchExecuteDrawer", true)
-                    }}
-                  >
-                    Execute Rejection
-                  </button>
-                )}
-              {batchState.batchVariant === "VOTE" && (
-                <>
-                  <button
-                    className="text-sm text-white"
-                    onClick={() => {
-                      setIsVotingApproval(true)
-                      toggleDrawer("batchVoteDrawer", true)
-                    }}
-                  >
-                    Approve
-                  </button>
-                  <button
-                    className="text-sm text-white"
-                    onClick={() => {
-                      setIsVotingApproval(false)
-                      toggleDrawer("batchVoteDrawer", true)
-                    }}
-                  >
-                    Rejection
-                  </button>
-                </>
-              )}
-              <div
-                onClick={() => reset()}
-                className="cursor-pointer text-slate-200"
-              >
-                <XMark size="sm" />
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </div>
+      <BatchStatusBar
+        totalCount={batchState.selectedRequests.length}
+        resetBatchState={resetBatchState}
+      >
+        {batchState.batchVariant === "EXECUTE" &&
+          batchState.validActions.includes("EXECUTE-APPROVE") && (
+            <button
+              className="text-sm font-bold"
+              onClick={() => {
+                setIsExecutingApproval(true)
+                toggleDrawer("batchExecuteDrawer", true)
+              }}
+            >
+              Execute Approval
+            </button>
+          )}
+        {batchState.batchVariant === "EXECUTE" &&
+          batchState.validActions.includes("EXECUTE-REJECT") && (
+            <button
+              className="text-sm font-bold"
+              onClick={() => {
+                setIsExecutingApproval(false)
+                toggleDrawer("batchExecuteDrawer", true)
+              }}
+            >
+              Execute Rejection
+            </button>
+          )}
+        {batchState.batchVariant === "VOTE" && (
+          <>
+            <button
+              className="text-sm font-bold"
+              onClick={() => {
+                setIsVotingApproval(true)
+                toggleDrawer("batchVoteDrawer", true)
+              }}
+            >
+              Approve
+            </button>
+            <button
+              className="text-sm font-bold"
+              onClick={() => {
+                setIsVotingApproval(false)
+                toggleDrawer("batchVoteDrawer", true)
+              }}
+            >
+              Rejection
+            </button>
+          </>
+        )}
+      </BatchStatusBar>
     </>
   )
 }

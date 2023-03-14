@@ -17,11 +17,13 @@ const RequestCard = ({
   request,
   showTerminal,
   onCheckboxChange,
+  checked,
 }: {
   disabled?: boolean
   request: RequestFrob
   showTerminal?: Terminal
   onCheckboxChange?: (e: any) => void
+  checked: boolean
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -51,6 +53,7 @@ const RequestCard = ({
                 onChange={onCheckboxChange}
                 name={request.id}
                 isDisabled={disabled || false}
+                checked={checked}
                 className={isExecuted(request) ? "invisible" : ""}
               />
             )}

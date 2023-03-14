@@ -1,5 +1,4 @@
-import { Transition } from "@headlessui/react"
-import { ArrowLeft, XMark } from "@icons"
+import { ArrowLeft } from "@icons"
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import { addressesAreEqual } from "lib/utils"
 import Link from "next/link"
@@ -9,6 +8,7 @@ import ClaimItemsDrawer from "../../../../src/components/claim/ClaimItemsDrawer"
 import { ClaimRequestItem } from "../../../../src/components/claim/ClaimRequestItem"
 import { ClaimRevShareItem } from "../../../../src/components/claim/ClaimRevShareItem"
 import AccountNavBar from "../../../../src/components/core/AccountNavBar"
+import { BatchStatusBar } from "../../../../src/components/core/BatchStatusBar"
 import { EmptyList } from "../../../../src/components/core/EmptyList"
 import { useAccountItemsToClaim } from "../../../../src/models/account/hooks"
 import { RevShareWithdraw } from "../../../../src/models/automation/types"
@@ -277,44 +277,22 @@ const ProfileClaimPage = ({}: {}) => {
           ))}
         </ul>
       )}
-      <div className="fixed inset-x-0 bottom-0 max-w-full p-4">
-        <Transition
-          show={Boolean(
-            batchState.selectedRequests.length ||
-              batchState.selectedRevShareWithdraws.length,
-          )}
-          enter="transform transition ease-in-out duration-300 sm:duration-500"
-          enterFrom="translate-y-[200%]"
-          enterTo="translate-y-0"
-          leave="transform transition ease-in-out duration-300 sm:duration-500"
-          leaveFrom="translate-y-0"
-          leaveTo="translate-y-[200%]"
+      <BatchStatusBar
+        totalCount={
+          batchState.selectedRequests.length +
+          batchState.selectedRevShareWithdraws.length
+        }
+        resetBatchState={resetBatchState}
+      >
+        <button
+          className="text-sm font-bold"
+          onClick={() => {
+            setClaimBatchOpen(true)
+          }}
         >
-          <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-full bg-slate-500 px-4 py-2">
-            <p className="text-sm text-white">
-              {batchState.selectedRequests.length +
-                batchState.selectedRevShareWithdraws.length}{" "}
-              selected
-            </p>
-            <div className="flex flex-row items-center space-x-3">
-              <button
-                className="text-sm text-white"
-                onClick={() => {
-                  setClaimBatchOpen(true)
-                }}
-              >
-                Claim
-              </button>
-              <div
-                onClick={() => resetBatchState()}
-                className="cursor-pointer text-slate-200"
-              >
-                <XMark size="sm" />
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </div>
+          Claim
+        </button>
+      </BatchStatusBar>
     </>
   )
 }

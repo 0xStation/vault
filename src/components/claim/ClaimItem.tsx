@@ -71,7 +71,7 @@ export const ClaimItem = ({
     <div
       className={cn(
         "flex flex-row items-center space-x-4 px-4 py-3",
-        disabled ? "opacity-50" : "",
+        disabled ? "opacity-30" : "",
       )}
     >
       <div className="h-4 w-4">
