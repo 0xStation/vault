@@ -3,9 +3,7 @@ import useSWR from "swr"
 import useSWRMutation from "swr/mutation"
 import { RequestFrob } from "./types"
 
-export const useRequestsCreatedByAccount = (
-  address: string,
-): { isLoading: boolean; requests: RequestFrob[] | undefined } => {
+export const useRequestsCreatedByAccount = (address: string) => {
   const fetcher = async (url: string) => {
     try {
       const response = await axios.get<RequestFrob[]>(url)
@@ -17,12 +15,16 @@ export const useRequestsCreatedByAccount = (
     }
   }
 
-  const { isLoading, data: requests } = useSWR(
+  const {
+    isLoading,
+    data: requests,
+    mutate,
+  } = useSWR(
     address ? `/api/v1/account/${address}/requests/created` : null,
     fetcher,
   )
 
-  return { isLoading, requests }
+  return { isLoading, requests, mutate }
 }
 
 export const useRequest = (requestId: string) => {

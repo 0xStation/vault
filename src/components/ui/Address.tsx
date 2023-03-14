@@ -11,7 +11,7 @@ const textSizeMap: { [key: string]: string } = {
   ["xs"]: "text-xs",
   ["sm"]: "text-base",
   ["base"]: "text-base",
-  ["lg"]: "text-2xl font-bold",
+  ["lg"]: "text-xl font-bold",
 }
 
 export const Address = ({
