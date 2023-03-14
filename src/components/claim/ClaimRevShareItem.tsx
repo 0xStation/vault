@@ -10,7 +10,7 @@ export const ClaimRevShareItem = ({
 }: {
   revShareWithdraw: RevShareWithdraw
   disabled: boolean
-  showDetails: () => void
+  showDetails: (pendingExecution: boolean) => void
   onCheckboxChange?: (e: any) => void
   checked: boolean
 }) => {

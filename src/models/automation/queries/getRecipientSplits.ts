@@ -95,7 +95,8 @@ export const getRecipientSplits = async (
     )
 
     if (!response?.recipient) {
-      throw Error("no recipient found")
+      console.warn("no recipient found")
+      return []
     }
 
     const splits = response?.recipient?.splits.map((split) => {

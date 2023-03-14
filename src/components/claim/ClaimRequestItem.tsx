@@ -11,7 +11,7 @@ export const ClaimRequestItem = ({
 }: {
   request: RequestFrob
   disabled: boolean
-  showDetails: () => void
+  showDetails: (pendingExecution: boolean) => void
   onCheckboxChange?: (e: any) => void
   checked: boolean
 }) => {

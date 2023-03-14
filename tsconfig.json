@@ -19,7 +19,9 @@
       "@icons": ["./src/components/icons"],
       "@icons/*": ["./src/components/icons/*"],
       "lib/*": ["./src/lib/*"],
-      "db": ["./prisma"]
+      "db": ["./prisma"],
+      "components/*": ["./src/components/*"],
+      "models/*": ["./src/models/*"]
     }
   },
   "include": [

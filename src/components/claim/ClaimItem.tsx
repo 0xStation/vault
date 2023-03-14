@@ -1,4 +1,5 @@
 import { Button } from "@ui/Button"
+import { Network } from "@ui/Network"
 import { cn } from "lib/utils"
 import { Token, TokenType } from "../../models/token/types"
 import { addValues, valueToAmount } from "../../models/token/utils"
@@ -18,7 +19,7 @@ export const ClaimItem = ({
   transfers: { token: Token; value?: string; tokenId?: string }[]
   name: string
   disabled: boolean
-  showDetails: () => void
+  showDetails: (pendingExecution: boolean) => void
   onCheckboxChange?: (e: any) => void
   checked: boolean
   pendingExecution?: boolean
@@ -88,19 +89,24 @@ export const ClaimItem = ({
       <div className="w-full">
         <div>{formatTransfers(transfers)}</div>
         <div className="mt-1 flex flex-row items-center justify-between">
-          {pendingExecution ? (
-            <div></div>
-          ) : (
-            <button onClick={showDetails}>
-              <div className="w-fit border-b border-dotted text-xs hover:text-slate-500">
-                View details
-              </div>
+          <div className="flex w-full flex-row items-center space-x-1">
+            <Network chainId={transfers?.[0]?.token?.chainId} />
+            <div>·</div>
+            <button
+              onClick={() => {
+                showDetails(pendingExecution)
+              }}
+              className="w-fit border-b border-dotted text-xs hover:text-slate-500"
+            >
+              View details
             </button>
-          )}
+          </div>
           <Button
             variant="secondary"
             size="sm"
-            onClick={showDetails}
+            onClick={() => {
+              showDetails(pendingExecution)
+            }}
             loading={pendingExecution}
           >
             Claim

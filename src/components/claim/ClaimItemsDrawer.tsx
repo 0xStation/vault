@@ -1,6 +1,7 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
+import { Network } from "@ui/Network"
 import { BigNumber } from "ethers"
 import { REJECTION_CALL } from "lib/constants"
 import { prepareSplitsDistributeCall } from "lib/encodings/0xsplits"
@@ -128,6 +129,8 @@ export const ClaimItemsDrawer = ({
   revShareWithdraws,
   requests,
   optimisticallyShow,
+  resetBatchState,
+  executionPending = false,
 }: {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
@@ -140,6 +143,8 @@ export const ClaimItemsDrawer = ({
     },
     mutation: Promise<any>,
   ) => void
+  resetBatchState: () => void
+  executionPending?: boolean
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [items, setItems] = useState<ClaimableItem[]>(
@@ -170,6 +175,7 @@ export const ClaimItemsDrawer = ({
     onSendSuccess: () => {
       setLoading(false)
       setIsOpen(false)
+      resetBatchState()
 
       // optimistic updates
       let setActionIdsPending: string[] = []
@@ -267,20 +273,22 @@ export const ClaimItemsDrawer = ({
       }}
     >
       <h1 className="pb-2">Claim tokens</h1>
-      <div className="h-full overflow-y-scroll pb-32">
-        {items.length > 1 && (
-          <div className="mt-4 mb-6 border-b border-slate-200 pb-6">
-            <TokenTransfersAccordion
-              transfers={reduceTransfers(
-                items.reduce(
-                  (acc: TokenTransfer[], item) => [...acc, ...item.transfers],
-                  [],
-                ),
-              )}
-            />
+      <div className="h-full overflow-y-auto pb-32">
+        <div className="mt-4 space-y-2 border-b border-slate-200 pb-6">
+          <div className="flex flex-row space-x-2">
+            <span className="text-xs text-slate-500">Network</span>
+            <Network chainId={items?.[0]?.transfers?.[0]?.token?.chainId} />
           </div>
-        )}
-        <div className="mt-4 space-y-2">
+          <TokenTransfersAccordion
+            transfers={reduceTransfers(
+              items.reduce(
+                (acc: TokenTransfer[], item) => [...acc, ...item.transfers],
+                [],
+              ),
+            )}
+          />
+        </div>
+        <div className="mt-6 space-y-2">
           {items.map((item, index) => (
             <div
               className="space-y-3 rounded-lg bg-slate-50 p-4"
@@ -302,12 +310,12 @@ export const ClaimItemsDrawer = ({
       <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-white px-5 pb-6 pt-3 text-center">
         <Button
           fullWidth={true}
-          loading={loading}
+          loading={loading || executionPending}
           onClick={() => {
             setLoading(true)
             trigger()
           }}
-          disabled={!ready}
+          disabled={!ready || executionPending}
         >
           Claim
         </Button>
