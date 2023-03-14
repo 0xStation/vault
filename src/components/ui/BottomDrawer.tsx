@@ -62,7 +62,7 @@ export const BottomDrawer = ({
               <div
                 className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full max-w-[580px]`}
               >
-                <div className="flex h-full w-full flex-col rounded-t-lg bg-white px-5 pt-3">
+                <div className="flex h-full w-full flex-col rounded-t-lg bg-black px-5 pt-3">
                   <div className="mb-6 flex w-full justify-center">
                     <button
                       onClick={() => setIsOpen(false)}

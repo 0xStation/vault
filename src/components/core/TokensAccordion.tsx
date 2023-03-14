@@ -40,7 +40,7 @@ export const TokenTransfersAccordion = ({
                 key={`transfer-${index}`}
                 className={cn(
                   "flex flex-row justify-between rounded-lg px-4 py-2",
-                  transferBgGray ? "bg-gray-200" : "bg-white",
+                  transferBgGray ? "bg-gray-200" : "bg-black",
                 )}
               >
                 <span>

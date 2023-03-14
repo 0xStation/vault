@@ -28,12 +28,12 @@ export default function RightSlider({
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-[580px]">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-black py-6 shadow-xl">
                     <div className="px-4">
                       <div className="flex items-start justify-end">
                         <button
                           type="button"
-                          className="text-gray-400 hover:text-gray-500 focus:ring-indigo-500 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+                          className="text-gray-400 hover:text-gray-500 focus:ring-indigo-500 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-offset-2"
                           onClick={() => setOpen(false)}
                         >
                           <span className="text-sm">Close</span>

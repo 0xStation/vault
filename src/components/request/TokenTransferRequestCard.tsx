@@ -30,7 +30,7 @@ export const TokenTransferRequestCard = ({
         )}
       </div>
       {showRecipients && (
-        <div className="mt-2 rounded bg-white p-2">
+        <div className="mt-2 rounded bg-black p-2">
           <AvatarAddress
             className="mt-1"
             size="sm"

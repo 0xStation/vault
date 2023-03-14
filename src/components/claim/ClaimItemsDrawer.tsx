@@ -307,7 +307,7 @@ export const ClaimItemsDrawer = ({
         </div>
         {/* <div className="h-32"></div> */}
       </div>
-      <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-white px-5 pb-6 pt-3 text-center">
+      <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-black px-5 pb-6 pt-3 text-center">
         <Button
           fullWidth={true}
           loading={loading || executionPending}

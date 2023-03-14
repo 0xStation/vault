@@ -97,7 +97,7 @@ const BatchVoteDrawer = ({
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white py-6 px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-black py-6 px-5 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>
             {approve ? "Approve" : "Reject"}
           </Button>

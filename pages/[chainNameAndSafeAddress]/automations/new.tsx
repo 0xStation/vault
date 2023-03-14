@@ -385,7 +385,7 @@ const NewAutomationPage = () => {
             {(splitsFieldError as string) || ""}
           </p>
         </div>
-        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white px-5 py-3 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-black px-5 py-3 text-center">
           <Button
             type="submit"
             fullWidth={true}
