@@ -65,17 +65,17 @@ const RequestCard = ({
                 {request.data.note}
               </div>
             </div>
-            <span className="shrink-0 pl-6 text-right text-sm text-gray">
+            <span className="shrink-0 pl-6 text-right text-sm text-gray-40">
               {timeSince(request.createdAt)}
             </span>
           </div>
 
-          <div className="flex flex-row items-center space-x-2 text-gray">
-            <span className="text-base text-gray">#{request.number}</span>
+          <div className="flex flex-row items-center space-x-2 text-gray-40">
+            <span className="text-base text-gray-40">#{request.number}</span>
             {request.variant === RequestVariantType.TOKEN_TRANSFER && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-gray">
+                <span className="text-base text-gray-40">
                   {transfer?.value &&
                     transfer?.token.decimals &&
                     valueToAmount(
@@ -90,7 +90,7 @@ const RequestCard = ({
             {request.variant === RequestVariantType.SIGNER_QUORUM && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-gray">
+                <span className="text-base text-gray-40">
                   Add {1} member and change quorum.
                 </span>
               </>
@@ -98,23 +98,25 @@ const RequestCard = ({
             {request.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-gray">Split token stuff</span>
+                <span className="text-base text-gray-40">
+                  Split token stuff
+                </span>
               </>
             )}
           </div>
-          <div className="flex flex-row items-center justify-between text-base text-gray">
+          <div className="flex flex-row items-center justify-between text-base text-gray-40">
             <div className="flex flex-row space-x-4 text-base">
               <div className="space-x-1">
                 <span className="font-bold text-white">
                   {request.approveActivities.length}
                 </span>
-                <span className="text-gray">Approved</span>
+                <span className="text-gray-40">Approved</span>
               </div>
               <div className="space-x-1">
                 <span className="font-bold text-white">
                   {request.rejectActivities.length}
                 </span>
-                <span className="text-gray">Rejected</span>
+                <span className="text-gray-40">Rejected</span>
               </div>
             </div>
             <div className="flex cursor-pointer flex-row items-center space-x-1">

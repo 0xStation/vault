@@ -317,7 +317,7 @@ const RequestListForm = ({
                 toggleDrawer("batchExecuteDrawer", true)
               }}
             >
-              Execute Approval
+              Execute approval
             </button>
           )}
         {batchState.batchVariant === "EXECUTE" &&

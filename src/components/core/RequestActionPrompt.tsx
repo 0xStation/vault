@@ -31,7 +31,7 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
 
   return !!prompt ? (
     <div className="flex flex-row items-center justify-between rounded-md bg-gray-90 px-2 py-1">
-      <h4 className="text-base text-gray">{prompt}</h4>
+      <h4 className="text-base text-gray-40">{prompt}</h4>
       <ChevronRight size="sm" color="gray" />
     </div>
   ) : (
