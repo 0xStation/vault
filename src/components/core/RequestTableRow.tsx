@@ -14,7 +14,7 @@ const RequestTransferContent = ({ request }: { request: RequestFrob }) => {
     ?.length
 
   return (
-    <div className="flex flex-row items-center space-x-2 text-gray">
+    <div className="flex flex-row items-center space-x-2 text-gray-40">
       <ArrowUpRight size={"sm"} />
       <span className="text-base">
         {transfer?.value &&
@@ -62,7 +62,7 @@ const RequestTableRow = ({
           />
         </td>
       )}
-      <td className="text-left text-xs text-gray">#{request.number}</td>
+      <td className="text-left text-xs text-gray-40">#{request.number}</td>
       <td className="px-3">
         <RequestStatusIcon status={request.status} />
       </td>
@@ -87,7 +87,7 @@ const RequestTableRow = ({
             {request.approveActivities.length}
           </span>
 
-          <span className="text-sm text-gray">Approved</span>
+          <span className="text-sm text-gray-40">Approved</span>
         </div>
       </td>
       <td className="text-right">
@@ -95,20 +95,20 @@ const RequestTableRow = ({
           <span className="text-sm font-bold text-white">
             {request.rejectActivities.length}
           </span>
-          <span className="text-sm text-gray">Rejected</span>
+          <span className="text-sm text-gray-40">Rejected</span>
         </div>
       </td>
 
       <td className="px-6">
         <div className="flex flex-row items-center space-x-1">
           <ChatBubble size={"sm"} />
-          <span className="text-sm text-gray">
+          <span className="text-sm text-gray-40">
             {request.commentActivities.length}
           </span>
         </div>
       </td>
       <td className="pr-6">
-        <div className="w-10 text-right text-xs text-gray">
+        <div className="w-10 text-right text-xs text-gray-40">
           {timeSince(request.createdAt)}
         </div>
       </td>

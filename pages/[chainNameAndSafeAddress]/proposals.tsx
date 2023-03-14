@@ -18,7 +18,7 @@ const DesktopTerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
     <DesktopTerminalLayout terminal={terminal}>
       <div>
         <div className="my-4 flex flex-row items-center justify-between px-4">
-          <span className="text-2xl font-bold">Requests</span>
+          <span className="text-2xl font-bold">Proposals</span>
           <CreateRequestDropdown />
         </div>
       </div>
@@ -43,7 +43,7 @@ const MobileTerminalRequestsPage = () => {
         <ArrowLeft />
       </Link>
       <div className="my-4 flex flex-row items-center justify-between px-4">
-        <span className="text-2xl font-bold">Requests</span>
+        <span className="text-2xl font-bold">Proposals</span>
         <CreateRequestDropdown />
       </div>
       <TerminalRequestTypeTabBar>
