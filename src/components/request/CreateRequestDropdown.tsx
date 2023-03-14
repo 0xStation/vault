@@ -16,6 +16,8 @@ import {
   addQueryParam,
   removeQueryParam,
 } from "../../lib/utils/updateQueryParam"
+import EditMembersContent from "../pages/editMembers/components/EditMembersContent"
+import RequestTokensContent from "../pages/requestTokens/components/RequestTokensContent"
 import { SendTokensContent } from "../pages/sendTokens/components/SendTokensContent"
 
 const chainNameToChainId: Record<string, number | undefined> = {
@@ -35,16 +37,47 @@ export const CreateRequestDropdown = () => {
 
   const [sendTokensSliderOpen, setSendTokensSliderOpen] =
     useState<boolean>(false)
+
   const closeSendTokensSlider = (isOpen: boolean) => {
     if (!isOpen) {
       removeQueryParam(router, "sendTokenSliderOpen")
     }
   }
 
+  const [requestTokensSliderOpen, setRequestTokensSliderOpen] =
+    useState<boolean>(false)
+
+  const closeRequestTokensSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "requestTokenSliderOpen")
+    }
+  }
+
+  const [editMembersSliderOpen, setEditMembersSliderOpen] =
+    useState<boolean>(false)
+
+  const closeEditMembersSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "editMembersSliderOpen")
+    }
+  }
+
   useEffect(() => {
     if (router.query.sendTokenSliderOpen) {
       setSendTokensSliderOpen(true)
+      setRequestTokensSliderOpen(false)
+      setEditMembersSliderOpen(false)
+    } else if (router.query.requestTokenSliderOpen) {
+      setRequestTokensSliderOpen(true)
+      setSendTokensSliderOpen(false)
+      setEditMembersSliderOpen(false)
+    } else if (router.query.editMembersSliderOpen) {
+      setEditMembersSliderOpen(true)
+      setRequestTokensSliderOpen(false)
+      setSendTokensSliderOpen(false)
     } else {
+      setEditMembersSliderOpen(false)
+      setRequestTokensSliderOpen(false)
       setSendTokensSliderOpen(false)
     }
   }, [router.query])
@@ -63,6 +96,22 @@ export const CreateRequestDropdown = () => {
               mutate(key)
             }}
           />
+        </div>
+      </RightSlider>
+      <RightSlider
+        open={requestTokensSliderOpen}
+        setOpen={closeRequestTokensSlider}
+      >
+        <div className="px-4">
+          <RequestTokensContent />
+        </div>
+      </RightSlider>
+      <RightSlider
+        open={editMembersSliderOpen}
+        setOpen={closeEditMembersSlider}
+      >
+        <div className="px-4">
+          <EditMembersContent />
         </div>
       </RightSlider>
       <DropdownMenu>
@@ -95,18 +144,52 @@ export const CreateRequestDropdown = () => {
             </Breakpoint>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer focus:bg-black">
-            <Link
-              href={`/${router.query.chainNameAndSafeAddress}/proposals/tokens/request`}
-            >
-              Request tokens
-            </Link>
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
+                  return (
+                    <Link
+                      href={`/${router.query.chainNameAndSafeAddress}/proposals/tokens/request`}
+                    >
+                      Request tokens
+                    </Link>
+                  )
+                }
+                return (
+                  <span
+                    onClick={() => {
+                      addQueryParam(router, "requestTokenSliderOpen", "true")
+                    }}
+                  >
+                    Request tokens
+                  </span>
+                )
+              }}
+            </Breakpoint>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer focus:bg-black">
-            <Link
-              href={`/${router.query.chainNameAndSafeAddress}/members/edit`}
-            >
-              Edit members
-            </Link>
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
+                  return (
+                    <Link
+                      href={`/${router.query.chainNameAndSafeAddress}/members/edit`}
+                    >
+                      Edit members
+                    </Link>
+                  )
+                }
+                return (
+                  <span
+                    onClick={() => {
+                      addQueryParam(router, "editMembersSliderOpen", "true")
+                    }}
+                  >
+                    Edit Members
+                  </span>
+                )
+              }}
+            </Breakpoint>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
