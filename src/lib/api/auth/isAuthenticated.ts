@@ -1,5 +1,6 @@
-import jwt, { Secret } from "jsonwebtoken"
+import jwt, { JwtPayload, Secret } from "jsonwebtoken"
 import { NextApiRequest, NextApiResponse } from "next/types"
+import { Ctx } from "./types"
 
 export const isAuthenticated = async (
   req: NextApiRequest,
@@ -14,7 +15,9 @@ export const isAuthenticated = async (
     const decoded = jwt.verify(authToken as string, verificationKey as Secret, {
       issuer: `app.dynamic.xyz/${process.env.DYNAMIC_ENV_ID}`,
     })
-    return decoded
+    return {
+      address: (decoded as JwtPayload)?.verified_account?.address,
+    } as Ctx
   } catch (err: any) {
     // If user is not authenticated, `jwt.verify` will throw.
     console.warn(`JWT failed to verify with error ${err}.`)

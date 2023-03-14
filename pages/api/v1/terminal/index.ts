@@ -1,11 +1,12 @@
 import db from "db"
+import { Ctx } from "lib/api/auth/types"
 import withAuth from "lib/api/auth/withAuth"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getTerminalByChainIdAndAddress } from "../../../../src/models/terminal/terminals"
 
 export default withAuth(handler)
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
   const { method, query, body } = req
   const { safeAddress: safeAddressQuery, chainId: chainIdQuery } = query as {
     safeAddress: string
