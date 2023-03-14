@@ -244,7 +244,7 @@ export const ExecuteWrapper = ({
             Execute
           </Button>
           {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-xs text-slate-500"}>
+          <p className={"mt-1 text-xs text-gray"}>
             You’ll be directed to confirm. This action is on-chain and cost gas.
           </p>
         </div>

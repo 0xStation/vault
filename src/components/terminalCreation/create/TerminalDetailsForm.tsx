@@ -181,7 +181,7 @@ export const TerminalDetailsForm = ({
           </Button>
           <p
             className={`mt-1 text-sm  ${
-              formMessage?.isError ? "text-red" : "text-slate-500"
+              formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >
             {formMessage.message || "Complete the required fields to continue."}

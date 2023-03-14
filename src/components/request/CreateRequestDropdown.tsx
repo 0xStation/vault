@@ -70,7 +70,7 @@ export const CreateRequestDropdown = () => {
           <Button size="sm">+ Create</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2">
-          <DropdownMenuItem className="cursor-pointer focus:bg-white">
+          <DropdownMenuItem className="cursor-pointer focus:bg-black">
             <Breakpoint>
               {(isMobile) => {
                 if (isMobile) {
@@ -94,14 +94,14 @@ export const CreateRequestDropdown = () => {
               }}
             </Breakpoint>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer focus:bg-white">
+          <DropdownMenuItem className="cursor-pointer focus:bg-black">
             <Link
               href={`/${router.query.chainNameAndSafeAddress}/requests/tokens/request`}
             >
               Request tokens
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer focus:bg-white">
+          <DropdownMenuItem className="cursor-pointer focus:bg-black">
             <Link
               href={`/${router.query.chainNameAndSafeAddress}/members/edit`}
             >

@@ -39,7 +39,7 @@ export const GettingStartedPage = () => {
         Let us help you and your collective get started.
       </p>
       {gettingStartedOptions.map((option) => (
-        <div className="mb-3 rounded bg-slate-50 p-2.5 pl-6" key={option.title}>
+        <div className="mb-3 rounded bg-gray-90 p-2.5 pl-6" key={option.title}>
           <p className="font-bold">{option.title}</p>
           <p className="mt-1 mb-3 text-sm">{option.subtitle}</p>
           <Button variant="secondary" size="sm">

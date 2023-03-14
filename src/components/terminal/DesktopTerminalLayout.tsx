@@ -91,33 +91,29 @@ const DesktopTerminalLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className=" relative h-full w-[300px] border-r border-slate-200">
+        <div className=" relative h-full w-[300px] border-r border-gray-80">
           <section className="flex flex-row items-center justify-between p-4">
             <StationLogo size="lg" />
           </section>
-          <section className="mt-4 p-4">
-            <div className="rounded border border-slate-200">
-              <div className="border-b border-slate-200 bg-slate-100 p-4">
-                <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
-                <div className="mt-2 flex flex-row items-center space-x-1">
-                  <Network chainId={terminal?.chainId} />
-                  <span className="text-xs">
-                    · {truncateString(terminal?.safeAddress)}
-                  </span>
-                  <CopyToClipboard text={terminal?.safeAddress} />
-                </div>
+          <section className="mt-4 rounded p-4">
+            <div className="rounded-t-xl bg-gray-100 p-4">
+              <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+              <div className="mt-2 flex flex-row items-center space-x-1">
+                <Network chainId={terminal?.chainId} />
+                <span className="text-xs">
+                  · {truncateString(terminal?.safeAddress)}
+                </span>
+                <CopyToClipboard text={terminal?.safeAddress} />
               </div>
-              <div className="bg-slate-50 p-4">
-                <h4 className="mb-1 text-xs text-slate-500">
-                  Total balance value
-                </h4>
-                <span>{`$${totalAssetValue
-                  ?.toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
-                <h4 className="mb-1 mt-4 text-xs text-slate-500">Members</h4>
-                <span>{terminal.signers.length}</span>
-              </div>
+            </div>
+            <div className="rounded-b-xl bg-gray-90 p-4">
+              <h4 className="mb-1 text-xs text-gray">Total balance value</h4>
+              <span>{`$${totalAssetValue
+                ?.toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
+              <h4 className="mb-1 mt-4 text-xs text-gray">Members</h4>
+              <span>{terminal.signers.length}</span>
             </div>
           </section>
           <section className="mt-2">
@@ -133,7 +129,7 @@ const DesktopTerminalLayout = ({
                     }`}
                     key={`link-${idx}`}
                   >
-                    <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-slate-100">
+                    <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-gray-90">
                       <span>{option.label}</span>
                       {option.label === "Proposals" &&
                         requestsNeedingAttention && (
@@ -152,7 +148,7 @@ const DesktopTerminalLayout = ({
                 >
                   <div className="flex flex-col">
                     <span>{option.label}</span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-gray">
                       {option.description}
                     </span>
                   </div>

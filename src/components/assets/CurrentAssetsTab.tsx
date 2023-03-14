@@ -53,12 +53,12 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                       className="block rounded-full object-contain"
                     />
                   ) : (
-                    <span className="block h-6 w-6 rounded-full bg-slate-200"></span>
+                    <span className="block h-6 w-6 rounded-full bg-gray-80"></span>
                   )}
                 </div>
                 <div className="flex flex-col">
                   <p>{response.name}</p>
-                  <p className="text-xs text-slate-500">{response.pretty}</p>
+                  <p className="text-xs text-gray">{response.pretty}</p>
                 </div>
               </div>
               <p className="text-lg">
@@ -77,11 +77,11 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                   src={response.nft.previews[1].URI}
                   alt={response.nft.description}
                   fill={true}
-                  className="rounded border border-slate-200 object-contain"
+                  className="rounded border border-gray-80 object-contain"
                 />
               </div>
               <h3 className="mt-2">{response.nft.title}</h3>
-              <h4 className="text-sm text-slate-500">0.15 ETH · $305.38</h4>
+              <h4 className="text-sm text-gray">0.15 ETH · $305.38</h4>
             </div>
           )
         })}

@@ -16,7 +16,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-slate-200`}
+      className={`${className} h-fit p-2 hover:bg-gray-80`}
     >
       <PencilIcon className="w-2.5" />
     </button>
@@ -40,7 +40,7 @@ const Mobile = ({ terminal }: { terminal: Terminal }) => {
           onClick={() =>
             router.push(`/${chainNameAndSafeAddress}/details/edit`)
           }
-          className="ml-2 mr-4 rounded border border-slate-200"
+          className="ml-2 mr-4 rounded border border-gray-80"
         />
       </div>
       <TerminalDetailsPageContent terminal={terminal} />

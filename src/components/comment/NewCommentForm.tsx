@@ -53,10 +53,10 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
             <div className="text-xs">You</div>
           </div>
           <form className="mt-1 pl-6" onSubmit={handleSubmit(onSubmit)}>
-            <div className="group flex flex-col space-y-2 rounded-md bg-slate-50 py-2 px-3 hover:bg-slate-100">
+            <div className="group flex flex-col space-y-2 rounded-md bg-gray-90 py-2 px-3 hover:bg-gray-90">
               <textarea
                 {...register("comment", { required: true })}
-                className="resize-none bg-slate-50 text-sm placeholder:text-slate-500 group-hover:bg-slate-100"
+                className="resize-none bg-gray-90 text-sm placeholder:text-gray group-hover:bg-gray-90"
                 placeholder="Leave a comment..."
                 rows={1}
                 // make height auto-adjust while typing

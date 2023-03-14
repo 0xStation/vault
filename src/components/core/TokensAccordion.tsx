@@ -18,7 +18,7 @@ export const TokenTransfersAccordion = ({
     <div>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row space-x-2">
-          <span className="text-xs text-slate-500">Tokens</span>
+          <span className="text-xs text-gray">Tokens</span>
           <span className="text-xs">{transfers?.length}</span>
         </div>
         <div
@@ -40,7 +40,7 @@ export const TokenTransfersAccordion = ({
                 key={`transfer-${index}`}
                 className={cn(
                   "flex flex-row justify-between rounded-lg px-4 py-2",
-                  transferBgGray ? "bg-slate-50" : "bg-white",
+                  transferBgGray ? "bg-gray-90" : "bg-black",
                 )}
               >
                 <span>

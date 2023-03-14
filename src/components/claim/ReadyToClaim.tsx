@@ -8,7 +8,7 @@ export const ReadyToClaim = ({ address }: { address: string }) => {
     (items?.requests.length ?? 0) + (items?.revShareWithdraws.length ?? 0)
 
   return (
-    <div className="rounded-lg border-[0.5px] border-slate-200 bg-slate-100 p-3 ">
+    <div className="rounded-lg bg-gray-90 p-3 ">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center space-x-3">
           {!!itemsCount && (
@@ -18,7 +18,7 @@ export const ReadyToClaim = ({ address }: { address: string }) => {
             {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
           </div>
         </div>
-        <ChevronRight size="sm" color="slate-500" />
+        <ChevronRight size="sm" color="gray" />
       </div>
     </div>
   )

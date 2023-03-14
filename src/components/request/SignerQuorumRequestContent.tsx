@@ -27,25 +27,25 @@ export const SignerQuorumRequestContent = ({
   return (
     <>
       <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Members</span>
+        <span className="text-gray">Members</span>
         <span>{prompt}</span>
       </div>
-      <div className="p2- space-y-2 rounded-md bg-slate-100 p-3">
+      <div className="p2- space-y-2 rounded-md bg-gray-90 p-3">
         {signerQuorumMeta.add.length > 0 && (
-          <h5 className="text-xs font-bold text-slate-500">Add</h5>
+          <h5 className="text-xs font-bold text-gray">Add</h5>
         )}
         {signerQuorumMeta.add.map((address, idx) => {
           return <Address key={`address-${idx}`} address={address} />
         })}
         {signerQuorumMeta.remove.length > 0 && (
-          <h5 className="text-xs font-bold text-slate-500">Remove</h5>
+          <h5 className="text-xs font-bold text-gray">Remove</h5>
         )}
         {signerQuorumMeta.remove.map((address, idx) => {
           return <Address key={`address-${idx}`} address={address} />
         })}
       </div>
       <div className="flex flex-row justify-between">
-        <span className="text-slate-500">Quorum</span>
+        <span className="text-gray">Quorum</span>
         <span>{signerQuorumMeta.setQuorum}</span>
       </div>
     </>

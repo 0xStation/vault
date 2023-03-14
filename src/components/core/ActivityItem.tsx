@@ -30,7 +30,7 @@ const ActivityItem = ({
     <div className="flex flex-col">
       <div className="flex flex-row items-center space-x-2">
         <AvatarAddress size="xs" address={activity.address} />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-gray">
           {variantMessage(activity.variant, activity.createdAt)}
         </p>
         {activity.data.transactionHash && (
@@ -44,7 +44,7 @@ const ActivityItem = ({
         )}
       </div>
       {activity.data.comment && (
-        <div className="mt-1 ml-6 rounded-md bg-slate-50 px-3 py-2">
+        <div className="mt-1 ml-6 rounded-md bg-gray-90 px-3 py-2">
           {isEditing ? (
             <EditCommentForm
               mutateRequest={mutateRequest}
@@ -60,7 +60,7 @@ const ActivityItem = ({
                 </span>
                 {activity.address === activeUser?.address && (
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-slate-100 data-[state=open]:bg-slate-100">
+                    <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-gray-90 data-[state=open]:bg-gray-90">
                       <EllipsisHorizontalIcon height={16} width={16} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -72,7 +72,7 @@ const ActivityItem = ({
                 )}
               </div>
               {activity.data.edited && (
-                <div className="mt-2.5 text-xs text-slate-500">(Edited)</div>
+                <div className="mt-2.5 text-xs text-gray">(Edited)</div>
               )}
             </>
           )}

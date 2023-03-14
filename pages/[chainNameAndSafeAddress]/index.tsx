@@ -141,15 +141,15 @@ const MobileTerminalIndexPage = () => {
           />
         </div>
       </section>
-      <section className="mt-4 divide-y divide-slate-300 border-t border-b border-slate-300">
+      <section className="mt-4 divide-y divide-gray-80 border-t border-b border-gray-80">
         {options(router).map((option, idx) => {
           if (option.active) {
             return (
               <Link href={option.href} className="block" key={`link-${idx}`}>
-                <div className="flex cursor-pointer flex-row items-center justify-between p-4 hover:bg-slate-100">
+                <div className="flex cursor-pointer flex-row items-center justify-between p-4 hover:bg-gray-90">
                   <div className="flex flex-col">
                     <span>{option.label}</span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-gray">
                       {option.description}
                     </span>
                   </div>
@@ -173,9 +173,7 @@ const MobileTerminalIndexPage = () => {
             >
               <div className="flex flex-col">
                 <span>{option.label}</span>
-                <span className="text-xs text-slate-500">
-                  {option.description}
-                </span>
+                <span className="text-xs text-gray">{option.description}</span>
               </div>
             </div>
           )

@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 body {
-  background-color: "#ffffff";
-  color: #212121;
+  background-color: #0d0e11;
+  color: #ffffff;
   font-family: "Favorit Pro";
   height: 100%;
 }
 
 input[type="checkbox"] {
   appearance: none;
-  background-color: #fff;
+  background-color: #0d0e11;
   margin: 0;
   font: inherit;
   color: #687385;

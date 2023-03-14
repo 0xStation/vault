@@ -15,7 +15,7 @@ const RequestTransferContent = ({ request }: { request: RequestFrob }) => {
     ?.length
 
   return (
-    <div className="flex flex-row items-center space-x-2 text-slate-500">
+    <div className="flex flex-row items-center space-x-2 text-gray-90">
       <ArrowUpRight size={"sm"} />
       <span className="text-base">
         {transfer?.value &&
@@ -49,8 +49,8 @@ const ProfileRequestTableRow = ({
 
   return (
     <div
-      className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-slate-200 py-3 px-4 hover:bg-slate-100 ${
-        disabled ? "opacity-30" : "hover:bg-slate-50"
+      className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-gray-80 py-3 px-4 hover:bg-gray-90 ${
+        disabled ? "opacity-30" : "hover:bg-gray-90"
       }`}
       onClick={() => triggerDetails(request)}
     >
@@ -67,7 +67,7 @@ const ProfileRequestTableRow = ({
           )}
         </>
       )}
-      <div className="text-xs text-slate-500">#{request.number}</div>
+      <div className="text-xs text-gray-90">#{request.number}</div>
       <RequestStatusIcon status={request.status} />
       <Avatar size="sm" address={request.data.createdBy} />
       <div className="min-w-0 grow">
@@ -86,22 +86,22 @@ const ProfileRequestTableRow = ({
           {request.approveActivities.length}
         </span>
 
-        <span className="text-sm text-slate-500">Approved</span>
+        <span className="text-sm text-gray-90">Approved</span>
       </div>
       <div className="space-x-1">
         <span className="text-sm font-bold text-black">
           {request.rejectActivities.length}
         </span>
-        <span className="text-sm text-slate-500">Rejected</span>
+        <span className="text-sm text-gray-90">Rejected</span>
       </div>
 
       <div className="flex cursor-pointer flex-row items-center space-x-1">
         <ChatBubble size={"sm"} />
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-gray-90">
           {request.commentActivities.length}
         </span>
       </div>
-      <div className="basis-16 text-right text-xs text-slate-500">
+      <div className="basis-16 text-right text-xs text-gray-90">
         {timeSince(request.createdAt)}
       </div>
     </div>

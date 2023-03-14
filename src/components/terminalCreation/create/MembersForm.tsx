@@ -326,13 +326,11 @@ export const MembersView = ({
                     <p className="ml-2">You</p>
                   </div>
                 ) : (
-                  <div key={item.id} className="mb-1 rounded bg-slate-50 p-3">
+                  <div key={item.id} className="mb-1 rounded bg-gray-90 p-3">
                     <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-sm text-slate-500">
-                        Member {index + 1}
-                      </p>
+                      <p className="text-sm text-gray">Member {index + 1}</p>
                       <button type="button" onClick={() => remove(index)}>
-                        <XMarkIcon className="h-5 w-5 fill-slate-500" />
+                        <XMarkIcon className="h-5 w-5 fill-gray-90" />
                       </button>
                     </div>
                     <AddressInput
@@ -341,7 +339,7 @@ export const MembersView = ({
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
+                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
@@ -405,7 +403,7 @@ export const MembersView = ({
           </Button>
           <p
             className={`mt-1 text-sm  ${
-              formMessage?.isError ? "text-red" : "text-slate-500"
+              formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >
             {formMessage.message || "Complete the required fields to continue."}

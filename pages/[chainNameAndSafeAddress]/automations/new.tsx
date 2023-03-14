@@ -277,7 +277,7 @@ const NewAutomationPage = () => {
           />
           <div className="flex flex-row items-center justify-between">
             <label className="text-sm font-bold">Recipients and splits*</label>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-gray">
               {sumSplits(watchSplits)}/100%
             </span>
           </div>
@@ -338,7 +338,7 @@ const NewAutomationPage = () => {
                     errors={errors}
                     label="Wallet or ENS address*"
                     placeholder="Enter a wallet or ENS address"
-                    className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
+                    className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
                     required
                     validations={{
                       noDuplicates: async (v: string) => {
@@ -385,7 +385,7 @@ const NewAutomationPage = () => {
             {(splitsFieldError as string) || ""}
           </p>
         </div>
-        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-white px-5 py-3 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-black px-5 py-3 text-center">
           <Button
             type="submit"
             fullWidth={true}
@@ -396,7 +396,7 @@ const NewAutomationPage = () => {
           </Button>
           <p
             className={`mt-1 text-sm  ${
-              formMessage?.isError ? "text-red" : "text-slate-500"
+              formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >
             {formMessage.message || "Complete the required fields to continue."}

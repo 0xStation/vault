@@ -19,25 +19,23 @@ const DesktopProfileLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className=" relative h-full w-[300px] border-r border-slate-200">
+        <div className=" relative h-full w-[300px] border-r border-gray-80">
           <section className="flex flex-row items-center justify-between p-4">
             <StationLogo size="lg" />
           </section>
           <section className="mt-4 p-4">
-            <div className="rounded border border-slate-200">
-              <div className="flex flex-row items-center space-x-2 border-b border-slate-200 bg-slate-100 p-4">
-                <Avatar address={accountAddress as string} size="lg" />
-                <Address address={accountAddress as string} size="lg" />
-              </div>
-              <div className="bg-slate-50 p-4">
-                <h4 className="mb-1 text-xs text-slate-500">Terminals</h4>
-                <span>{count}</span>
-              </div>
+            <div className="flex flex-row items-center space-x-2 rounded-t-xl border-b border-gray-80 bg-gray-90 p-4">
+              <Avatar address={accountAddress as string} size="lg" />
+              <Address address={accountAddress as string} size="lg" />
+            </div>
+            <div className="rounded-b-xl bg-gray-90 p-4">
+              <h4 className="mb-1 text-xs text-gray">Terminals</h4>
+              <span>{count}</span>
             </div>
           </section>
         </div>
         <div
-          className={`h-full grow overflow-scroll ${
+          className={`h-full grow overflow-auto ${
             assumeDefaultPadding ? "px-12 py-4" : "p-0"
           }`}
         >

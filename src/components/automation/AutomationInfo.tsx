@@ -26,7 +26,7 @@ export const AutomationInfo = () => {
       <div className="mt-6 px-4">
         <div className="flex flex-row items-center space-x-1">
           <span className="h-2 w-2 rounded-full bg-green"></span>
-          <span className="text-sm text-slate-500">Live</span>
+          <span className="text-sm text-gray">Live</span>
         </div>
         <h2 className="mt-2">{automation?.data.name}</h2>
       </div>
@@ -53,13 +53,13 @@ export const AutomationInfo = () => {
                     key={`split-${split.address}`}
                   >
                     <AvatarAddress address={split.address} size="sm" />
-                    <p className="text-slate-500">{split.value}%</p>
+                    <p className="text-gray">{split.value}%</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="mb-24 mt-4 border-t border-slate-200 px-4">
+          <div className="mb-24 mt-4 border-t border-gray-80 px-4">
             <h3 className="mt-4">Balance</h3>
             <div className="space-y-3">
               <LabelCard
@@ -84,12 +84,12 @@ export const AutomationInfo = () => {
                           className="block rounded-full object-contain"
                         />
                       ) : (
-                        <span className="block h-6 w-6 rounded-full bg-slate-200"></span>
+                        <span className="block h-6 w-6 rounded-full bg-gray-80"></span>
                       )}
                     </div>
                     <div className="flex flex-col">
                       <p>{balance.symbol}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-gray">
                         {valueToAmount(balance.value, balance.decimals)}
                       </p>
                     </div>

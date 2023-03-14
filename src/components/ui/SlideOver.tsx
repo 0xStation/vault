@@ -23,7 +23,7 @@ const SlideOver = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-slate-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-gray-90 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -39,16 +39,16 @@ const SlideOver = ({
                 leaveTo="-translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-black py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-gray-900 text-lg font-medium">
+                        <Dialog.Title className="text-lg font-medium text-gray-90">
                           Panel title
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="text-gray-400 hover:text-gray-500 focus:ring-indigo-500 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            className="text-gray-400 hover:text-gray-500 focus:ring-indigo-500 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-offset-2"
                             onClick={() => setOpen(false)}
                           >
                             <span className="sr-only">Close panel</span>

@@ -38,8 +38,8 @@ const RequestCard = ({
       )}/requests/${request.id}`}
     >
       <div
-        className={`w-full max-w-[100vw] border-b border-slate-200 p-4 ${
-          disabled ? "opacity-30" : "hover:bg-slate-50"
+        className={`w-full max-w-[100vw] border-b border-gray-80 p-4 ${
+          disabled ? "opacity-30" : "hover:bg-gray-90"
         }`}
       >
         <div className="flex flex-col space-y-3">
@@ -65,17 +65,17 @@ const RequestCard = ({
                 {request.data.note}
               </div>
             </div>
-            <span className="shrink-0 pl-6 text-right text-xs text-slate-500">
+            <span className="shrink-0 pl-6 text-right text-xs text-gray">
               {timeSince(request.createdAt)}
             </span>
           </div>
 
-          <div className="flex flex-row items-center space-x-2 text-slate-500">
-            <span className="text-sm text-slate-500">#{request.number}</span>
+          <div className="flex flex-row items-center space-x-2 text-gray">
+            <span className="text-sm text-gray">#{request.number}</span>
             {request.variant === RequestVariantType.TOKEN_TRANSFER && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-slate-500">
+                <span className="text-base text-gray">
                   {transfer?.value &&
                     transfer?.token.decimals &&
                     valueToAmount(
@@ -90,7 +90,7 @@ const RequestCard = ({
             {request.variant === RequestVariantType.SIGNER_QUORUM && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-slate-500">
+                <span className="text-base text-gray">
                   Add {1} member and change quorum.
                 </span>
               </>
@@ -98,25 +98,23 @@ const RequestCard = ({
             {request.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
               <>
                 <ArrowUpRight size={"sm"} />
-                <span className="text-base text-slate-500">
-                  Split token stuff
-                </span>
+                <span className="text-base text-gray">Split token stuff</span>
               </>
             )}
           </div>
-          <div className="flex flex-row items-center justify-between text-sm text-slate-500">
+          <div className="flex flex-row items-center justify-between text-sm text-gray">
             <div className="flex flex-row space-x-4 text-sm">
               <div className="space-x-1">
-                <span className="font-bold text-black">
+                <span className="font-bold text-white">
                   {request.approveActivities.length}
                 </span>
-                <span className="text-slate-500">Approved</span>
+                <span className="text-gray">Approved</span>
               </div>
               <div className="space-x-1">
-                <span className="font-bold text-black">
+                <span className="font-bold text-white">
                   {request.rejectActivities.length}
                 </span>
-                <span className="text-slate-500">Rejected</span>
+                <span className="text-gray">Rejected</span>
               </div>
             </div>
             <div className="flex cursor-pointer flex-row items-center space-x-1">

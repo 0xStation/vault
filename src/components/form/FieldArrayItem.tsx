@@ -10,11 +10,11 @@ export const FieldArrayItem = ({
   children: any
 }) => {
   return (
-    <li className="mb-1 space-y-5 rounded-lg bg-slate-50 p-3">
+    <li className="mb-1 space-y-5 rounded-lg bg-gray-90 p-3">
       <div className="flex flex-row items-center justify-between">
-        <p className="text-xs text-slate-500">{title}</p>
+        <p className="text-xs text-gray">{title}</p>
         <button type="button" onClick={remove}>
-          <XMarkIcon className="h-4 w-4 fill-slate-500" />
+          <XMarkIcon className="h-4 w-4 fill-gray" />
         </button>
       </div>
       {children}
