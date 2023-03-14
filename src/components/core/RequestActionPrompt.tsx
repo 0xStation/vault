@@ -27,7 +27,9 @@ const RequestActionPrompt = ({ request }: { request: RequestFrob }) => {
     if (!hasVoted) prompt += " or cast your vote"
   }
 
-  return !isExecuted(request) ? (
+  if (isExecuted(request)) return <></>
+
+  return !!prompt ? (
     <div className="flex flex-row items-center justify-between rounded-md bg-slate-100 px-2 py-1">
       <h4 className="text-sm text-slate-500">{prompt}</h4>
       <ChevronRight size="sm" color="slate-500" />
