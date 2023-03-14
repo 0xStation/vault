@@ -1,5 +1,6 @@
 import jwt, { JwtPayload, Secret } from "jsonwebtoken"
 import { NextApiRequest, NextApiResponse } from "next/types"
+import { Ctx } from "./types"
 
 export const isAuthenticated = async (
   req: NextApiRequest,
