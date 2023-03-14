@@ -65,13 +65,13 @@ const RequestCard = ({
                 {request.data.note}
               </div>
             </div>
-            <span className="shrink-0 pl-6 text-right text-xs text-gray">
+            <span className="shrink-0 pl-6 text-right text-sm text-gray">
               {timeSince(request.createdAt)}
             </span>
           </div>
 
           <div className="flex flex-row items-center space-x-2 text-gray">
-            <span className="text-sm text-gray">#{request.number}</span>
+            <span className="text-base text-gray">#{request.number}</span>
             {request.variant === RequestVariantType.TOKEN_TRANSFER && (
               <>
                 <ArrowUpRight size={"sm"} />
@@ -102,8 +102,8 @@ const RequestCard = ({
               </>
             )}
           </div>
-          <div className="flex flex-row items-center justify-between text-sm text-gray">
-            <div className="flex flex-row space-x-4 text-sm">
+          <div className="flex flex-row items-center justify-between text-base text-gray">
+            <div className="flex flex-row space-x-4 text-base">
               <div className="space-x-1">
                 <span className="font-bold text-white">
                   {request.approveActivities.length}

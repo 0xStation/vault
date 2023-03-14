@@ -37,7 +37,7 @@ const TransactionItem = ({
         <div className="flex flex-col">
           <Address address={address} interactive={false} />
           <div className="flex flex-row">
-            <p className="pr-1 text-xs text-gray">
+            <p className="pr-1 text-sm text-gray">
               {date}
               {" · "}
             </p>

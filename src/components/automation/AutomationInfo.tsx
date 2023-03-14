@@ -26,7 +26,7 @@ export const AutomationInfo = () => {
       <div className="mt-6 px-4">
         <div className="flex flex-row items-center space-x-1">
           <span className="h-2 w-2 rounded-full bg-green"></span>
-          <span className="text-sm text-gray">Live</span>
+          <span className="text-base text-gray">Live</span>
         </div>
         <h2 className="mt-2">{automation?.data.name}</h2>
       </div>
@@ -35,8 +35,8 @@ export const AutomationInfo = () => {
           <div className="px-4">
             <div className="mt-1 flex flex-row items-center space-x-1">
               <Network chainId={chainId} />
-              <span className="px-1 text-xs">·</span>
-              <span className="text-xs">
+              <span className="px-1 text-sm">·</span>
+              <span className="text-sm">
                 {truncateString(
                   toChecksumAddress(automation?.data.meta.address),
                 )}
@@ -89,7 +89,7 @@ export const AutomationInfo = () => {
                     </div>
                     <div className="flex flex-col">
                       <p>{balance.symbol}</p>
-                      <p className="text-xs text-gray">
+                      <p className="text-sm text-gray">
                         {valueToAmount(balance.value, balance.decimals)}
                       </p>
                     </div>

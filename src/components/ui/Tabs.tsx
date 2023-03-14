@@ -24,7 +24,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     className={cn(
-      "mb-[-4px] inline-flex items-center justify-center pb-1 text-xs text-white disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b data-[state=active]:font-bold",
+      "mb-[-4px] inline-flex items-center justify-center pb-1 text-sm text-white disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b data-[state=active]:font-bold",
       className,
     )}
     {...props}
@@ -52,7 +52,7 @@ const FilterTabsTrigger = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "mb-2 inline-flex items-center justify-center rounded-full border border-gray-80 px-3 py-1 text-xs text-white disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-gray-90 data-[state=active]:font-medium",
+        "mb-2 inline-flex items-center justify-center rounded-full border border-gray-80 px-3 py-1 text-sm text-white disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-gray-90 data-[state=active]:font-medium",
         className,
       )}
       {...props}

@@ -116,8 +116,8 @@ const MobileTerminalIndexPage = () => {
         <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
-          <span className="px-1 text-xs">·</span>
-          <span className="text-xs">
+          <span className="px-1 text-sm">·</span>
+          <span className="text-sm">
             {truncateString(terminal?.safeAddress)}
           </span>
           <CopyToClipboard text={terminal?.safeAddress} />
@@ -149,14 +149,14 @@ const MobileTerminalIndexPage = () => {
                 <div className="flex cursor-pointer flex-row items-center justify-between p-4 hover:bg-gray-90">
                   <div className="flex flex-col">
                     <span>{option.label}</span>
-                    <span className="text-xs text-gray">
+                    <span className="text-sm text-gray">
                       {option.description}
                     </span>
                   </div>
                   <div className="flex flex-row items-center space-x-2">
                     {option.label === "Proposals" &&
                       requestsNeedingAttention && (
-                        <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-sm text-orange">
+                        <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-base text-orange">
                           {requestsNeedingAttention.length}
                         </span>
                       )}
@@ -173,7 +173,7 @@ const MobileTerminalIndexPage = () => {
             >
               <div className="flex flex-col">
                 <span>{option.label}</span>
-                <span className="text-xs text-gray">{option.description}</span>
+                <span className="text-sm text-gray">{option.description}</span>
               </div>
             </div>
           )

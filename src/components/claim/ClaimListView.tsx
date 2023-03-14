@@ -276,7 +276,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
         resetBatchState={resetBatchState}
       >
         <button
-          className="text-sm font-bold"
+          className="text-base font-bold"
           onClick={() => {
             setClaimBatchOpen(true)
           }}

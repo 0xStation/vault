@@ -58,7 +58,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                 </div>
                 <div className="flex flex-col">
                   <p>{response.name}</p>
-                  <p className="text-xs text-gray">{response.pretty}</p>
+                  <p className="text-sm text-gray">{response.pretty}</p>
                 </div>
               </div>
               <p className="text-lg">
@@ -81,7 +81,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                 />
               </div>
               <h3 className="mt-2">{response.nft.title}</h3>
-              <h4 className="text-sm text-gray">0.15 ETH · $305.38</h4>
+              <h4 className="text-base text-gray">0.15 ETH · $305.38</h4>
             </div>
           )
         })}

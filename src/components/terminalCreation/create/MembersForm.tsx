@@ -53,7 +53,7 @@ const LoadingScreen = ({
               setTerminalCreationError("")
               setCreateTerminalView(CREATE_TERMINAL_VIEW.MEMBERS)
             }}
-            className="mt-1 text-sm underline"
+            className="mt-1 text-base underline"
           >
             Try again.
           </button>
@@ -64,11 +64,11 @@ const LoadingScreen = ({
           <p className="mt-8 mb-2 animate-pulse font-bold">
             Building your Terminal
           </p>
-          <p className="animate-pulse text-sm">
+          <p className="animate-pulse text-base">
             Please do not leave or refresh the page.
           </p>
           <a
-            className="flex flex-row items-center pt-3 text-sm text-violet underline"
+            className="flex flex-row items-center pt-3 text-base text-violet underline"
             href={getTransactionLink(chainId, txnHash)}
             target="_blank"
             rel="noreferrer"
@@ -315,7 +315,7 @@ export const MembersView = ({
       >
         <div className={`flex ${formHeight} grow flex-col overflow-auto`}>
           <div className="mb-6">
-            <label className="text-sm font-bold">Members*</label>
+            <label className="text-base font-bold">Members*</label>
             <div className="w-full">
               {(
                 memberFields as unknown as [{ id: string; address: string }]
@@ -328,7 +328,7 @@ export const MembersView = ({
                 ) : (
                   <div key={item.id} className="mb-1 rounded bg-gray-90 p-3">
                     <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-sm text-gray">Member {index + 1}</p>
+                      <p className="text-base text-gray">Member {index + 1}</p>
                       <button type="button" onClick={() => remove(index)}>
                         <XMarkIcon className="h-5 w-5 fill-gray-90" />
                       </button>
@@ -402,7 +402,7 @@ export const MembersView = ({
             Create Terminal
           </Button>
           <p
-            className={`mt-1 text-sm  ${
+            className={`mt-1 text-base  ${
               formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >

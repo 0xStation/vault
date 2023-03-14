@@ -30,7 +30,7 @@ const ActivityItem = ({
     <div className="flex flex-col">
       <div className="flex flex-row items-center space-x-2">
         <AvatarAddress size="xs" address={activity.address} />
-        <p className="text-xs text-gray">
+        <p className="text-sm text-gray">
           {variantMessage(activity.variant, activity.createdAt)}
         </p>
         {activity.data.transactionHash && (
@@ -55,7 +55,7 @@ const ActivityItem = ({
           ) : (
             <>
               <div className="items-top flex flex-row space-x-2.5">
-                <span className="w-full whitespace-pre-line text-sm">
+                <span className="w-full whitespace-pre-line text-base">
                   {activity.data.comment}
                 </span>
                 {activity.address === activeUser?.address && (
@@ -72,7 +72,7 @@ const ActivityItem = ({
                 )}
               </div>
               {activity.data.edited && (
-                <div className="mt-2.5 text-xs text-gray">(Edited)</div>
+                <div className="mt-2.5 text-sm text-gray">(Edited)</div>
               )}
             </>
           )}

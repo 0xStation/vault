@@ -311,7 +311,7 @@ const RequestListForm = ({
         {batchState.batchVariant === "EXECUTE" &&
           batchState.validActions.includes("EXECUTE-APPROVE") && (
             <button
-              className="text-sm font-bold"
+              className="text-base font-bold"
               onClick={() => {
                 setIsExecutingApproval(true)
                 toggleDrawer("batchExecuteDrawer", true)
@@ -323,7 +323,7 @@ const RequestListForm = ({
         {batchState.batchVariant === "EXECUTE" &&
           batchState.validActions.includes("EXECUTE-REJECT") && (
             <button
-              className="text-sm font-bold"
+              className="text-base font-bold"
               onClick={() => {
                 setIsExecutingApproval(false)
                 toggleDrawer("batchExecuteDrawer", true)
@@ -335,7 +335,7 @@ const RequestListForm = ({
         {batchState.batchVariant === "VOTE" && (
           <>
             <button
-              className="text-sm font-bold"
+              className="text-base font-bold"
               onClick={() => {
                 setIsVotingApproval(true)
                 toggleDrawer("batchVoteDrawer", true)
@@ -344,7 +344,7 @@ const RequestListForm = ({
               Approve
             </button>
             <button
-              className="text-sm font-bold"
+              className="text-base font-bold"
               onClick={() => {
                 setIsVotingApproval(false)
                 toggleDrawer("batchVoteDrawer", true)

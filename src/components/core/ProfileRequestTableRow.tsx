@@ -67,7 +67,7 @@ const ProfileRequestTableRow = ({
           )}
         </>
       )}
-      <div className="text-xs text-gray-90">#{request.number}</div>
+      <div className="text-sm text-gray-90">#{request.number}</div>
       <RequestStatusIcon status={request.status} />
       <Avatar size="sm" address={request.data.createdBy} />
       <div className="min-w-0 grow">
@@ -82,26 +82,26 @@ const ProfileRequestTableRow = ({
       </div>
 
       <div className="space-x-1">
-        <span className="text-sm font-bold text-black">
+        <span className="text-base font-bold text-black">
           {request.approveActivities.length}
         </span>
 
-        <span className="text-sm text-gray-90">Approved</span>
+        <span className="text-base text-gray-90">Approved</span>
       </div>
       <div className="space-x-1">
-        <span className="text-sm font-bold text-black">
+        <span className="text-base font-bold text-black">
           {request.rejectActivities.length}
         </span>
-        <span className="text-sm text-gray-90">Rejected</span>
+        <span className="text-base text-gray-90">Rejected</span>
       </div>
 
       <div className="flex cursor-pointer flex-row items-center space-x-1">
         <ChatBubble size={"sm"} />
-        <span className="text-sm text-gray-90">
+        <span className="text-base text-gray-90">
           {request.commentActivities.length}
         </span>
       </div>
-      <div className="basis-16 text-right text-xs text-gray-90">
+      <div className="basis-16 text-right text-sm text-gray-90">
         {timeSince(request.createdAt)}
       </div>
     </div>

@@ -38,7 +38,7 @@ export const Toast = () => {
         <div className="flex flex-row items-center space-x-2">
           {variant === "success" && <CheckIcon />}
           {variant === "loading" && <LoadingSpinner />}
-          <span className="text-sm">{message}</span>
+          <span className="text-base">{message}</span>
         </div>
         {action && <Hyperlink {...action} />}
       </div>

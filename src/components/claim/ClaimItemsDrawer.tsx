@@ -282,7 +282,7 @@ export const ClaimItemsDrawer = ({
               <div className="h-full overflow-y-auto pb-32">
                 <div className="mt-4 space-y-2 border-b border-gray-80 pb-6">
                   <div className="flex flex-row space-x-2">
-                    <span className="text-xs text-gray">Network</span>
+                    <span className="text-sm text-gray">Network</span>
                     <Network
                       chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                     />
@@ -306,7 +306,7 @@ export const ClaimItemsDrawer = ({
                       key={`item-${index}`}
                     >
                       <div>
-                        <p className="text-xs text-gray">Note</p>
+                        <p className="text-sm text-gray">Note</p>
                         <p className="mt-1">{item.note}</p>
                       </div>
                       <TokenTransfersAccordion
@@ -331,7 +331,7 @@ export const ClaimItemsDrawer = ({
                   Claim
                 </Button>
                 {/* TODO change size of xs to match designs, needs to be smaller */}
-                <p className={"mt-1 text-xs text-slate-500"}>
+                <p className={"mt-1 text-sm text-slate-500"}>
                   You’ll be directed to confirm. This action costs gas.
                 </p>
               </div>
@@ -352,7 +352,7 @@ export const ClaimItemsDrawer = ({
             <div className="h-full overflow-y-auto pb-32">
               <div className="mt-4 space-y-2 border-b border-slate-200 pb-6">
                 <div className="flex flex-row space-x-2">
-                  <span className="text-xs text-slate-500">Network</span>
+                  <span className="text-sm text-slate-500">Network</span>
                   <Network
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
@@ -376,7 +376,7 @@ export const ClaimItemsDrawer = ({
                     key={`item-${index}`}
                   >
                     <div>
-                      <p className="text-xs text-slate-500">Note</p>
+                      <p className="text-sm text-slate-500">Note</p>
                       <p className="mt-1">{item.note}</p>
                     </div>
                     <TokenTransfersAccordion
@@ -401,7 +401,7 @@ export const ClaimItemsDrawer = ({
                 Claim
               </Button>
               {/* TODO change size of xs to match designs, needs to be smaller */}
-              <p className={"mt-1 text-xs text-gray"}>
+              <p className={"mt-1 text-sm text-gray"}>
                 You’ll be directed to confirm. This action costs gas.
               </p>
             </div>

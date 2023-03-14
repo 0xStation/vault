@@ -36,7 +36,7 @@ const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
 const AssetsPageContent = ({ terminal }: { terminal: Terminal }) => {
   return (
     <>
-      <section className="mt-4 px-4">
+      <section className="mt-6 px-4">
         <h3 className="mb-2 text-2xl font-bold">Assets</h3>
       </section>
       <TerminalAssetsTabBar>

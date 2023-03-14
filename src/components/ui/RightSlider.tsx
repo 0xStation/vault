@@ -36,7 +36,7 @@ export default function RightSlider({
                           className="text-gray-400 hover:text-gray-500 focus:ring-indigo-500 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-offset-2"
                           onClick={() => setOpen(false)}
                         >
-                          <span className="text-sm">Close</span>
+                          <span className="text-base">Close</span>
                         </button>
                       </div>
                     </div>

@@ -194,7 +194,7 @@ const BatchExecuteWrapper = ({
             Execute
           </Button>
           {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-xs text-gray"}>
+          <p className={"mt-1 text-sm text-gray"}>
             You’ll be directed to confirm.
           </p>
         </div>

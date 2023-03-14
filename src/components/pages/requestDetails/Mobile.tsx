@@ -41,7 +41,7 @@ const RequestDetailsMobile = () => {
           >
             <ArrowLeft />
           </button>
-          <h4 className="text-xs text-gray">#{request?.number}</h4>
+          <h4 className="text-sm text-gray">#{request?.number}</h4>
           {/* empty span to keep number centered */}
           <span></span>
         </div>

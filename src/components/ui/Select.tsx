@@ -58,7 +58,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn(
-      "py-1.5 pr-2 pl-8 text-sm font-semibold text-white",
+      "py-1.5 pr-2 pl-8 text-base font-semibold text-white",
       className,
     )}
     {...props}
@@ -93,7 +93,7 @@ const SelectItem = React.forwardRef<
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <span className="absolute right-10 h-3.5 w-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <p className="text-xs text-gray">Selected</p>
+          <p className="text-sm text-gray">Selected</p>
         </SelectPrimitive.ItemIndicator>
       </span>
     </SelectPrimitive.Item>

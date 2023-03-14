@@ -30,7 +30,7 @@ export const ExistingSafeCard = ({
       <div className="flex flex-row justify-between">
         <p className="font-bold">{truncateString(safeAddress)}</p>
         <button
-          className="text-xs text-violet"
+          className="text-sm text-violet"
           onClick={(e) => {
             e.stopPropagation()
             setSelectedAddress(safeAddress)

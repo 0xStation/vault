@@ -52,7 +52,7 @@ const Desktop = ({ terminal }: { terminal: Terminal }) => {
         <RightSlider open={editDetailsSliderOpen} setOpen={toggleDetailsSlider}>
           <EditTerminalContent />
         </RightSlider>
-        <div className="absolute right-[48px] top-[62px]">
+        <div className="absolute right-[48px] top-[72px]">
           <EditButton
             onClick={() => addQueryParam(router, "editDetails", "true")}
             className="rounded border border-gray-80"

@@ -29,7 +29,7 @@ const Mobile = () => {
           {isLoading ? (
             <div className="h-4 w-20 animate-pulse rounded-md bg-gray-80"></div>
           ) : (
-            <div className="text-xs">
+            <div className="text-sm">
               <span className="font-bold">{count}</span>{" "}
               <span className="text-gray">
                 Terminal{count === 1 ? "" : "s"}

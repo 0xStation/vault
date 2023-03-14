@@ -29,7 +29,7 @@ export const PercentInput = ({
   const requiredMessage = required ? { required: "Required." } : {}
   return (
     <div className="mb-3 grid w-full items-center gap-1.5">
-      <label className="text-sm font-bold" htmlFor={name}>
+      <label className="text-base font-bold" htmlFor={name}>
         {label}
       </label>
       <div className="flex flex-row space-x-2 border-b border-b-gray-80">
@@ -64,7 +64,7 @@ export const PercentInput = ({
         />
         <span className="text-gray">%</span>
       </div>
-      <p className="text-xs text-red">
+      <p className="text-sm text-red">
         {get(errors, name) && get(errors, `${name}.message`)}
       </p>
     </div>

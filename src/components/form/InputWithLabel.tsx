@@ -28,7 +28,7 @@ export const InputWithLabel = ({
 
   return (
     <div className={`${className} grid w-full items-center gap-1.5`}>
-      <label className="text-sm font-bold" htmlFor={name}>
+      <label className="text-base font-bold" htmlFor={name}>
         {label}
       </label>
       <input
@@ -38,7 +38,7 @@ export const InputWithLabel = ({
         {...register(name, { ...registerOptions, ...requiredMessage })}
         {...rest}
       />
-      <p className="text-xs text-red">
+      <p className="text-sm text-red">
         {get(errors, name) && get(errors, `${name}.message`)}
       </p>
     </div>

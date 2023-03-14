@@ -19,9 +19,9 @@ export const TransactionLoadingPage = ({
         <LoadingSpinner />
       </div>
       <p className="mb-2 animate-pulse font-bold">{title}</p>
-      <p className="animate-pulse text-sm">{subtitle}</p>
+      <p className="animate-pulse text-base">{subtitle}</p>
       <a
-        className="flex flex-row items-center pt-3 text-sm text-violet underline"
+        className="flex flex-row items-center pt-3 text-base text-violet underline"
         href={getTransactionLink(chainId, txnHash)}
         target="_blank"
         rel="noreferrer"

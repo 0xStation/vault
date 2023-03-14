@@ -32,13 +32,13 @@ export const SignerQuorumRequestContent = ({
       </div>
       <div className="p2- space-y-2 rounded-md bg-gray-90 p-3">
         {signerQuorumMeta.add.length > 0 && (
-          <h5 className="text-xs font-bold text-gray">Add</h5>
+          <h5 className="text-sm font-bold text-gray">Add</h5>
         )}
         {signerQuorumMeta.add.map((address, idx) => {
           return <Address key={`address-${idx}`} address={address} />
         })}
         {signerQuorumMeta.remove.length > 0 && (
-          <h5 className="text-xs font-bold text-gray">Remove</h5>
+          <h5 className="text-sm font-bold text-gray">Remove</h5>
         )}
         {signerQuorumMeta.remove.map((address, idx) => {
           return <Address key={`address-${idx}`} address={address} />

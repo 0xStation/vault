@@ -276,8 +276,10 @@ const NewAutomationPage = () => {
             }}
           />
           <div className="flex flex-row items-center justify-between">
-            <label className="text-sm font-bold">Recipients and splits*</label>
-            <span className="text-xs text-gray">
+            <label className="text-base font-bold">
+              Recipients and splits*
+            </label>
+            <span className="text-sm text-gray">
               {sumSplits(watchSplits)}/100%
             </span>
           </div>
@@ -381,7 +383,7 @@ const NewAutomationPage = () => {
           >
             + Add recipient
           </Button>
-          <p className="text-center text-xs text-red">
+          <p className="text-center text-sm text-red">
             {(splitsFieldError as string) || ""}
           </p>
         </div>
@@ -395,7 +397,7 @@ const NewAutomationPage = () => {
             Create
           </Button>
           <p
-            className={`mt-1 text-sm  ${
+            className={`mt-1 text-base  ${
               formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >

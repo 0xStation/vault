@@ -26,7 +26,7 @@ export const TextareaWithLabel = ({
 
   return (
     <div className={`${className} grid w-full items-center gap-1.5`}>
-      <label className="text-sm font-bold" htmlFor={name}>
+      <label className="text-base font-bold" htmlFor={name}>
         {label}
       </label>
       <textarea
@@ -41,7 +41,7 @@ export const TextareaWithLabel = ({
           e.target.style.height = e.target.scrollHeight + "px"
         }}
       />
-      <p className="text-xs text-red">
+      <p className="text-sm text-red">
         {get(errors, name) && get(errors, `${name}.message`)}
       </p>
     </div>

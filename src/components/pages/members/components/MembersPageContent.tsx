@@ -1,4 +1,5 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
+import { Button } from "@ui/Button"
 import { useRouter } from "next/router"
 import { useGetSignerQuorumRequestChanges } from "../../../..//hooks/useGetSignerQuorumRequestChanges"
 import { convertGlobalId } from "../../../..//models/terminal/utils"
@@ -17,18 +18,7 @@ const EditButton = ({
       onClick={onClick}
       className={`${className} h-fit p-2 hover:bg-gray-80`}
     >
-      <PencilIcon className="w-2.5" />
-    </button>
-  )
-}
-
-const AddButton = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <button
-      onClick={onClick}
-      className="h-[28px] rounded bg-violet px-2 text-sm font-medium text-black hover:bg-violet/80"
-    >
-      + Add
+      <PencilIcon className="w-4" />
     </button>
   )
 }
@@ -53,15 +43,18 @@ const MembersPageContent = () => {
 
   return (
     <>
-      <div className="mt-4 w-full px-4">
-        <div className="flex flex-row justify-between">
-          <h2 className="mb-6 font-bold">Members</h2>
-          <div className="items-center">
-            <AddButton
+      <div className="mt-6 w-full px-4">
+        <div className="mb-6 flex flex-row items-center justify-between">
+          <h2 className="font-bold">Members</h2>
+          <div className="flex flex-row">
+            <Button
+              size="base"
               onClick={() =>
                 router.push(`/${chainNameAndSafeAddress}/members/edit`)
               }
-            />
+            >
+              + Add
+            </Button>
             <EditButton
               onClick={() =>
                 router.push(`/${chainNameAndSafeAddress}/members/edit`)
@@ -90,10 +83,10 @@ const MembersPageContent = () => {
                 />
 
                 {activeRequest?.length ? (
-                  <p className="flex items-center text-xs text-gray">
+                  <p className="flex items-center text-sm text-gray">
                     Pending entry ·&nbsp;
                     <a
-                      className="text-xs text-white underline decoration-dotted"
+                      className="text-sm text-white underline decoration-dotted"
                       href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
                     >
                       View request
@@ -121,10 +114,10 @@ const MembersPageContent = () => {
                   />
 
                   {(requestIds as string[])?.length ? (
-                    <p className="flex items-center text-xs text-gray">
+                    <p className="flex items-center text-sm text-gray">
                       Pending entry ·&nbsp;
                       <a
-                        className="text-xs text-white underline decoration-dotted"
+                        className="text-sm text-white underline decoration-dotted"
                         href={`/${chainNameAndSafeAddress}/proposals/${
                           (requestIds as string[])?.[0]
                         }`}
@@ -138,16 +131,16 @@ const MembersPageContent = () => {
             })}
         </div>
         <div className="mt-4">
-          <p className="text-sm font-bold">Quorum</p>
+          <p className="text-base font-bold">Quorum</p>
           <div className="flex flex-row justify-between">
             <p className="mt-2">
               {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
             </p>
             {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
-              <p className="text-xs text-gray">
+              <p className="text-sm text-gray">
                 Pending update ·&nbsp;
                 <a
-                  className="text-xs text-white underline decoration-dotted"
+                  className="text-sm text-white underline decoration-dotted"
                   href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
                   View request

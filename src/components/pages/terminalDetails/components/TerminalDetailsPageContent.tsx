@@ -6,12 +6,12 @@ import CopyToClipboard from "../../../core/CopyToClipboard"
 const TerminalDetailsPageContent = ({ terminal }: { terminal: Terminal }) => {
   return (
     <div>
-      <section className="mt-4 px-4">
+      <section className="mt-6 px-4">
         <h1 className="text-xl font-bold">{terminal.data.name}</h1>
         <div className="mt-2 flex flex-row items-center space-x-1">
           <Network chainId={terminal.chainId} />
-          <span className="text-xs">·</span>
-          <span className="text-xs">
+          <span className="text-sm">·</span>
+          <span className="text-sm">
             {truncateString(terminal.safeAddress)}
           </span>
           <CopyToClipboard text={terminal.safeAddress} />
@@ -20,7 +20,7 @@ const TerminalDetailsPageContent = ({ terminal }: { terminal: Terminal }) => {
           <a
             href={terminal.data.url}
             target="_blank"
-            className="mt-6 mt-4 inline-block border-b border-dotted text-sm hover:text-gray"
+            className="mt-6 inline-block border-b border-dotted text-base hover:text-gray"
             rel="noreferrer"
           >
             {terminal.data.url}

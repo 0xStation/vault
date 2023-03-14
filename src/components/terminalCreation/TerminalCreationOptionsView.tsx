@@ -129,7 +129,7 @@ export const TerminalCreationOptionsView = ({
               <p className="font-bold">Create a Terminal with a new address</p>
               <p className="text-gray">An address is unique to each terminal</p>
             </SelectorCard>
-            <p className="mt-4 mb-3 text-sm font-bold">
+            <p className="mt-4 mb-3 text-base font-bold">
               Select to use an existing safe:{" "}
             </p>
             <div className="mb-3">
