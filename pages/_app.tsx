@@ -76,6 +76,8 @@ function App({ Component, pageProps }: AppProps) {
             "rainbow",
             "coinbase",
             "walletconnect",
+            "zerion",
+            "zengo",
           ]),
         }}
       >
