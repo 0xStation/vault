@@ -23,7 +23,7 @@ export const AutomationHistory = ({
             <AssetTransfersTab
               address={automation.data.meta.address}
               chainId={automation.chainId}
-              direction={TransferDirection.OUTBOUND}
+              direction={TransferDirection.WITHDRAW_EVENT}
             />
           )}
         </TabsContent>
