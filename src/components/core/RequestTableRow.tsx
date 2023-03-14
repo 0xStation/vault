@@ -51,8 +51,8 @@ const RequestTableRow = ({
       )}
       onClick={() => triggerDetails(request)}
     >
-      <td className="px-4">
-        {onCheckboxChange && (
+      {onCheckboxChange && (
+        <td className="px-4">
           <Checkbox
             onChange={onCheckboxChange}
             name={request.id}
@@ -60,8 +60,8 @@ const RequestTableRow = ({
             className={isExecuted(request) ? "invisible" : ""}
             checked={checked}
           />
-        )}
-      </td>
+        </td>
+      )}
       <td className="text-left text-xs text-slate-500">#{request.number}</td>
       <td className="px-3">
         <RequestStatusIcon status={request.status} />
