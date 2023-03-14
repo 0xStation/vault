@@ -18,13 +18,15 @@ const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
       <TerminalAssetsHistoryFilterBar>
         <TabsContent value={TerminalAssetsHistoryFilter.SENT}>
           <AssetTransfersTab
-            terminal={terminal}
+            address={terminal.safeAddress}
+            chainId={terminal.chainId}
             direction={TransferDirection.OUTBOUND}
           />
         </TabsContent>
         <TabsContent value={TerminalAssetsHistoryFilter.RECEIVED}>
           <AssetTransfersTab
-            terminal={terminal}
+            address={terminal.safeAddress}
+            chainId={terminal.chainId}
             direction={TransferDirection.INBOUND}
           />
         </TabsContent>
