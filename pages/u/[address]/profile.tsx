@@ -1,7 +1,7 @@
 import { Address } from "@ui/Address"
 import { Avatar } from "@ui/Avatar"
 import { useRouter } from "next/router"
-import { ReadyToClaim } from "../../../src/components/claim/ReadyToClaim"
+import { ProfileReadyToClaim } from "../../../src/components/claim/ProfileReadyToClaim"
 import { AccountNavBar } from "../../../src/components/core/AccountNavBar"
 import ProfileTabBar from "../../../src/components/core/TabBars/ProfileTabBar"
 import { ProfileRequestsList } from "../../../src/components/request/ProfileRequestsList"
@@ -36,7 +36,7 @@ const ProfilePage = ({}: {}) => {
           </div>
         </div>
         <div>
-          <ReadyToClaim />
+          <ProfileReadyToClaim />
         </div>
       </div>
       {/* TABS */}

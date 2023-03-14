@@ -1,5 +1,6 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
+import { RequestStatusIcon } from "components/request/RequestStatusIcon"
 import Link from "next/link"
 import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
@@ -17,11 +18,13 @@ const RequestCard = ({
   request,
   showTerminal,
   onCheckboxChange,
+  checked,
 }: {
   disabled?: boolean
   request: RequestFrob
   showTerminal?: Terminal
   onCheckboxChange?: (e: any) => void
+  checked: boolean
 }) => {
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
@@ -46,14 +49,15 @@ const RequestCard = ({
             <RequestActionPrompt request={request} />
           )}
           <div className="flex w-full items-center space-x-2">
-            {!showTerminal && onCheckboxChange && (
+            {!showTerminal && onCheckboxChange && !isExecuted(request) && (
               <Checkbox
                 onChange={onCheckboxChange}
                 name={request.id}
                 isDisabled={disabled || false}
-                className={isExecuted(request) ? "invisible" : ""}
+                checked={checked}
               />
             )}
+            <RequestStatusIcon status={request.status} />
             <Avatar size="sm" address={request.data.createdBy} />
 
             <div className="min-w-0 grow">

@@ -69,7 +69,7 @@ export const BottomDrawer = ({
                       className="h-1 w-5 rounded bg-slate-300"
                     />
                   </div>
-                  <div className={"h-[calc(100%-50px)] "}>{children}</div>
+                  <div className={"h-[calc(100%-50px)]"}>{children}</div>
                 </div>
               </div>
             </Transition.Child>

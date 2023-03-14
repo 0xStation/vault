@@ -24,6 +24,7 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
                 key={`request-${idx}`}
                 request={request}
                 showTerminal={request.terminal}
+                checked={false}
               />
             )
           })}

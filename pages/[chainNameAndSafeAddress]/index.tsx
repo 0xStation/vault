@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useAccount } from "wagmi"
+import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ChevronRight } from "../../src/components/icons"
@@ -93,8 +94,8 @@ const MobileTerminalIndexPage = () => {
     (r) =>
       !isExecuted(r) &&
       (!(
-        r.approveActivities.some((a) => a.address === address) ||
-        r.rejectActivities.some((a) => a.address === address)
+        r.approveActivities.some((a) => a.address === userAddress) ||
+        r.rejectActivities.some((a) => a.address === userAddress)
       ) ||
         r.approveActivities.length >= r.quorum ||
         r.rejectActivities.length >= r.quorum),
@@ -113,7 +114,7 @@ const MobileTerminalIndexPage = () => {
       <AccountNavBar />
       <section className="mt-6 px-4">
         <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
-        <div className="mt-2 flex flex-row items-center space-x-1">
+        <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
           <span className="px-1 text-xs">·</span>
           <span className="text-xs">
@@ -121,10 +122,12 @@ const MobileTerminalIndexPage = () => {
           </span>
           <CopyToClipboard text={terminal?.safeAddress} />
         </div>
+        <TerminalReadyToClaim />
       </section>
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">
           <LabelCard
+            boxWrap={false}
             label="Total balance value"
             description={`$${totalAssetValue
               ?.toFixed(2)
@@ -132,6 +135,7 @@ const MobileTerminalIndexPage = () => {
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
           />
           <LabelCard
+            boxWrap={false}
             label="Members"
             description={String(terminal?.signers?.length)}
           />

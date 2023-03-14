@@ -157,7 +157,7 @@ const BatchExecuteWrapper = ({
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="overflow-scroll pb-[110px]">
+      <div className="overflow-auto pb-[110px]">
         <div className="mb-4 space-y-6">
           <div className="text-2xl font-bold">
             Execute ({`${approve ? "approve" : "reject"}`}){" "}

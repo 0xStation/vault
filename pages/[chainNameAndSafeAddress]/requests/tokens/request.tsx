@@ -242,7 +242,7 @@ export const NewTokensPage = () => {
           className="flex h-[calc(100%-120px)] flex-col"
         >
           <div
-            className={`flex ${formHeight} grow flex-col overflow-scroll pb-3`}
+            className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
           >
             <label className="mt-3 mb-2 text-sm font-bold" htmlFor="tokens">
               Tokens*

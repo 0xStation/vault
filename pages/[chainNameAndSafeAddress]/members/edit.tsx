@@ -327,7 +327,7 @@ export const EditMembersPage = () => {
           className="flex h-[calc(100%-120px)] flex-col"
         >
           <div
-            className={`flex ${formHeight} grow flex-col overflow-scroll pb-3`}
+            className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
           >
             <div className="mb-3">
               {safeMetadata?.signers?.map((address) => {
