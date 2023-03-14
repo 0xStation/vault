@@ -95,27 +95,25 @@ const DesktopTerminalLayout = ({
           <section className="flex flex-row items-center justify-between p-4">
             <StationLogo size="lg" />
           </section>
-          <section className="mt-4 p-4">
-            <div className="rounded border border-gray-115">
-              <div className="border-b border-gray-115 bg-gray-200 p-4">
-                <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
-                <div className="mt-2 flex flex-row items-center space-x-1">
-                  <Network chainId={terminal?.chainId} />
-                  <span className="text-xs">
-                    · {truncateString(terminal?.safeAddress)}
-                  </span>
-                  <CopyToClipboard text={terminal?.safeAddress} />
-                </div>
+          <section className="mt-4 rounded p-4">
+            <div className="rounded-t-xl bg-gray-90 p-4">
+              <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+              <div className="mt-2 flex flex-row items-center space-x-1">
+                <Network chainId={terminal?.chainId} />
+                <span className="text-xs">
+                  · {truncateString(terminal?.safeAddress)}
+                </span>
+                <CopyToClipboard text={terminal?.safeAddress} />
               </div>
-              <div className="bg-gray-200 p-4">
-                <h4 className="mb-1 text-xs text-gray">Total balance value</h4>
-                <span>{`$${totalAssetValue
-                  ?.toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
-                <h4 className="mb-1 mt-4 text-xs text-gray">Members</h4>
-                <span>{terminal.signers.length}</span>
-              </div>
+            </div>
+            <div className="rounded-b-xl bg-gray-200 p-4">
+              <h4 className="mb-1 text-xs text-gray">Total balance value</h4>
+              <span>{`$${totalAssetValue
+                ?.toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
+              <h4 className="mb-1 mt-4 text-xs text-gray">Members</h4>
+              <span>{terminal.signers.length}</span>
             </div>
           </section>
           <section className="mt-2">

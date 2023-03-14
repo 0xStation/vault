@@ -4,10 +4,10 @@ import { ButtonHTMLAttributes } from "react"
 export const buttonStyles = cva("relative font-medium rounded", {
   variants: {
     variant: {
-      primary: "text-black border",
+      primary: "text-black border bg-violet",
       secondary: "border text-violet border-violet hover:bg-gray-200",
       unemphasized: "border text-white border-white bg-black",
-      tertiary: "bg-gray-200 text-white hover:bg-gray-200",
+      tertiary: "bg-gray-200 text-white hover:bg-gray-200/80",
     },
     size: {
       sm: "px-3 py-1 text-xs font-medium",
@@ -24,18 +24,13 @@ export const buttonStyles = cva("relative font-medium rounded", {
   compoundVariants: [
     {
       variant: "primary",
-      disabled: true,
-      class: "bg-violet border-violet opacity-70",
+      disabled: false,
+      class: "hover:bg-violet/80",
     },
     {
       variant: "primary",
-      disabled: false,
-      class: "bg-violet hover:bg-violet/80",
-    },
-    {
-      variant: ["secondary", "unemphasized"],
-      size: ["sm", "base", "lg"],
-      class: "",
+      disabled: true,
+      class: "opacity-70",
     },
   ],
 })
