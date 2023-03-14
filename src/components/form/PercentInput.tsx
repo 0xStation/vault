@@ -39,7 +39,7 @@ export const PercentInput = ({
           step={10 ** (-1 * decimals)}
           max={max}
           defaultValue={0}
-          className="bg-gray-200 w-full placeholder:text-gray"
+          className="w-full bg-gray-90 placeholder:text-gray"
           placeholder={placeholder}
           {...register(name, {
             required: "Required",

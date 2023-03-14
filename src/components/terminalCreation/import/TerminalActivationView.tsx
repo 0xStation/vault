@@ -413,7 +413,7 @@ export const TerminalActivationView = ({
 
   return (
     <Overlay setIsOpen={setIsOpen} isOpen={isOpen}>
-      <div className="mx-10 flex h-full flex-col items-center justify-center text-gray-200">
+      <div className="mx-10 flex h-full flex-col items-center justify-center text-gray-90">
         {getTxnStatus({
           executionNonce: safeMetadata?.nonce,
           terminalNonce: terminal?.data?.nonce,

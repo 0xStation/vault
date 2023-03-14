@@ -39,7 +39,7 @@ const RequestCard = ({
     >
       <div
         className={`w-full max-w-[100vw] border-b border-gray-80 p-4 ${
-          disabled ? "opacity-30" : "hover:bg-gray-200"
+          disabled ? "opacity-30" : "hover:bg-gray-90"
         }`}
       >
         <div className="flex flex-col space-y-3">

@@ -46,7 +46,7 @@ export const TokenTransferRequestContent = ({
             return (
               <div
                 key={`transfer-${idx}`}
-                className="flex flex-row justify-between rounded bg-gray-200 p-2"
+                className="flex flex-row justify-between rounded bg-gray-90 p-2"
               >
                 <span>{transfer.token.symbol}</span>
                 <span>

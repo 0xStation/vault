@@ -69,7 +69,7 @@ const RequestDetailsContent = ({
         <section className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
-            <span className="bg-gray-200 rounded-full px-2 py-1 text-sm">
+            <span className="rounded-full bg-gray-90 px-2 py-1 text-sm">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>

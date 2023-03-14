@@ -44,7 +44,7 @@ const ActivityItem = ({
         )}
       </div>
       {activity.data.comment && (
-        <div className="mt-1 ml-6 rounded-md bg-gray-200 px-3 py-2">
+        <div className="mt-1 ml-6 rounded-md bg-gray-90 px-3 py-2">
           {isEditing ? (
             <EditCommentForm
               mutateRequest={mutateRequest}
@@ -60,7 +60,7 @@ const ActivityItem = ({
                 </span>
                 {activity.address === activeUser?.address && (
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-gray-200 data-[state=open]:bg-gray-200">
+                    <DropdownMenuTrigger className="h-4 w-4 rounded-sm hover:cursor-pointer hover:bg-gray-90 data-[state=open]:bg-gray-90">
                       <EllipsisHorizontalIcon height={16} width={16} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

@@ -30,7 +30,7 @@ export const SignerQuorumRequestContent = ({
         <span className="text-gray">Members</span>
         <span>{prompt}</span>
       </div>
-      <div className="p2- space-y-2 rounded-md bg-gray-200 p-3">
+      <div className="p2- space-y-2 rounded-md bg-gray-90 p-3">
         {signerQuorumMeta.add.length > 0 && (
           <h5 className="text-xs font-bold text-gray">Add</h5>
         )}

@@ -7,7 +7,7 @@ import { useSafeMetadata } from "../../hooks/safe/useSafeMetadata"
 
 const MetadataPill = ({ children }: { children: ReactNode }) => {
   return (
-    <span className="bg-gray-200 mr-3 flex h-fit w-fit flex-row rounded-full py-1 px-2">
+    <span className="mr-3 flex h-fit w-fit flex-row rounded-full bg-gray-90 py-1 px-2">
       {children}
     </span>
   )

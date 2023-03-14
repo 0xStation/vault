@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
-        "bg-gray-200 flex h-10 w-full items-center justify-between border-b border-b-gray-80 pt-1 text-base text-white disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-10 w-full items-center justify-between border-b border-b-gray-80 bg-gray-90 pt-1 text-base text-white disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}
@@ -38,7 +38,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "animate-in fade-in-80 border-gray-200 relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-black text-white shadow-md",
+        "animate-in fade-in-80 relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-gray-90 bg-black text-white shadow-md",
         className,
       )}
       {...props}
@@ -58,7 +58,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn(
-      "py-1.5 pr-2 pl-8 text-sm font-semibold text-slate-900",
+      "py-1.5 pr-2 pl-8 text-sm font-semibold text-white",
       className,
     )}
     {...props}
@@ -79,7 +79,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "focus:bg-gray-200 relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-base outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-base outline-none focus:bg-gray-90 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         className,
       )}
       {...props}
@@ -107,7 +107,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn("bg-gray-200 -mx-1 my-1 h-px", className)}
+    className={cn("-mx-1 my-1 h-px bg-gray-90", className)}
     {...props}
   />
 ))

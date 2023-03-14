@@ -16,7 +16,7 @@ export const TokenTransferRequestCard = ({
   const [showTokens, setShowTokens] = useState<boolean>(true)
   let tokenTransferMeta = request.data.meta as TokenTransferVariant
   return (
-    <div className="space-y-4 rounded bg-gray-200 p-4">
+    <div className="space-y-4 rounded bg-gray-90 p-4">
       <span className="text-xs text-gray">#{request.number}</span>
       <div
         className="flex flex-row items-center justify-between"
