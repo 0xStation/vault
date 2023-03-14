@@ -1,12 +1,9 @@
 import db from "db"
-import { Ctx } from "lib/api/auth/types"
-import withAuth from "lib/api/auth/withAuth"
+import { isAuthenticated } from "lib/api/auth/isAuthenticated"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getTerminalByChainIdAndAddress } from "../../../../src/models/terminal/terminals"
 
-export default withAuth(handler)
-
-async function handler(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
+export async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query, body } = req
   const { safeAddress: safeAddressQuery, chainId: chainIdQuery } = query as {
     safeAddress: string
@@ -16,6 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
   let terminal
   switch (method) {
     case "PUT":
+      // no try/catch since isAuthenticated will return the response
+      await isAuthenticated(req, res)
+
       const {
         safeAddress,
         name,
@@ -75,3 +75,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
+
+export default handler
