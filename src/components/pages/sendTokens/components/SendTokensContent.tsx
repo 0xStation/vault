@@ -260,7 +260,7 @@ export const SendTokensContent = ({
           className="flex h-[calc(100%-120px)] flex-col"
         >
           <div
-            className={`flex ${formHeight} grow flex-col overflow-scroll pb-3`}
+            className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
           >
             <AddressInput
               label={"Recipient*"}

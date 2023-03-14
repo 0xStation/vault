@@ -243,13 +243,9 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
                 setClaimDrawerOpen(true)
               }}
               onCheckboxChange={onCheckboxChange}
-              checked={
-                !!batchState.selectedRevShareWithdraws.find(
-                  (rsw) =>
-                    rsw.chainId === revShareWithdraw.chainId &&
-                    addressesAreEqual(rsw.address, revShareWithdraw.address),
-                )
-              }
+              checked={batchState.selectedRevShareWithdraws.includes(
+                revShareWithdraw,
+              )}
             />
           ))}
           {items?.requests.map((request, index) => (
@@ -267,9 +263,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
                 setClaimDrawerOpen(true)
               }}
               onCheckboxChange={onCheckboxChange}
-              checked={
-                !!batchState.selectedRequests.find((r) => r.id === request.id)
-              }
+              checked={batchState.selectedRequests.includes(request)}
             />
           ))}
         </ul>
