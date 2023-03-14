@@ -66,7 +66,7 @@ export const BottomDrawer = ({
                   <div className="mb-6 flex w-full justify-center">
                     <button
                       onClick={() => setIsOpen(false)}
-                      className="h-1 w-5 rounded bg-gray-115"
+                      className="h-1 w-5 rounded bg-gray-80"
                     />
                   </div>
                   <div className={"h-[calc(100%-50px)]"}>{children}</div>

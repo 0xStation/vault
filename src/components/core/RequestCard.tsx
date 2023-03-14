@@ -38,7 +38,7 @@ const RequestCard = ({
       )}/requests/${request.id}`}
     >
       <div
-        className={`w-full max-w-[100vw] border-b border-gray-115 p-4 ${
+        className={`w-full max-w-[100vw] border-b border-gray-80 p-4 ${
           disabled ? "opacity-30" : "hover:bg-gray-200"
         }`}
       >

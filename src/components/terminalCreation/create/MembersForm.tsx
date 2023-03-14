@@ -326,11 +326,11 @@ export const MembersView = ({
                     <p className="ml-2">You</p>
                   </div>
                 ) : (
-                  <div key={item.id} className="mb-1 rounded bg-gray-200 p-3">
+                  <div key={item.id} className="mb-1 rounded bg-gray-90 p-3">
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-sm text-gray">Member {index + 1}</p>
                       <button type="button" onClick={() => remove(index)}>
-                        <XMarkIcon className="fill-gray-2000 h-5 w-5" />
+                        <XMarkIcon className="h-5 w-5 fill-gray-90" />
                       </button>
                     </div>
                     <AddressInput
@@ -339,7 +339,7 @@ export const MembersView = ({
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-gray-200 [&>input]:placeholder:text-gray"
+                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {

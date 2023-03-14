@@ -23,7 +23,7 @@ const SlideOver = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="bg-gray-2000 fixed inset-0 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-gray-90 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -42,7 +42,7 @@ const SlideOver = ({
                   <div className="flex h-full flex-col overflow-y-scroll bg-black py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-gray-900 text-lg font-medium">
+                        <Dialog.Title className="text-lg font-medium text-gray-90">
                           Panel title
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">

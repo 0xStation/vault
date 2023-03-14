@@ -41,7 +41,7 @@ const RequestDetailsContent = ({
 
   return (
     <>
-      <div className="divide-y divide-gray-115">
+      <div className="divide-y divide-gray-80">
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
@@ -69,7 +69,7 @@ const RequestDetailsContent = ({
         <section className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <h3>Votes</h3>
-            <span className="rounded-full bg-gray-200 px-2 py-1 text-sm">
+            <span className="bg-gray-200 rounded-full px-2 py-1 text-sm">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>

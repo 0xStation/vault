@@ -7,7 +7,7 @@ import { useSafeMetadata } from "../../hooks/safe/useSafeMetadata"
 
 const MetadataPill = ({ children }: { children: ReactNode }) => {
   return (
-    <span className="mr-3 flex h-fit w-fit flex-row rounded-full bg-gray-200 py-1 px-2">
+    <span className="bg-gray-200 mr-3 flex h-fit w-fit flex-row rounded-full py-1 px-2">
       {children}
     </span>
   )
@@ -42,8 +42,8 @@ export const SafeDetailsDrawer = ({
       <h1>{truncateString(safeAddress)}</h1>
       {isSafeMetadataLoading || isSafeBalanceLoading ? (
         <div className="mt-3 flex flex-row">
-          <span className="mr-3 flex h-[32px] w-[50px] animate-pulse rounded-full bg-gray-115 py-1 px-2" />
-          <span className="mr-3 flex h-[32px] w-[50px] animate-pulse rounded-full bg-gray-115 py-1 px-2" />
+          <span className="mr-3 flex h-[32px] w-[50px] animate-pulse rounded-full bg-gray-80 py-1 px-2" />
+          <span className="mr-3 flex h-[32px] w-[50px] animate-pulse rounded-full bg-gray-80 py-1 px-2" />
         </div>
       ) : (
         <div className="mt-3 flex flex-row">

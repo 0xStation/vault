@@ -31,7 +31,7 @@ export const TerminalAutomationDetailPage = () => {
             console.log("edit automation")
           }}
           className={
-            "h-6 w-6 items-center rounded-md border border-gray-115 px-1.5"
+            "h-6 w-6 items-center rounded-md border border-gray-80 px-1.5"
           }
         >
           <PencilIcon className="w-2.5" />

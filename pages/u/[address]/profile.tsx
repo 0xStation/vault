@@ -24,7 +24,7 @@ const ProfilePage = ({}: {}) => {
           <div className="items-left flex flex-col">
             <Address address={accountAddress} size="lg" />
             {isLoading ? (
-              <div className="h-4 w-20 animate-pulse rounded-md bg-gray-115"></div>
+              <div className="h-4 w-20 animate-pulse rounded-md bg-gray-80"></div>
             ) : (
               <div className="text-xs">
                 <span className="font-bold">{count}</span>{" "}

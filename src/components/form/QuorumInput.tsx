@@ -27,7 +27,7 @@ export const QuorumInput = ({
       <label className="text-sm font-bold" htmlFor={name}>
         {label}
       </label>
-      <div className="flex flex-row justify-between border-b border-b-gray-115">
+      <div className="flex flex-row justify-between border-b border-b-gray-80">
         <input
           type="number"
           className="bg-black placeholder:text-white"

@@ -14,7 +14,7 @@ export const AutomationListItem = ({
     <Link
       href={`/${router.query.chainNameAndSafeAddress}/automations/${automation.id}`}
     >
-      <div className="space-y-2 border-b border-gray-115 py-3 px-4 hover:bg-gray-200">
+      <div className="hover:bg-gray-200 space-y-2 border-b border-gray-80 py-3 px-4">
         <div className="flex flex-row items-center space-x-1">
           <span className="h-2 w-2 rounded-full bg-green"></span>
           <span className="text-sm text-gray">Live</span>

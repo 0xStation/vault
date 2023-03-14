@@ -53,7 +53,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                       className="block rounded-full object-contain"
                     />
                   ) : (
-                    <span className="block h-6 w-6 rounded-full bg-gray-115"></span>
+                    <span className="block h-6 w-6 rounded-full bg-gray-80"></span>
                   )}
                 </div>
                 <div className="flex flex-col">
@@ -77,7 +77,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                   src={response.nft.previews[1].URI}
                   alt={response.nft.description}
                   fill={true}
-                  className="rounded border border-gray-115 object-contain"
+                  className="rounded border border-gray-80 object-contain"
                 />
               </div>
               <h3 className="mt-2">{response.nft.title}</h3>

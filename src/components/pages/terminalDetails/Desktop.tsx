@@ -21,7 +21,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-gray-115`}
+      className={`${className} h-fit p-2 hover:bg-gray-80`}
     >
       <PencilIcon className="w-2.5" />
     </button>
@@ -55,7 +55,7 @@ const Desktop = ({ terminal }: { terminal: Terminal }) => {
         <div className="absolute right-[48px] top-[62px]">
           <EditButton
             onClick={() => addQueryParam(router, "editDetails", "true")}
-            className="rounded border border-gray-115"
+            className="rounded border border-gray-80"
           />
         </div>
         <TerminalDetailsPageContent terminal={terminal} />

@@ -46,7 +46,7 @@ const RequestTableRow = ({
   return (
     <tr
       className={cn(
-        "h-14 cursor-pointer border-b border-gray-115 hover:bg-gray-200",
+        "hover:bg-gray-200 h-14 cursor-pointer border-b border-gray-80",
         disabled ? "disabled:opacity-30" : "hover:bg-gray-200",
       )}
       onClick={() => triggerDetails(request)}

@@ -274,9 +274,9 @@ export const ClaimItemsDrawer = ({
     >
       <h1 className="pb-2">Claim tokens</h1>
       <div className="h-full overflow-y-auto pb-32">
-        <div className="mt-4 space-y-2 border-b border-gray-115 pb-6">
+        <div className="mt-4 space-y-2 border-b border-gray-80 pb-6">
           <div className="flex flex-row space-x-2">
-            <span className="text-xs text-gray-100">Network</span>
+            <span className="text-xs text-gray">Network</span>
             <Network chainId={items?.[0]?.transfers?.[0]?.token?.chainId} />
           </div>
           <TokenTransfersAccordion
@@ -291,7 +291,7 @@ export const ClaimItemsDrawer = ({
         <div className="mt-6 space-y-2">
           {items.map((item, index) => (
             <div
-              className="space-y-3 rounded-lg bg-gray-200 p-4"
+              className="space-y-3 rounded-lg bg-gray-90 p-4"
               key={`item-${index}`}
             >
               <div>

@@ -32,14 +32,14 @@ export const PercentInput = ({
       <label className="text-sm font-bold" htmlFor={name}>
         {label}
       </label>
-      <div className="flex flex-row space-x-2 border-b border-b-gray-115">
+      <div className="flex flex-row space-x-2 border-b border-b-gray-80">
         <input
           type="number"
           min={min}
           step={10 ** (-1 * decimals)}
           max={max}
           defaultValue={0}
-          className="w-full bg-gray-200 placeholder:text-gray"
+          className="bg-gray-200 w-full placeholder:text-gray"
           placeholder={placeholder}
           {...register(name, {
             required: "Required",

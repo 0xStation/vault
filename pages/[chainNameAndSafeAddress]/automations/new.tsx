@@ -338,7 +338,7 @@ const NewAutomationPage = () => {
                     errors={errors}
                     label="Wallet or ENS address*"
                     placeholder="Enter a wallet or ENS address"
-                    className="[&>input]:bg-gray-200 [&>input]:placeholder:text-gray"
+                    className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
                     required
                     validations={{
                       noDuplicates: async (v: string) => {

@@ -10,7 +10,7 @@ export const FieldArrayItem = ({
   children: any
 }) => {
   return (
-    <li className="mb-1 space-y-5 rounded-lg bg-gray-200 p-3">
+    <li className="mb-1 space-y-5 rounded-lg bg-gray-90 p-3">
       <div className="flex flex-row items-center justify-between">
         <p className="text-xs text-gray">{title}</p>
         <button type="button" onClick={remove}>

@@ -8,7 +8,7 @@ export const ReadyToClaim = ({ address }: { address: string }) => {
     (items?.requests.length ?? 0) + (items?.revShareWithdraws.length ?? 0)
 
   return (
-    <div className="rounded-lg bg-gray-200 p-3 ">
+    <div className="rounded-lg bg-gray-90 p-3 ">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center space-x-3">
           {!!itemsCount && (

@@ -5,9 +5,9 @@ export const buttonStyles = cva("relative font-medium rounded", {
   variants: {
     variant: {
       primary: "text-black border bg-violet",
-      secondary: "border text-violet border-violet hover:bg-gray-200",
+      secondary: "border text-violet border-violet hover:bg-gray-90",
       unemphasized: "border text-white border-white bg-black",
-      tertiary: "bg-gray-200 text-white hover:bg-gray-200/80",
+      tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",
     },
     size: {
       sm: "px-3 py-1 text-xs font-medium",

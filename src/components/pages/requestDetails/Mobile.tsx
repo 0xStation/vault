@@ -35,7 +35,7 @@ const RequestDetailsMobile = () => {
     <>
       <div className="w-full max-w-[580px]">
         <AccountNavBar />
-        <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-115 py-2 px-4">
+        <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-80 py-2 px-4">
           <button
             onClick={() =>
               router.push(`/${router.query.chainNameAndSafeAddress}/requests`)

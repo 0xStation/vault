@@ -249,7 +249,7 @@ export const NewTokensPage = () => {
             </label>
             <div className="mb-3">
               {nftError || fungibleTokenError ? (
-                <div className=" w-full rounded bg-gray-200 p-3 text-orange">
+                <div className=" bg-gray-200 w-full rounded p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-sm">
                     We apologize for the inconvenience, there was an error
@@ -258,7 +258,7 @@ export const NewTokensPage = () => {
                   </p>
                 </div>
               ) : !tokens.length ? (
-                <div className="w-full rounded bg-gray-200 p-4 text-center">
+                <div className="bg-gray-200 w-full rounded p-4 text-center">
                   <p className="font-bold">No tokens found</p>
                   <p className="pt-2 text-sm">
                     Look&apos;s like this Terminal doesn&apos;t have any tokens.
@@ -286,7 +286,7 @@ export const NewTokensPage = () => {
                     return (
                       <div
                         key={item.id}
-                        className="mb-1 rounded bg-gray-200 p-3"
+                        className="bg-gray-200 mb-1 rounded p-3"
                       >
                         <div className="mb-5 flex flex-row justify-between">
                           <p className="text-sm text-gray">Token {index + 1}</p>
@@ -365,14 +365,14 @@ export const NewTokensPage = () => {
                                 !(errors as any)?.tokens?.[index as number]
                                   ?.amount
                                   ? "border-b-orange"
-                                  : "border-b-gray-115"
+                                  : "border-b-gray-80"
                               } bg-gray-200`}
                             >
                               <input
                                 required={Boolean(
                                   getErc20FieldTokenData(index),
                                 )}
-                                className="w-full bg-gray-200 placeholder:text-slate-400"
+                                className="bg-gray-200 w-full placeholder:text-slate-400"
                                 placeholder="Enter an amount"
                                 {...register(`tokens.${index}.amount`, {
                                   validate: {

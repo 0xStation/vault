@@ -28,7 +28,7 @@ export default function RightSlider({
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-[580px]">
-                  <div className="flex h-full flex-col overflow-y-scroll border-l border-l-gray-200 bg-black py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll border-l border-l-gray-90 bg-black py-6 shadow-xl">
                     <div className="px-4">
                       <div className="flex items-start justify-end">
                         <button

@@ -59,7 +59,7 @@ export const AutomationInfo = () => {
               ))}
             </div>
           </div>
-          <div className="mb-24 mt-4 border-t border-gray-115 px-4">
+          <div className="mb-24 mt-4 border-t border-gray-80 px-4">
             <h3 className="mt-4">Balance</h3>
             <div className="space-y-3">
               <LabelCard
@@ -84,7 +84,7 @@ export const AutomationInfo = () => {
                           className="block rounded-full object-contain"
                         />
                       ) : (
-                        <span className="block h-6 w-6 rounded-full bg-gray-115"></span>
+                        <span className="block h-6 w-6 rounded-full bg-gray-80"></span>
                       )}
                     </div>
                     <div className="flex flex-col">

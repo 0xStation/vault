@@ -15,7 +15,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-gray-115`}
+      className={`${className} h-fit p-2 hover:bg-gray-80`}
     >
       <PencilIcon className="w-2.5" />
     </button>
@@ -66,7 +66,7 @@ const MembersPageContent = () => {
               onClick={() =>
                 router.push(`/${chainNameAndSafeAddress}/members/edit`)
               }
-              className="ml-2 rounded border border-gray-115"
+              className="ml-2 rounded border border-gray-80"
             />
           </div>
         </div>
