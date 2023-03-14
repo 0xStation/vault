@@ -7,7 +7,7 @@ const SendTokensMobile = () => {
   const { chainNameAndSafeAddress } = router.query
   return (
     <Layout
-      backFunc={() => router.push(`/${chainNameAndSafeAddress}/requests`)}
+      backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
       isCloseIcon={true}
     >
       <SendTokensContent />

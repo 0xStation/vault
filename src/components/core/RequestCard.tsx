@@ -35,7 +35,7 @@ const RequestCard = ({
       href={`/${globalId(
         request.terminal.chainId,
         request.terminal.safeAddress,
-      )}/requests/${request.id}`}
+      )}/proposals/${request.id}`}
     >
       <div
         className={`w-full max-w-[100vw] border-b border-gray-80 p-4 ${

@@ -23,7 +23,7 @@ const options = (router: any) =>
       label: "Proposals",
       description: "Vote and execute to distribute tokens",
       active: true,
-      href: `/${router.query.chainNameAndSafeAddress}/requests`,
+      href: `/${router.query.chainNameAndSafeAddress}/proposals`,
     },
     {
       label: "Assets",

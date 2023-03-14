@@ -94,7 +94,7 @@ const MembersPageContent = () => {
                     Pending entry ·&nbsp;
                     <a
                       className="text-xs text-white underline decoration-dotted"
-                      href={`/${chainNameAndSafeAddress}/requests/${activeRequest[0]}`}
+                      href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
                     >
                       View request
                     </a>
@@ -125,7 +125,7 @@ const MembersPageContent = () => {
                       Pending entry ·&nbsp;
                       <a
                         className="text-xs text-white underline decoration-dotted"
-                        href={`/${chainNameAndSafeAddress}/requests/${
+                        href={`/${chainNameAndSafeAddress}/proposals/${
                           (requestIds as string[])?.[0]
                         }`}
                       >
@@ -148,7 +148,7 @@ const MembersPageContent = () => {
                 Pending update ·&nbsp;
                 <a
                   className="text-xs text-white underline decoration-dotted"
-                  href={`/${chainNameAndSafeAddress}/requests/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
+                  href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
                   View request
                 </a>
