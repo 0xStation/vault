@@ -76,12 +76,6 @@ export const ExecuteWrapper = ({
     sendTransaction,
   } = useSendTransaction(config)
 
-  // const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
-  //   hash: txData?.hash,
-  //   chainId: request.chainId,
-  //   enabled: !!txData?.hash,
-  // })
-
   useEffect(() => {
     if (isError) {
       setLoading(false)
@@ -148,35 +142,6 @@ export const ExecuteWrapper = ({
     }
   }, [isSendTransactionSuccess])
 
-  // const onWaitSuccess = () => {
-  //   const updatedActions = request.actions.map((action: Action) => {
-  //     if (action.id === actionToExecute.id) {
-  //       return {
-  //         ...actionToExecute,
-  //         status: ActionStatus.SUCCESS,
-  //       }
-  //     }
-  //     return action
-  //   })
-
-  //   mutateRequest({
-  //     fn: completeRequestExecution({
-  //       actionId: actionToExecute.id,
-  //     }),
-  //     requestId: request.id,
-  //     payload: {
-  //       ...request,
-  //       actions: updatedActions,
-  //       status: getStatus(
-  //         updatedActions,
-  //         request.approveActivities,
-  //         request.rejectActivities,
-  //         request.quorum,
-  //       ),
-  //     },
-  //   })
-  // }
-
   const {
     register,
     handleSubmit,
@@ -193,13 +158,6 @@ export const ExecuteWrapper = ({
     sendTransaction?.()
     resetField("comment")
   }
-
-  // console.log("request", request)
-  // console.log("actionToExecute", actionToExecute)
-  // console.log(
-  //   "pendingAction",
-  //   request.actions.find((action) => action.status === ActionStatus.PENDING),
-  // )
 
   const FormContent = () => {
     return (
@@ -235,29 +193,22 @@ export const ExecuteWrapper = ({
   }
 
   return (
-    <>
-      {/* <WaitRequestExecution
-        chainId={request.chainId}
-        transactionHash={txData?.hash}
-        onWaitSuccess={onWaitSuccess}
-      /> */}
-      <Breakpoint>
-        {(isMobile) => {
-          if (isMobile) {
-            return (
-              <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-                <FormContent />
-              </BottomDrawer>
-            )
-          }
+    <Breakpoint>
+      {(isMobile) => {
+        if (isMobile) {
           return (
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
               <FormContent />
-            </Modal>
+            </BottomDrawer>
           )
-        }}
-      </Breakpoint>
-    </>
+        }
+        return (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <FormContent />
+          </Modal>
+        )
+      }}
+    </Breakpoint>
   )
 }
 
@@ -274,10 +225,6 @@ export const ExecuteRequest = ({
   approve: boolean
   mutateRequest: any
 }) => {
-  // const pendingActions = request?.actions.filter(
-  //   (action) => action.status === ActionStatus.PENDING,
-  // )
-
   let actionsToExecute: any[] = []
   request?.actions.forEach((action: Action) => {
     if (approve && action.variant === ActionVariant.APPROVAL) {

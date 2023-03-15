@@ -24,7 +24,6 @@ export const WaitTransactionSuccess = ({
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("success!")
       onWaitSuccess()
 
       successToast({
