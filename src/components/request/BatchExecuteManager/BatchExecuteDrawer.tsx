@@ -157,16 +157,18 @@ const BatchExecuteWrapper = ({
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="overflow-auto pb-[110px]">
-        <div className="mb-4 space-y-6">
-          <div className="text-2xl font-bold">
-            Execute ({`${approve ? "approve" : "reject"}`}){" "}
-            {requestsToApprove.length} requests
-          </div>
-          <div>This action is on-chain and will not be reversible.</div>
+      <h1 className="pb-2">
+        Execute {requestsToApprove.length}{" "}
+        {`${approve ? "approval" : "rejection"}${
+          requestsToApprove.length === 1 ? "" : "s"
+        }`}
+      </h1>
+      <div className="h-full overflow-auto pb-32">
+        <div className="mt-4">
+          This action is on-chain and will not be reversible.
         </div>
 
-        <div className="space-y-4">
+        <div className="mt-6 space-y-2">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (

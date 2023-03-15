@@ -5,8 +5,8 @@ export const buttonStyles = cva("relative font-medium rounded", {
   variants: {
     variant: {
       primary: "text-black border bg-violet",
-      secondary: "border text-violet border-violet hover:bg-gray-90",
-      unemphasized: "border text-white border-white bg-black",
+      secondary: "border",
+      unemphasized: "text-white",
       tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",
     },
     size: {
@@ -31,6 +31,16 @@ export const buttonStyles = cva("relative font-medium rounded", {
       variant: "primary",
       disabled: true,
       class: "opacity-70",
+    },
+    {
+      variant: "secondary",
+      disabled: false,
+      class: "text-white border-white hover:border-gray-50 hover:text-gray-50",
+    },
+    {
+      variant: "secondary",
+      disabled: true,
+      class: "text-gray-80 border-gray-80",
     },
   ],
 })

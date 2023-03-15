@@ -25,7 +25,6 @@ export const getHash = (message: EIP712Message): string => {
  * @returns domain to use to construct EIP712Message's
  */
 export const actionDomain = (): TypedDataDomain => {
-  // TODO: change to "ParallelProcessor" and remove version
   return {
     name: "Station",
     version: "0.0.1",
@@ -38,7 +37,6 @@ export const actionDomain = (): TypedDataDomain => {
  * @returns domain to use to construct EIP712Message's
  */
 export const stationDomain = (): TypedDataDomain => {
-  // TODO: change to "ParallelProcessor" and remove version
   return {
     name: "Station",
   }
