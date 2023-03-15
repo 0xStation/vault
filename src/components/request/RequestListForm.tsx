@@ -175,9 +175,6 @@ const RequestListForm = ({
     requestId: string
     payload: any
   }) => {
-    // set state used by Request in slider
-    setRequestForDetails(payload)
-
     const updatedRequests = requests.map((request: RequestFrob) => {
       if (request.id === requestId) {
         return payload
@@ -215,7 +212,11 @@ const RequestListForm = ({
         <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
           <RequestDetailsContent
             request={requestForDetails}
-            mutateRequest={mutateRequest}
+            mutateRequest={(args) => {
+              // set state used by Request in slider
+              setRequestForDetails(args.payload)
+              mutateRequest(args)
+            }}
           />
         </RightSlider>
       )}
@@ -243,6 +244,7 @@ const RequestListForm = ({
                           ).length === 0)
                       }
                       request={request}
+                      mutateRequest={mutateRequest}
                       showTerminal={isProfile ? request.terminal : undefined}
                       checked={batchState.selectedRequests.includes(request)}
                     />
@@ -269,6 +271,7 @@ const RequestListForm = ({
                             ).length === 0)
                         }
                         request={request}
+                        mutateRequest={mutateRequest}
                         triggerDetails={(request) => {
                           addQueryParam(router, "requestId", request.id)
                           setRequestForDetails(request)

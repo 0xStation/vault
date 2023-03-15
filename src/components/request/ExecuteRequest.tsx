@@ -14,11 +14,7 @@ import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { v4 as uuid } from "uuid"
-import {
-  usePrepareSendTransaction,
-  useSendTransaction,
-  useWaitForTransaction,
-} from "wagmi"
+import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import { RawCall } from "../../../src/lib/transactions/call"
@@ -80,11 +76,11 @@ export const ExecuteWrapper = ({
     sendTransaction,
   } = useSendTransaction(config)
 
-  const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
-    hash: txData?.hash,
-    chainId: request.chainId,
-    enabled: !!txData?.hash,
-  })
+  // const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
+  //   hash: txData?.hash,
+  //   chainId: request.chainId,
+  //   enabled: !!txData?.hash,
+  // })
 
   useEffect(() => {
     if (isError) {
@@ -152,48 +148,34 @@ export const ExecuteWrapper = ({
     }
   }, [isSendTransactionSuccess])
 
-  // what happens if the user naviagates away from page before this runs
-  // we might not run the function to update the status of the action / request
-  useEffect(() => {
-    if (isWaitForTransactionSuccess) {
-      const updatedActions = request.actions.map((action: Action) => {
-        if (action.id === actionToExecute.id) {
-          return {
-            ...actionToExecute,
-            status: ActionStatus.SUCCESS,
-          }
-        }
-        return action
-      })
+  // const onWaitSuccess = () => {
+  //   const updatedActions = request.actions.map((action: Action) => {
+  //     if (action.id === actionToExecute.id) {
+  //       return {
+  //         ...actionToExecute,
+  //         status: ActionStatus.SUCCESS,
+  //       }
+  //     }
+  //     return action
+  //   })
 
-      mutateRequest({
-        fn: completeRequestExecution({
-          actionId: actionToExecute.id,
-        }),
-        requestId: request.id,
-        payload: {
-          ...request,
-          actions: updatedActions,
-          status: getStatus(
-            updatedActions,
-            request.approveActivities,
-            request.rejectActivities,
-            request.quorum,
-          ),
-        },
-      })
-
-      closeCurrentToast() // loading toast
-      successToast({
-        message: "Request successfully executed!",
-        action: {
-          href: `${getNetworkExplorer(request.chainId)}/tx/${txData?.hash}`,
-          label: "View on Etherscan",
-        },
-        timeout: 5000,
-      })
-    }
-  }, [isWaitForTransactionSuccess])
+  //   mutateRequest({
+  //     fn: completeRequestExecution({
+  //       actionId: actionToExecute.id,
+  //     }),
+  //     requestId: request.id,
+  //     payload: {
+  //       ...request,
+  //       actions: updatedActions,
+  //       status: getStatus(
+  //         updatedActions,
+  //         request.approveActivities,
+  //         request.rejectActivities,
+  //         request.quorum,
+  //       ),
+  //     },
+  //   })
+  // }
 
   const {
     register,
@@ -211,6 +193,13 @@ export const ExecuteWrapper = ({
     sendTransaction?.()
     resetField("comment")
   }
+
+  // console.log("request", request)
+  // console.log("actionToExecute", actionToExecute)
+  // console.log(
+  //   "pendingAction",
+  //   request.actions.find((action) => action.status === ActionStatus.PENDING),
+  // )
 
   const FormContent = () => {
     return (
@@ -246,22 +235,29 @@ export const ExecuteWrapper = ({
   }
 
   return (
-    <Breakpoint>
-      {(isMobile) => {
-        if (isMobile) {
+    <>
+      {/* <WaitRequestExecution
+        chainId={request.chainId}
+        transactionHash={txData?.hash}
+        onWaitSuccess={onWaitSuccess}
+      /> */}
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return (
+              <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+                <FormContent />
+              </BottomDrawer>
+            )
+          }
           return (
-            <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
               <FormContent />
-            </BottomDrawer>
+            </Modal>
           )
-        }
-        return (
-          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-            <FormContent />
-          </Modal>
-        )
-      }}
-    </Breakpoint>
+        }}
+      </Breakpoint>
+    </>
   )
 }
 
@@ -278,6 +274,10 @@ export const ExecuteRequest = ({
   approve: boolean
   mutateRequest: any
 }) => {
+  // const pendingActions = request?.actions.filter(
+  //   (action) => action.status === ActionStatus.PENDING,
+  // )
+
   let actionsToExecute: any[] = []
   request?.actions.forEach((action: Action) => {
     if (approve && action.variant === ActionVariant.APPROVAL) {

@@ -1,4 +1,5 @@
 import { RequestVariantType } from "@prisma/client"
+import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import { timeSince } from "lib/utils"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
@@ -36,6 +37,7 @@ const RequestDetailsContent = ({
 
   return (
     <>
+      <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <div className="divide-y divide-gray-80">
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">
