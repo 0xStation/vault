@@ -37,32 +37,32 @@ export const BottomDrawer = ({
       >
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
+          enter="transform transition ease-in-out duration-500 sm:duration-700"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-200"
+          leave="transform transition ease-in-out duration-500 sm:duration-700"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-black bg-opacity-70" />
         </Transition.Child>
 
         <div className="fixed inset-0">
           <div className="flex h-full items-center justify-center text-center">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
+              enter="transform transition ease-in-out duration-500 sm:duration-700"
               enterFrom="translate-y-[300%]"
               enterTo={transitionChildStyles[size]}
-              leave="ease-in duration-200"
+              leave="transform transition ease-in-out duration-500 sm:duration-700"
               leaveFrom="translate-y-0"
               leaveTo="translate-y-[300%]"
             >
               {/* TODO: max-w-[580px] made to shrink for mobile size on large screens, reverse later */}
               <div
-                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full max-w-[580px]`}
+                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full border-t border-gray-90`}
               >
-                <div className="flex h-full w-full flex-col rounded-t-lg bg-black px-5 pt-3">
+                <div className="flex h-full w-full flex-col rounded-t-2xl bg-black px-5 pt-3">
                   <div className="mb-6 flex w-full justify-center">
                     <button
                       onClick={() => setIsOpen(false)}

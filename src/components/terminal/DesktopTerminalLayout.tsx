@@ -125,7 +125,7 @@ const DesktopTerminalLayout = ({
                     className={`block ${
                       option.href ===
                         decodeURIComponent(router.asPath.split("?")[0]) &&
-                      "font-bold"
+                      "bg-gray-100 font-bold"
                     }`}
                     key={`link-${idx}`}
                   >

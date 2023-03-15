@@ -95,7 +95,7 @@ const EditTerminalContent = () => {
         />
         <InputWithLabel
           className="mb-3"
-          label="Url"
+          label="URL"
           register={register}
           name="url"
           placeholder="Enter a link to your project"
@@ -112,7 +112,7 @@ const EditTerminalContent = () => {
             Save
           </Button>
           <p
-            className={`mt-1 text-base  ${
+            className={`mt-1 text-sm ${
               formMessage?.isError ? "text-red" : "text-gray"
             } ${formMessage.message || "text-transparent"}`}
           >
