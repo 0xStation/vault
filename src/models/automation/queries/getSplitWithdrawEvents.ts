@@ -34,6 +34,7 @@ export const SPLIT_WITHDRAW_EVENTS_QUERY = gql`
   }
 `
 
+// TODO: This could be a shared type with useAssetTransfers
 type WithdrawEvent = {
   hash: string
   from: string
@@ -104,7 +105,7 @@ export const getSplitWithdrawEvents = async ([address, chainId]: [
         symbol: details?.symbol ?? null,
         category: details?.type,
         metadata: {
-          blockTimestamp: event.timestamp,
+          blockTimestamp: new Date(parseInt(event.timestamp) * 1000).toJSON(),
         },
       }
     })
