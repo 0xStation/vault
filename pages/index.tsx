@@ -60,20 +60,20 @@ function Page() {
   return (
     <>
       <div
-        className="h-screen w-screen bg-cover bg-clip-content bg-center bg-no-repeat"
+        className="h-screen bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${LandingBackgroundImage.src})` }}
       >
-        <main className="absolute top-0 right-0 z-10 mx-5 mt-20 md:top-16 md:left-14 md:mx-0 md:mt-0 md:max-w-xl">
+        <main className="absolute top-0 right-0 z-10 mx-5 mt-20 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
           <StationLogo size={isMobile ? "mobileLanding" : "landing"} />
-          <p className="mt-4 mb-16 text-sm md:my-0 md:text-2xl ">
+          <p className="mt-4 mb-16 text-base lg:my-0 lg:text-2xl ">
             Group wallet for your collective to raise funds, build cool shit,
             manage spend, and split revenue.
           </p>
-          <div className="mx-auto block h-auto max-w-full md:hidden">
+          <div className="mx-auto block h-auto max-w-full lg:hidden">
             <Image src={LandingImage} alt="Landing image" />
           </div>
-          {/* <div className="fixed bottom-2 left-0 w-full space-y-2 px-5 text-center md:relative md:mt-11 md:flex md:flex-row md:space-y-0 md:px-0"> */}
-          <div className="mt-11 mb-10 space-y-2 px-5 text-center md:mb-10 md:mt-11 md:flex md:flex-row">
+          {/* <div className="fixed bottom-2 left-0 w-full space-y-2 px-5 text-center lg:relative lg:mt-11 lg:flex lg:flex-row lg:space-y-0 lg:px-0"> */}
+          <div className="mt-11 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:mt-11 lg:flex lg:flex-row">
             <DynamicConnectButton
               buttonContainerClassName={buttonStyles({
                 variant: "primary",
@@ -95,10 +95,10 @@ function Page() {
             </Button>
           </div>
         </main>
-        <div className="bottom absolute right-52 hidden h-[730px] w-[503px] md:top-36 md:block">
+        <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">
           <Image src={LandingImage} alt="Landing image" />
         </div>
-        <footer className="absolute bottom-10 left-14 hidden flex-row md:block">
+        <footer className="absolute bottom-10 left-14 hidden flex-row lg:block">
           <ul className="flex flex-row space-x-12 text-sm">
             {options(router).map((option, idx) => {
               return (
