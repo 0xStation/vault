@@ -1,10 +1,9 @@
-import { Terminal } from "../../../../src/models/terminal/types"
 import DesktopTerminalLayout from "../../terminal/DesktopTerminalLayout"
 import AutomationsPageContent from "./components/AutomationsPageContent"
 
-const Desktop = ({ terminal }: { terminal: Terminal }) => {
+const Desktop = () => {
   return (
-    <DesktopTerminalLayout terminal={terminal}>
+    <DesktopTerminalLayout>
       <AutomationsPageContent />
     </DesktopTerminalLayout>
   )
