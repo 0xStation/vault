@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import { useNetwork, useSwitchNetwork } from "wagmi"
-import { VIEW } from "../../../pages/terminal/new"
+import { VIEW } from "../../../pages/project/new"
 import useGetSafeWithoutTerminal from "../../hooks/safe/useGetSafesWithoutTerminal"
 import useStore from "../../hooks/stores/useStore"
 import { useTerminalCreationStore } from "../../hooks/stores/useTerminalCreationStore"
@@ -92,9 +92,9 @@ export const TerminalCreationOptionsView = ({
         chainId={watchChainId}
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
-        <h2 className="font-bold">New Terminal</h2>
+        <h2 className="font-bold">New Project</h2>
         <p className="mb-7 mt-3 text-gray">
-          Use an existing Safe, or create Terminal with a new address.
+          Use an existing Safe, or create Project with a new address.
         </p>
         <SelectWithLabel
           className="mb-3"
@@ -126,8 +126,8 @@ export const TerminalCreationOptionsView = ({
               className="mt-7"
               onClick={() => setView(VIEW.CREATE_FORM)}
             >
-              <p className="font-bold">Create a Terminal with a new address</p>
-              <p className="text-gray">An address is unique to each terminal</p>
+              <p className="font-bold">Create a Project with a new address</p>
+              <p className="text-gray">An address is unique to each Project</p>
             </SelectorCard>
             <p className="mt-4 mb-3 text-base font-bold">
               Select to use an existing safe:{" "}

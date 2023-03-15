@@ -224,7 +224,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
         items?.revShareWithdraws.length === 0 ? (
         <EmptyList
           title="No items ready to claim"
-          subtitle="Claimable funds across Terminals will show here."
+          subtitle="Claimable funds across Projects will show here."
         />
       ) : (
         <ul className="mt-3">

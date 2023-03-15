@@ -15,7 +15,7 @@ const RequestTransferContent = ({ request }: { request: RequestFrob }) => {
     ?.length
 
   return (
-    <div className="flex flex-row items-center space-x-2 text-gray-90">
+    <div className="flex flex-row items-center space-x-2 text-gray-40">
       <ArrowUpRight size={"sm"} />
       <span className="text-base">
         {transfer?.value &&
@@ -67,7 +67,7 @@ const ProfileRequestTableRow = ({
           )}
         </>
       )}
-      <div className="text-sm text-gray-90">#{request.number}</div>
+      <div className="text-sm text-gray-40">#{request.number}</div>
       <RequestStatusIcon status={request.status} />
       <Avatar size="sm" address={request.data.createdBy} />
       <div className="min-w-0 grow">
@@ -86,22 +86,22 @@ const ProfileRequestTableRow = ({
           {request.approveActivities.length}
         </span>
 
-        <span className="text-base text-gray-90">Approved</span>
+        <span className="text-base text-gray-40">Approved</span>
       </div>
       <div className="space-x-1">
         <span className="text-base font-bold text-black">
           {request.rejectActivities.length}
         </span>
-        <span className="text-base text-gray-90">Rejected</span>
+        <span className="text-base text-gray-40">Rejected</span>
       </div>
 
       <div className="flex cursor-pointer flex-row items-center space-x-1">
         <ChatBubble size={"sm"} />
-        <span className="text-base text-gray-90">
+        <span className="text-base text-gray-40">
           {request.commentActivities.length}
         </span>
       </div>
-      <div className="basis-16 text-right text-sm text-gray-90">
+      <div className="basis-16 text-right text-sm text-gray-40">
         {timeSince(request.createdAt)}
       </div>
     </div>

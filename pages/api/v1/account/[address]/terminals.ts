@@ -44,7 +44,7 @@ export default async function handler(
     res.statusCode = 500
     return res.end(
       JSON.stringify(
-        "Failure fetching Terminals matching signer's supported Safes",
+        "Failure fetching Projects matching signer's supported Safes",
       ),
     )
   }

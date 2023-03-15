@@ -58,7 +58,7 @@ const options = (router: any) =>
     },
     {
       label: "About",
-      description: "About the terminal",
+      description: "About the Project",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/details`,
     },
