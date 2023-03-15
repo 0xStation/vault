@@ -54,6 +54,7 @@ const RequestDetailsContent = ({
           <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
             {request?.data?.note}
           </h3>
+
           {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
             <TokenTransferRequestContent request={request} />
           )}

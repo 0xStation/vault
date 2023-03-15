@@ -27,6 +27,10 @@ export const SignerQuorumRequestContent = ({
   return (
     <>
       <div className="flex flex-row justify-between">
+        <span className="text-gray">Action</span>
+        <span>Quorum change</span>
+      </div>
+      <div className="flex flex-row justify-between">
         <span className="text-gray">Members</span>
         <span>{prompt}</span>
       </div>
