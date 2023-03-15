@@ -48,7 +48,7 @@ const Desktop = ({ terminal }: { terminal: Terminal }) => {
 
   return (
     <>
-      <DesktopTerminalLayout terminal={terminal}>
+      <DesktopTerminalLayout>
         <RightSlider open={editDetailsSliderOpen} setOpen={toggleDetailsSlider}>
           <EditTerminalContent />
         </RightSlider>

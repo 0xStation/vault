@@ -4,7 +4,7 @@ import AssetsPageContent from "./components/AssetPageContent"
 
 const Desktop = ({ terminal }: { terminal: Terminal }) => {
   return (
-    <DesktopTerminalLayout terminal={terminal}>
+    <DesktopTerminalLayout>
       <AssetsPageContent terminal={terminal} />
     </DesktopTerminalLayout>
   )

@@ -3,7 +3,6 @@ import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Network } from "@ui/Network"
 import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
-import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -20,8 +19,6 @@ import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import { useRequests } from "../../src/hooks/useRequests"
 import { isExecuted } from "../../src/models/request/utils"
-import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
-import { Terminal } from "../../src/models/terminal/types"
 import { convertGlobalId } from "../../src/models/terminal/utils"
 
 type TerminalNavOption = {
@@ -68,18 +65,14 @@ const options = (router: any) =>
 const MobileTerminalIndexPage = () => {
   const router = useRouter()
   const { address: userAddress } = useAccount()
+
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
+  const { terminal } = useGetTerminal({
     chainId: chainId as number,
     address: address as string,
   })
-  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
-    address: terminal?.safeAddress,
-    chainId: terminal?.chainId,
-  })
-  const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
   const { data: tokenData } = useFungibleTokenData(chainId || 1, address)
 
@@ -105,14 +98,6 @@ const MobileTerminalIndexPage = () => {
 
   return (
     <>
-      {isSuccess && !isModuleEnabled && (
-        <TerminalActivationView
-          mutateGetTerminal={mutateGetTerminal}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          terminal={terminal}
-        />
-      )}
       <AccountNavBar />
       <section className="mt-6 px-4">
         <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
@@ -185,11 +170,11 @@ const MobileTerminalIndexPage = () => {
   )
 }
 
-const DesktopTerminalIndexPage = ({ terminal }: { terminal: Terminal }) => {
-  return <DesktopTerminalLayout terminal={terminal}></DesktopTerminalLayout>
+const DesktopTerminalIndexPage = () => {
+  return <DesktopTerminalLayout></DesktopTerminalLayout>
 }
 
-const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
+const TerminalPage = () => {
   const breakpoint = useBreakpoint()
   const isMobile = breakpoint === "S"
   const router = useRouter()
@@ -203,35 +188,37 @@ const TerminalPage = ({ terminal }: { terminal: Terminal }) => {
     }
   }, [breakpoint])
 
-  return (
-    <Breakpoint>
-      {(isMobile) => {
-        if (isMobile) return <MobileTerminalIndexPage />
-        return <DesktopTerminalIndexPage terminal={terminal} />
-      }}
-    </Breakpoint>
+  const { chainId, address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
   )
-}
+  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
+    chainId: chainId as number,
+    address: address as string,
+  })
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
+    address: terminal?.safeAddress,
+    chainId: terminal?.chainId,
+  })
+  const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const chainNameAndSafeAddress = context?.params?.chainNameAndSafeAddress
-
-  try {
-    let terminal = await getTerminalFromChainNameAndSafeAddress(
-      chainNameAndSafeAddress,
-    )
-    terminal = JSON.parse(JSON.stringify(terminal))
-    return {
-      props: {
-        terminal: terminal,
-      },
-    }
-  } catch (e) {
-    console.error(`Error: ${e}`)
-    return {
-      notFound: true,
-    }
-  }
+  return (
+    <>
+      {isSuccess && !isModuleEnabled && (
+        <TerminalActivationView
+          mutateGetTerminal={mutateGetTerminal}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          terminal={terminal}
+        />
+      )}
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) return <MobileTerminalIndexPage />
+          return <DesktopTerminalIndexPage />
+        }}
+      </Breakpoint>
+    </>
+  )
 }
 
 export default TerminalPage
