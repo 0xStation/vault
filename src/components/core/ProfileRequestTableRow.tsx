@@ -82,14 +82,14 @@ const ProfileRequestTableRow = ({
       </div>
 
       <div className="space-x-1">
-        <span className="text-base font-bold text-black">
+        <span className="text-base font-bold text-white">
           {request.approveActivities.length}
         </span>
 
         <span className="text-base text-gray-40">Approved</span>
       </div>
       <div className="space-x-1">
-        <span className="text-base font-bold text-black">
+        <span className="text-base font-bold text-white">
           {request.rejectActivities.length}
         </span>
         <span className="text-base text-gray-40">Rejected</span>
