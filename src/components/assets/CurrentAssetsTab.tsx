@@ -8,12 +8,12 @@ import { TabsContent } from "../ui/Tabs"
 
 export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
   const { data: nftData } = useNFTAssetData(
-    terminal.safeAddress,
-    terminal.chainId,
+    terminal?.safeAddress,
+    terminal?.chainId,
   )
   const { data: tokenData } = useFungibleTokenData(
-    terminal.chainId,
-    terminal.safeAddress,
+    terminal?.chainId,
+    terminal?.safeAddress,
   )
   if (!tokenData || !nftData) {
     return <></>
@@ -26,7 +26,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
 
   return (
     <TabsContent value={TerminalAssetsTab.CURRENT}>
-      <section className="mt-4 px-4">
+      <section className="mt-6 px-4">
         <LabelCard
           label="Total balance value"
           description={`$${totalAssetValue
@@ -36,7 +36,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
         />
       </section>
 
-      <section className="mt-4 space-y-4 px-4">
+      <section className="mt-6 space-y-4 px-4">
         {tokenData.map((response: any, idx: number) => {
           return (
             <div
@@ -68,7 +68,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
           )
         })}
       </section>
-      <section className="mt-4 grid grid-cols-2 gap-3 px-4">
+      <section className="mt-6 grid grid-cols-2 gap-3 px-4">
         {nftData.map((response: any, idx: number) => {
           return (
             <div key={`nft-${idx}`}>

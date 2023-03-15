@@ -1,15 +1,17 @@
 import { Network } from "@ui/Network"
+import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
+import { convertGlobalId } from "models/terminal/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
 import { StationLogo } from "../../components/icons"
+import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
-import { Terminal } from "../../models/terminal/types"
 
 type TerminalNavOption = {
   label: string
@@ -52,20 +54,26 @@ const options = (router: any) =>
   ] as TerminalNavOption[]
 
 const DesktopTerminalLayout = ({
-  terminal,
   assumeDefaultPadding = true,
   children,
 }: {
-  terminal: Terminal
   assumeDefaultPadding?: boolean
   children?: React.ReactNode
 }) => {
   const router = useRouter()
-  const { address } = useAccount()
+  const { address: accountAddress } = useAccount()
+  const { chainId, address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
+  )
+
+  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
+    chainId: chainId as number,
+    address: address as string,
+  })
 
   const { data: tokenData } = useFungibleTokenData(
-    terminal.chainId,
-    terminal.safeAddress,
+    terminal?.chainId,
+    terminal?.safeAddress,
   )
 
   const totalAssetValue = tokenData?.reduce((sum: number, token: any) => {
@@ -73,16 +81,20 @@ const DesktopTerminalLayout = ({
     return sum
   }, 0)
 
-  let { data: requests } = useRequests(terminal.chainId, terminal.safeAddress, {
-    tab: "ALL",
-  })
+  let { data: requests } = useRequests(
+    terminal?.chainId,
+    terminal?.safeAddress,
+    {
+      tab: TerminalRequestTypeTab.ALL,
+    },
+  )
 
   const requestsNeedingAttention = requests?.filter(
     (r) =>
       !isExecuted(r) &&
       (!(
-        r.approveActivities.some((a) => a.address === address) ||
-        r.rejectActivities.some((a) => a.address === address)
+        r.approveActivities.some((a) => a.address === accountAddress) ||
+        r.rejectActivities.some((a) => a.address === accountAddress)
       ) ||
         r.approveActivities.length >= r.quorum ||
         r.rejectActivities.length >= r.quorum),
@@ -113,7 +125,7 @@ const DesktopTerminalLayout = ({
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
               <h4 className="mb-1 mt-4 text-sm text-gray">Members</h4>
-              <span>{terminal.signers.length}</span>
+              <span>{terminal?.signers?.length}</span>
             </div>
           </section>
           <section className="mt-2">
@@ -125,7 +137,7 @@ const DesktopTerminalLayout = ({
                     className={`block ${
                       option.href ===
                         decodeURIComponent(router.asPath.split("?")[0]) &&
-                      "font-bold"
+                      "bg-gray-100 font-bold"
                     }`}
                     key={`link-${idx}`}
                   >

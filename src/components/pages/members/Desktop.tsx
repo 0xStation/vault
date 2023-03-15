@@ -4,7 +4,7 @@ import MembersPageContent from "./components/MembersPageContent"
 
 const Desktop = ({ terminal }: { terminal: Terminal }) => {
   return (
-    <DesktopTerminalLayout terminal={terminal}>
+    <DesktopTerminalLayout>
       <MembersPageContent />
     </DesktopTerminalLayout>
   )

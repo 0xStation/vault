@@ -180,7 +180,7 @@ const AwaitingConfirmationsView = ({
       </div>
       {error && <p className="mt-2 -mb-2 text-red">{error}</p>}
       <div className="mt-9 w-full text-left">
-        <p className="text-gray">Hasn&apos;t approved</p>
+        <p className="text-gray-40">Hasn&apos;t approved</p>
         {signersLeftToApprove?.map((signer) => (
           <AvatarAddress address={signer} className="mt-2" key={signer} />
         ))}
@@ -413,7 +413,7 @@ export const TerminalActivationView = ({
 
   return (
     <Overlay setIsOpen={setIsOpen} isOpen={isOpen}>
-      <div className="mx-10 flex h-full flex-col items-center justify-center text-gray-90">
+      <div className="mx-10 flex h-full flex-col items-center justify-center text-white">
         {getTxnStatus({
           executionNonce: safeMetadata?.nonce,
           terminalNonce: terminal?.data?.nonce,

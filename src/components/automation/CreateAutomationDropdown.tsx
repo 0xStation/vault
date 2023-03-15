@@ -20,8 +20,8 @@ export const CreateAutomationDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="">
-        {/* Copy same styles as primary, small button because annoying console.error if we use Button component */}
-        <div className="relative cursor-pointer rounded border bg-violet px-3 py-1 text-sm font-medium font-medium text-black hover:bg-violet/80">
+        {/* Copy same styles as primary, base button because annoying console.error if we use Button component */}
+        <div className="relative cursor-pointer rounded border bg-violet px-3 py-1 text-base font-medium font-medium text-black hover:bg-violet/80">
           + Create
         </div>
       </DropdownMenuTrigger>
