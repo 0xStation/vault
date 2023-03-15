@@ -64,7 +64,7 @@ export const ExecuteWrapper = ({
   )
   const { setActionPending } = useSetActionPending(actionToExecute.id)
 
-  const { config, error } = usePrepareSendTransaction({
+  const { config } = usePrepareSendTransaction({
     request: {
       to: txPayload.to,
       value: BigNumber.from(txPayload.value),
@@ -72,13 +72,6 @@ export const ExecuteWrapper = ({
     },
     chainId: request.chainId,
   })
-
-  if (error) {
-    // need to parse the error because there could be many but this seems most common
-    // errorToast({ message: "Chain mismatch" })
-  }
-
-  console.log(error)
 
   const {
     data: txData,

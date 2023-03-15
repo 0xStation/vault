@@ -1,5 +1,4 @@
 import Breakpoint from "@ui/Breakpoint"
-import { Button } from "@ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -116,7 +115,10 @@ export const CreateRequestDropdown = () => {
       </RightSlider>
       <DropdownMenu>
         <DropdownMenuTrigger className="">
-          <Button size="sm">+ Create</Button>
+          {/* Copy same styles as primary, small button because annoying console.error if we use Button component */}
+          <div className="relative cursor-pointer rounded border bg-violet px-3 py-1 text-sm font-medium font-medium text-black hover:bg-violet/80">
+            + Create
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2">
           <DropdownMenuItem className="cursor-pointer focus:bg-black">

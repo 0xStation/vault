@@ -15,7 +15,6 @@ export const useSignToEnableModule = ({
   const { signMessage } = useSignature()
 
   const signToEnableModule = async () => {
-    console.log("nonce!", nonce)
     try {
       let message
       if (safeMetadata?.contractVersion || !nonce) {
