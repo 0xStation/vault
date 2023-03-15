@@ -1,8 +1,12 @@
 import { ArrowLeft } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
-import { GetServerSidePropsContext } from "next"
+import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
+import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
+import { Terminal } from "models/terminal/types"
+import { convertGlobalId } from "models/terminal/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import TerminalRequestTypeTabBar, {
   TerminalRequestTypeTab,
@@ -10,12 +14,11 @@ import TerminalRequestTypeTabBar, {
 import { CreateRequestDropdown } from "../../src/components/request/CreateRequestDropdown"
 import RequestTabContent from "../../src/components/request/RequestTabContent"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
-import { getTerminalFromChainNameAndSafeAddress } from "../../src/models/terminal/terminals"
-import { Terminal } from "../../src/models/terminal/types"
+import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 
-const DesktopTerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
+const DesktopTerminalRequestsPage = () => {
   return (
-    <DesktopTerminalLayout terminal={terminal}>
+    <DesktopTerminalLayout>
       <div>
         <div className="my-4 flex flex-row items-center justify-between px-4">
           <span className="text-2xl font-bold">Proposals</span>
@@ -33,6 +36,7 @@ const DesktopTerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
 
 const MobileTerminalRequestsPage = () => {
   const router = useRouter()
+
   return (
     <>
       <AccountNavBar />
@@ -55,36 +59,36 @@ const MobileTerminalRequestsPage = () => {
   )
 }
 
-const TerminalRequestsPage = ({ terminal }: { terminal: Terminal }) => {
-  return (
-    <Breakpoint>
-      {(isMobile) => {
-        if (isMobile) return <MobileTerminalRequestsPage />
-        return <DesktopTerminalRequestsPage terminal={terminal} />
-      }}
-    </Breakpoint>
+const TerminalRequestsPage = () => {
+  const router = useRouter()
+  const { chainId, address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
   )
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const chainNameAndSafeAddress = context?.params?.chainNameAndSafeAddress
-
-  try {
-    let terminal = await getTerminalFromChainNameAndSafeAddress(
-      chainNameAndSafeAddress,
-    )
-    terminal = JSON.parse(JSON.stringify(terminal))
-    return {
-      props: {
-        terminal: terminal,
-      },
-    }
-  } catch (e) {
-    console.error(`Error: ${e}`)
-    return {
-      notFound: true,
-    }
-  }
+  const { terminal, mutate: mutateGetTerminal } =
+    useTerminalByChainIdAndSafeAddress(address as string, chainId as number)
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
+    address: terminal?.safeAddress as string,
+    chainId: terminal?.chainId as number,
+  })
+  const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+  return (
+    <>
+      {isSuccess && !isModuleEnabled && (
+        <TerminalActivationView
+          mutateGetTerminal={mutateGetTerminal}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          terminal={terminal as Terminal}
+        />
+      )}
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) return <MobileTerminalRequestsPage />
+          return <DesktopTerminalRequestsPage />
+        }}
+      </Breakpoint>
+    </>
+  )
 }
 
 export default TerminalRequestsPage

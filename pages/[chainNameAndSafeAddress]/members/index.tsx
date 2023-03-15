@@ -1,6 +1,9 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
+import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
+import { useState } from "react"
 import Desktop from "../../../src/components/pages/members/Desktop"
 import Mobile from "../../../src/components/pages/members/Mobile"
+import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
 import { useTerminalByChainIdAndSafeAddress } from "../../../src/models/terminal/hooks"
 
 const chainNameToChainId: Record<string, number | undefined> = {
@@ -16,21 +19,38 @@ const MembersPage = () => {
 
   const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
   const chainId = chainNameToChainId[chainName] as number
-  const { terminal } = useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
+  const { terminal, mutate: mutateGetTerminal } =
+    useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
+
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
+    address: terminal?.safeAddress as string,
+    chainId: terminal?.chainId as number,
+  })
+  const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
   if (!terminal) {
-    return <></>
+    return <></> // TODO: show the 404 page
   }
 
   return (
-    <Breakpoint>
-      {(isMobile) => {
-        if (isMobile) {
-          return <Mobile />
-        }
-        return <Desktop terminal={terminal} />
-      }}
-    </Breakpoint>
+    <>
+      {isSuccess && !isModuleEnabled && (
+        <TerminalActivationView
+          mutateGetTerminal={mutateGetTerminal}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          terminal={terminal}
+        />
+      )}
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return <Mobile />
+          }
+          return <Desktop terminal={terminal} />
+        }}
+      </Breakpoint>
+    </>
   )
 }
 

@@ -23,7 +23,11 @@ export const useTerminalByChainIdAndSafeAddress = (
     }
   }
 
-  const { isLoading, data: terminal } = useSWR(
+  const {
+    isLoading,
+    data: terminal,
+    mutate,
+  } = useSWR(
     address && chainId
       ? `/api/v1/terminal?chainId=${chainId}&safeAddress=${address}`
       : null,
@@ -34,5 +38,6 @@ export const useTerminalByChainIdAndSafeAddress = (
   return {
     isLoading,
     terminal,
+    mutate,
   }
 }

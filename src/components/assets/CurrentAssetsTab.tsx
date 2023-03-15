@@ -8,12 +8,12 @@ import { TabsContent } from "../ui/Tabs"
 
 export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
   const { data: nftData } = useNFTAssetData(
-    terminal.safeAddress,
-    terminal.chainId,
+    terminal?.safeAddress,
+    terminal?.chainId,
   )
   const { data: tokenData } = useFungibleTokenData(
-    terminal.chainId,
-    terminal.safeAddress,
+    terminal?.chainId,
+    terminal?.safeAddress,
   )
   if (!tokenData || !nftData) {
     return <></>
