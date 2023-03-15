@@ -60,9 +60,9 @@ export default async function handler(
             },
             {
               actions: {
-                every: {
+                none: {
                   status: {
-                    equals: ActionStatus.NONE,
+                    in: [ActionStatus.SUCCESS, ActionStatus.FAILURE],
                   },
                 },
               },

@@ -221,47 +221,6 @@ export const ClaimItemsDrawer = ({
         }),
       )
     },
-    onWaitSuccess: () => {
-      // optimistic updates
-      let setActionIdsPending: string[] = []
-      const updatedRequests = requests.map((request: RequestFrob) => {
-        let updatedActions: Action[] = []
-        request.actions.forEach((action: Action) => {
-          if (action.variant === ActionVariant.APPROVAL) {
-            updatedActions.push({
-              ...action,
-              status: ActionStatus.SUCCESS,
-              txHash: transactionHash as string,
-            })
-            setActionIdsPending.push(action.id)
-          } else {
-            updatedActions.push(action)
-          }
-        })
-        return {
-          ...request,
-          actions: updatedActions,
-        }
-      }) as RequestFrob[]
-
-      let updatedItems: {
-        requests: RequestFrob[]
-        revShareWithdraws: RevShareWithdraw[]
-      } = {
-        requests: updatedRequests,
-        revShareWithdraws: revShareWithdraws.map((rs) => ({
-          ...rs,
-          pendingExecution: false,
-        })),
-      }
-
-      optimisticallyShow(
-        updatedItems,
-        completeRequestsExecution({
-          actionIds: setActionIdsPending,
-        }),
-      )
-    },
   })
 
   return (

@@ -2,11 +2,7 @@ import { BigNumber } from "ethers"
 import { RawCall } from "lib/transactions/call"
 import { getNetworkExplorer } from "lib/utils/networks"
 import { useEffect } from "react"
-import {
-  usePrepareSendTransaction,
-  useSendTransaction,
-  useWaitForTransaction,
-} from "wagmi"
+import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
 import { useToast } from "./useToast"
 
 export const usePreparedTransaction = ({
@@ -14,15 +10,13 @@ export const usePreparedTransaction = ({
   txPayload,
   onError,
   onSendSuccess,
-  onWaitSuccess,
 }: {
   chainId: number
   txPayload: RawCall
   onError: () => void
   onSendSuccess: () => void
-  onWaitSuccess: () => void
 }) => {
-  const { loadingToast, successToast, closeCurrentToast } = useToast()
+  const { loadingToast } = useToast()
 
   const { config } = usePrepareSendTransaction({
     request: {
@@ -39,12 +33,6 @@ export const usePreparedTransaction = ({
     isError,
     sendTransaction,
   } = useSendTransaction(config)
-
-  const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
-    hash: txData?.hash,
-    chainId,
-    enabled: !!txData?.hash,
-  })
 
   useEffect(() => {
     if (isError) {
@@ -64,21 +52,6 @@ export const usePreparedTransaction = ({
       onSendSuccess()
     }
   }, [isSendTransactionSuccess])
-
-  useEffect(() => {
-    if (isWaitForTransactionSuccess) {
-      closeCurrentToast() // loading toast
-      successToast({
-        message: "Successfully executed!",
-        action: {
-          href: `${getNetworkExplorer(chainId)}/tx/${txData?.hash}`,
-          label: "View on etherscan",
-        },
-        timeout: 5000,
-      })
-      onWaitSuccess()
-    }
-  }, [isWaitForTransactionSuccess])
 
   return {
     ready: !!sendTransaction,
