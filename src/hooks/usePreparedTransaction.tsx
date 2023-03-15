@@ -55,10 +55,10 @@ export const usePreparedTransaction = ({
   useEffect(() => {
     if (isSendTransactionSuccess) {
       loadingToast({
-        message: "loading...",
+        message: "Loading...",
         action: {
           href: `${getNetworkExplorer(chainId)}/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          label: "View on Etherscan",
         },
       })
       onSendSuccess()

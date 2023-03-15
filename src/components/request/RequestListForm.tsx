@@ -350,7 +350,7 @@ const RequestListForm = ({
                 toggleDrawer("batchVoteDrawer", true)
               }}
             >
-              Rejection
+              Reject
             </button>
           </>
         )}
