@@ -1,6 +1,7 @@
 import Breakpoint from "@ui/Breakpoint"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Network } from "@ui/Network"
+import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
 import { GetServerSidePropsContext } from "next"
 import Link from "next/link"
@@ -88,7 +89,7 @@ const MobileTerminalIndexPage = () => {
   }, 0)
 
   let { data: requests } = useRequests(chainId || 1, address || "", {
-    tab: "ALL",
+    tab: TerminalRequestTypeTab.ALL,
   })
 
   const requestsNeedingAttention = requests?.filter(

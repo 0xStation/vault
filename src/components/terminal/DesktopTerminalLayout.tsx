@@ -1,4 +1,5 @@
 import { Network } from "@ui/Network"
+import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -74,7 +75,7 @@ const DesktopTerminalLayout = ({
   }, 0)
 
   let { data: requests } = useRequests(terminal.chainId, terminal.safeAddress, {
-    tab: "ALL",
+    tab: TerminalRequestTypeTab.ALL,
   })
 
   const requestsNeedingAttention = requests?.filter(
