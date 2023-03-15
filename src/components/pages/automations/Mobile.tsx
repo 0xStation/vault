@@ -1,23 +1,25 @@
 import { ArrowLeft } from "@icons"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import AccountNavBar from "../../../src/components/core/AccountNavBar"
-import NewAutomationContent from "../../../src/components/pages/newAutomation/components/NewAutomationContent"
+import AccountNavBar from "../../core/AccountNavBar"
+import AutomationsPageContent from "./components/AutomationsPageContent"
 
-const NewAutomationPage = () => {
+const Mobile = () => {
   const router = useRouter()
+
   return (
     <>
       <AccountNavBar />
+      {/* link probably needs to go back to a different page here */}
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
         className="block w-fit px-4"
       >
         <ArrowLeft />
       </Link>
-      <NewAutomationContent />
+      <AutomationsPageContent />
     </>
   )
 }
 
-export default NewAutomationPage
+export default Mobile
