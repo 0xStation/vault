@@ -80,7 +80,7 @@ function Page() {
             size={isMobile ? "base" : "xl"}
             variant="unemphasized"
             onClick={() => {
-              router.push(TYPE_FORM) // TODO: constant
+              router.push(TYPE_FORM)
             }}
           >
             Get early access
