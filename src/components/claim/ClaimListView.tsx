@@ -146,7 +146,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       requests: RequestFrob[]
       revShareWithdraws: RevShareWithdraw[]
     },
-    mutation: Promise<any>,
+    fn: Promise<any>,
   ) => {
     // TODO: thread together existing items with updated items
     let optimisticRequests: RequestFrob[] = []
@@ -188,7 +188,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       }
     })
 
-    mutate(mutation, {
+    mutate(fn, {
       optimisticData: {
         requests: optimisticRequests,
         revShareWithdraws: optimisticRevShares,
@@ -264,6 +264,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
               }}
               onCheckboxChange={onCheckboxChange}
               checked={batchState.selectedRequests.includes(request)}
+              optimisticallyShow={optimisticallyShow}
             />
           ))}
         </ul>

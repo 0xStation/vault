@@ -14,11 +14,7 @@ import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { v4 as uuid } from "uuid"
-import {
-  usePrepareSendTransaction,
-  useSendTransaction,
-  useWaitForTransaction,
-} from "wagmi"
+import { usePrepareSendTransaction, useSendTransaction } from "wagmi"
 import { SignerQuorumRequestContent } from "../../../src/components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import { RawCall } from "../../../src/lib/transactions/call"
@@ -79,12 +75,6 @@ export const ExecuteWrapper = ({
     isError,
     sendTransaction,
   } = useSendTransaction(config)
-
-  const { isSuccess: isWaitForTransactionSuccess } = useWaitForTransaction({
-    hash: txData?.hash,
-    chainId: request.chainId,
-    enabled: !!txData?.hash,
-  })
 
   useEffect(() => {
     if (isError) {
@@ -151,49 +141,6 @@ export const ExecuteWrapper = ({
       })
     }
   }, [isSendTransactionSuccess])
-
-  // what happens if the user naviagates away from page before this runs
-  // we might not run the function to update the status of the action / request
-  useEffect(() => {
-    if (isWaitForTransactionSuccess) {
-      const updatedActions = request.actions.map((action: Action) => {
-        if (action.id === actionToExecute.id) {
-          return {
-            ...actionToExecute,
-            status: ActionStatus.SUCCESS,
-          }
-        }
-        return action
-      })
-
-      mutateRequest({
-        fn: completeRequestExecution({
-          actionId: actionToExecute.id,
-        }),
-        requestId: request.id,
-        payload: {
-          ...request,
-          actions: updatedActions,
-          status: getStatus(
-            updatedActions,
-            request.approveActivities,
-            request.rejectActivities,
-            request.quorum,
-          ),
-        },
-      })
-
-      closeCurrentToast() // loading toast
-      successToast({
-        message: "Request successfully executed!",
-        action: {
-          href: `${getNetworkExplorer(request.chainId)}/tx/${txData?.hash}`,
-          label: "View on Etherscan",
-        },
-        timeout: 5000,
-      })
-    }
-  }, [isWaitForTransactionSuccess])
 
   const {
     register,

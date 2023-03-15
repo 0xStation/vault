@@ -56,9 +56,6 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
     requestId: string
     payload: any
   }) => {
-    // set state used by Request in slider
-    setRequestForDetails(payload)
-
     const updatedRequests = requests?.map((request: RequestFrob) => {
       if (request.id === requestId) {
         return payload
@@ -87,7 +84,11 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
         <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
           <RequestDetailsContent
             request={requestForDetails}
-            mutateRequest={mutateRequest}
+            mutateRequest={(args) => {
+              // set state used by Request in slider
+              setRequestForDetails(args.payload)
+              mutateRequest(args)
+            }}
           />
         </RightSlider>
       )}
@@ -112,6 +113,7 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
                           request={request}
                           showTerminal={request.terminal}
                           checked={false}
+                          mutateRequest={mutateRequest}
                         />
                       )
                     })}

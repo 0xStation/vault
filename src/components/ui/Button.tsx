@@ -36,7 +36,7 @@ export const buttonStyles = cva("relative rounded text-center", {
     {
       variant: "secondary",
       disabled: false,
-      class: "text-white border-white hover:border-gray-50",
+      class: "text-white border-white hover:border-gray-40 hover:text-gray-40",
     },
     {
       variant: "secondary",
