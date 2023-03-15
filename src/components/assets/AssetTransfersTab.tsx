@@ -5,7 +5,6 @@ import {
 } from "../../hooks/useAssetTransfers"
 import { timeSince } from "../../lib/utils"
 import networks from "../../lib/utils/networks"
-import { Terminal } from "../../models/terminal/types"
 import { TokenType } from "../../models/token/types"
 import { Address } from "../ui/Address"
 import { Avatar } from "../ui/Avatar"
@@ -67,17 +66,15 @@ const formatAssetValue = (tx: TransferItem): string => {
 }
 
 export const AssetTransfersTab = ({
-  terminal,
+  address,
+  chainId,
   direction,
 }: {
-  terminal: Terminal
+  address: string
+  chainId: number
   direction: TransferDirection
 }) => {
-  const { data } = useAssetTransfers(
-    terminal.safeAddress,
-    terminal.chainId,
-    direction,
-  )
+  const { data } = useAssetTransfers(address, chainId, direction)
 
   return (
     <section className="space-y-4 px-4">
@@ -85,7 +82,7 @@ export const AssetTransfersTab = ({
         <TransactionItem
           key={tx.hash}
           hash={tx.hash}
-          chainId={terminal.chainId}
+          chainId={chainId}
           value={formatAssetValue(tx)}
           date={timeSince(new Date(tx.metadata.blockTimestamp)) ?? ""}
           address={direction === TransferDirection.INBOUND ? tx.from : tx.to}

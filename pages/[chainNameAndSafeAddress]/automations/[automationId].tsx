@@ -10,6 +10,8 @@ import { useAutomation } from "../../../src/models/automation/hooks"
 
 export const TerminalAutomationDetailPage = () => {
   const router = useRouter()
+  // The automation id can be undefined when the page loads so the isLoading state
+  // really isn't reliable
   const { automation } = useAutomation(router.query.automationId as string)
 
   return (
@@ -39,7 +41,7 @@ export const TerminalAutomationDetailPage = () => {
       </div>
       <AutomationTabBar>
         <AutomationInfo />
-        <AutomationHistory />
+        <AutomationHistory automation={automation} isLoading={!automation} />
       </AutomationTabBar>
     </>
   )
