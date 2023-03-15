@@ -86,21 +86,25 @@ export const ClaimItem = ({
           />
         )}
       </div>
-      <div className="w-full">
-        <div>{formatTransfers(transfers)}</div>
-        <div className="mt-1 flex flex-row items-center justify-between">
-          <div className="flex w-full flex-row items-center space-x-1">
-            <Network chainId={transfers?.[0]?.token?.chainId} />
-            <div>·</div>
-            <button
-              onClick={() => {
-                showDetails(pendingExecution)
-              }}
-              className="w-fit border-b border-dotted text-sm hover:text-gray-90"
-            >
-              View details
-            </button>
+      <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex flex-col">
+          {formatTransfers(transfers)}
+          <div className="mt-1 flex flex-row items-center">
+            <div className="flex w-full flex-row items-center space-x-1">
+              <Network chainId={transfers?.[0]?.token?.chainId} />
+              <div>·</div>
+              <button
+                onClick={() => {
+                  showDetails(pendingExecution)
+                }}
+                className="w-fit border-b border-dotted text-sm hover:text-gray-90"
+              >
+                View details
+              </button>
+            </div>
           </div>
+        </div>
+        <div className="max-h-[35px] items-center">
           <Button
             variant="secondary"
             size="sm"
