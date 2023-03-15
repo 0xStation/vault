@@ -1,18 +1,19 @@
 import { cva, VariantProps } from "class-variance-authority"
 import { ButtonHTMLAttributes } from "react"
 
-export const buttonStyles = cva("relative font-medium rounded", {
+export const buttonStyles = cva("relative rounded text-center", {
   variants: {
     variant: {
       primary: "text-black border bg-violet",
       secondary: "border",
-      unemphasized: "text-white",
+      unemphasized: "text-violet hover:opacity-90",
       tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",
     },
     size: {
       sm: "px-3 py-1 text-sm font-medium",
       base: "font-medium px-3 py-1 text-base",
-      lg: "font-bold px-5 py-2 text-base rounded-lg",
+      lg: "font-medium font-bold px-5 py-2 text-base rounded-lg",
+      xl: "px-16 py-3 font-bold text-xl",
     },
     fullWidth: {
       true: "w-full",
@@ -35,12 +36,22 @@ export const buttonStyles = cva("relative font-medium rounded", {
     {
       variant: "secondary",
       disabled: false,
-      class: "text-white border-white hover:border-gray-50 hover:text-gray-50",
+      class: "text-white border-white hover:border-gray-50",
     },
     {
       variant: "secondary",
       disabled: true,
       class: "text-gray-80 border-gray-80",
+    },
+    {
+      variant: "unemphasized",
+      disabled: false,
+      class: "text-violet hover:text-violet/80 ",
+    },
+    {
+      variant: "unemphasized",
+      disabled: true,
+      class: "text-violet/20",
     },
   ],
 })

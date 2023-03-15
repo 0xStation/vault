@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { SWRConfig } from "swr"
 import "../styles/globals.css"
 
+import { useRouter } from "next/router"
 import AppLayout from "../src/components/core/AppLayout"
 import { useIsRouterLoading } from "../src/hooks/useIsRouterLoading"
 
@@ -64,6 +65,7 @@ function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const [loading] = useIsRouterLoading()
+  const router = useRouter()
   return (
     <SWRConfig value={{ provider: () => new Map() }}>
       <DynamicContextProvider
@@ -79,6 +81,11 @@ function App({ Component, pageProps }: AppProps) {
             "zerion",
             "zengo",
           ]),
+          eventsCallbacks: {
+            onLogout: (args) => {
+              router.push("/")
+            },
+          },
         }}
       >
         <DynamicWagmiConnector>

@@ -27,3 +27,12 @@ export const SAFE_URL = "https://app.safe.global"
 // works for mainnet, goerli, polygon
 export const SPLITS_MAIN_ADDRESS = "0x2ed6c4B5dA6378c7897AC67Ba9e43102Feb694EE"
 export const SPLITS_PERCENTAGE_SCALE = 1e6
+
+export const LINKS = {
+  TYPE_FORM: "https://6vdcjqzyfj3.typeform.com/to/RzLV4yli",
+  NEWSTAND: "https://station.mirror.xyz/",
+  ABOUT: "https://www.station.express/letter-to-the-internet",
+  HELP_DESK: "/#",
+  TERMS_AND_SERVICES:
+    "https://www.notion.so/Terms-of-Service-f61ca68c69aa4c429f703cc69cde152e",
+}
