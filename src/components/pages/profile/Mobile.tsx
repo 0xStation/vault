@@ -31,9 +31,7 @@ const Mobile = () => {
           ) : (
             <div className="text-sm">
               <span className="font-bold">{count}</span>{" "}
-              <span className="text-gray">
-                Terminal{count === 1 ? "" : "s"}
-              </span>
+              <span className="text-gray">Project{count === 1 ? "" : "s"}</span>
             </div>
           )}
         </div>

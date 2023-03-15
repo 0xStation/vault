@@ -318,7 +318,7 @@ export const ClaimItemsDrawer = ({
                 </div>
                 {/* <div className="h-32"></div> */}
               </div>
-              <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-slate-200 bg-white px-5 pb-6 pt-3 text-center">
+              <div className="fixed bottom-0 right-0 left-0 mx-auto px-5 pb-6 pt-3 text-center">
                 <Button
                   fullWidth={true}
                   loading={loading || executionPending}
@@ -331,7 +331,7 @@ export const ClaimItemsDrawer = ({
                   Claim
                 </Button>
                 {/* TODO change size of xs to match designs, needs to be smaller */}
-                <p className={"mt-1 text-sm text-slate-500"}>
+                <p className={"mt-1 text-sm text-gray"}>
                   You’ll be directed to confirm. This action costs gas.
                 </p>
               </div>
@@ -350,9 +350,9 @@ export const ClaimItemsDrawer = ({
           >
             <h1 className="pb-2">Claim tokens</h1>
             <div className="h-full overflow-y-auto pb-32">
-              <div className="mt-4 space-y-2 border-b border-slate-200 pb-6">
+              <div className="mt-4 space-y-2 border-b border-gray-90 pb-6">
                 <div className="flex flex-row space-x-2">
-                  <span className="text-sm text-slate-500">Network</span>
+                  <span className="text-sm text-gray">Network</span>
                   <Network
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
@@ -372,11 +372,11 @@ export const ClaimItemsDrawer = ({
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (
                   <div
-                    className="space-y-3 rounded-lg bg-slate-50 p-4"
+                    className="space-y-3 rounded-lg bg-gray-90 p-4"
                     key={`item-${index}`}
                   >
                     <div>
-                      <p className="text-sm text-slate-500">Note</p>
+                      <p className="text-sm text-gray">Note</p>
                       <p className="mt-1">{item.note}</p>
                     </div>
                     <TokenTransfersAccordion
@@ -388,7 +388,7 @@ export const ClaimItemsDrawer = ({
               </div>
               {/* <div className="h-32"></div> */}
             </div>
-            <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-gray-80 bg-black px-5 pb-6 pt-3 text-center">
+            <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-gray-90 bg-black px-5 pb-6 pt-3 text-center">
               <Button
                 fullWidth={true}
                 loading={loading || executionPending}

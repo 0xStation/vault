@@ -68,10 +68,10 @@ export const AccountNavBar = () => {
                         variant="secondary"
                         size="sm"
                         onClick={() => {
-                          router.push("/terminal/new")
+                          router.push("/project/new")
                         }}
                       >
-                        + New Terminal
+                        + New Project
                       </Button>
                     )
                   } else {
@@ -88,7 +88,7 @@ export const AccountNavBar = () => {
                           setCreateTerminalSliderOpen(true)
                         }}
                       >
-                        + New Terminal
+                        + New Project
                       </Button>
                     )
                   }

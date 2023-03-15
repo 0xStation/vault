@@ -62,7 +62,7 @@ const LoadingScreen = ({
         <>
           <LoadingSpinner />
           <p className="mt-8 mb-2 animate-pulse font-bold">
-            Building your Terminal
+            Building your Project
           </p>
           <p className="animate-pulse text-base">
             Please do not leave or refresh the page.
@@ -140,15 +140,10 @@ export const MembersView = ({
           quorum: undefined,
           address: "",
         })
-        router.push(
-          `/${globalId(
-            terminal.chainId,
-            terminal.safeAddress,
-          )}/getting-started`,
-        )
+        router.push(`/${globalId(terminal.chainId, terminal.safeAddress)}`)
       } catch (err) {
-        console.error("Failed to create Terminal", err)
-        setTerminalCreationError("Failed to create Terminal.")
+        console.error("Failed to create Project", err)
+        setTerminalCreationError("Failed to create Project.")
         setTxnHash(undefined)
       }
     },
@@ -399,7 +394,7 @@ export const MembersView = ({
             disabled={isSubmitting}
             loading={isSubmitting}
           >
-            Create Terminal
+            Create Project
           </Button>
           <p
             className={`mt-1 text-base  ${

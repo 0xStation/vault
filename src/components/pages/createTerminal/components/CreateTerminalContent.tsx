@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { VIEW } from "../../../../../pages/terminal/new"
+import { VIEW } from "../../../../../pages/project/new"
 import useStore from "../../../../hooks/stores/useStore"
 import TerminalCreationForm from "../../../terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../../terminalCreation/TerminalCreationOptionsView"

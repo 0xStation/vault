@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNetwork } from "wagmi"
-import { VIEW } from "../../../../pages/terminal/new"
+import { VIEW } from "../../../../pages/project/new"
 import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreationStore"
 import Layout from "../Layout"
 import { MembersView } from "./MembersForm"

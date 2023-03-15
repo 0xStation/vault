@@ -1,6 +1,6 @@
 import truncateString from "lib/utils"
 import { Dispatch, SetStateAction } from "react"
-import { VIEW } from "../../../pages/terminal/new"
+import { VIEW } from "../../../pages/project/new"
 import { useTerminalCreationStore } from "../../hooks/stores/useTerminalCreationStore"
 import SelectorCard from "../core/SelectorCard"
 

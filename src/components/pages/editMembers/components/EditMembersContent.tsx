@@ -374,10 +374,10 @@ export const EditMembersContent = () => {
                 return (
                   <div
                     key={item.id + item.address}
-                    className="mb-1 rounded bg-slate-50 p-3"
+                    className="mb-1 rounded bg-gray-90 p-3"
                   >
                     <div className="mb-5 flex flex-row justify-between">
-                      <p className="text-base font-bold text-slate-500">
+                      <p className="text-base font-bold text-gray">
                         Member{" "}
                         {(safeMetadata?.signers?.length as number) -
                           signersToRemove.size +
@@ -385,7 +385,7 @@ export const EditMembersContent = () => {
                           1}
                       </p>
                       <button type="button" onClick={() => remove(index)}>
-                        <XMarkIcon className="h-5 w-5 fill-slate-500" />
+                        <XMarkIcon className="h-5 w-5 fill-gray" />
                       </button>
                     </div>
                     <AddressInput
@@ -394,7 +394,7 @@ export const EditMembersContent = () => {
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-slate-50 [&>input]:placeholder:text-slate-500"
+                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
@@ -477,7 +477,7 @@ export const EditMembersContent = () => {
             </Button>
             <p
               className={`mt-1 text-sm  ${
-                formMessage?.isError ? "text-red" : "text-slate-500"
+                formMessage?.isError ? "text-red" : "text-gray"
               }`}
             >
               {formMessage.message ||

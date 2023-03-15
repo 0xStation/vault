@@ -71,7 +71,7 @@ const AwaitingExecutionview = ({
         <>
           <h2 className="font-bold">Ready to activate</h2>
           <p className="mt-1 text-center">
-            Execute to activate your Terminal. This action costs gas.
+            Execute to activate your Project. This action costs gas.
           </p>
         </>
       ) : (
@@ -153,10 +153,10 @@ const AwaitingConfirmationsView = ({
         )
   return (
     <>
-      <h2 className="font-bold">Terminal not activated</h2>
+      <h2 className="font-bold">Project not activated</h2>
       <p className="mt-1 text-center">
         Requires {quorumDiff} more approval{quorumDiff > 1 && "s"} to activate
-        your Terminal.
+        your Project.
       </p>
       <div className="mt-6 flex flex-row space-x-3">
         {!hasApproved && (
@@ -273,7 +273,7 @@ export const TerminalActivationView = ({
     },
     onError: async (data) => {
       console.error("Failed to wait for txn", data)
-      setError("Failed to activate Terminal.")
+      setError("Failed to activate Project.")
       setTxnHash("")
     },
   })
@@ -377,9 +377,9 @@ export const TerminalActivationView = ({
         mutateGetTerminal()
         setApproveLoading(false)
       } catch (err) {
-        console.error("Failed to update Terminal: ", err)
+        console.error("Failed to update Project: ", err)
         setApproveLoading(false)
-        setError("Failed to update Terminal.")
+        setError("Failed to update Project.")
         return
       }
     } else {

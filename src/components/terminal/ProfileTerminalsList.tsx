@@ -24,10 +24,10 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
               variant="secondary"
               size="sm"
               onClick={() => {
-                router.push("/terminal/new")
+                router.push("/project/new")
               }}
             >
-              + New Terminal
+              + New Project
             </Button>
           </div>
         </EmptyList>
