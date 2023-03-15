@@ -2,7 +2,7 @@ import Breakpoint from "@ui/Breakpoint"
 import Desktop from "../../../src/components/pages/automations/Desktop"
 import Mobile from "../../../src/components/pages/automations/Mobile"
 
-const AutomationsPage = ({}: {}) => {
+const AutomationsPage = () => {
   return (
     <Breakpoint>
       {(isMobile) => {
