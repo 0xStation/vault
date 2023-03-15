@@ -33,12 +33,13 @@ const RequestDetailsContent = ({
     return <></>
   }
 
-  const connectedUserIsSigner = request.signers?.includes(address as string)
+  const showVoteExecuteButtons =
+    request.signers?.includes(address as string) && !isExecuted(request)
 
   return (
     <>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
-      <div className="divide-y divide-gray-80">
+      <div className="divide-y divide-gray-80 pb-32">
         <section className="space-y-3 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
@@ -112,7 +113,7 @@ const RequestDetailsContent = ({
             )
           })}
         </section>
-        <section className="p-4 pb-28">
+        <section className="p-4">
           <h3 className="mb-4">Timeline</h3>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
@@ -168,16 +169,13 @@ const RequestDetailsContent = ({
           />
         </section>
       </div>
-      <div
-        className={`${
-          connectedUserIsSigner && !isExecuted(request) ? "" : "hidden"
-        }`}
-      >
+      {/* updating status on transaction success handled elsewhere, can remove this when execution pending */}
+      {showVoteExecuteButtons && (
         <RequestDetailsActions
           request={request}
           mutateRequest={mutateRequest}
         />
-      </div>
+      )}
     </>
   )
 }

@@ -67,8 +67,8 @@ export const TabBar = ({
         // style = "filter"
         <FilterTabsList
           className={cn(
-            // top-[29px] assumes that filter is used within tab to get sticky lined up right
-            "sticky top-[29px] z-10 bg-black px-4 py-2",
+            // top-[33px] assumes that filter is used within tab to get sticky lined up right
+            "sticky top-[33px] z-10 bg-black px-4 py-2",
             showBorder ? "border-b border-gray-80" : "",
           )}
         >

@@ -1,7 +1,5 @@
-import { ArrowLeft } from "@icons"
 import { Address } from "@ui/Address"
 import { Avatar } from "@ui/Avatar"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import { useTerminalsBySigner } from "../../../models/terminal/hooks"
 import AccountNavBar from "../../core/AccountNavBar"
@@ -15,14 +13,7 @@ const Mobile = () => {
   return (
     <>
       <AccountNavBar />
-      {/* link probably needs to go back to a different page here */}
-      <Link
-        href={`/${router.query.chainNameAndSafeAddress}`}
-        className="block w-fit px-4"
-      >
-        <ArrowLeft />
-      </Link>
-      <div className="mt-6 flex flex-row items-center space-x-3">
+      <div className="mt-6 flex flex-row items-center space-x-3 px-4">
         <Avatar address={accountAddress} size="lg" />
         <div className="items-left flex flex-col">
           <Address address={accountAddress} size="lg" />

@@ -77,7 +77,7 @@ export const AccountNavBar = () => {
                   } else {
                     return (
                       <Button
-                        variant="secondary"
+                        variant="unemphasized"
                         size="sm"
                         onClick={() => {
                           addQueryParam(
