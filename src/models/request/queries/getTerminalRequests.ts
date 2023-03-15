@@ -1,4 +1,5 @@
 import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import db from "db"
 import { getSafeDetails } from "lib/api/safe/getSafeDetails"
 import { Activity } from "../../activity/types"
@@ -34,10 +35,10 @@ export const getTerminalRequests = async ({
         terminalAddress: safeAddress,
         chainId: safeChainId,
         ...(options?.tab &&
-          options?.tab !== "all" && {
+          options?.tab !== TerminalRequestTypeTab.ALL && {
             variant: {
               in:
-                options.tab === "members"
+                options.tab === TerminalRequestTypeTab.MEMBERS
                   ? [RequestVariantType.SIGNER_QUORUM]
                   : [
                       RequestVariantType.TOKEN_TRANSFER,
