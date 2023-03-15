@@ -76,6 +76,8 @@ model Activity {
 
 model Action {
   id          String        @id @default(uuid())
+  // actionHash used by Spec indexer to upsert records to change status on execution
+  actionHash  String        @unique
   requestId   String
   safeAddress String
   chainId     Int
