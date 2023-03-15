@@ -72,7 +72,6 @@ function Page() {
           <div className="mx-auto block h-auto max-w-full lg:hidden">
             <Image src={LandingImage} alt="Landing image" />
           </div>
-          {/* <div className="fixed bottom-2 left-0 w-full space-y-2 px-5 text-center lg:relative lg:mt-11 lg:flex lg:flex-row lg:space-y-0 lg:px-0"> */}
           <div className="mt-11 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:mt-11 lg:flex lg:flex-row">
             <DynamicConnectButton
               buttonContainerClassName={buttonStyles({
