@@ -97,7 +97,6 @@ export const TerminalCreationOptionsView = ({
           Use an existing Safe, or create Project with a new address.
         </p>
         <SelectWithLabel
-          className="mb-3"
           label="Chain*"
           name="chainId"
           required
@@ -123,13 +122,14 @@ export const TerminalCreationOptionsView = ({
         {watchChainId && chain?.id === parseInt(watchChainId) && (
           <>
             <SelectorCard
-              className="mt-7"
+              className="mt-7 mb-6"
               onClick={() => setView(VIEW.CREATE_FORM)}
             >
               <p className="font-bold">Create a Project with a new address</p>
               <p className="text-gray">An address is unique to each Project</p>
             </SelectorCard>
-            <p className="mt-4 mb-3 text-base font-bold">
+            <hr className="text-gray-90" />
+            <p className="mt-6 mb-3 text-base font-bold">
               Select to use an existing safe:{" "}
             </p>
             <div className="mb-3">
