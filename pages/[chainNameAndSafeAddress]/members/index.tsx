@@ -47,7 +47,7 @@ const MembersPage = () => {
           if (isMobile) {
             return <Mobile />
           }
-          return <Desktop terminal={terminal} />
+          return <Desktop />
         }}
       </Breakpoint>
     </>

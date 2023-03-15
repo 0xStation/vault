@@ -1,10 +1,15 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
+import RightSlider from "@ui/RightSlider"
+import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import { useGetSignerQuorumRequestChanges } from "../../../..//hooks/useGetSignerQuorumRequestChanges"
 import { convertGlobalId } from "../../../..//models/terminal/utils"
 import { useSafeMetadata } from "../../../../hooks/safe/useSafeMetadata"
 import { AvatarAddress } from "../../../core/AvatarAddress"
+import EditMembersContent from "../../editMembers/components/EditMembersContent"
 
 const EditButton = ({
   onClick,
@@ -41,26 +46,77 @@ const MembersPageContent = () => {
     currentQuorum: safeMetadata?.quorum as number,
   })
 
+  const [editMembersOpen, setEditMembersOpen] = useState<boolean>(false)
+  const closeEditMembersSlider = (isOpen: boolean) => {
+    if (!isOpen) {
+      removeQueryParam(router, "editMembers")
+    }
+  }
+
+  useEffect(() => {
+    if (router.query.editMembers) {
+      setEditMembersOpen(true)
+    } else {
+      setEditMembersOpen(false)
+    }
+  }, [router.query])
+
   return (
     <>
+      <RightSlider open={editMembersOpen} setOpen={closeEditMembersSlider}>
+        <EditMembersContent />
+      </RightSlider>
       <div className="mt-6 w-full px-4">
         <div className="mb-6 flex flex-row items-center justify-between">
           <h2 className="font-bold">Members</h2>
           <div className="flex flex-row">
-            <Button
-              size="base"
-              onClick={() =>
-                router.push(`/${chainNameAndSafeAddress}/members/edit`)
-              }
-            >
-              + Add
-            </Button>
-            <EditButton
-              onClick={() =>
-                router.push(`/${chainNameAndSafeAddress}/members/edit`)
-              }
-              className="ml-2 rounded border border-gray-80"
-            />
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
+                  return (
+                    <Button
+                      size="base"
+                      onClick={() =>
+                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
+                      }
+                    >
+                      + Add
+                    </Button>
+                  )
+                }
+                return (
+                  <Button
+                    size="base"
+                    onClick={() => {
+                      addQueryParam(router, "editMembers", "true")
+                    }}
+                  >
+                    + Add
+                  </Button>
+                )
+              }}
+            </Breakpoint>
+
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
+                  return (
+                    <EditButton
+                      onClick={() =>
+                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
+                      }
+                      className="ml-2 rounded border border-gray-80"
+                    />
+                  )
+                }
+                return (
+                  <EditButton
+                    onClick={() => addQueryParam(router, "editMembers", "true")}
+                    className="ml-2 rounded border border-gray-80"
+                  />
+                )
+              }}
+            </Breakpoint>
           </div>
         </div>
         <div>
