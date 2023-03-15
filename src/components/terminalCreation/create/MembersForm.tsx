@@ -311,7 +311,7 @@ export const MembersView = ({
         <div className={`flex ${formHeight} grow flex-col overflow-auto`}>
           <div className="mb-6">
             <label className="text-base font-bold">Members*</label>
-            <div className="w-full">
+            <div className="mt-2 w-full">
               {(
                 memberFields as unknown as [{ id: string; address: string }]
               ).map((item, index) => {
@@ -325,7 +325,7 @@ export const MembersView = ({
                     <div className="mb-5 flex flex-row justify-between">
                       <p className="text-base text-gray">Member {index + 1}</p>
                       <button type="button" onClick={() => remove(index)}>
-                        <XMarkIcon className="h-5 w-5 fill-gray-90" />
+                        <XMarkIcon className="h-5 w-5 fill-gray" />
                       </button>
                     </div>
                     <AddressInput
@@ -334,7 +334,7 @@ export const MembersView = ({
                       register={register}
                       placeholder="Enter a wallet or ENS address"
                       errors={errors}
-                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
+                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray-40"
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
@@ -359,7 +359,7 @@ export const MembersView = ({
               <Button
                 variant="tertiary"
                 fullWidth={true}
-                size="sm"
+                size="base"
                 onClick={() => append({ address: "" })}
               >
                 + Add member
@@ -387,7 +387,7 @@ export const MembersView = ({
             quorumSize={memberFields?.length || 1} // default to 1 since activeUser is a member
           />
         </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-3 text-center">
           <Button
             type="submit"
             fullWidth={true}

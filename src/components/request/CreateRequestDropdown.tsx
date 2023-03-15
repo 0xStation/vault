@@ -116,7 +116,7 @@ export const CreateRequestDropdown = () => {
       </RightSlider>
       <DropdownMenu>
         <DropdownMenuTrigger className="">
-          <Button size="sm">+ Create</Button>
+          <Button size="base">+ Create</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2">
           <DropdownMenuItem className="cursor-pointer focus:bg-black">

@@ -13,7 +13,6 @@ export const TokenTransferRequestCard = ({
   request: RequestFrob
 }) => {
   const [showRecipients, setShowRecipients] = useState<boolean>(true)
-  const [showTokens, setShowTokens] = useState<boolean>(true)
   let tokenTransferMeta = request.data.meta as TokenTransferVariant
   return (
     <div className="space-y-4 rounded bg-gray-90 p-4">
@@ -30,7 +29,7 @@ export const TokenTransferRequestCard = ({
         )}
       </div>
       {showRecipients && (
-        <div className="mt-2 rounded bg-black p-2">
+        <div className="mt-2 items-center rounded-lg bg-gray-80 p-2">
           <AvatarAddress
             className="mt-1"
             size="sm"

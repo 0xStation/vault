@@ -306,18 +306,17 @@ const NewAutomationPage = () => {
                                 "flex flex-row items-center group-hover:hidden"
                               }
                             >
-                              This Terminal
+                              This Project
                             </span>
                             <span
                               // show on hover
                               className={
-                                "flex hidden flex-row items-center group-hover:block"
+                                "hidden flex-row items-center group-hover:flex"
                               }
                             >
                               {truncateString(terminalAddress)}
                             </span>
                           </div>
-                          {/* This Terminal */}
                         </SelectItem>
                         {terminal?.signers?.map((signer: string, i) => {
                           return (
@@ -378,7 +377,7 @@ const NewAutomationPage = () => {
           <Button
             variant="tertiary"
             fullWidth={true}
-            size="lg"
+            size="base"
             onClick={() => append({ recipient: "", value: 0, address: "" })}
           >
             + Add recipient

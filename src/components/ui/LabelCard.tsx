@@ -15,7 +15,7 @@ const LabelCard = ({
     <div
       className={cn(
         "flex flex-col",
-        boxWrap ? "rounded-lg bg-gray-90 px-3 py-2" : "",
+        boxWrap ? "rounded-lg px-3 py-2" : "",
         className,
       )}
     >

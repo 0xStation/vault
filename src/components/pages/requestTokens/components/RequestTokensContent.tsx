@@ -433,7 +433,7 @@ export const NewTokensPage = () => {
                     type="button"
                     variant="tertiary"
                     fullWidth={true}
-                    size="lg"
+                    size="base"
                     onClick={() => append({ address: "", amount: 0 })}
                   >
                     + Add token
