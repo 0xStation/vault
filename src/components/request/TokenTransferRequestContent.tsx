@@ -19,6 +19,10 @@ export const TokenTransferRequestContent = ({
   return (
     <>
       <div className="flex flex-row justify-between">
+        <span className="text-gray">Action</span>
+        <span>Token transfer</span>
+      </div>
+      <div className="flex flex-row justify-between">
         <span className="text-gray">Recipient(s)</span>
         <AvatarAddress
           className="mt-1"
