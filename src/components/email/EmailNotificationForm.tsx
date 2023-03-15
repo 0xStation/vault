@@ -1,6 +1,6 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
-import { updateUserEmail } from "lib/dynamic"
+import { updateUserEmailSDK } from "lib/dynamic"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import TextareaWithLabel from "../form/TextareaWithLabel"
@@ -28,7 +28,7 @@ const EmailNotificationForm = () => {
 
   const onSubmit = async (data: any) => {
     if (user) {
-      const r = await updateUserEmail(user.userId || "", data.email)
+      const r = await updateUserEmailSDK(user.environmentId || "", data.email)
       console.log(r)
     }
   }

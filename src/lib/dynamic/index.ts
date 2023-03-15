@@ -20,3 +20,27 @@ export const updateUserEmail = async (userId: string, email: string) => {
     console.error(err)
   }
 }
+
+export const updateUserEmailSDK = async (
+  environmentId: string,
+  email: string,
+) => {
+  const options = {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      Authorization: `Bearer ${process.env.DYNAMIC_API_KEY}`,
+    },
+  }
+
+  try {
+    const response = await axios.put(
+      `https://app.dynamic.xyz/sdk/${environmentId}/users`,
+      JSON.stringify({ email }),
+      options,
+    )
+    return response
+  } catch (err) {
+    console.error(err)
+  }
+}
