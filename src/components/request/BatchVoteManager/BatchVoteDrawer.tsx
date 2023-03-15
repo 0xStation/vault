@@ -63,18 +63,17 @@ const BatchVoteDrawer = ({
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="overflow-auto pb-[110px]">
-        <div className="space-y-6">
-          <div className="text-2xl font-bold">
-            {approve ? "Approve" : "Reject"} {requestsToApprove.length} requests
-          </div>
-          <div>
-            The {approve ? "approval" : "rejection"} will be executed once the
-            quorum has been met.
-          </div>
+      <h1 className="pb-2">
+        {approve ? "Approve" : "Reject"} {requestsToApprove.length} request
+        {requestsToApprove.length === 1 ? "" : "s"}
+      </h1>
+      <div className="h-full overflow-auto pb-32">
+        <div className="mt-4">
+          The {approve ? "approval" : "rejection"} will be executed once the
+          quorum has been met.
         </div>
 
-        <div className="space-y-4">
+        <div className="mt-6 space-y-2">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (

@@ -15,12 +15,12 @@ export const ExecutionPending = () => {
     >
       <defs>
         <linearGradient id="spinner-firstHalf">
-          <stop offset="0%" stop-opacity="1" stop-color="currentColor" />
-          <stop offset="100%" stop-opacity="0.4" stop-color="currentColor" />
+          <stop offset="0%" stopOpacity="1" stopColor="currentColor" />
+          <stop offset="100%" stopOpacity="0.4" stopColor="currentColor" />
         </linearGradient>
         <linearGradient id="spinner-secondHalf">
-          <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
-          <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
+          <stop offset="0%" stopOpacity="0" stopColor="currentColor" />
+          <stop offset="100%" stopOpacity="0.5" stopColor="currentColor" />
         </linearGradient>
       </defs>
 

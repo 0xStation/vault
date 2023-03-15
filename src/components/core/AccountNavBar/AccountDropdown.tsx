@@ -65,7 +65,7 @@ export const AccountNavBar = () => {
                   if (isMobile) {
                     return (
                       <Button
-                        variant="secondary"
+                        variant="unemphasized"
                         size="sm"
                         onClick={() => {
                           router.push("/project/new")

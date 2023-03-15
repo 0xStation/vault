@@ -27,13 +27,13 @@ export const TerminalAutomationDetailPage = () => {
         </Link>
 
         <h4 className="text-base text-gray">{automation?.data.name}</h4>
-        {/* TODO: add editing */}
+        {/* TODO: add editing, invisible for now */}
         <button
           onClick={() => {
             console.log("edit automation")
           }}
           className={
-            "h-6 w-6 items-center rounded-md border border-gray-80 px-1.5"
+            "invisible h-6 w-6 items-center rounded-md border border-gray-80 px-1.5"
           }
         >
           <PencilIcon className="w-2.5" />

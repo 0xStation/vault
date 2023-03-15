@@ -156,7 +156,7 @@ export const SendTokensContent = ({
         chainId: chainId as number,
         safe: address as string,
         nonce: nextNonce?.nonce as number,
-        executor: ZERO_ADDRESS,
+        sender: ZERO_ADDRESS,
         calls: [...preparedCalls],
       })
 

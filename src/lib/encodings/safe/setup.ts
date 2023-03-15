@@ -1,4 +1,4 @@
-import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
+import { PARALLEL_PROCESSOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
 import { RawCall } from "lib/transactions/call"
 import {
   createProxyWithNonce,
@@ -20,7 +20,7 @@ export const encodeSafeSetup = ({
   const safeSetupData = encodeFunctionData(safeSetup, [
     owners,
     threshold,
-    CONDUCTOR_ADDRESS,
+    PARALLEL_PROCESSOR_ADDRESS,
     initialModuleData,
     // fallback handler was created after the gnosis contract was created,
     // if we call the safe contract with arguments that the safe doesn't call for, the safe

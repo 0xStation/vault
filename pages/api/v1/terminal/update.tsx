@@ -12,9 +12,6 @@ export default async function handler(
     chainId: string
   }
 
-  console.log(safeAddress)
-  console.log(chainId)
-
   const { name, description, url } = body as {
     name?: string
     description?: string

@@ -21,8 +21,6 @@ export default async function handler(
   // TODO: grab address from auth
   const { comment, address, newActivityId } = body
 
-  console.log(query, body)
-
   const newComment = await db.activity.create({
     data: {
       id: newActivityId,

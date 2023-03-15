@@ -2,7 +2,7 @@ import { bundleCalls } from "lib/transactions/bundle"
 import { ActionCall } from "lib/transactions/call"
 import { Action } from "../../models/action/types"
 import { ZERO_ADDRESS } from "../constants"
-import { conductorDomain, EIP712Message, getHash } from "./utils"
+import { actionDomain, EIP712Message, getHash } from "./utils"
 
 /**
  * Hash an Action provided its values using EIP712.
@@ -14,23 +14,23 @@ export const hashActionValues = ({
   chainId,
   safe,
   nonce,
-  executor,
+  sender,
   operation,
   to,
   value,
   data,
 }: ActionCall & { chainId: number }): string => {
   const message: EIP712Message = {
-    domain: conductorDomain(),
+    domain: actionDomain(),
     types: {
       Action: [
         { name: "chainId", type: "uint256" },
         { name: "safe", type: "address" },
         { name: "nonce", type: "uint256" },
-        { name: "executor", type: "address" },
+        { name: "sender", type: "address" },
+        { name: "operation", type: "uint8" },
         { name: "to", type: "address" },
         { name: "value", type: "uint256" },
-        { name: "operation", type: "uint8" },
         { name: "data", type: "bytes" },
       ],
     },
@@ -38,7 +38,7 @@ export const hashActionValues = ({
       chainId,
       safe,
       nonce,
-      executor: executor || ZERO_ADDRESS,
+      sender: sender || ZERO_ADDRESS,
       operation: operation || 0,
       to,
       value,
@@ -62,7 +62,7 @@ export const hashAction = (action: Action): string => {
     chainId: action.chainId,
     safe: action.safeAddress,
     nonce: action.nonce,
-    executor: ZERO_ADDRESS,
+    sender: ZERO_ADDRESS,
     operation: operation,
     to: to,
     value: value,

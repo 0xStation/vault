@@ -202,7 +202,7 @@ export const EditMembersPage = () => {
       chainId: safeMetadata?.chainId as number,
       safe: safeMetadata?.address as string,
       nonce: nextNonce?.nonce as number,
-      executor: ZERO_ADDRESS,
+      sender: ZERO_ADDRESS,
       calls: [...preparedCalls],
     })
 

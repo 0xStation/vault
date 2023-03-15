@@ -1,4 +1,4 @@
-import { conductorDomain, EIP712Message } from "./utils"
+import { EIP712Message, stationDomain } from "./utils"
 
 /**
  * Hash a payload of data to update a terminal provided its values using EIP712.
@@ -16,7 +16,7 @@ export const formatUpdateTerminalValues = ({
   url: string
 }) => {
   const message: EIP712Message = {
-    domain: conductorDomain(),
+    domain: stationDomain(),
     types: {
       Action: [
         { name: "name", type: "string" },

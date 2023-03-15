@@ -1,4 +1,4 @@
-import { ActionStatus, RequestVariantType } from "@prisma/client"
+import { RequestVariantType } from "@prisma/client"
 import { timeSince } from "lib/utils"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
@@ -6,7 +6,6 @@ import ActivityItem from "../../../../components/core/ActivityItem"
 import { AvatarAddress } from "../../../../components/core/AvatarAddress"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
-import { Action } from "../../../../models/action/types"
 import { RequestFrob } from "../../../../models/request/types"
 import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
@@ -34,10 +33,6 @@ const RequestDetailsContent = ({
   }
 
   const connectedUserIsSigner = request.signers?.includes(address as string)
-
-  const activeActions = request.actions.some((action: Action, idx: number) => {
-    return action.status !== ActionStatus.NONE
-  })
 
   return (
     <>
@@ -170,13 +165,15 @@ const RequestDetailsContent = ({
           />
         </section>
       </div>
-      <div className={`${activeActions ? "hidden" : "block"}`}>
-        {connectedUserIsSigner && !isExecuted(request) && (
-          <RequestDetailsActions
-            request={request}
-            mutateRequest={mutateRequest}
-          />
-        )}
+      <div
+        className={`${
+          connectedUserIsSigner && !isExecuted(request) ? "" : "hidden"
+        }`}
+      >
+        <RequestDetailsActions
+          request={request}
+          mutateRequest={mutateRequest}
+        />
       </div>
     </>
   )

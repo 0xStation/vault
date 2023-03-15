@@ -6,7 +6,7 @@ import { RawCall } from "lib/transactions/call"
 import { MerkleTree } from "merkletreejs"
 import { Action } from "../../models/action/types"
 import { hashAction, hashActionValues } from "./action"
-import { conductorDomain, EIP712Message } from "./utils"
+import { EIP712Message, stationDomain } from "./utils"
 
 export type Tree = {
   root: string
@@ -21,7 +21,7 @@ export type Tree = {
  */
 export const treeMessage = (root: string): EIP712Message => {
   return {
-    domain: conductorDomain(),
+    domain: stationDomain(),
     types: {
       Tree: [{ name: "root", type: "bytes32" }],
     },
@@ -75,7 +75,7 @@ export const newActionTree = (values: {
   chainId: number
   safe: string
   nonce: number
-  executor: string
+  sender: string
   calls: RawCall[]
 }): Tree => {
   const root = hashActionValues({ ...values, ...bundleCalls(values.calls) }) // only one node so this leaf is the root

@@ -2,6 +2,7 @@ import { ActionStatus, ActionVariant, RequestVariantType } from "@prisma/client"
 import BottomDrawer from "@ui/BottomDrawer"
 import { Button } from "@ui/Button"
 import { BigNumber } from "ethers"
+import { getNetworkExplorer } from "lib/utils/networks"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
@@ -13,8 +14,7 @@ import useStore from "../../../hooks/stores/useStore"
 import { useToast } from "../../../hooks/useToast"
 import { batchCalls } from "../../../lib/transactions/batch"
 import { RawCall } from "../../../lib/transactions/call"
-import { callAction } from "../../../lib/transactions/conductor"
-import networks from "../../../lib/utils/networks/networks.json"
+import { callAction } from "../../../lib/transactions/parallelProcessor"
 import { useSetActionsPending } from "../../../models/action/hooks"
 import { Action } from "../../../models/action/types"
 import { Proof } from "../../../models/proof/types"
@@ -82,21 +82,18 @@ const BatchExecuteWrapper = ({
     enabled: !!txData?.hash,
   })
 
-  // typescript with json is annoying
-  //@ts-ignore
-  const blockExplorer = networks[String(requestsToApprove[0].chainId)].explorer
-
   useEffect(() => {
     if (isSendTransactionSuccess) {
       setLoading(false)
       setIsOpen(false)
       loadingToast({
-        message: "loading...",
+        message: "Loading...",
         action: {
-          href: `${blockExplorer}/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(requestsToApprove[0].chainId)}/tx/${
+            txData?.hash
+          }`,
+          label: "View on Etherscan",
         },
-        useTimeout: false,
       })
       mutateSelectedRequests({
         selectedRequests: requestsToApprove,
@@ -141,8 +138,10 @@ const BatchExecuteWrapper = ({
       successToast({
         message: "Batch of requests successfully executed!",
         action: {
-          href: `${blockExplorer}/tx/${txData?.hash}`,
-          label: "View on etherscan",
+          href: `${getNetworkExplorer(requestsToApprove[0].chainId)}/tx/${
+            txData?.hash
+          }`,
+          label: "View on Etherscan",
         },
         timeout: 5000,
       })
@@ -157,16 +156,18 @@ const BatchExecuteWrapper = ({
 
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="overflow-auto pb-[110px]">
-        <div className="mb-4 space-y-6">
-          <div className="text-2xl font-bold">
-            Execute ({`${approve ? "approve" : "reject"}`}){" "}
-            {requestsToApprove.length} requests
-          </div>
-          <div>This action is on-chain and will not be reversible.</div>
+      <h1 className="pb-2">
+        Execute {requestsToApprove.length}{" "}
+        {`${approve ? "approval" : "rejection"}${
+          requestsToApprove.length === 1 ? "" : "s"
+        }`}
+      </h1>
+      <div className="h-full overflow-auto pb-32">
+        <div className="mt-4">
+          This action is on-chain and will not be reversible.
         </div>
 
-        <div className="space-y-4">
+        <div className="mt-6 space-y-2">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (

@@ -143,7 +143,7 @@ export const NewTokensPage = () => {
         chainId: chainId as number,
         safe: address as string,
         nonce: nextNonce?.nonce as number,
-        executor: ZERO_ADDRESS,
+        sender: ZERO_ADDRESS,
         calls: [...preparedCalls],
       })
 
@@ -175,7 +175,7 @@ export const NewTokensPage = () => {
         },
       )
       // TODO: show toast
-      router.push(`/${chainNameAndSafeAddress}/requests`)
+      router.push(`/${chainNameAndSafeAddress}/proposals`)
     } catch (err: any) {
       console.error(err)
       if (
@@ -233,7 +233,7 @@ export const NewTokensPage = () => {
   return (
     <>
       <Layout
-        backFunc={() => router.push(`/${chainNameAndSafeAddress}/requests`)}
+        backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
         isCloseIcon={true}
       >
         <h2 className="mb-[30px] font-bold">Request tokens</h2>

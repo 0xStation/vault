@@ -12,10 +12,11 @@ export type RawCall = {
 export type ActionCall = RawCall & {
   safe: string
   nonce: number
-  executor: string
+  sender: string
 }
 
-export type ConductorCall = ActionCall & {
+export type ParallelProcessorCall = {
+  action: ActionCall
   proofs: { path: string[]; signature: string }[]
   note: string
 }

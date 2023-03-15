@@ -1,4 +1,3 @@
-import { Button } from "@ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +20,10 @@ export const CreateAutomationDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="">
-        <Button size="base">+ Create</Button>
+        {/* Copy same styles as primary, base button because annoying console.error if we use Button component */}
+        <div className="relative cursor-pointer rounded border bg-violet px-3 py-1 text-base font-medium font-medium text-black hover:bg-violet/80">
+          + Create
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2">
         <DropdownMenuItem>
