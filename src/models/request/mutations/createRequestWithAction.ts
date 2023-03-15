@@ -4,12 +4,15 @@ import {
   RequestVariantType,
   SubscriptionVariant,
 } from "@prisma/client"
-import { REJECTION_CALL } from "lib/constants"
+import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
+import { hashActionValues } from "lib/signatures/action"
+import { bundleCalls } from "lib/transactions/bundle"
 import {
   ZodSignerQuorumVariant,
   ZodSplitTokenTransferVariant,
   ZodTokenTransferVariant,
 } from "lib/zod"
+import { ActionMetadata } from "models/action/types"
 import { z } from "zod"
 import { TokenTransferVariant } from "../types"
 
@@ -79,10 +82,15 @@ export const createRequestWithAction = async (
           }
         : {}
 
-    const actionMetadata = {
-      minDate: Date.now(),
+    const actionMetadata: ActionMetadata = {
       calls,
     }
+    const actionCall = bundleCalls(actionMetadata.calls)
+
+    const rejectionMetadata: ActionMetadata = {
+      calls: [REJECTION_CALL],
+    }
+    const rejectionCall = bundleCalls(rejectionMetadata.calls)
 
     request = await db.request.create({
       data: {
@@ -98,6 +106,16 @@ export const createRequestWithAction = async (
         actions: {
           create: [
             {
+              actionHash: hashActionValues({
+                chainId,
+                safe: address,
+                nonce,
+                sender: ZERO_ADDRESS,
+                operation: actionCall.operation,
+                to: actionCall.to,
+                value: actionCall.value,
+                data: actionCall.data,
+              }),
               safeAddress: address as string,
               chainId,
               nonce,
@@ -106,12 +124,20 @@ export const createRequestWithAction = async (
               variant: ActionVariant.APPROVAL,
             },
             {
+              actionHash: hashActionValues({
+                chainId,
+                safe: address,
+                nonce,
+                sender: ZERO_ADDRESS,
+                operation: rejectionCall.operation,
+                to: rejectionCall.to,
+                value: rejectionCall.value,
+                data: rejectionCall.data,
+              }),
               safeAddress: address as string,
               chainId,
               nonce,
-              data: JSON.parse(
-                JSON.stringify({ ...actionMetadata, calls: [REJECTION_CALL] }),
-              ),
+              data: rejectionMetadata,
               status: ActionStatus.NONE,
               variant: ActionVariant.REJECTION,
             },

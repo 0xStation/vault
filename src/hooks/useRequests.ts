@@ -18,10 +18,14 @@ export const useRequests = (
     }
   }
 
+  const enabled = !!safeChainId && !!safeAddress
   let endpoint = `/api/v1/requests?safeChainId=${safeChainId}&safeAddress=${safeAddress}`
   if (options?.tab) endpoint += `&tab=${options.tab}`
 
-  const { isLoading, data, mutate, error } = useSWR(endpoint, fetcher)
+  const { isLoading, data, mutate, error } = useSWR(
+    enabled ? endpoint : null,
+    fetcher,
+  )
 
   return { isLoading, data, mutate, error }
 }
