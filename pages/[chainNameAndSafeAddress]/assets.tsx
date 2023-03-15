@@ -1,7 +1,10 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
+import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { Terminal } from "models/terminal/types"
+import { useState } from "react"
 import Desktop from "../../src/components/pages/assets/Desktop"
 import Mobile from "../../src/components/pages/assets/Mobile"
+import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import { useTerminalByChainIdAndSafeAddress } from "../../src/models/terminal/hooks"
 
 const chainNameToChainId: Record<string, number | undefined> = {
@@ -16,17 +19,33 @@ const AssetsPage = () => {
   ) as string
   const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
   const chainId = chainNameToChainId[chainName] as number
-  const { terminal } = useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
+  const { terminal, mutate: mutateGetTerminal } =
+    useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
+  const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
+    address: terminal?.safeAddress as string,
+    chainId: terminal?.chainId as number,
+  })
+  const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
   return (
-    <Breakpoint>
-      {(isMobile) => {
-        if (isMobile) {
-          return <Mobile terminal={terminal as Terminal} />
-        }
-        return <Desktop terminal={terminal as Terminal} />
-      }}
-    </Breakpoint>
+    <>
+      {isSuccess && !isModuleEnabled && (
+        <TerminalActivationView
+          mutateGetTerminal={mutateGetTerminal}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          terminal={terminal as Terminal}
+        />
+      )}
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return <Mobile terminal={terminal as Terminal} />
+          }
+          return <Desktop terminal={terminal as Terminal} />
+        }}
+      </Breakpoint>
+    </>
   )
 }
 

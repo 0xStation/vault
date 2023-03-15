@@ -3,6 +3,8 @@ import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Network } from "@ui/Network"
 import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
+import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
+import { Terminal } from "models/terminal/types"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -191,13 +193,11 @@ const TerminalPage = () => {
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
-    chainId: chainId as number,
-    address: address as string,
-  })
+  const { terminal, mutate: mutateGetTerminal } =
+    useTerminalByChainIdAndSafeAddress(address as string, chainId as number)
   const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
-    address: terminal?.safeAddress,
-    chainId: terminal?.chainId,
+    address: terminal?.safeAddress as string,
+    chainId: terminal?.chainId as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
 
@@ -208,7 +208,7 @@ const TerminalPage = () => {
           mutateGetTerminal={mutateGetTerminal}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          terminal={terminal}
+          terminal={terminal as Terminal}
         />
       )}
       <Breakpoint>
