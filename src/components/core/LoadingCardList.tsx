@@ -1,6 +1,6 @@
 const LoadingCard = () => {
   return (
-    <div className="border-blue-300 mx-auto w-full rounded-md p-4">
+    <div className="mx-auto w-full p-4">
       <div className="flex animate-pulse space-x-4">
         <div className="h-10 w-10 rounded-full bg-gray-80"></div>
         <div className="flex-1 space-y-6 py-1">
@@ -22,7 +22,7 @@ const LoadingCard = () => {
 
 const LoadingCardList = () => {
   return (
-    <div className="divide-y divide-gray-80 border-y border-gray-80">
+    <div className="divide-y divide-gray-80 border-b border-gray-80">
       {Array(5)
         .fill(0)
         .map((_a, key) => (
