@@ -1,35 +1,43 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
-import { updateUserEmailSDK } from "lib/dynamic"
+import { updateUserEmail } from "lib/dynamic"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
+import { useToast } from "../../hooks/useToast"
 import TextareaWithLabel from "../form/TextareaWithLabel"
 
-const EmailNotificationForm = () => {
-  const { user } = useDynamicContext()
-  console.log(user)
+const EmailNotificationForm = ({
+  successCallback,
+}: {
+  successCallback: () => void
+}) => {
+  const { user, authToken } = useDynamicContext()
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
     message: string
   }>({ isError: false, message: "" })
 
+  const { successToast } = useToast()
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    control,
-    watch,
   } = useForm({
     mode: "all", // validate on all event handlers (onBlur, onChange, onSubmit)
     defaultValues: {
-      email: "",
+      email: user?.email || "",
     } as FieldValues,
   })
 
   const onSubmit = async (data: any) => {
     if (user) {
-      const r = await updateUserEmailSDK(user.environmentId || "", data.email)
-      console.log(r)
+      await updateUserEmail(
+        user.environmentId || "",
+        data.email,
+        authToken as string,
+      )
+      successCallback()
     }
   }
   const onError = async (data: any) => {}

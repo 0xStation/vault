@@ -18,6 +18,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import useStore from "../../../hooks/stores/useStore"
+import { useToast } from "../../../hooks/useToast"
 import {
   addQueryParam,
   removeQueryParam,
@@ -54,6 +55,8 @@ export const AccountNavBar = () => {
     }
   }, [router.query])
 
+  const { successToast } = useToast()
+
   return (
     <>
       <RightSlider
@@ -63,7 +66,12 @@ export const AccountNavBar = () => {
         <CreateTerminalContent />
       </RightSlider>
       <BottomDrawer isOpen={notificationOpen} setIsOpen={setNotificationOpen}>
-        <EmailNotificationForm />
+        <EmailNotificationForm
+          successCallback={() => {
+            setNotificationOpen(false)
+            successToast({ message: "Email notification settings updated" })
+          }}
+        />
       </BottomDrawer>
       <DropdownMenu>
         {isAuthenticated ? (

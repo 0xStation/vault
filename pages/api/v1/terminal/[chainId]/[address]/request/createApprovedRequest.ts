@@ -1,10 +1,13 @@
 import { ActivityVariant } from "@prisma/client"
 import db from "db"
+import { getEmails } from "lib/dynamic/"
+import { sendNewProposalEmail } from "lib/sendgrid"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
 import { createProofWithSignature } from "../../../../../../../src/models/proof/mutations/createProofWithSignature"
 import { createRequestWithAction } from "../../../../../../../src/models/request/mutations/createRequestWithAction"
+import { Request } from "../../../../../../../src/models/request/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,7 +59,27 @@ export default async function handler(
         $tx,
       })
     })
+
+    try {
+      // 1. get gnosis signer addresses by body.chainId and body.address
+      const addresses = ["0x65A3870F48B5237f27f674Ec42eA1E017E111D63"]
+      const emails = await getEmails(addresses)
+
+      await sendNewProposalEmail({
+        recipients: emails,
+        proposalCreatedBy: body.createdBy,
+        proposalTitle: body.note,
+        terminalName: (request as unknown as Request).terminalAddress,
+        requestId: (request as unknown as Request).id,
+        chainName: body.chainId,
+        safeAddress: body.address,
+      })
+    } catch (e) {
+      // silently fail
+      console.warn("Failed to send notification emails in `createProposal`", e)
+    }
   } catch (err) {
+    console.log(err)
     res.statusCode = 500
     return res.end(
       JSON.stringify(`Internal error: failed to create Proposal ${err}`),

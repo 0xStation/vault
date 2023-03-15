@@ -5,7 +5,7 @@ import { Hyperlink } from "./Hyperlink"
 import LoadingSpinner from "./LoadingSpinner"
 
 const toast = cva(
-  "flex justify-between items-center min-w-screen max-w-[580px] sm:max-w-[400px] mx-auto rounded-full py-2 px-3 z-50",
+  "flex justify-between items-center min-w-screen max-w-[580px] sm:max-w-[400px] mx-auto rounded-full py-2 px-3 z-[100]",
   {
     variants: {
       variant: {

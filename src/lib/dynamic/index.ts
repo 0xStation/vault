@@ -1,17 +1,21 @@
 import axios from "axios"
 
-export const updateUserEmail = async (userId: string, email: string) => {
+export const updateUserEmail = async (
+  environmentId: string,
+  email: string,
+  token: string,
+) => {
   const options = {
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      Authorization: `Bearer ${process.env.DYNAMIC_API_KEY}`,
+      Authorization: `Bearer ${token}`,
     },
   }
 
   try {
     const response = await axios.put(
-      `https://app.dynamic.xyz/api/v0/users/${userId}`,
+      `https://app.dynamic.xyz/api/v0/sdk/${environmentId}/users`,
       JSON.stringify({ email }),
       options,
     )
@@ -21,26 +25,9 @@ export const updateUserEmail = async (userId: string, email: string) => {
   }
 }
 
-export const updateUserEmailSDK = async (
-  environmentId: string,
-  email: string,
-) => {
-  const options = {
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      Authorization: `Bearer ${process.env.DYNAMIC_API_KEY}`,
-    },
-  }
-
-  try {
-    const response = await axios.put(
-      `https://app.dynamic.xyz/sdk/${environmentId}/users`,
-      JSON.stringify({ email }),
-      options,
-    )
-    return response
-  } catch (err) {
-    console.error(err)
-  }
+// todo: fix this to get the proper emails
+export const getEmails = (addresses: string[]) => {
+  return addresses.map((address) => {
+    return "frog@station.express"
+  })
 }
