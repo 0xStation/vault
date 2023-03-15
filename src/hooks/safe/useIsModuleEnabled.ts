@@ -1,4 +1,4 @@
-import { CONDUCTOR_ADDRESS } from "lib/constants"
+import { PARALLEL_PROCESSOR_ADDRESS } from "lib/constants"
 import { useContractRead } from "wagmi"
 import safeAbi from "../../lib/abis/safeAbi.json"
 
@@ -14,7 +14,7 @@ export const useIsModuleEnabled = ({
     address: address as `0x${string}`,
     abi: safeAbi,
     functionName: "isModuleEnabled",
-    args: [CONDUCTOR_ADDRESS],
+    args: [PARALLEL_PROCESSOR_ADDRESS],
   })
 
   return response

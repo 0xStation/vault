@@ -1,4 +1,4 @@
-import { addConductorMessage } from "lib/signatures/safe"
+import { addParallelProcessorMessage } from "lib/signatures/safe"
 import useSignature from "../useSignature"
 import { useSafeMetadata } from "./useSafeMetadata"
 
@@ -19,7 +19,7 @@ export const useSignToEnableModule = ({
     try {
       let message
       if (safeMetadata?.contractVersion || !nonce) {
-        message = addConductorMessage({
+        message = addParallelProcessorMessage({
           chainId,
           safeAddress: address,
           nonce: `${nonce}`,

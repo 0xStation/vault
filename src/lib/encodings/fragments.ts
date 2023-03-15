@@ -14,9 +14,9 @@ const ev = (arg: string): EventFragment => {
  *  - name fragment: {contractName}{functionName} with camelCase
  */
 
-// https://github.com/0xStation/checkbook-contracts/blob/main/src/contracts/FlexSigning.sol#L93
-export const conductorExecute = fn(
-  "execute(address safe,uint256 nonce,address executor,address to,uint256 value,uint8 operation,bytes calldata data,tuple(bytes32[] calldata path,bytes signature)[] calldata proofs,string note) external returns (bool success)",
+// https://github.com/0xStation/protocol-v1/blob/main/src/ParallelProcessor.sol#L101
+export const parallelProcessorExecute = fn(
+  "execute(tuple(address safe, uint256 nonce, address sender, uint8 operation, address to, uint256 value, bytes calldata data), tuple(bytes32[] calldata path, bytes signature)[] calldata proofs, string note) external returns (bool success)",
 )
 
 // https://github.com/safe-global/safe-contracts/blob/main/contracts/Safe.sol#L111

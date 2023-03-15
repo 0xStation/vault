@@ -1,6 +1,6 @@
 import { safeEnableModule } from "lib/encodings/fragments"
 import { encodeFunctionData } from "lib/encodings/utils"
-import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "../constants"
+import { PARALLEL_PROCESSOR_ADDRESS, ZERO_ADDRESS } from "../constants"
 import { EIP712Message } from "./utils"
 
 /**
@@ -65,13 +65,13 @@ export const safeMessage = ({
 }
 
 /**
- * Create an EIP712-ready message to add the Conductor module to a Safe
+ * Create an EIP712-ready message to add the ParallelProcessor module to a Safe
  * Intended use when importing an existing Safe in onboarding and
- * handling cases where existing users disable the Conductor Module
+ * handling cases where existing users disable the ParallelProcessor Module
  * @param args
  * @returns an EIP712Message encoded to call enableModule on the Safe
  */
-export const addConductorMessage = ({
+export const addParallelProcessorMessage = ({
   chainId,
   safeAddress,
   nonce,
@@ -86,7 +86,9 @@ export const addConductorMessage = ({
   const value = "0"
   const operation = 0 // call
 
-  const data = encodeFunctionData(safeEnableModule, [CONDUCTOR_ADDRESS])
+  const data = encodeFunctionData(safeEnableModule, [
+    PARALLEL_PROCESSOR_ADDRESS,
+  ])
 
   return safeMessage({
     chainId,

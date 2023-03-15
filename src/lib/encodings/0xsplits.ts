@@ -55,7 +55,7 @@ export const prepareSplitsWithdrawCall = (
       erc20Addresses.length < tokenAddresses.length ? 1 : 0, // zero address present, flip bit to withdraw ETH
       erc20Addresses,
     ]),
-    operation: 0, // no need to delegatecall Conductor
+    operation: 0, // no need to delegatecall ParallelProcessor
   }
 }
 

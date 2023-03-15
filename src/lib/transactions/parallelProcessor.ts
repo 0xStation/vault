@@ -1,26 +1,20 @@
-import { CONDUCTOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
+import { PARALLEL_PROCESSOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
 import { encodeFunctionData } from "lib/encodings/utils"
 import { compareAddresses } from "lib/utils/compareAddresses"
 import { Action } from "../../models/action/types"
 import { Proof } from "../../models/proof/types"
-import { conductorExecute } from "../encodings/fragments"
+import { parallelProcessorExecute } from "../encodings/fragments"
 import { bundleCalls } from "./bundle"
-import { ConductorCall, RawCall } from "./call"
+import { ParallelProcessorCall, RawCall } from "./call"
 
 /**
- * Encode the arguments needed for execution into a call to Conductor
- * @param call function parameters for Conductor's `execute`
- * @returns a call to the Conductor module
+ * Encode the arguments needed for execution into a call to ParallelProcessor
+ * @param call function parameters for ParallelProcessor's `execute`
+ * @returns a call to the ParallelProcessor module
  */
-const callConductor = (call: ConductorCall): RawCall => {
-  const conductorData = encodeFunctionData(conductorExecute, [
-    call.safe,
-    call.nonce,
-    call.executor,
-    call.to,
-    call.value,
-    call.operation, // TODO: reorder this after executor (requires new contract)
-    call.data,
+const callParallelProcessor = (call: ParallelProcessorCall): RawCall => {
+  const parallelProcessorData = encodeFunctionData(parallelProcessorExecute, [
+    call.action,
     call.proofs,
     // TODO: we should notify users that the check title will be published on-chain if the checkbook is public
     // if the checkbook is private we should pass in an empty string to not publicize on chain
@@ -28,15 +22,15 @@ const callConductor = (call: ConductorCall): RawCall => {
   ])
 
   return {
-    to: CONDUCTOR_ADDRESS,
+    to: PARALLEL_PROCESSOR_ADDRESS,
     value: "0",
-    data: conductorData,
-    operation: 0, // no need to delegatecall Conductor
+    data: parallelProcessorData,
+    operation: 0, // no need to delegatecall ParallelProcessor
   }
 }
 
 /**
- * Prepare an Action and its Proofs into a call to the Conductor module
+ * Prepare an Action and its Proofs into a call to the ParallelProcessor module
  * @param payload
  * @returns to, value, data, operation for a raw call
  */
@@ -68,15 +62,17 @@ export const callAction = ({
 
   const { to, value, data, operation } = bundleCalls(action.data.calls)
 
-  return callConductor({
-    safe: action.safeAddress,
-    nonce: action.nonce,
-    executor: ZERO_ADDRESS, // hardcoded for now
-    operation,
-    to,
-    value,
-    data,
+  return callParallelProcessor({
+    action: {
+      safe: action.safeAddress,
+      nonce: action.nonce,
+      sender: ZERO_ADDRESS, // hardcoded for now
+      operation,
+      to,
+      value,
+      data,
+    },
     proofs: formattedProofs,
-    note: "", // come from request
+    note: "", // TODO: come from request
   })
 }

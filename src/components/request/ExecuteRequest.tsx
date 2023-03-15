@@ -24,7 +24,7 @@ import { TokenTransferRequestContent } from "../../../src/components/request/Tok
 import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
 import { useToast } from "../../hooks/useToast"
-import { callAction } from "../../lib/transactions/conductor"
+import { callAction } from "../../lib/transactions/parallelProcessor"
 import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"

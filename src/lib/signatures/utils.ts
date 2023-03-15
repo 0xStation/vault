@@ -1,6 +1,6 @@
 import { _TypedDataEncoder } from "@ethersproject/hash"
 import { TypedDataDomain, TypedDataField } from "ethers"
-import { CONDUCTOR_ADDRESS } from "lib/constants"
+import { PARALLEL_PROCESSOR_ADDRESS } from "lib/constants"
 
 // object of domain, types, value prepared to sign using EIP712
 // https://eips.ethereum.org/EIPS/eip-712
@@ -21,14 +21,25 @@ export const getHash = (message: EIP712Message): string => {
 }
 
 /**
- * Convenience helper to standardize domains between Tree messages and Action messages used to make Action hashes
+ * Convenience helper to retrieve domains for Action messages used to make Action hashes
  * @returns domain to use to construct EIP712Message's
  */
-export const conductorDomain = (): TypedDataDomain => {
-  // TODO: change to "Conductor" and remove version
+export const actionDomain = (): TypedDataDomain => {
+  // TODO: change to "ParallelProcessor" and remove version
   return {
-    name: "Checkbook",
-    version: "1.0.0",
-    verifyingContract: CONDUCTOR_ADDRESS,
+    name: "Station",
+    version: "0.0.1",
+    verifyingContract: PARALLEL_PROCESSOR_ADDRESS,
+  }
+}
+
+/**
+ * Convenience helper to retrieve domains for Action messages used to make Action hashes
+ * @returns domain to use to construct EIP712Message's
+ */
+export const stationDomain = (): TypedDataDomain => {
+  // TODO: change to "ParallelProcessor" and remove version
+  return {
+    name: "Station",
   }
 }
