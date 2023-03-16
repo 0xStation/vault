@@ -1,10 +1,7 @@
-import {
-  DynamicConnectButton,
-  useDynamicContext,
-} from "@dynamic-labs/sdk-react"
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { StationLogo } from "@icons"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
-import { Button, buttonStyles } from "@ui/Button"
+import { Button } from "@ui/Button"
 import { LINKS } from "lib/constants"
 import Image from "next/image"
 import Link from "next/link"
@@ -47,9 +44,9 @@ const options = (router: any) =>
 
 function Page() {
   const router = useRouter()
-  const { user } = useDynamicContext()
   const breakpoint = useBreakpoint()
   const isMobile = breakpoint === "S"
+  const { user, setShowAuthFlow } = useDynamicContext()
 
   useEffect(() => {
     if (user?.blockchainAccounts?.[0]?.address) {
@@ -72,20 +69,20 @@ function Page() {
           <div className="mx-auto block h-auto max-w-full lg:hidden">
             <Image src={LandingImage} alt="Landing image" />
           </div>
-          <div className="mt-11 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:mt-11 lg:flex lg:flex-row">
-            <DynamicConnectButton
-              buttonContainerClassName={buttonStyles({
-                variant: "primary",
-                size: isMobile ? "base" : "xl",
-                fullWidth: false,
-                disabled: false,
-              })}
+
+          <div className="mt-11 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
+            <Button
+              size={isMobile ? "base" : "xl"}
+              variant="primary"
+              fullWidth={isMobile}
+              onClick={() => setShowAuthFlow(true)}
             >
               Log in
-            </DynamicConnectButton>
+            </Button>
             <Button
               size={isMobile ? "base" : "xl"}
               variant="unemphasized"
+              fullWidth={isMobile}
               onClick={() => {
                 router.push(TYPE_FORM)
               }}
