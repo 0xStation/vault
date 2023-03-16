@@ -122,41 +122,42 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
               }
               return (
                 <div className="w-full">
-                  {Object.values(groupedRequests!).map(
-                    (terminalBundle, idx) => {
-                      return (
-                        <>
-                          <div
-                            className="mt-6 w-full border-b border-gray-80 pb-2"
-                            key={`bundle-${idx}`}
-                          >
-                            <RequestTerminalLink
-                              terminal={terminalBundle.terminal}
-                            />
-                          </div>
-                          {terminalBundle.requests.map(
-                            (request: RequestFrob, idx: number) => {
-                              return (
-                                <ProfileRequestTableRow
-                                  key={`request-${idx}`}
-                                  request={request}
-                                  triggerDetails={(request) => {
-                                    addQueryParam(
-                                      router,
-                                      "requestId",
-                                      request.id,
-                                    )
-                                    setRequestForDetails(request)
-                                    setDetailsSliderOpen(true)
-                                  }}
-                                />
-                              )
-                            },
-                          )}
-                        </>
-                      )
-                    },
-                  )}
+                  {groupedRequests &&
+                    Object.values(groupedRequests!)?.map(
+                      (terminalBundle, idx) => {
+                        return (
+                          <>
+                            <div
+                              className="mt-6 w-full border-b border-gray-80 pb-2"
+                              key={`bundle-${idx}`}
+                            >
+                              <RequestTerminalLink
+                                terminal={terminalBundle.terminal}
+                              />
+                            </div>
+                            {terminalBundle.requests.map(
+                              (request: RequestFrob, idx: number) => {
+                                return (
+                                  <ProfileRequestTableRow
+                                    key={`request-${idx}`}
+                                    request={request}
+                                    triggerDetails={(request) => {
+                                      addQueryParam(
+                                        router,
+                                        "requestId",
+                                        request.id,
+                                      )
+                                      setRequestForDetails(request)
+                                      setDetailsSliderOpen(true)
+                                    }}
+                                  />
+                                )
+                              },
+                            )}
+                          </>
+                        )
+                      },
+                    )}
                 </div>
               )
             }}
