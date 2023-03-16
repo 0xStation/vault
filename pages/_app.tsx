@@ -59,6 +59,20 @@ const cssOverrides = `
   .button--rounded {
     border-radius: 0.25rem;
   }
+
+  .dynamic-auth-layout__container {
+    background: #0D0E11;
+    border: solid;
+    border-color: #4d4d4dff;
+  }
+
+  .footer--border-top {
+    border-top: 1px solid #4d4d4dff;
+  }
+
+  .footer {
+    background: #0D0E11;
+  }
 `
 
 function App({ Component, pageProps }: AppProps) {
