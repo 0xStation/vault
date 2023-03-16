@@ -35,7 +35,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
           />
         </div>
       ) : (
-        <ul className="sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-4">
+        <ul className="px-0 sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-4">
           {terminals?.map((terminal) => (
             <TerminalListItem terminal={terminal} key={terminal.id} />
           ))}

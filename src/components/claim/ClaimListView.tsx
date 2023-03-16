@@ -222,7 +222,8 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
         <></>
       ) : items?.requests.length === 0 &&
         items?.revShareWithdraws.length === 0 ? (
-        <div className="flex h-[calc(100%+18px)] px-4 pt-4">
+        <div className="flex h-[calc(100%+18px)] flex-col px-4 pt-4">
+          <h1 className="mb-7">Claim tokens</h1>
           <EmptyState
             title="No tokens to claim"
             subtitle="Tokens available to claim from Projects you created and collaborated with will appear here."
