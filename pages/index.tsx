@@ -70,7 +70,7 @@ function Page() {
             <Image src={LandingImage} alt="Landing image" />
           </div>
 
-          <div className="mt-8 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
+          <div className="mt-8 mb-10 space-y-2 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
             <Button
               size={isMobile ? "base" : "xl"}
               variant="primary"
