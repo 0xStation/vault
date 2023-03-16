@@ -272,7 +272,7 @@ export const SendTokensContent = ({
                 <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                 <p className="pt-3 text-center text-base">
                   We apologize for the inconvenience, there was an error
-                  retrieving assets for you terminal. Please refresh the page or
+                  retrieving assets for your Project. Please refresh the page or
                   try again later.
                 </p>
               </div>
