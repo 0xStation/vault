@@ -67,6 +67,8 @@ const TabsContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
+    // make content fill height with bottom buffer for empty state gray boxes
+    // works on desktop and mobile!
     className={cn("h-[calc(100%-36px)]", className)}
     {...props}
     ref={ref}

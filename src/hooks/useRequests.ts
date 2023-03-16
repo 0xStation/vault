@@ -5,7 +5,7 @@ import { RequestFrob } from "../models/request/types"
 export const useRequests = (
   safeChainId: number,
   safeAddress: string,
-  options: { tab?: string; filter?: string; userAddress?: string },
+  options: { tab?: string },
 ) => {
   const fetcher = async (url: string) => {
     try {

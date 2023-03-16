@@ -39,6 +39,8 @@ export const TerminalRequestStatusFilterBar = ({
     <TabBar
       className={className}
       style="filter"
+      // when empty states are displayed, need to hide the sticky border
+      // data & logic to change this is so far away so using a store
       showBorder={showProjectRequestsFilterBorder}
       defaultValue={TerminalRequestStatusFilter.NEEDS_ACTION}
       options={options}
