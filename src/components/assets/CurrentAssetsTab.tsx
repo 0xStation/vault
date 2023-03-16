@@ -29,7 +29,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
   return (
     <TabsContent value={TerminalAssetsTab.CURRENT}>
       {!tokenData?.length && !nftData?.length ? (
-        <div className="flex h-[calc(100%+18px)] pt-4">
+        <div className="mx-4 flex h-[calc(100%+18px)] pt-4">
           <EmptyState title={title} subtitle={subtitle} />
         </div>
       ) : (

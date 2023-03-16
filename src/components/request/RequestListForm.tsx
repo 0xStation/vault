@@ -225,7 +225,7 @@ const RequestListForm = ({
         break
     }
     return (
-      <div className="flex h-full">
+      <div className="mx-4 flex h-full">
         <EmptyState title={title} subtitle={subtitle} />
       </div>
     )

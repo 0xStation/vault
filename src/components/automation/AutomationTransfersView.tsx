@@ -66,7 +66,7 @@ const formatAssetValue = (tx: TransferItem): string => {
   }
 }
 
-export const AssetTransfersTab = ({
+export const AutomationTransfersView = ({
   address,
   chainId,
   direction,
@@ -78,12 +78,12 @@ export const AssetTransfersTab = ({
   const { data } = useAssetTransfers(address, chainId, direction)
 
   if (!data?.length) {
-    const title = "Add tokens"
-    const subtitle =
-      "Transfer tokens to the Project address or share the address to receive and distribute tokens."
     return (
       <div className="mx-4 flex h-full">
-        <EmptyState title={title} subtitle={subtitle} />
+        <EmptyState
+          title="Start sharing revenue"
+          subtitle="Copy the Automation address and paste it as the payout recipient."
+        />
       </div>
     )
   }
