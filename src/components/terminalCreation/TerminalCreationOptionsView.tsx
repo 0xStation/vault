@@ -128,29 +128,33 @@ export const TerminalCreationOptionsView = ({
               <p className="font-bold">Create a Project with a new address</p>
               <p className="text-gray">An address is unique to each Project</p>
             </SelectorCard>
-            <hr className="text-gray-90" />
-            <p className="mt-6 mb-3 text-base font-bold">
-              Select to use an existing safe:
-            </p>
-            <div className="mb-3">
-              {isLoading ? (
-                <LoadingSpinner className="mx-auto mt-10 flex w-full justify-center" />
-              ) : (
-                safeAddresses &&
-                safeAddresses?.map((safeAddress) => {
-                  return (
-                    <ExistingSafeCard
-                      key={safeAddress}
-                      chainId={watchChainId}
-                      safeAddress={safeAddress}
-                      setView={setView}
-                      setSelectedAddress={setSelectedAddress}
-                      setDrawerOpen={setIsOpen}
-                    />
-                  )
-                })
-              )}
-            </div>
+            {safeAddresses && safeAddresses?.length > 0 ? (
+              <>
+                <hr className="text-gray-90" />
+                <p className="mt-6 mb-3 text-base font-bold">
+                  Select to use an existing safe:
+                </p>
+                <div className="mb-3">
+                  {isLoading ? (
+                    <LoadingSpinner className="mx-auto mt-10 flex w-full justify-center" />
+                  ) : (
+                    safeAddresses &&
+                    safeAddresses?.map((safeAddress) => {
+                      return (
+                        <ExistingSafeCard
+                          key={safeAddress}
+                          chainId={watchChainId}
+                          safeAddress={safeAddress}
+                          setView={setView}
+                          setSelectedAddress={setSelectedAddress}
+                          setDrawerOpen={setIsOpen}
+                        />
+                      )
+                    })
+                  )}
+                </div>
+              </>
+            ) : null}
           </>
         )}
       </Layout>
