@@ -7,6 +7,8 @@ interface StoreState {
   setActiveUser: (user: undefined | Account | null) => void
   toastState: ToastType
   setToastState: (toastState: any) => void
+  showProjectRequestsFilterBorder: boolean
+  setShowProjectRequestsFilterBorder: (show: boolean) => void
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -35,6 +37,12 @@ export const useStore = create<StoreState>((set) => ({
         }),
       },
     })),
+  showProjectRequestsFilterBorder: true,
+  setShowProjectRequestsFilterBorder(show) {
+    set(() => ({
+      showProjectRequestsFilterBorder: show,
+    }))
+  },
 }))
 
 export default useStore

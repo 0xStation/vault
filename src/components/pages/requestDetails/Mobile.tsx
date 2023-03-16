@@ -31,7 +31,7 @@ const RequestDetailsMobile = () => {
 
   return (
     <>
-      <div className="w-full max-w-[580px]">
+      <div className="h-screen w-full max-w-[580px]">
         <AccountNavBar />
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-80 py-2 px-4">
           <button

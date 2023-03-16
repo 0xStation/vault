@@ -19,11 +19,9 @@ import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 const DesktopTerminalRequestsPage = () => {
   return (
     <DesktopTerminalLayout>
-      <div>
-        <div className="my-4 flex flex-row items-center justify-between px-4">
-          <span className="text-2xl font-bold">Proposals</span>
-          <CreateRequestDropdown />
-        </div>
+      <div className="my-4 flex flex-row items-center justify-between px-4">
+        <span className="text-2xl font-bold">Proposals</span>
+        <CreateRequestDropdown />
       </div>
       <TerminalRequestTypeTabBar>
         <RequestTabContent tab={TerminalRequestTypeTab.ALL} />

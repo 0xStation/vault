@@ -169,11 +169,14 @@ const DesktopTerminalLayout = ({
             })}
           </section>
         </div>
-        <div className={`grow ${assumeDefaultPadding ? "px-12 py-4" : "p-0"}`}>
+        <div
+          className={`flex grow flex-col overflow-y-auto ${
+            assumeDefaultPadding ? "px-12 py-4" : "p-0"
+          }`}
+        >
           <div className="flex justify-end">
             <AccountNavBar />
           </div>
-
           {children}
         </div>
       </div>

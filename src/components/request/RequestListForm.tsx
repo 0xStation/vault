@@ -1,9 +1,12 @@
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
+import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
+import { EmptyState } from "components/emptyStates/EmptyState"
 import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
+import useStore from "../../hooks/stores/useStore"
 import { listIntersection } from "../../lib/utils/listIntersection"
 import {
   addQueryParam,
@@ -12,7 +15,6 @@ import {
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { BatchStatusBar } from "../core/BatchStatusBar"
-import { EmptyList } from "../core/EmptyList"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
@@ -189,6 +191,10 @@ const RequestListForm = ({
     })
   }
 
+  const setShowProjectRequestsFilterBorder = useStore(
+    (state) => state.setShowProjectRequestsFilterBorder,
+  )
+
   useEffect(() => {
     if (router.query.requestId) {
       setDetailsSliderOpen(true)
@@ -198,12 +204,33 @@ const RequestListForm = ({
   }, [router.query])
 
   if (requests.length === 0) {
+    setShowProjectRequestsFilterBorder(false)
+
+    let title = ""
+    let subtitle = ""
+
+    switch (router.query.filter) {
+      case TerminalRequestStatusFilter.NEEDS_ACTION:
+        title = "Hurray!"
+        subtitle = "You've reviewed all proposals."
+        break
+      case TerminalRequestStatusFilter.AWAITING_OTHERS:
+        title = "No pending Proposals"
+        subtitle = "You and your collective have reviewed all proposals."
+        break
+      case TerminalRequestStatusFilter.CLOSED:
+        title = "Create your first Proposal"
+        subtitle =
+          "Proposals enable collectives distribute tokens and manage members with more trust."
+        break
+    }
     return (
-      <EmptyList
-        title="No requests"
-        subtitle="Start distributing funds and reward contributors."
-      />
+      <div className="flex h-full">
+        <EmptyState title={title} subtitle={subtitle} />
+      </div>
     )
+  } else {
+    setShowProjectRequestsFilterBorder(true)
   }
 
   return (
