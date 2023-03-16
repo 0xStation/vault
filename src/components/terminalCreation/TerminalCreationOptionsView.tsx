@@ -59,19 +59,19 @@ export const TerminalCreationOptionsView = ({
       try {
         setError("chainId", {
           type: "wrongNetwork",
-          message: "Please check your wallet to switch to specified chain.",
+          message: "Switch to the specified chain in your wallet to continue.",
         })
         await switchNetworkAsync?.(parseInt(watchChainId))
         clearErrors("chainId")
       } catch (e: any) {
         setError("chainId", {
           type: "wrongNetwork",
-          message: "Please check your wallet to switch to specified chain.",
+          message: "Switch to the specified chain in your wallet to continue.",
         })
         if (e.name === "ConnectorNotFoundError") {
           setError("chainId", {
             type: "wrongNetwork",
-            message: "Wallet connection error.",
+            message: "Wallet connection error. Please try again.",
           })
         }
       }
@@ -92,7 +92,7 @@ export const TerminalCreationOptionsView = ({
         chainId={watchChainId}
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
-        <h1 className="font-bold">New Project</h1>
+        <h2 className="font-bold">New Project</h2>
         <p className="mb-7 mt-3 text-white">
           Use an existing Safe, or create Project with a new Safe.
         </p>{" "}
@@ -127,7 +127,7 @@ export const TerminalCreationOptionsView = ({
             >
               <p className="font-bold">Create a Project with a new Safe</p>
               <p className="text-gray">
-                An address is unique to the Project will be created
+                An address unique to the Project will be created
               </p>
             </SelectorCard>
             <hr className="text-gray-90" />
