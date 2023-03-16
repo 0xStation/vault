@@ -1,6 +1,8 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import BottomDrawer from "@ui/BottomDrawer"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
+import Modal from "@ui/Modal"
 import truncateString, { addressesAreEqual } from "lib/utils"
 import { Dispatch, SetStateAction } from "react"
 import { useEnsName } from "wagmi"
@@ -34,36 +36,73 @@ export const RemoveSignerConfirmationDrawer = ({
       "You’ll be removed from the Terminal once the request has been approved and executed."
   }
   return (
-    <BottomDrawer setIsOpen={setIsOpen} isOpen={isOpen} size="sm">
-      <div className="mt-2 flex flex-col">
-        <div>
-          <button onClick={() => setIsOpen(false)}>
-            <XMarkIcon className="h-6 w-6" />
-          </button>
-        </div>
-        <div className="mt-6 flex grow flex-col">
-          <h2 className="font-bold">{title}</h2>
-          <p className="mt-3">{subtitle}</p>
-        </div>
-        <div className="absolute bottom-12 right-0 left-0 mx-auto mb-5 w-full px-5 text-center">
-          <Button
-            type="button"
-            fullWidth={true}
-            onClick={() => {
-              onClick()
-              setIsOpen(false)
-            }}
-          >
-            Confirm
-          </Button>
+    <Breakpoint>
+      {(isMobile) =>
+        isMobile ? (
+          <BottomDrawer setIsOpen={setIsOpen} isOpen={isOpen} size="sm">
+            <div className="mt-2 flex flex-col">
+              <div>
+                <button onClick={() => setIsOpen(false)}>
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+              <div className="mt-6 flex grow flex-col">
+                <h2 className="font-bold">{title}</h2>
+                <p className="mt-3">{subtitle}</p>
+              </div>
+              <div className="absolute bottom-12 right-0 left-0 mx-auto mb-5 w-full px-5 text-center">
+                <Button
+                  type="button"
+                  fullWidth={true}
+                  onClick={() => {
+                    onClick()
+                    setIsOpen(false)
+                  }}
+                >
+                  Confirm
+                </Button>
 
-          <p className="mt-3 text-center text-sm text-gray">
-            This drawer will close following confirmation. This action does not
-            cost gas.
-          </p>
-        </div>
-      </div>
-    </BottomDrawer>
+                <p className="mt-3 text-center text-sm text-gray">
+                  This drawer will close following confirmation. This action
+                  does not cost gas.
+                </p>
+              </div>
+            </div>
+          </BottomDrawer>
+        ) : (
+          <Modal setIsOpen={setIsOpen} isOpen={isOpen}>
+            <div className="mt-2 flex flex-col">
+              <div>
+                <button onClick={() => setIsOpen(false)}>
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+              <div className="mt-4 flex grow flex-col">
+                <h2 className="font-bold">{title}</h2>
+                <p className="mt-3">{subtitle}</p>
+              </div>
+              <div className="my-4 w-full text-center">
+                <Button
+                  type="button"
+                  fullWidth={true}
+                  onClick={() => {
+                    onClick()
+                    setIsOpen(false)
+                  }}
+                >
+                  Confirm
+                </Button>
+
+                <p className="mt-3 text-center text-sm text-gray">
+                  This modal will close following confirmation. This action does
+                  not cost gas.
+                </p>
+              </div>
+            </div>
+          </Modal>
+        )
+      }
+    </Breakpoint>
   )
 }
 
