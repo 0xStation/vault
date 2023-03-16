@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Favorit Pro";
+  src: url("../public/fonts/favoritpro-regular-webfont.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Favorit Pro";
+  src: url("../public/fonts/favoritpro-bold-webfont.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LoRes9PlusOT";
+  src: url("../public/fonts/Emigre_-_LoRes9PlusOT-WideRegular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TerminalGrotesque";
+  src: url("../public/fonts/terminal-grotesque-webfont.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -12,6 +45,7 @@ body {
   font-family: "Favorit Pro";
   margin: 0;
   padding: 0;
+  font-family: "Favorit Pro";
 }
 
 input[type="checkbox"] {

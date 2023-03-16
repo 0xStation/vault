@@ -1,5 +1,4 @@
 const colors = require("tailwindcss/colors")
-const fontFamily = require("tailwindcss/defaultTheme")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -14,7 +13,10 @@ module.exports = {
         sm: "580px",
       },
       fontFamily: {
-        sans: ["var(--font-favoritpro)", fontFamily.sans],
+        sans: ["Graphik", "sans-serif"],
+        serif: ["Merriweather", "serif"],
+        lores: ["LoRes9PlusOT", "Monospace"],
+        grotesque: ["TerminalGrotesque", "Monospace"],
       },
       colors: {
         transparent: "transparent",
