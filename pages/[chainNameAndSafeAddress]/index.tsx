@@ -117,7 +117,7 @@ const MobileTerminalIndexPage = () => {
         <div className="mt-4 grid grid-cols-2 gap-2">
           <LabelCard
             boxWrap={false}
-            label="Total balance value"
+            label="Total balance"
             description={`$${totalAssetValue
               ?.toFixed(2)
               .toString()

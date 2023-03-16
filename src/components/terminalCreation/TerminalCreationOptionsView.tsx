@@ -59,19 +59,19 @@ export const TerminalCreationOptionsView = ({
       try {
         setError("chainId", {
           type: "wrongNetwork",
-          message: "Please check your wallet to switch to specified chain.",
+          message: "Switch to the specified chain in your wallet to continue.",
         })
         await switchNetworkAsync?.(parseInt(watchChainId))
         clearErrors("chainId")
       } catch (e: any) {
         setError("chainId", {
           type: "wrongNetwork",
-          message: "Please check your wallet to switch to specified chain.",
+          message: "Switch to the specified chain in your wallet to continue.",
         })
         if (e.name === "ConnectorNotFoundError") {
           setError("chainId", {
             type: "wrongNetwork",
-            message: "Wallet connection error.",
+            message: "Wallet connection error. Please try again.",
           })
         }
       }
@@ -93,9 +93,9 @@ export const TerminalCreationOptionsView = ({
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
         <h2 className="font-bold">New Project</h2>
-        <p className="mb-7 mt-3 text-gray">
-          Use an existing Safe, or create Project with a new address.
-        </p>
+        <p className="mb-7 mt-3 text-white">
+          Use an existing Safe, or create Project with a new Safe.
+        </p>{" "}
         <SelectWithLabel
           label="Chain*"
           name="chainId"
@@ -110,7 +110,7 @@ export const TerminalCreationOptionsView = ({
             },
           }}
         >
-          <option value="">Choose option</option>
+          <option value="">Select an option</option>
           {SUPPORTED_CHAINS?.map((chain, idx) => {
             return (
               <option key={chain.id} value={chain.id}>
@@ -125,14 +125,16 @@ export const TerminalCreationOptionsView = ({
               className="mt-7 mb-6"
               onClick={() => setView(VIEW.CREATE_FORM)}
             >
-              <p className="font-bold">Create a Project with a new address</p>
-              <p className="text-gray">An address is unique to each Project</p>
+              <p className="font-bold">Create a Project with a new Safe</p>
+              <p className="text-gray">
+                An address unique to the Project will be created
+              </p>
             </SelectorCard>
             {safeAddresses && safeAddresses?.length > 0 ? (
               <>
                 <hr className="text-gray-90" />
                 <p className="mt-6 mb-3 text-base font-bold">
-                  Select to use an existing safe:
+                  Select to use an existing safe
                 </p>
                 <div className="mb-3">
                   {isLoading ? (

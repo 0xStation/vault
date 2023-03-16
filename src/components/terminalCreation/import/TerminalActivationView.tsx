@@ -153,10 +153,10 @@ const AwaitingConfirmationsView = ({
         )
   return (
     <>
-      <h2 className="font-bold">Project not activated</h2>
+      <h2 className="font-bold">A module needs to be activated</h2>
       <p className="mt-1 text-center">
         Requires {quorumDiff} more approval{quorumDiff > 1 && "s"} to activate
-        your Project.
+        your the module and continue operating your Project.
       </p>
       <div className="mt-6 flex flex-row space-x-3">
         {!hasApproved && (
@@ -330,9 +330,9 @@ export const TerminalActivationView = ({
         err.code === 4001 ||
         (err?.name && err?.name === "UserRejectedRequestError")
       ) {
-        setError("Signature was rejected.")
+        setError("Signature was rejected. Please try again.")
       } else {
-        setError("Something went wrong.")
+        setError("Something went wrong. Please try again.")
       }
       return
     }

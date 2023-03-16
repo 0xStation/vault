@@ -15,8 +15,8 @@ export const SignerQuorumRequestContent = ({
   const membersRemoved = signerQuorumMeta.remove.length
 
   const prompt = `${[
-    ...(membersAdded > 0 ? [`adding ${membersAdded}`] : []),
-    ...(membersRemoved > 0 ? [`removing ${membersRemoved}`] : []),
+    ...(membersAdded > 0 ? [`Adding ${membersAdded}`] : []),
+    ...(membersRemoved > 0 ? [`Removing ${membersRemoved}`] : []),
   ].join(", ")} ${membersAdded + membersRemoved > 1 ? "members" : "member"}`
 
   // should never happen but just in case...
