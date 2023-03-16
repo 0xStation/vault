@@ -62,8 +62,7 @@ const cssOverrides = `
 
   .dynamic-auth-layout__container {
     background: #0D0E11;
-    border: solid;
-    border-color: #4d4d4dff;
+    box-shadow: 0 0 100px 20px #AD72FF;
   }
 
   .footer--border-top {
