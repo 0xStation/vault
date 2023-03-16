@@ -78,7 +78,7 @@ export const AccountNavBar = () => {
                     return (
                       <Button
                         variant="unemphasized"
-                        size="sm"
+                        size="base"
                         onClick={() => {
                           addQueryParam(
                             router,
