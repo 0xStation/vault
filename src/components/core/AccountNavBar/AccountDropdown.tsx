@@ -1,11 +1,7 @@
-import {
-  DynamicConnectButton,
-  DynamicUserProfile,
-  useDynamicContext,
-} from "@dynamic-labs/sdk-react"
+import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Avatar } from "@ui/Avatar"
 import Breakpoint from "@ui/Breakpoint"
-import { Button, buttonStyles } from "@ui/Button"
+import { Button } from "@ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,8 +32,12 @@ export const AccountNavBar = () => {
   }
   const { address } = useAccount()
   const setActiveUser = useStore((state) => state.setActiveUser)
-  const { handleLogOut, setShowDynamicUserProfile, isAuthenticated } =
-    useDynamicContext()
+  const {
+    handleLogOut,
+    setShowDynamicUserProfile,
+    isAuthenticated,
+    setShowAuthFlow,
+  } = useDynamicContext()
 
   useEffect(() => {
     if (router.query.createTerminalSliderOpen) {
@@ -129,16 +129,13 @@ export const AccountNavBar = () => {
         ) : (
           // set height to same as Avatar to reduce cumulative layout shift
           <div className="flex max-h-[32px] items-center">
-            <DynamicConnectButton
-              buttonContainerClassName={buttonStyles({
-                variant: "primary",
-                size: "base",
-                fullWidth: false,
-                disabled: false,
-              })}
+            <Button
+              variant="primary"
+              size="base"
+              onClick={() => setShowAuthFlow(true)}
             >
               Connect wallet
-            </DynamicConnectButton>
+            </Button>
           </div>
         )}
       </DropdownMenu>
