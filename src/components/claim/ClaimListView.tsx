@@ -3,7 +3,7 @@ import ClaimItemsDrawer from "components/claim/ClaimItemsDrawer"
 import { ClaimRequestItem } from "components/claim/ClaimRequestItem"
 import { ClaimRevShareItem } from "components/claim/ClaimRevShareItem"
 import { BatchStatusBar } from "components/core/BatchStatusBar"
-import { EmptyList } from "components/core/EmptyList"
+import { EmptyState } from "components/emptyStates/EmptyState"
 import { addressesAreEqual } from "lib/utils"
 import { useAccountItemsToClaim } from "models/account/hooks"
 import { RevShareWithdraw } from "models/automation/types"
@@ -198,7 +198,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
     })
   }
   return (
-    <>
+    <div className="flex h-full flex-col">
       {/* single view & execute */}
       <ClaimItemsDrawer
         isOpen={claimDrawerOpen}
@@ -222,10 +222,12 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
         <></>
       ) : items?.requests.length === 0 &&
         items?.revShareWithdraws.length === 0 ? (
-        <EmptyList
-          title="No items ready to claim"
-          subtitle="Claimable funds across Projects will show here."
-        />
+        <div className="flex h-[calc(100%+18px)] px-4 pt-4">
+          <EmptyState
+            title="No tokens to claim"
+            subtitle="Tokens available to claim from Projects you created and collaborated with will appear here."
+          />
+        </div>
       ) : (
         <ul className="mt-3">
           {items?.revShareWithdraws.map((revShareWithdraw, idx) => (
@@ -285,7 +287,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
           Claim
         </button>
       </BatchStatusBar>
-    </>
+    </div>
   )
 }
 

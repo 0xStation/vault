@@ -10,7 +10,7 @@ const Mobile = ({ terminal }: { terminal: Terminal }) => {
 
   if (!terminal) return <></>
   return (
-    <>
+    <div className="flex h-screen grow flex-col pb-4">
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
@@ -19,7 +19,7 @@ const Mobile = ({ terminal }: { terminal: Terminal }) => {
         <ArrowLeft />
       </Link>
       <AssetsPageContent terminal={terminal} />
-    </>
+    </div>
   )
 }
 

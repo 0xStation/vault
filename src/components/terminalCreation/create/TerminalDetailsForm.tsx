@@ -147,9 +147,10 @@ export const TerminalDetailsForm = ({
           />
           <TextareaWithLabel
             className="mb-3"
-            label="About"
+            label="About*"
             register={register}
             name="about"
+            required
             placeholder="What does this group do?"
             errors={errors}
             registerOptions={{

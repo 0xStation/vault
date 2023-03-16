@@ -1,3 +1,4 @@
+import useStore from "../../../hooks/stores/useStore"
 import { TabBar } from "../TabBar"
 
 export enum ProfileTab {
@@ -17,11 +18,13 @@ export const ProfileTabBar = ({
     { value: ProfileTab.REQUESTS, label: "Proposals" },
   ]
 
+  const showTabBottomBorder = useStore((state) => state.showTabBottomBorder)
+
   return (
     <TabBar
       className={className}
       style="tab"
-      showBorder={true}
+      showBorder={showTabBottomBorder}
       defaultValue={ProfileTab.TERMINALS}
       options={options}
     >

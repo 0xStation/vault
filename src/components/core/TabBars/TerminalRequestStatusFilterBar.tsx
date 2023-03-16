@@ -31,9 +31,7 @@ export const TerminalRequestStatusFilterBar = ({
     { value: TerminalRequestStatusFilter.CLOSED, label: "Closed" },
   ] as TerminalNavOption[]
 
-  const showProjectRequestsFilterBorder = useStore(
-    (state) => state.showProjectRequestsFilterBorder,
-  )
+  const showTabBottomBorder = useStore((state) => state.showTabBottomBorder)
 
   return (
     <TabBar
@@ -41,7 +39,7 @@ export const TerminalRequestStatusFilterBar = ({
       style="filter"
       // when empty states are displayed, need to hide the sticky border
       // data & logic to change this is so far away so using a store
-      showBorder={showProjectRequestsFilterBorder}
+      showBorder={showTabBottomBorder}
       defaultValue={TerminalRequestStatusFilter.NEEDS_ACTION}
       options={options}
     >

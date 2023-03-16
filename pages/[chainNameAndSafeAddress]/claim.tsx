@@ -12,7 +12,7 @@ const TerminalClaimListView = ({}: {}) => {
   )
 
   return (
-    <>
+    <div className="flex h-screen grow flex-col pb-4">
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
@@ -21,7 +21,7 @@ const TerminalClaimListView = ({}: {}) => {
         <ArrowLeft />
       </Link>
       <ClaimListView recipientAddress={address!} />
-    </>
+    </div>
   )
 }
 

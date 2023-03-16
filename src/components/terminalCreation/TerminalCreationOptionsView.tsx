@@ -130,29 +130,33 @@ export const TerminalCreationOptionsView = ({
                 An address unique to the Project will be created
               </p>
             </SelectorCard>
-            <hr className="text-gray-90" />
-            <p className="mt-6 mb-3 text-base font-bold">
-              Select to use an existing safe{" "}
-            </p>
-            <div className="mb-3">
-              {isLoading ? (
-                <LoadingSpinner className="mx-auto mt-10 flex w-full justify-center" />
-              ) : (
-                safeAddresses &&
-                safeAddresses?.map((safeAddress) => {
-                  return (
-                    <ExistingSafeCard
-                      key={safeAddress}
-                      chainId={watchChainId}
-                      safeAddress={safeAddress}
-                      setView={setView}
-                      setSelectedAddress={setSelectedAddress}
-                      setDrawerOpen={setIsOpen}
-                    />
-                  )
-                })
-              )}
-            </div>
+            {safeAddresses && safeAddresses?.length > 0 ? (
+              <>
+                <hr className="text-gray-90" />
+                <p className="mt-6 mb-3 text-base font-bold">
+                  Select to use an existing safe
+                </p>
+                <div className="mb-3">
+                  {isLoading ? (
+                    <LoadingSpinner className="mx-auto mt-10 flex w-full justify-center" />
+                  ) : (
+                    safeAddresses &&
+                    safeAddresses?.map((safeAddress) => {
+                      return (
+                        <ExistingSafeCard
+                          key={safeAddress}
+                          chainId={watchChainId}
+                          safeAddress={safeAddress}
+                          setView={setView}
+                          setSelectedAddress={setSelectedAddress}
+                          setDrawerOpen={setIsOpen}
+                        />
+                      )
+                    })
+                  )}
+                </div>
+              </>
+            ) : null}
           </>
         )}
       </Layout>

@@ -9,13 +9,13 @@ const ProfileClaimListView = ({}: {}) => {
   const accountAddress = router.query.address as string
 
   return (
-    <>
+    <div className="flex h-screen grow flex-col pb-4">
       <AccountNavBar />
       <Link href={`/u/${accountAddress}/profile`} className="block w-fit px-4">
         <ArrowLeft />
       </Link>
       <ClaimListView recipientAddress={accountAddress} />
-    </>
+    </div>
   )
 }
 
