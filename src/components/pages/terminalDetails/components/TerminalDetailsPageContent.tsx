@@ -1,21 +1,11 @@
-import { Network } from "@ui/Network"
-import truncateString from "lib/utils"
 import { Terminal } from "../../../../models/terminal/types"
-import CopyToClipboard from "../../../core/CopyToClipboard"
 
 const TerminalDetailsPageContent = ({ terminal }: { terminal: Terminal }) => {
   return (
     <div>
       <section className="mt-6 px-4">
-        <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
-        <div className="mt-2 flex flex-row items-center space-x-1">
-          <Network chainId={terminal?.chainId} />
-          <span className="text-sm">·</span>
-          <span className="text-sm">
-            {truncateString(terminal?.safeAddress)}
-          </span>
-          <CopyToClipboard text={terminal?.safeAddress} />
-        </div>
+        <h1 className="text-xl font-bold">About</h1>
+        <div className="mt-2 flex flex-row items-center space-x-1"></div>
         {terminal?.data?.url && (
           <a
             href={terminal?.data?.url}
