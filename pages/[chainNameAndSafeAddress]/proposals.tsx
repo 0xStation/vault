@@ -36,7 +36,7 @@ const MobileTerminalRequestsPage = () => {
   const router = useRouter()
 
   return (
-    <>
+    <div className={"flex h-screen grow flex-col pb-4"}>
       <AccountNavBar />
       <Link
         href={`/${router.query.chainNameAndSafeAddress}`}
@@ -53,7 +53,7 @@ const MobileTerminalRequestsPage = () => {
         <RequestTabContent tab={TerminalRequestTypeTab.TOKENS} />
         <RequestTabContent tab={TerminalRequestTypeTab.MEMBERS} />
       </TerminalRequestTypeTabBar>
-    </>
+    </div>
   )
 }
 
