@@ -1,3 +1,4 @@
+import useStore from "../../../hooks/stores/useStore"
 import { TabBar } from "../TabBar"
 
 export enum TerminalRequestStatusFilter {
@@ -30,11 +31,17 @@ export const TerminalRequestStatusFilterBar = ({
     { value: TerminalRequestStatusFilter.CLOSED, label: "Closed" },
   ] as TerminalNavOption[]
 
+  const showProjectRequestsFilterBorder = useStore(
+    (state) => state.showProjectRequestsFilterBorder,
+  )
+
   return (
     <TabBar
       className={className}
       style="filter"
-      showBorder={true}
+      // when empty states are displayed, need to hide the sticky border
+      // data & logic to change this is so far away so using a store
+      showBorder={showProjectRequestsFilterBorder}
       defaultValue={TerminalRequestStatusFilter.NEEDS_ACTION}
       options={options}
     >

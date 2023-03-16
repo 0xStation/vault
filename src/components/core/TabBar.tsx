@@ -40,7 +40,7 @@ export const TabBar = ({
 
   return (
     <Tabs
-      className={`w-full ${className}`}
+      className={`h-full w-full ${className}`}
       value={
         (style === "tab"
           ? (router.query.tab as string)
