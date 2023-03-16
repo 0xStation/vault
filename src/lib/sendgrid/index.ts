@@ -1,7 +1,5 @@
 import { MailService as SendGrid } from "@sendgrid/mail"
 import truncateString from "lib/utils"
-import { getTerminalByChainIdAndAddress } from "../../models/terminal/terminals"
-import { Terminal } from "../../models/terminal/types"
 import { getUrlHost } from "../utils/getUrlHost"
 import { chainIdToChainName } from "../utils/networks/chains"
 import { requireEnv } from "../utils/requireEnv"
@@ -48,14 +46,12 @@ const email = async (
 
 export const sendNewProposalReadyForClaimingEmail = async ({
   recipients,
-  claimAmount,
   terminalName,
   requestId,
   chainId,
   safeAddress,
 }: {
   recipients: string[]
-  claimAmount: string
   terminalName: string
   requestId: string
   chainId: number
@@ -63,7 +59,6 @@ export const sendNewProposalReadyForClaimingEmail = async ({
 }) => {
   const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
-    claimAmount,
     terminalName,
     buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
   }
@@ -106,18 +101,14 @@ export const sendNewProposalReadyForExecutionEmail = async ({
 
 export const sendNewProposalExecutionEmail = async ({
   recipients,
-  proposalExecutedBy,
   proposalTitle,
-  executionNote,
   terminalName,
   requestId,
   chainId,
   safeAddress,
 }: {
   recipients: string[]
-  proposalExecutedBy: string
   proposalTitle: string
-  executionNote: string
   terminalName: string
   requestId: string
   chainId: number
@@ -125,9 +116,7 @@ export const sendNewProposalExecutionEmail = async ({
 }) => {
   const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
-    proposalExecutedBy,
     proposalTitle,
-    executionNote,
     terminalName,
     buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
   }
@@ -144,6 +133,7 @@ export const sendNewCommentEmail = async ({
   commentCreatedBy,
   commentBody,
   requestId,
+  terminalName,
   chainId,
   safeAddress,
 }: {
@@ -151,12 +141,14 @@ export const sendNewCommentEmail = async ({
   commentCreatedBy: string
   commentBody: string
   requestId: string
+  terminalName: string
   chainId: number
   safeAddress: string
 }) => {
   const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
-    commentCreatedBy,
+    terminalName,
+    commentCreatedBy: truncateString(commentCreatedBy, 6),
     commentBody,
     buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
   }
@@ -171,6 +163,7 @@ export const sendNewProposalEmail = async ({
   requestId,
   chainId,
   safeAddress,
+  terminalName,
 }: {
   recipients: string[]
   proposalCreatedBy: string
@@ -178,19 +171,9 @@ export const sendNewProposalEmail = async ({
   requestId: string
   chainId: number
   safeAddress: string
+  terminalName: string
 }) => {
   const chainName = chainIdToChainName[chainId]
-
-  let terminalName = ""
-  try {
-    let terminal = (await getTerminalByChainIdAndAddress(
-      chainId,
-      safeAddress,
-    )) as Terminal
-    terminalName = terminal.data.name
-  } catch (err) {
-    console.log("Error getting terminal", err)
-  }
 
   const dynamicTemplateData = {
     proposalCreatedBy: truncateString(proposalCreatedBy, 6),

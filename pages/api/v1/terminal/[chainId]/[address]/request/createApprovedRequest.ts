@@ -1,13 +1,23 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActivityVariant, RequestVariantType } from "@prisma/client"
 import db from "db"
-import { getEmails } from "lib/dynamic/"
-import { sendNewProposalEmail } from "lib/sendgrid"
+import { getSafeDetails } from "lib/api/safe/getSafeDetails"
+import { getEmails } from "lib/dynamic"
+import {
+  sendNewProposalEmail,
+  sendNewProposalReadyForClaimingEmail,
+  sendNewProposalReadyForExecutionEmail,
+} from "lib/sendgrid"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
 import { createProofWithSignature } from "../../../../../../../src/models/proof/mutations/createProofWithSignature"
 import { createRequestWithAction } from "../../../../../../../src/models/request/mutations/createRequestWithAction"
-import { Request } from "../../../../../../../src/models/request/types"
+import {
+  Request,
+  TokenTransferVariant,
+} from "../../../../../../../src/models/request/types"
+import { getTerminalByChainIdAndAddress } from "../../../../../../../src/models/terminal/terminals"
+import { Terminal } from "../../../../../../../src/models/terminal/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -61,18 +71,52 @@ export default async function handler(
     })
 
     try {
-      // 1. get gnosis signer addresses by body.chainId and body.address
-      const addresses = ["0x65A3870F48B5237f27f674Ec42eA1E017E111D63"]
-      const emails = await getEmails(addresses)
+      const safeDetails = await getSafeDetails(body.chainId, body.address)
+      const { quorum, signers } = safeDetails
+      const emails = await getEmails(signers)
+      request = request as unknown as Request
+
+      // need to get terminal by chainName and safeAddress because it's not available yet off of the request
+      let terminal = (await getTerminalByChainIdAndAddress(
+        body.chainId,
+        body.address,
+      )) as Terminal
 
       await sendNewProposalEmail({
         recipients: emails,
         proposalCreatedBy: body.createdBy,
         proposalTitle: body.note,
-        requestId: (request as unknown as Request).id,
+        requestId: request.id,
         chainId: body.chainId,
         safeAddress: body.address,
+        terminalName: terminal.data.name,
       })
+
+      // edge case of a single quorum safe which auto sends the request to be ready to execute
+      // this also means a token transfer request is immediately claimable by recipient
+      if (quorum === 1) {
+        if (request.variant === RequestVariantType.TOKEN_TRANSFER) {
+          const meta = request.data.meta as TokenTransferVariant
+          const recipientEmail = await getEmails([meta.recipient])
+
+          await sendNewProposalReadyForClaimingEmail({
+            recipients: recipientEmail,
+            requestId: request.id,
+            chainId: body.chainId,
+            safeAddress: body.address,
+            terminalName: terminal.data.name,
+          })
+        }
+
+        await sendNewProposalReadyForExecutionEmail({
+          recipients: emails,
+          proposalTitle: request.data.note,
+          requestId: request.id,
+          chainId: body.chainId,
+          safeAddress: body.address,
+          terminalName: terminal.data.name,
+        })
+      }
     } catch (e) {
       // silently fail
       console.warn("Failed to send notification emails in `createProposal`", e)
