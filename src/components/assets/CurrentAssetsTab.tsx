@@ -22,15 +22,14 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
     return sum
   }, 0)
 
-  const title = "Add tokens"
-  const subtitle =
-    "Transfer tokens to the Project address or share the address to receive and distribute tokens."
-
   return (
     <TabsContent value={TerminalAssetsTab.CURRENT}>
       {!tokenData?.length && !nftData?.length ? (
         <div className="flex h-[calc(100%+18px)] px-4 pb-4 pt-4">
-          <EmptyState title={title} subtitle={subtitle} />
+          <EmptyState
+            title="Add tokens"
+            subtitle="Transfer tokens to the Project address or share the address to receive and distribute tokens."
+          />
         </div>
       ) : (
         <>
