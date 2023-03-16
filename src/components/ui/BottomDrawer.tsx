@@ -28,6 +28,7 @@ export const BottomDrawer = ({
     ["base"]: "h-[80%]",
     ["lg"]: "h-[95%]",
   }
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -58,9 +59,8 @@ export const BottomDrawer = ({
               leaveFrom="translate-y-0"
               leaveTo="translate-y-[300%]"
             >
-              {/* TODO: max-w-[580px] made to shrink for mobile size on large screens, reverse later */}
-              <div
-                className={`pointer-events-auto text-left ${modalBodyStyles[size]} w-full border-t border-gray-90`}
+              <Dialog.Panel
+                className={`pointer-events-auto ${modalBodyStyles[size]} w-full border-t border-gray-90 text-left`}
               >
                 <div className="flex h-full w-full flex-col rounded-t-2xl bg-black px-5 pt-3">
                   <div className="mb-6 flex w-full justify-center">
@@ -71,7 +71,7 @@ export const BottomDrawer = ({
                   </div>
                   <div className={"h-[calc(100%-50px)]"}>{children}</div>
                 </div>
-              </div>
+              </Dialog.Panel>
             </Transition.Child>
           </div>
         </div>
