@@ -15,8 +15,8 @@ const AutomationsPageContent = () => {
 
   return (
     <>
-      <div className="mt-4 flex flex-row items-center justify-between border-b border-gray-80 px-4 pb-4 sm:px-0">
-        <span className="text-2xl font-bold">Automations</span>
+      <div className="mt-4 flex flex-row items-center justify-between px-4 pb-4 sm:px-0">
+        <h1>Automations</h1>
         <CreateAutomationDropdown />
       </div>
       {isLoading ? (

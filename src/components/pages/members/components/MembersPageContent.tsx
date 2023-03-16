@@ -68,7 +68,7 @@ const MembersPageContent = () => {
       </RightSlider>
       <div className="mt-6 w-full px-4">
         <div className="mb-6 flex flex-row items-center justify-between">
-          <h2 className="font-bold">Members</h2>
+          <h1>Members</h1>
           <div className="flex flex-row">
             <Breakpoint>
               {(isMobile) => {
@@ -140,7 +140,7 @@ const MembersPageContent = () => {
 
                 {activeRequest?.length ? (
                   <p className="flex items-center text-sm text-gray">
-                    Pending entry ·&nbsp;
+                    Pending removal ·&nbsp;
                     <a
                       className="text-sm text-white underline decoration-dotted"
                       href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}

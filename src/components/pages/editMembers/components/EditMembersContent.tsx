@@ -175,7 +175,13 @@ export const EditMembersContent = () => {
       }
     } else {
       while (i < signersToBeAdded.length) {
-        const newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
+        let newSignerAddress
+        try {
+          newSignerAddress = await resolveEnsAddress(signersToBeAdded[i])
+        } catch (err) {
+          console.log("Failed to retrieve new signer address")
+          return
+        }
         const addOwnerCall = prepareAddOwnerWithThresholdCall(
           safeMetadata?.address as string,
           newSignerAddress as string,
@@ -212,7 +218,7 @@ export const EditMembersContent = () => {
       if (!signature) {
         // TODO: show toasty toast
         console.log("no signature :(")
-        return
+        throw Error("User rejected signature")
       }
 
       await axios.post(

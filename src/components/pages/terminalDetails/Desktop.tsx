@@ -1,5 +1,5 @@
-import { PencilIcon } from "@heroicons/react/24/solid"
 import RightSlider from "@ui/RightSlider"
+import { EditButton } from "components/core/EditButton"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Terminal } from "../../../../src/models/terminal/types"
@@ -11,26 +11,8 @@ import DesktopTerminalLayout from "../../terminal/DesktopTerminalLayout"
 import EditTerminalContent from "../editTerminalDetails/components/EditTerminalContent"
 import TerminalDetailsPageContent from "./components/TerminalDetailsPageContent"
 
-const EditButton = ({
-  onClick,
-  className,
-}: {
-  onClick: () => void
-  className?: string
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-gray-80`}
-    >
-      <PencilIcon className="w-2.5" />
-    </button>
-  )
-}
-
 const Desktop = ({ terminal }: { terminal: Terminal }) => {
   const router = useRouter()
-  const { chainNameAndSafeAddress } = router.query
   const [editDetailsSliderOpen, setEditSliderOpen] = useState<boolean>(false)
   const toggleDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {

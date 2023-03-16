@@ -47,7 +47,7 @@ const MobileTerminalRequestsPage = () => {
         <ArrowLeft />
       </Link>
       <div className="my-4 flex flex-row items-center justify-between px-4">
-        <span className="text-2xl font-bold">Proposals</span>
+        <h1>Proposals</h1>
         <CreateRequestDropdown />
       </div>
       <TerminalRequestTypeTabBar>
