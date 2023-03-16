@@ -15,9 +15,10 @@ export const useUpdateTerminal = (address: string, chainId: number) => {
       nonce,
     } = arg
 
+    console.log(arg)
     if (!safeAddress || !name || !chainId)
       throw Error(
-        `Missing args in "createTerminal". Args specified - safeAddress: ${safeAddress}, chainId: ${chainId}, name: ${name} `,
+        `Missing args in "updateTerminal". Args specified - safeAddress: ${safeAddress}, chainId: ${chainId}, name: ${name} `,
       )
 
     try {
