@@ -197,7 +197,14 @@ const RequestListForm = ({
 
   useEffect(() => {
     if (router.query.requestId) {
-      setDetailsSliderOpen(true)
+      const selectedRequest = requests.find(
+        (r) => r.id === router.query.requestId,
+      )
+
+      if (selectedRequest) {
+        setRequestForDetails(selectedRequest)
+        setDetailsSliderOpen(true)
+      }
     } else {
       setDetailsSliderOpen(false)
     }
