@@ -1,5 +1,4 @@
 import { SUPPORTED_CHAINS } from "lib/constants"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -93,14 +92,10 @@ export const TerminalCreationOptionsView = ({
         chainId={watchChainId}
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
-        <h2 className="font-bold">New Project</h2>
+        <h1 className="font-bold">New Project</h1>
         <p className="mb-7 mt-3 text-white">
           Use an existing Safe, or create Project with a new Safe.
         </p>{" "}
-        <span className="mb-7 mt-3 text-gray-50">
-          {" "}
-          What is a <Link href="https://safe.global/">Safe</Link>?
-        </span>
         <SelectWithLabel
           label="Chain*"
           name="chainId"
@@ -115,7 +110,7 @@ export const TerminalCreationOptionsView = ({
             },
           }}
         >
-          <option value="">Choose option</option>
+          <option value="">Select an option</option>
           {SUPPORTED_CHAINS?.map((chain, idx) => {
             return (
               <option key={chain.id} value={chain.id}>
@@ -130,12 +125,14 @@ export const TerminalCreationOptionsView = ({
               className="mt-7 mb-6"
               onClick={() => setView(VIEW.CREATE_FORM)}
             >
-              <p className="font-bold">Create a Project with a new address</p>
-              <p className="text-gray">An address is unique to each Project</p>
+              <p className="font-bold">Create a Project with a new Safe</p>
+              <p className="text-gray">
+                An address is unique to the Project will be created
+              </p>
             </SelectorCard>
             <hr className="text-gray-90" />
             <p className="mt-6 mb-3 text-base font-bold">
-              Select to use an existing safe:{" "}
+              Select to use an existing safe{" "}
             </p>
             <div className="mb-3">
               {isLoading ? (
