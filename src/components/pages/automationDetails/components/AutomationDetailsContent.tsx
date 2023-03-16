@@ -15,16 +15,18 @@ export const AutomationDetailsContent = () => {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex w-full items-center justify-between space-x-3 py-2 px-4 sm:px-0">
+      <div className="flex w-full items-center justify-between space-x-3 py-2 px-4 sm:hidden sm:px-0">
         <Link
           // TODO: change when directed to Automations from other locations, e.g. claiming
           href={`/${router.query.chainNameAndSafeAddress}/automations`}
-          className="w-fit sm:hidden"
+          className="w-fit"
         >
           <ArrowLeft />
         </Link>
 
-        <h4 className="text-base text-gray">{automation?.data.name}</h4>
+        <h4 className="text-base text-gray sm:hidden">
+          {automation?.data.name}
+        </h4>
         {/* TODO: add editing */}
         <button
           onClick={() => {
