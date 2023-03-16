@@ -12,6 +12,7 @@ import { valueToAmount } from "../../models/token/utils"
 import RequestActionPrompt from "../core/RequestActionPrompt"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
+import RequestChangeMemberContent from "../request/RequestChangeMemberContent"
 import RequestTerminalLink from "./RequestTerminalLink"
 
 const RequestCard = ({
@@ -101,12 +102,7 @@ const RequestCard = ({
                 </>
               )}
               {request.variant === RequestVariantType.SIGNER_QUORUM && (
-                <>
-                  <ArrowUpRight size={"sm"} />
-                  <span className="text-base text-gray-40">
-                    Add {1} member and change quorum.
-                  </span>
-                </>
+                <RequestChangeMemberContent request={request} />
               )}
               {request.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
                 <>
