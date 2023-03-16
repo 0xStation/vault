@@ -79,7 +79,7 @@ export const AutomationTransfersView = ({
 
   if (!data?.length) {
     return (
-      <div className="mx-4 flex h-full">
+      <div className="flex h-full px-4 pb-4">
         <EmptyState
           title="Start sharing revenue"
           subtitle="Copy the Automation address and paste it as the payout recipient."

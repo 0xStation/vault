@@ -9,7 +9,7 @@ const ProfilePageContent = ({}: {}) => {
   const accountAddress = router.query.address as string
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full grow flex-col pb-4">
       {/* ACCOUNT */}
       <div className="mt-6 space-y-3 px-4">
         <div>

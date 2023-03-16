@@ -29,7 +29,7 @@ const AutomationsPageContent = () => {
       {isLoading ? (
         <></>
       ) : noAutomations ? (
-        <div className="flex h-[calc(100%-49px)] px-4 pt-4 sm:h-full sm:px-0">
+        <div className="flex h-[calc(100%-49px)] px-4 pb-4 pt-4 sm:h-full sm:px-0">
           <EmptyState
             title="Set up Automations"
             subtitle="Automate revenue-sharing from NFT sales and sponsorships."

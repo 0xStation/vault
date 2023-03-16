@@ -82,7 +82,7 @@ export const AssetTransfersTab = ({
     const subtitle =
       "Transfer tokens to the Project address or share the address to receive and distribute tokens."
     return (
-      <div className="mx-4 flex h-full">
+      <div className="flex h-full px-4 pb-4">
         <EmptyState title={title} subtitle={subtitle} />
       </div>
     )
