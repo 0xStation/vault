@@ -1,6 +1,6 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
-import { updateUserEmail } from "lib/dynamic"
+import { demo, updateUserEmail } from "lib/dynamic"
 import { isValidEmail } from "lib/validations"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -40,9 +40,18 @@ const EmailNotificationForm = ({
   }
   const onError = async (data: any) => {}
 
+  const testEmails = async () => {
+    demo()
+    // const emails = await getEmails([
+    //   "0x65A3870F48B5237f27f674Ec42eA1E017E111D63",
+    // ])
+    // console.log(emails)
+  }
+
   return (
     <div className="px-4">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
+      <button onClick={() => testEmails()}>Test emails</button>
       <p>
         Enter your email to get notifications about your Terminals. We’ll never
         spam you with useless emails.
