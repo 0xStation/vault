@@ -35,7 +35,7 @@ const DesktopProfileLayout = ({
           </section>
         </div>
         <div
-          className={`h-full grow overflow-auto ${
+          className={`flex grow flex-col overflow-y-auto ${
             assumeDefaultPadding ? "px-12 py-4" : "p-0"
           }`}
         >

@@ -1,6 +1,7 @@
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
 import { TabsContent } from "@ui/Tabs"
+import { EmptyState } from "components/emptyStates/EmptyState"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import {
@@ -9,7 +10,6 @@ import {
 } from "../../lib/utils/updateQueryParam"
 import { useRequestsCreatedByAccount } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
-import { EmptyList } from "../core/EmptyList"
 import ProfileRequestTableRow from "../core/ProfileRequestTableRow"
 import RequestCard from "../core/RequestCard"
 import RequestTerminalLink from "../core/RequestTerminalLink"
@@ -96,10 +96,12 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
         {isLoading ? (
           <></>
         ) : requests?.length === 0 ? (
-          <EmptyList
-            title="No Requests"
-            subtitle="Something delightful & not cringey."
-          />
+          <div className="flex h-[calc(100%+18px)] px-4 pt-4">
+            <EmptyState
+              title="No Proposals"
+              subtitle="Proposals you created in Projects will appear here."
+            />
+          </div>
         ) : (
           <Breakpoint>
             {(isMobile) => {

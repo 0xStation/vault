@@ -191,8 +191,8 @@ const RequestListForm = ({
     })
   }
 
-  const setShowProjectRequestsFilterBorder = useStore(
-    (state) => state.setShowProjectRequestsFilterBorder,
+  const setShowTabBottomBorder = useStore(
+    (state) => state.setShowTabBottomBorder,
   )
 
   useEffect(() => {
@@ -204,7 +204,7 @@ const RequestListForm = ({
   }, [router.query])
 
   if (requests.length === 0) {
-    setShowProjectRequestsFilterBorder(false)
+    setShowTabBottomBorder(false)
 
     let title = ""
     let subtitle = ""
@@ -230,7 +230,7 @@ const RequestListForm = ({
       </div>
     )
   } else {
-    setShowProjectRequestsFilterBorder(true)
+    setShowTabBottomBorder(true)
   }
 
   return (

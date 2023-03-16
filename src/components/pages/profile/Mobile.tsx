@@ -11,7 +11,7 @@ const Mobile = () => {
   const { isLoading, count } = useTerminalsBySigner(accountAddress)
 
   return (
-    <>
+    <div className="flex h-screen flex-col pb-4">
       <AccountNavBar />
       <div className="mt-6 flex flex-row items-center space-x-3 px-4">
         <Avatar address={accountAddress} size="lg" />
@@ -28,7 +28,7 @@ const Mobile = () => {
         </div>
       </div>
       <ProfilePageContent />
-    </>
+    </div>
   )
 }
 
