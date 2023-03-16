@@ -261,8 +261,8 @@ export const NewTokensPage = () => {
                 <div className="w-full rounded bg-gray-90 p-4 text-center">
                   <p className="font-bold">No tokens found</p>
                   <p className="pt-2 text-base">
-                    Look&apos;s like this Terminal doesn&apos;t have any tokens.
-                    Add tokens by sending them to the Terminal&apos;s address.
+                    Look&apos;s like this Project doesn&apos;t have any tokens.
+                    Add tokens by sending them to the Project&apos;s address.
                   </p>
                   <button
                     type="button"
