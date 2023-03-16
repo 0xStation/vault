@@ -65,14 +65,39 @@ export const AccountNavBar = () => {
       >
         <CreateTerminalContent />
       </RightSlider>
-      <BottomDrawer isOpen={notificationOpen} setIsOpen={setNotificationOpen}>
-        <EmailNotificationForm
-          successCallback={() => {
-            setNotificationOpen(false)
-            successToast({ message: "Email notification settings updated" })
-          }}
-        />
-      </BottomDrawer>
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return (
+              <BottomDrawer
+                isOpen={notificationOpen}
+                setIsOpen={setNotificationOpen}
+              >
+                <EmailNotificationForm
+                  successCallback={() => {
+                    setNotificationOpen(false)
+                    successToast({
+                      message: "Email notification settings updated",
+                    })
+                  }}
+                />
+              </BottomDrawer>
+            )
+          }
+          return (
+            <RightSlider open={notificationOpen} setOpen={setNotificationOpen}>
+              <EmailNotificationForm
+                successCallback={() => {
+                  setNotificationOpen(false)
+                  successToast({
+                    message: "Email notification settings updated",
+                  })
+                }}
+              />
+            </RightSlider>
+          )
+        }}
+      </Breakpoint>
       <DropdownMenu>
         {isAuthenticated ? (
           <div className="flex flex-row items-center space-x-3">

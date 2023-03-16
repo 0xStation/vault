@@ -1,9 +1,9 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
 import { updateUserEmail } from "lib/dynamic"
+import { isValidEmail } from "lib/validations"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
-import { useToast } from "../../hooks/useToast"
 import TextareaWithLabel from "../form/TextareaWithLabel"
 
 const EmailNotificationForm = ({
@@ -16,8 +16,6 @@ const EmailNotificationForm = ({
     isError: boolean
     message: string
   }>({ isError: false, message: "" })
-
-  const { successToast } = useToast()
 
   const {
     register,
@@ -43,7 +41,7 @@ const EmailNotificationForm = ({
   const onError = async (data: any) => {}
 
   return (
-    <div>
+    <div className="px-4">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
       <p>
         Enter your email to get notifications about your Terminals. We’ll never
@@ -60,6 +58,9 @@ const EmailNotificationForm = ({
           name="email"
           errors={errors}
           placeholder="0xyou@gmail.com"
+          registerOptions={{
+            validate: (v) => !v || isValidEmail(v) || "Invalid email.",
+          }}
         />
         <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
           <Button
