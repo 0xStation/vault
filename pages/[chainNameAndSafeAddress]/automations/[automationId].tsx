@@ -3,10 +3,12 @@ import AutomationDetailsContent from "../../../src/components/pages/automationDe
 
 export const TerminalAutomationDetailPage = () => {
   return (
-    <>
-      <AccountNavBar />
-      <AutomationDetailsContent />
-    </>
+    <div className="h-screen">
+      <div className="flex h-[calc(100%-18px)] flex-col">
+        <AccountNavBar />
+        <AutomationDetailsContent />
+      </div>
+    </div>
   )
 }
 

@@ -8,7 +8,7 @@ const Mobile = () => {
   const router = useRouter()
 
   return (
-    <>
+    <div className="flex h-screen flex-col pb-4">
       <AccountNavBar />
       {/* link probably needs to go back to a different page here */}
       <Link
@@ -18,7 +18,7 @@ const Mobile = () => {
         <ArrowLeft />
       </Link>
       <AutomationsPageContent />
-    </>
+    </div>
   )
 }
 

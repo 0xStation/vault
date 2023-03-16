@@ -14,8 +14,8 @@ export const AutomationDetailsContent = () => {
   const { automation } = useAutomation(router.query.automationId as string)
 
   return (
-    <>
-      <div className="flex w-full items-center justify-between space-x-3 py-2 px-4">
+    <div className="flex h-full flex-col">
+      <div className="flex w-full items-center justify-between space-x-3 py-2 px-4 sm:px-0">
         <Link
           // TODO: change when directed to Automations from other locations, e.g. claiming
           href={`/${router.query.chainNameAndSafeAddress}/automations`}
@@ -41,7 +41,7 @@ export const AutomationDetailsContent = () => {
         <AutomationInfo />
         <AutomationHistory automation={automation} isLoading={!automation} />
       </AutomationTabBar>
-    </>
+    </div>
   )
 }
 
