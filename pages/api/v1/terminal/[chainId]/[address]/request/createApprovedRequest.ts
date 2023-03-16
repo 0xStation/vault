@@ -69,9 +69,8 @@ export default async function handler(
         recipients: emails,
         proposalCreatedBy: body.createdBy,
         proposalTitle: body.note,
-        terminalName: (request as unknown as Request).terminalAddress,
         requestId: (request as unknown as Request).id,
-        chainName: body.chainId,
+        chainId: body.chainId,
         safeAddress: body.address,
       })
     } catch (e) {

@@ -1,22 +1,22 @@
 import { MailService as SendGrid } from "@sendgrid/mail"
+import truncateString from "lib/utils"
+import { getTerminalByChainIdAndAddress } from "../../models/terminal/terminals"
+import { Terminal } from "../../models/terminal/types"
 import { getUrlHost } from "../utils/getUrlHost"
+import { chainIdToChainName } from "../utils/networks/chains"
 import { requireEnv } from "../utils/requireEnv"
 
 export const SENDGRID_TEMPLATES = {
   NEW_PROPOSAL: "d-4aa7e8bf1a2145f99e3f90d65e37251a",
   NEW_COMMENT: "d-2eb70172e6e04d63a454088b4ed010c4",
-  NEW_PROPOSAL_EXECUTION: "",
-  NEW_PROPOSAL_READY_FOR_EXECUTION: "",
-  NEW_PROPOSAL_READY_FOR_CLAIMING: "",
+  NEW_PROPOSAL_EXECUTION: "d-03866801d8cd4d54b898ccf742ebd562",
+  NEW_PROPOSAL_READY_FOR_EXECUTION: "d-9154fbd7f1224318b00b7e0908082bf4",
+  NEW_PROPOSAL_READY_FOR_CLAIMING: "d-320b49ba370b4d16a01c14a7f9a7e12f",
 }
 
 const sendgrid = new SendGrid()
 sendgrid.setApiKey(requireEnv("SENDGRID_API_KEY"))
 const hostname = getUrlHost()
-
-type EmailArgs = {
-  recipients: string[]
-}
 
 const email = async (
   recipients: string[],
@@ -51,16 +51,17 @@ export const sendNewProposalReadyForClaimingEmail = async ({
   claimAmount,
   terminalName,
   requestId,
-  chainName,
+  chainId,
   safeAddress,
 }: {
   recipients: string[]
   claimAmount: string
   terminalName: string
   requestId: string
-  chainName: string
+  chainId: number
   safeAddress: string
 }) => {
+  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     claimAmount,
     terminalName,
@@ -76,27 +77,22 @@ export const sendNewProposalReadyForClaimingEmail = async ({
 
 export const sendNewProposalReadyForExecutionEmail = async ({
   recipients,
-  proposalExecutedBy,
   proposalTitle,
-  executionNote,
   terminalName,
   requestId,
-  chainName,
+  chainId,
   safeAddress,
 }: {
   recipients: string[]
-  proposalExecutedBy: string
   proposalTitle: string
-  executionNote: string
   terminalName: string
   requestId: string
-  chainName: string
+  chainId: number
   safeAddress: string
 }) => {
+  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
-    proposalExecutedBy,
     proposalTitle,
-    executionNote,
     terminalName,
     buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
   }
@@ -115,7 +111,7 @@ export const sendNewProposalExecutionEmail = async ({
   executionNote,
   terminalName,
   requestId,
-  chainName,
+  chainId,
   safeAddress,
 }: {
   recipients: string[]
@@ -124,9 +120,10 @@ export const sendNewProposalExecutionEmail = async ({
   executionNote: string
   terminalName: string
   requestId: string
-  chainName: string
+  chainId: number
   safeAddress: string
 }) => {
+  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     proposalExecutedBy,
     proposalTitle,
@@ -147,16 +144,17 @@ export const sendNewCommentEmail = async ({
   commentCreatedBy,
   commentBody,
   requestId,
-  chainName,
+  chainId,
   safeAddress,
 }: {
   recipients: string[]
   commentCreatedBy: string
   commentBody: string
   requestId: string
-  chainName: string
+  chainId: number
   safeAddress: string
 }) => {
+  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     commentCreatedBy,
     commentBody,
@@ -170,21 +168,32 @@ export const sendNewProposalEmail = async ({
   recipients,
   proposalCreatedBy,
   proposalTitle,
-  terminalName,
   requestId,
-  chainName,
+  chainId,
   safeAddress,
 }: {
   recipients: string[]
   proposalCreatedBy: string
   proposalTitle: string
-  terminalName: string
   requestId: string
-  chainName: string
+  chainId: number
   safeAddress: string
 }) => {
+  const chainName = chainIdToChainName[chainId]
+
+  let terminalName = ""
+  try {
+    let terminal = (await getTerminalByChainIdAndAddress(
+      chainId,
+      safeAddress,
+    )) as Terminal
+    terminalName = terminal.data.name
+  } catch (err) {
+    console.log("Error getting terminal", err)
+  }
+
   const dynamicTemplateData = {
-    proposalCreatedBy,
+    proposalCreatedBy: truncateString(proposalCreatedBy, 6),
     proposalTitle,
     terminalName,
     buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
