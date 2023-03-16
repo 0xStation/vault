@@ -60,17 +60,17 @@ function Page() {
         className="h-screen bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${LandingBackgroundImage.src})` }}
       >
-        <main className="absolute top-0 right-0 z-10 mx-5 mt-20 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
+        <main className="absolute top-0 right-0 z-10 mx-5 mt-16 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
           <StationLogo size={isMobile ? "mobileLanding" : "landing"} />
-          <p className="mt-4 mb-16 text-base lg:my-0 lg:text-2xl ">
+          <p className="mt-4 mb-10 text-sm md:text-base lg:my-0 lg:text-2xl ">
             Group wallet for your collective to raise funds, build cool shit,
             manage spend, and split revenue.
           </p>
-          <div className="mx-auto block h-auto max-w-full lg:hidden">
+          <div className="mx-auto block h-auto max-w-[80%] lg:hidden">
             <Image src={LandingImage} alt="Landing image" />
           </div>
 
-          <div className="mt-11 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
+          <div className="mt-8 mb-10 space-y-2 px-5 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
             <Button
               size={isMobile ? "base" : "xl"}
               variant="primary"

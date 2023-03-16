@@ -130,7 +130,7 @@ export const TerminalCreationOptionsView = ({
             </SelectorCard>
             <hr className="text-gray-90" />
             <p className="mt-6 mb-3 text-base font-bold">
-              Select to use an existing safe:{" "}
+              Select to use an existing safe:
             </p>
             <div className="mb-3">
               {isLoading ? (
