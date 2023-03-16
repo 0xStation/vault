@@ -17,6 +17,7 @@ export const buttonStyles = cva("relative rounded text-center", {
     },
     fullWidth: {
       true: "w-full",
+      false: "w-fit",
     },
     disabled: {
       true: "cursor-not-allowed",

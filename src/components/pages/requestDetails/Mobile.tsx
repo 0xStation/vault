@@ -45,8 +45,11 @@ const RequestDetailsMobile = () => {
           {/* empty span to keep number centered */}
           <span></span>
         </div>
+        <RequestDetailsContent
+          request={request}
+          mutateRequest={mutateRequest}
+        />
       </div>
-      <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
     </>
   )
 }
