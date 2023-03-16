@@ -27,7 +27,10 @@ const EditTerminalContent = () => {
     message: "You’ll be directed to confirm. This action does not cost gas.",
   })
 
-  const { terminal } = useTerminalByChainIdAndSafeAddress(address, chainId)
+  const { terminal, mutate } = useTerminalByChainIdAndSafeAddress(
+    address,
+    chainId,
+  )
 
   const { register, handleSubmit, formState, setError, clearErrors } = useForm({
     defaultValues: async () =>
@@ -41,9 +44,15 @@ const EditTerminalContent = () => {
   const { updateTerminal } = useUpdateTerminal(address, chainId)
 
   const onSubmit = async (data: any) => {
-    // this is mostly just theatre because we aren't actually doing anything with the signature?
     await signMessage(formatUpdateTerminalValues(data))
-    await updateTerminal(data)
+    await updateTerminal({
+      ...data,
+      safeAddress: terminal?.safeAddress,
+      chainId: terminal?.chainId,
+      nonce: terminal?.data.nonce,
+      safeTxnHash: terminal?.data.safeTxnHash,
+    })
+    mutate()
     router.back()
   }
 
