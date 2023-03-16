@@ -307,7 +307,7 @@ export const TerminalActivationView = ({
       setTxnHash(executedTransaction?.hash)
     } catch (err) {
       console.error("error executing transaction")
-      setError("Failed to execute transaction")
+      setError("Failed to execute transaction.")
       setExecuteLoading(false)
       // TODO: toasty toast
     }
