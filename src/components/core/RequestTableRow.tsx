@@ -120,8 +120,8 @@ const RequestTableRow = ({
             </span>
           </div>
         </td>
-        <td className="pr-6">
-          <div className="w-10 text-right text-sm text-gray-40">
+        <td>
+          <div className="w-16 text-right text-sm text-gray-40">
             {timeSince(request.createdAt)}
           </div>
         </td>
