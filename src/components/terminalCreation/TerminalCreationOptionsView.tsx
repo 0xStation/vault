@@ -1,4 +1,5 @@
 import { SUPPORTED_CHAINS } from "lib/constants"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -93,9 +94,13 @@ export const TerminalCreationOptionsView = ({
       />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
         <h2 className="font-bold">New Project</h2>
-        <p className="mb-7 mt-3 text-gray">
-          Use an existing Safe, or create Project with a new address.
-        </p>
+        <p className="mb-7 mt-3 text-white">
+          Use an existing Safe, or create Project with a new Safe.
+        </p>{" "}
+        <span className="mb-7 mt-3 text-gray-50">
+          {" "}
+          What is a <Link href="https://safe.global/">Safe</Link>?
+        </span>
         <SelectWithLabel
           label="Chain*"
           name="chainId"

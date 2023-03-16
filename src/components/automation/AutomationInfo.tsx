@@ -64,7 +64,7 @@ export const AutomationInfo = () => {
             <div className="space-y-3">
               <LabelCard
                 className="mt-3 w-full"
-                label={"Total balance value"}
+                label={"Total balance"}
                 description={`$${automation?.unclaimedBalances
                   ?.reduce((acc, balance) => acc + balance.usdAmount, 0)
                   .toFixed(2)}`}

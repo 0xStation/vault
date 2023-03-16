@@ -28,7 +28,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
     <TabsContent value={TerminalAssetsTab.CURRENT}>
       <section className="mt-6 px-4">
         <LabelCard
-          label="Total balance value"
+          label="Total balance"
           description={`$${totalAssetValue
             .toFixed(2)
             .toString()

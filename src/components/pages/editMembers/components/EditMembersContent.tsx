@@ -250,12 +250,12 @@ export const EditMembersContent = () => {
       ) {
         setFormMessage({
           isError: true,
-          message: "Signature was rejected.",
+          message: "Signature was rejected. Please try again.",
         })
       } else {
         setFormMessage({
           isError: true,
-          message: "Something went wrong.",
+          message: "Something went wrong. Please try again.",
         })
       }
       // TODO: show toasty toast
@@ -479,7 +479,7 @@ export const EditMembersContent = () => {
               disabled={isSubmitting}
               loading={isSubmitting}
             >
-              Edit
+              Propose changes
             </Button>
             <p
               className={`mt-1 text-sm  ${

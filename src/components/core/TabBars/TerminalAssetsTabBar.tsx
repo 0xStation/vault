@@ -11,8 +11,8 @@ export const TerminalAssetsTabBar = ({
   children: React.ReactNode
 }) => {
   const options = [
-    { value: TerminalAssetsTab.CURRENT, label: "Current" },
-    { value: TerminalAssetsTab.HISTORY, label: "History" },
+    { value: TerminalAssetsTab.CURRENT, label: "Balance" },
+    { value: TerminalAssetsTab.HISTORY, label: "Activity" },
   ]
 
   return (

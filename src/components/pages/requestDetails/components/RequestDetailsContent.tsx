@@ -114,7 +114,7 @@ const RequestDetailsContent = ({
           })}
         </section>
         <section className="p-4">
-          <h3 className="mb-4">Timeline</h3>
+          <h3 className="mb-4">Activity</h3>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem

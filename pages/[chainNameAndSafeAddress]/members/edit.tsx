@@ -244,12 +244,12 @@ export const EditMembersPage = () => {
       ) {
         setFormMessage({
           isError: true,
-          message: "Signature was rejected.",
+          message: "Signature was rejected. Please try again.",
         })
       } else {
         setFormMessage({
           isError: true,
-          message: "Something went wrong.",
+          message: "Something went wrong. Please try again.",
         })
       }
       // TODO: show toasty toast

@@ -16,7 +16,7 @@ export const AutomationTabBar = ({
     { value: AutomationTab.INFO, label: "Info" },
     {
       value: AutomationTab.HISTORY,
-      label: "History",
+      label: "Activity",
     },
   ]
 
