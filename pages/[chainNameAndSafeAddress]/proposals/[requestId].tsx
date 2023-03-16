@@ -44,4 +44,26 @@ const TerminalRequestIdPage = () => {
   )
 }
 
+export async function getServerSideProps(context: any) {
+  const { requestId, chainNameAndSafeAddress } = context.query
+  const userAgent = context.req.headers["user-agent"]
+  const isMobile = Boolean(
+    userAgent.match(
+      /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i,
+    ),
+  )
+
+  if (!isMobile) {
+    return {
+      redirect: {
+        destination: `/${chainNameAndSafeAddress}/proposals?requestId=${requestId}`,
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
+
 export default TerminalRequestIdPage
