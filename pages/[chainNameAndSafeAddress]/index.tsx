@@ -102,7 +102,7 @@ const MobileTerminalIndexPage = () => {
     <>
       <AccountNavBar />
       <section className="mt-6 px-4">
-        <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+        <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
           <span className="px-1 text-sm">·</span>

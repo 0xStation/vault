@@ -49,10 +49,13 @@ export const AutomationListItem = ({
                 <div className="space-y-2 border-b border-gray-80 py-3 px-4 hover:bg-gray-90 sm:rounded sm:border-x sm:border-t">
                   <div className="flex flex-row items-center space-x-1">
                     <span className="h-2 w-2 rounded-full bg-green"></span>
-                    <span className="text-base text-gray">Live</span>
+                    {/* TODO: Unhide this after we implement edit automation */}
+                    {/* <span className="text-base text-gray">Live</span> */}
                   </div>
                   <div className="mt-2 mb-2 flex flex-row items-center justify-between">
-                    <span>{automation.data.name}</span>
+                    <span className="text-lg font-bold">
+                      {automation.data.name}
+                    </span>
                     <span className="text-sm text-gray">
                       {timeSince(automation.createdAt)}
                     </span>
