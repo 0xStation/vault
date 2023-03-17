@@ -51,7 +51,7 @@ export const AutomationListItem = ({
                     <span className="h-2 w-2 rounded-full bg-green"></span>
                     <span className="text-base text-gray">Live</span>
                   </div>
-                  <div className="flex flex-row items-center justify-between">
+                  <div className="mt-2 mb-2 flex flex-row items-center justify-between">
                     <span>{automation.data.name}</span>
                     <span className="text-sm text-gray">
                       {timeSince(automation.createdAt)}
