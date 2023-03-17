@@ -1,6 +1,6 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
-import { demo, updateUserEmail } from "lib/dynamic"
+import { updateUserEmail } from "lib/dynamic"
 import { isValidEmail } from "lib/validations"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -41,7 +41,9 @@ const EmailNotificationForm = ({
   const onError = async (data: any) => {}
 
   const testEmails = async () => {
-    demo()
+    fetch("/api/v1/demo")
+      .then((res) => res.json())
+      .then((res) => console.log(res))
     // const emails = await getEmails([
     //   "0x65A3870F48B5237f27f674Ec42eA1E017E111D63",
     // ])
