@@ -6,7 +6,7 @@ export const buttonStyles = cva("relative rounded text-center", {
     variant: {
       primary: "text-black border bg-violet",
       secondary: "border",
-      unemphasized: "text-violet hover:opacity-90",
+      unemphasized: "text-violet hover:text-violet-80",
       tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",
     },
     size: {
@@ -27,7 +27,7 @@ export const buttonStyles = cva("relative rounded text-center", {
     {
       variant: "primary",
       disabled: false,
-      class: "hover:bg-violet/80",
+      class: "hover:bg-violet-80",
     },
     {
       variant: "primary",
