@@ -1,4 +1,4 @@
-import { EmptyState } from "components/emptyStates/EmptyState"
+import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
 import {
   TransferDirection,
   TransferItem,
@@ -78,12 +78,17 @@ export const AssetTransfersTab = ({
   const { data } = useAssetTransfers(address, chainId, direction)
 
   if (!data?.length) {
-    const title = "Add tokens"
+    const title = "Deposit tokens"
     const subtitle =
       "Transfer tokens to the Project address or share the address to receive tokens."
     return (
       <div className="flex h-full px-4 pb-4">
-        <EmptyState title={title} subtitle={subtitle} />
+        <QrCodeEmptyState
+          title={title}
+          subtitle={subtitle}
+          address={address}
+          qrCodeSize={96}
+        />
       </div>
     )
   }

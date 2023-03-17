@@ -8,10 +8,12 @@ export const EmptyState = ({
   children?: any
 }) => {
   return (
-    <div className="flex w-full grow flex-col items-center justify-center rounded-xl bg-gray-90 px-[13%] text-center">
-      <div className="text-xl font-bold">{title}</div>
-      <div className="mt-2 text-base">{subtitle}</div>
-      {children}
+    <div className="flex w-full items-center justify-center rounded-xl bg-gray-90 text-center">
+      <div className="px-auto flex max-w-[350px] flex-col justify-center text-center">
+        <div className="text-xl font-bold">{title}</div>
+        <div className="mt-2 mb-6 text-base">{subtitle}</div>
+        {children}
+      </div>
     </div>
   )
 }
