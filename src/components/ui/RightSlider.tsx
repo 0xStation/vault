@@ -29,7 +29,7 @@ export default function RightSlider({
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-[580px]">
                   <div className="flex h-full flex-col overflow-y-auto border-l border-l-gray-90 bg-black pt-6 pb-4 shadow-xl">
-                    <div className="px-4">
+                    <div className="px-0">
                       <div className="flex items-start justify-end">
                         <button
                           type="button"
