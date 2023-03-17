@@ -162,17 +162,19 @@ export const ExecuteWrapper = ({
   const FormContent = () => {
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-6 pb-[70px]">
-          <div className="text-2xl font-bold">{title}</div>
+        <div className="space-y-4 pb-[70px]">
+          <div className="text-xl font-bold">{title}</div>
           <div>{subtitle}</div>
-          {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
-            <TokenTransferRequestContent request={request} />
-          )}
-          {request?.variant === RequestVariantType.SIGNER_QUORUM && (
-            <SignerQuorumRequestContent request={request} />
-          )}
+          <div className="mb-6 space-y-2">
+            {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
+              <TokenTransferRequestContent request={request} />
+            )}
+            {request?.variant === RequestVariantType.SIGNER_QUORUM && (
+              <SignerQuorumRequestContent request={request} />
+            )}
+          </div>
           <TextareaWithLabel
-            label="Note (optional)"
+            label="Note"
             register={register}
             placeholder="Add a note"
             name="comment"
@@ -183,9 +185,9 @@ export const ExecuteWrapper = ({
           <Button type="submit" fullWidth={true} loading={loading}>
             Execute
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
           <p className={"mt-1 text-xs text-gray-50"}>
-            You’ll be directed to confirm. This action is on-chain and cost gas.
+            This action will be recorded on-chain. You’ll be directed to
+            execute.
           </p>
         </div>
       </form>
