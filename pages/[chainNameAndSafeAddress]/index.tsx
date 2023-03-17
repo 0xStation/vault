@@ -137,8 +137,8 @@ const MobileTerminalIndexPage = () => {
               <Link href={option.href} className="block" key={`link-${idx}`}>
                 <div className="flex cursor-pointer flex-row items-center justify-between p-4 hover:bg-gray-90">
                   <div className="flex flex-col">
-                    <span>{option.label}</span>
-                    <span className="text-sm text-gray">
+                    <span className="text-lg">{option.label}</span>
+                    <span className="text-sm text-gray-50">
                       {option.description}
                     </span>
                   </div>
