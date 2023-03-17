@@ -21,7 +21,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-gray-80`}
+      className={`${className} h-fit p-3 hover:bg-gray-80`}
     >
       <PencilIcon className="w-4" />
     </button>
