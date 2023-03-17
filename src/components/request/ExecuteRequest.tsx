@@ -182,15 +182,16 @@ export const ExecuteWrapper = ({
             name="comment"
             errors={errors}
           />
-        </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full px-5 text-center">
-          <Button type="submit" fullWidth={true} loading={loading}>
-            Execute
-          </Button>
-          <p className={"mt-1 text-xs text-gray-50"}>
-            This action will be recorded on-chain. You’ll be directed to
-            execute.
-          </p>
+
+          <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full px-5 text-center">
+            <Button type="submit" fullWidth={true} loading={loading}>
+              Execute
+            </Button>
+            <p className={"mt-1 text-xs text-gray-50"}>
+              This action will be recorded on-chain. You’ll be directed to
+              execute.
+            </p>
+          </div>
         </div>
       </form>
     )
