@@ -1,6 +1,7 @@
 import { RequestVariantType } from "@prisma/client"
 import { Avatar } from "@ui/Avatar"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import { cn, timeSince } from "../../lib/utils"
 import { RequestFrob } from "../../models/request/types"
 import { isExecuted } from "../../models/request/utils"
@@ -33,18 +34,19 @@ const RequestTableRow = ({
     payload: any
   }) => void
 }) => {
+  const isSigner = usePermissionsStore((state) => state.isSigner)
   return (
     <>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <tr
         className={cn(
-          "h-14 cursor-pointer border-b border-gray-80 hover:bg-gray-90",
+          "h-14 cursor-pointer border-b border-gray-80 px-4 hover:bg-gray-90",
           disabled ? "disabled:opacity-30" : "hover:bg-gray-90",
         )}
         onClick={() => triggerDetails(request)}
       >
-        {onCheckboxChange && (
-          <td className="px-4">
+        <td className={`${isSigner ? "px-4" : "px-2"}`}>
+          {isSigner && onCheckboxChange && (
             <Checkbox
               onChange={onCheckboxChange}
               name={request.id}
@@ -52,8 +54,8 @@ const RequestTableRow = ({
               className={isExecuted(request) ? "invisible" : ""}
               checked={checked}
             />
-          </td>
-        )}
+          )}
+        </td>
         <td className="text-left text-sm text-gray-40">#{request.number}</td>
         <td className="px-3">
           <RequestStatusIcon status={request.status} />

@@ -8,6 +8,7 @@ import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
 import { StationLogo } from "../../components/icons"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
@@ -65,6 +66,7 @@ const DesktopTerminalLayout = ({
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   const { terminal, mutate: mutateGetTerminal } = useGetTerminal({
     chainId: chainId as number,
@@ -144,6 +146,7 @@ const DesktopTerminalLayout = ({
                     <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-gray-90">
                       <span>{option.label}</span>
                       {option.label === "Proposals" &&
+                        isSigner &&
                         requestsNeedingAttention && (
                           <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-base text-orange">
                             {requestsNeedingAttention.length}

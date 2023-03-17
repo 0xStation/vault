@@ -3,7 +3,7 @@ import { Button } from "@ui/Button"
 import { SAFE_URL } from "lib/constants"
 import { prepareExecuteSafeTransaction } from "lib/encodings/safe/exec-transaction"
 import { EIP712Message, getHash } from "lib/signatures/utils"
-import { useRouter } from "next/router"
+import { NextRouter, useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { useGetSafeNonce } from "../../../hooks/safe/useGetSafeNonce"
@@ -61,7 +61,7 @@ const AwaitingExecutionview = ({
   txnStatus: string
   handleExecute: () => void
   executeLoading: boolean
-  router: any
+  router: NextRouter
   activeUserAddress: string
   error?: string
 }) => {
@@ -124,7 +124,7 @@ const AwaitingConfirmationsView = ({
   handleApprove: () => void
   approveLoading: boolean
   queuedTransaction: any | null
-  router: any
+  router: NextRouter
   activeUserAddress: string
   safeMetadata: SafeMetadata
   error?: string
@@ -189,6 +189,33 @@ const AwaitingConfirmationsView = ({
   )
 }
 
+const UnAuthedView = ({
+  router,
+  activeUserAddress,
+}: {
+  router: any
+  activeUserAddress: string
+}) => {
+  return (
+    <>
+      <h2 className="mb-6">This Project has not been activated.</h2>
+      {activeUserAddress ? (
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
+        >
+          Go to profile
+        </Button>
+      ) : (
+        <Button variant="primary" size="lg" onClick={() => router.push("/")}>
+          Go back
+        </Button>
+      )}
+    </>
+  )
+}
+
 export const TerminalActivationView = ({
   isOpen,
   setIsOpen,
@@ -225,6 +252,9 @@ export const TerminalActivationView = ({
         ? availableNonce
         : terminal?.data?.nonce,
   })
+  const isSigner = safeMetadata?.signers?.includes(
+    activeUser?.address as string,
+  )
 
   // This is the queued txn that is used to enable the module.
   // It might be `null` if the transaction hasn't been queued yet.
@@ -414,37 +444,44 @@ export const TerminalActivationView = ({
   return (
     <Overlay setIsOpen={setIsOpen} isOpen={isOpen}>
       <div className="mx-10 flex h-full flex-col items-center justify-center text-white">
-        {getTxnStatus({
-          executionNonce: safeMetadata?.nonce,
-          terminalNonce: terminal?.data?.nonce,
-        }) === "CREATE_TRANSACTION" || awaitingConfirmations ? (
-          <AwaitingConfirmationsView
-            txnStatus={getTxnStatus({
-              executionNonce: safeMetadata?.nonce,
-              terminalNonce: terminal?.data?.nonce,
-            })}
-            handleApprove={handleApprove}
-            approveLoading={approveLoading}
-            queuedTransaction={queuedTransaction}
-            router={router}
-            activeUserAddress={activeUser?.address as string}
-            safeMetadata={safeMetadata as SafeMetadata}
-            error={error}
-          />
-        ) : (
-          awaitingExecution && (
-            <AwaitingExecutionview
+        {isSigner ? (
+          getTxnStatus({
+            executionNonce: safeMetadata?.nonce,
+            terminalNonce: terminal?.data?.nonce,
+          }) === "CREATE_TRANSACTION" || awaitingConfirmations ? (
+            <AwaitingConfirmationsView
               txnStatus={getTxnStatus({
                 executionNonce: safeMetadata?.nonce,
                 terminalNonce: terminal?.data?.nonce,
               })}
-              handleExecute={handleExecute}
-              executeLoading={executeLoading}
+              handleApprove={handleApprove}
+              approveLoading={approveLoading}
+              queuedTransaction={queuedTransaction}
               router={router}
               activeUserAddress={activeUser?.address as string}
+              safeMetadata={safeMetadata as SafeMetadata}
               error={error}
             />
+          ) : (
+            awaitingExecution && (
+              <AwaitingExecutionview
+                txnStatus={getTxnStatus({
+                  executionNonce: safeMetadata?.nonce,
+                  terminalNonce: terminal?.data?.nonce,
+                })}
+                handleExecute={handleExecute}
+                executeLoading={executeLoading}
+                router={router}
+                activeUserAddress={activeUser?.address as string}
+                error={error}
+              />
+            )
           )
+        ) : (
+          <UnAuthedView
+            router={router}
+            activeUserAddress={activeUser?.address as string}
+          />
         )}
       </div>
     </Overlay>

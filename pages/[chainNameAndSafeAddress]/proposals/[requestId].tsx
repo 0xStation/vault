@@ -16,6 +16,11 @@ const TerminalRequestIdPage = () => {
   )
   const { terminal, mutate: mutateGetTerminal } =
     useTerminalByChainIdAndSafeAddress(address as string, chainId as number)
+  // const isSigner = useIsSigner({
+  //   address: address as string,
+  //   chainId: chainId as number,
+  // })
+  // console.log("isSigner", isSigner)
 
   const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
     address: terminal?.safeAddress as string,
