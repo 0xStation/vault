@@ -159,7 +159,7 @@ const BatchExecuteWrapper = ({
       <div className="overflow-auto pb-[110px]">
         <div className="mb-4 space-y-4">
           <div className="text-xl font-bold">
-            Execute ({`${approve ? "approve" : "reject"}`}){" "}
+            Execute {`${approve ? "to approve" : "to reject"}`}{" "}
             {requestsToApprove.length} Proposals
           </div>
           <div>This action is on-chain and will not be reversible.</div>
