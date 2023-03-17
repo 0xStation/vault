@@ -20,7 +20,7 @@ const DesktopProfileLayout = ({
     <>
       <div className="flex h-screen flex-row">
         <div className="relative h-full w-[300px]">
-          <div className="border-r border-gray-90">
+          <div className="h-[90%] border-r border-gray-90">
             <section className="flex flex-row items-center justify-between p-4">
               <StationLogo size="lg" />
             </section>
