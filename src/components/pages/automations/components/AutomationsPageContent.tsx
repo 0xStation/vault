@@ -16,7 +16,7 @@ const AutomationsPageContent = () => {
   const noAutomations = !isLoading && automations?.length === 0
 
   return (
-    <div className="h-[calc(100%-84px)]">
+    <div className="mt-6 h-[calc(100%-84px)] px-4">
       <div
         className={cn(
           "mt-4 flex flex-row items-center justify-between px-4 pb-4 sm:px-0",
