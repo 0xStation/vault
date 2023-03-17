@@ -40,7 +40,7 @@ const RequestDetailsContent = ({
     <>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <div className="divide-y divide-gray-90 pb-32">
-        <section className="space-y-6 p-6">
+        <section className="space-y-6 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <RequestStatusIcon status={request.status} />
@@ -66,21 +66,21 @@ const RequestDetailsContent = ({
             )}
           </div>
         </section>
-        <section className="p-6">
+        <section className="p-4">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="font-regular">Votes</h2>
             <span className="text-sm text-gray-50">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>
-          <h4 className="mt-2 mb-1 text-sm text-gray-50">
+          <h4 className="mt-4 mb-1 text-sm text-gray-50">
             Approved ({request?.approveActivities?.length})
           </h4>
           {request?.approveActivities?.map((activity, idx) => {
             return (
               <AvatarAddress
                 key={`approval-Account-${idx}`}
-                className="mt-1"
+                className="mt-2"
                 size="sm"
                 address={activity.address}
               />
@@ -94,7 +94,7 @@ const RequestDetailsContent = ({
             return (
               <AvatarAddress
                 key={`rejection-Account-${idx}`}
-                className="mt-1"
+                className="mt-2"
                 size="sm"
                 address={activity.address}
               />
@@ -107,16 +107,16 @@ const RequestDetailsContent = ({
             return (
               <AvatarAddress
                 key={`waiting-signature-from-${idx}`}
-                className="mt-1"
+                className="mt-2"
                 size="sm"
                 address={address}
               />
             )
           })}
         </section>
-        <section className="p-6">
+        <section className="p-4">
           <h2 className="font-regular mb-6">Activity</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
                 key={`activity-${idx}`}
