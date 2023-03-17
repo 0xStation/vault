@@ -1,5 +1,6 @@
 import { TabsContent } from "@ui/Tabs"
 import { useRouter } from "next/router"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import RequestListByFilterAndTab from "../core/RequestListByFilterAndTab"
 import TerminalRequestStatusFilterBar, {
   TerminalRequestStatusFilter,
@@ -47,17 +48,27 @@ const RequestContentForFilterAndTab = ({
 }
 
 const RequestTabContent = ({ tab }: { tab: TerminalRequestTypeTab }) => {
+  const isSigner = usePermissionsStore((state) => state.isSigner)
   return (
     <TabsContent value={tab}>
       <TerminalRequestStatusFilterBar>
-        <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.NEEDS_ACTION}
-          tab={tab}
-        />
-        <RequestContentForFilterAndTab
-          filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
-          tab={tab}
-        />
+        {isSigner ? (
+          <>
+            <RequestContentForFilterAndTab
+              filter={TerminalRequestStatusFilter.NEEDS_ACTION}
+              tab={tab}
+            />
+            <RequestContentForFilterAndTab
+              filter={TerminalRequestStatusFilter.AWAITING_OTHERS}
+              tab={tab}
+            />
+          </>
+        ) : (
+          <RequestContentForFilterAndTab
+            filter={TerminalRequestStatusFilter.OPEN}
+            tab={tab}
+          />
+        )}
         <RequestContentForFilterAndTab
           filter={TerminalRequestStatusFilter.CLOSED}
           tab={tab}

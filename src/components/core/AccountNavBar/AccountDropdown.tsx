@@ -12,7 +12,6 @@ import RightSlider from "@ui/RightSlider"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useAccount } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
 import {
   addQueryParam,
@@ -30,13 +29,13 @@ export const AccountNavBar = () => {
       removeQueryParam(router, "createTerminalSliderOpen")
     }
   }
-  const { address } = useAccount()
   const setActiveUser = useStore((state) => state.setActiveUser)
   const {
     handleLogOut,
     setShowDynamicUserProfile,
     isAuthenticated,
     setShowAuthFlow,
+    primaryWallet,
   } = useDynamicContext()
 
   useEffect(() => {
@@ -96,20 +95,23 @@ export const AccountNavBar = () => {
               </Breakpoint>
             </div>
             <DropdownMenuTrigger>
-              <Avatar size="base" address={address as string} />
+              <Avatar size="base" address={primaryWallet?.address as string} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-2">
               <DropdownMenuItem>
                 <button onClick={() => setShowDynamicUserProfile(true)}>
                   <AvatarAddress
-                    address={address as string}
+                    address={primaryWallet?.address as string}
                     size="sm"
                     interactive={false}
                   />
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href={`/u/${address}/profile`} className="w-full">
+                <Link
+                  href={`/u/${primaryWallet?.address as string}/profile`}
+                  className="w-full"
+                >
                   Profile
                 </Link>
               </DropdownMenuItem>
