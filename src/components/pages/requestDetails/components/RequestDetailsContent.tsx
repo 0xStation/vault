@@ -40,7 +40,7 @@ const RequestDetailsContent = ({
     <>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <div className="divide-y divide-gray-90 pb-32">
-        <section className="space-y-6 p-6">
+        <section className="space-y-6 p-4">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <RequestStatusIcon status={request.status} />
@@ -66,7 +66,7 @@ const RequestDetailsContent = ({
             )}
           </div>
         </section>
-        <section className="p-6">
+        <section className="p-4">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="font-regular">Votes</h2>
             <span className="text-sm text-gray-50">
@@ -80,7 +80,7 @@ const RequestDetailsContent = ({
             return (
               <AvatarAddress
                 key={`approval-Account-${idx}`}
-                className="mt-1"
+                className="mt-0"
                 size="sm"
                 address={activity.address}
               />
@@ -114,9 +114,9 @@ const RequestDetailsContent = ({
             )
           })}
         </section>
-        <section className="p-6">
+        <section className="p-4">
           <h2 className="font-regular mb-6">Activity</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
                 key={`activity-${idx}`}

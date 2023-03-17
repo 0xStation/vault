@@ -18,19 +18,19 @@ export const TokenTransferRequestContent = ({
 
   return (
     <>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-center justify-between">
         <span className="text-gray">Action</span>
         <span>Token transfer</span>
       </div>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-center justify-between">
         <span className="text-gray">Recipient(s)</span>
         <AvatarAddress
-          className="mt-1"
+          className="mt-0"
           size="sm"
           address={tokenTransferMeta.recipient}
         />
       </div>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-center justify-between">
         <span className="text-gray">Tokens</span>
         <div
           className="flex cursor-pointer flex-row items-center space-x-2"
