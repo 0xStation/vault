@@ -39,8 +39,8 @@ const RequestDetailsContent = ({
   return (
     <>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
-      <div className="divide-y divide-gray-80 pb-32">
-        <section className="space-y-3 p-4">
+      <div className="divide-y divide-gray-90 pb-32">
+        <section className="space-y-6 p-6">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-3">
               <RequestStatusIcon status={request.status} />
@@ -57,22 +57,23 @@ const RequestDetailsContent = ({
           <h3 className="max-w-[30ch] overflow-hidden text-ellipsis whitespace-nowrap">
             {request?.data?.note}
           </h3>
-
-          {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
-            <TokenTransferRequestContent request={request} />
-          )}
-          {request?.variant === RequestVariantType.SIGNER_QUORUM && (
-            <SignerQuorumRequestContent request={request} />
-          )}
+          <div className="space-y-2">
+            {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
+              <TokenTransferRequestContent request={request} />
+            )}
+            {request?.variant === RequestVariantType.SIGNER_QUORUM && (
+              <SignerQuorumRequestContent request={request} />
+            )}
+          </div>
         </section>
-        <section className="p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <h3>Votes</h3>
-            <span className="rounded-full bg-gray-90 px-2 py-1 text-base">
+        <section className="p-6">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-regular">Votes</h2>
+            <span className="text-sm text-gray-50">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
           </div>
-          <h4 className="mt-2 text-sm font-bold">
+          <h4 className="mt-2 mb-1 text-sm text-gray-50">
             Approved ({request?.approveActivities?.length})
           </h4>
           {request?.approveActivities?.map((activity, idx) => {
@@ -86,7 +87,7 @@ const RequestDetailsContent = ({
             )
           })}
 
-          <h4 className="mt-3 text-sm font-bold">
+          <h4 className="mt-4 text-sm text-gray-50">
             Rejected ({request?.rejectActivities?.length})
           </h4>
           {request?.rejectActivities?.map((activity, idx) => {
@@ -99,7 +100,7 @@ const RequestDetailsContent = ({
               />
             )
           })}
-          <h4 className="mt-3 text-sm font-bold">
+          <h4 className="mt-4 text-sm text-gray-50">
             Has not voted ({request?.addressesThatHaveNotSigned?.length})
           </h4>
           {request?.addressesThatHaveNotSigned?.map((address, idx) => {
@@ -113,8 +114,8 @@ const RequestDetailsContent = ({
             )
           })}
         </section>
-        <section className="p-4">
-          <h3 className="mb-4">Activity</h3>
+        <section className="p-6">
+          <h2 className="font-regular mb-6">Activity</h2>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem

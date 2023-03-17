@@ -130,7 +130,7 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
                         return (
                           <>
                             <div
-                              className="mt-6 w-full border-b border-gray-80 pb-2"
+                              className="mt-6 w-full border-b border-gray-90 pb-2"
                               key={`bundle-${idx}`}
                             >
                               <RequestTerminalLink

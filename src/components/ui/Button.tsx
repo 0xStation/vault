@@ -6,12 +6,12 @@ export const buttonStyles = cva("relative rounded text-center", {
     variant: {
       primary: "text-black border bg-violet",
       secondary: "border",
-      unemphasized: "text-violet hover:opacity-90",
+      unemphasized: "text-violet hover:text-violet-80",
       tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",
     },
     size: {
-      sm: "px-3 py-1 text-sm font-bold",
-      base: "font-bold px-3 py-1 text-base",
+      sm: "px-4 py-2 text-sm font-bold",
+      base: "font-bold px-5 py-2 text-base",
       lg: "font-bold px-5 py-2 text-base",
       xl: "px-16 py-3 font-bold text-xl",
     },
@@ -27,7 +27,7 @@ export const buttonStyles = cva("relative rounded text-center", {
     {
       variant: "primary",
       disabled: false,
-      class: "hover:bg-violet/80",
+      class: "hover:bg-violet-80",
     },
     {
       variant: "primary",

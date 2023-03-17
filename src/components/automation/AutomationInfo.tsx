@@ -24,16 +24,17 @@ export const AutomationInfo = () => {
   return (
     <TabsContent value={AutomationTab.INFO}>
       <div className="mt-6 px-4">
-        <div className="flex flex-row items-center space-x-1">
+        {/* TODO: Unhide this once the Automation editing is done and Live is not the only status */}
+        {/* <div className="flex flex-row items-center space-x-1">
           <span className="h-2 w-2 rounded-full bg-green"></span>
           <span className="text-base text-gray">Live</span>
-        </div>
-        <h2 className="mt-2">{automation?.data.name}</h2>
+        </div> */}
+        <h1 className="mt-4">{automation?.data.name}</h1>
       </div>
       {automation?.variant === AutomationVariant.REV_SHARE && (
         <>
           <div className="px-4">
-            <div className="mt-1 flex flex-row items-center space-x-1">
+            <div className="mt-1 flex flex-row items-center space-x-1 text-gray-50">
               <Network chainId={chainId} />
               <span className="px-1 text-sm">·</span>
               <span className="text-sm">
@@ -47,7 +48,7 @@ export const AutomationInfo = () => {
             </div>
             <div className="mt-4">
               {automation?.splits!.map((split) => (
-                <div className="py-3" key={`split-${split.address}`}>
+                <div className="py-2" key={`split-${split.address}`}>
                   <div
                     className="flex flex-row items-center justify-between"
                     key={`split-${split.address}`}
@@ -59,9 +60,9 @@ export const AutomationInfo = () => {
               ))}
             </div>
           </div>
-          <div className="mb-24 mt-4 border-t border-gray-80 px-4">
-            <h3 className="mt-4">Balance</h3>
-            <div className="space-y-3">
+          <div className="mb-24 mt-4 border-t border-gray-90 px-4">
+            <h2 className="mt-6">Balance</h2>
+            <div className="space-y-4">
               <LabelCard
                 className="mt-3 w-full"
                 label={"Total balance"}

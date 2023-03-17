@@ -279,9 +279,8 @@ export const SendTokensContent = ({
                   <div className=" w-full rounded bg-gray-90 p-3 text-orange">
                     <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                     <p className="pt-3 text-center text-base">
-                      We apologize for the inconvenience, there was an error
-                      retrieving assets for your Project. Please refresh the
-                      page or try again later.
+                      There was an error retrieving assets for your Project.
+                      Please refresh the page or try again later.
                     </p>
                   </div>
                 ) : !tokens.length ? (
@@ -338,7 +337,7 @@ export const SendTokensContent = ({
                                     placeholder={
                                       tokens.length
                                         ? "Select one"
-                                        : "No tokens found."
+                                        : "No tokens found"
                                     }
                                   />
                                 </SelectTrigger>
@@ -450,7 +449,7 @@ export const SendTokensContent = ({
                                     (getErc20FieldTokenData(index) as any)
                                       ?.tokenValue
                                   }
-                                  . You can still create the request but will
+                                  . You can still create the proposal but will
                                   not be able to execute it unless the balance
                                   has been refilled.
                                 </p>

@@ -4,13 +4,13 @@ const TerminalDetailsPageContent = ({ terminal }: { terminal: Terminal }) => {
   return (
     <div>
       <section className="mt-6 px-4">
-        <h1 className="text-xl font-bold">About</h1>
-        <div className="mt-2 flex flex-row items-center space-x-1"></div>
+        <h1>About</h1>
+        <div className="mt-6 flex flex-row items-center space-x-1"></div>
         {terminal?.data?.url && (
           <a
             href={terminal?.data?.url}
             target="_blank"
-            className="mt-6 inline-block border-b border-dotted text-base hover:text-gray"
+            className="mt-6 inline-block text-base text-violet hover:text-violet-80"
             rel="noreferrer"
           >
             {terminal?.data?.url}

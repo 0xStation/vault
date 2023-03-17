@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import Layout from "../../terminalCreation/Layout"
-import SendTokensContent from "./components/RequestTokensContent"
+import RequestTokensContent from "./components/RequestTokensContent"
 
 const RequestTokensDesktop = () => {
   const router = useRouter()
@@ -10,7 +10,7 @@ const RequestTokensDesktop = () => {
       backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
       isCloseIcon={true}
     >
-      <SendTokensContent />
+      <RequestTokensContent />
     </Layout>
   )
 }

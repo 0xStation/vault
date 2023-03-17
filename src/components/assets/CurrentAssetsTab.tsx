@@ -28,7 +28,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
         <div className="flex h-[calc(100%+18px)] px-4 pb-4 pt-4">
           <EmptyState
             title="Add tokens"
-            subtitle="Transfer tokens to the Project address or share the address to receive and distribute tokens."
+            subtitle="Transfer tokens to the Project address or share the address to receive tokens."
           />
         </div>
       ) : (

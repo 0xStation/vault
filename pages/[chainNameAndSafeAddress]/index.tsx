@@ -9,7 +9,6 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
-import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import { ChevronRight } from "../../src/components/icons"
@@ -104,7 +103,7 @@ const MobileTerminalIndexPage = () => {
     <>
       <AccountNavBar />
       <section className="mt-6 px-4">
-        <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+        <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
           <span className="px-1 text-sm">·</span>
@@ -113,7 +112,8 @@ const MobileTerminalIndexPage = () => {
           </span>
           <CopyToClipboard text={terminal?.safeAddress} />
         </div>
-        <TerminalReadyToClaim />
+        {/* TODO: Add this back when Claim tokens for Project is done */}
+        {/* <TerminalReadyToClaim /> */}
       </section>
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">
@@ -139,8 +139,8 @@ const MobileTerminalIndexPage = () => {
               <Link href={option.href} className="block" key={`link-${idx}`}>
                 <div className="flex cursor-pointer flex-row items-center justify-between p-4 hover:bg-gray-90">
                   <div className="flex flex-col">
-                    <span>{option.label}</span>
-                    <span className="text-sm text-gray">
+                    <span className="text-lg">{option.label}</span>
+                    <span className="text-sm text-gray-50">
                       {option.description}
                     </span>
                   </div>

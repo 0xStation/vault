@@ -105,72 +105,73 @@ const DesktopTerminalLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className=" relative h-full w-[300px] border-r border-gray-80">
+        <div className=" relative h-full w-[300px]">
           <section className="flex flex-row items-center justify-between p-4">
             <StationLogo size="lg" />
           </section>
-          <section className="mt-4 rounded p-4">
-            <div className="rounded-t-xl bg-gray-100 p-4">
-              <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
-              <div className="mt-2 flex flex-row items-center space-x-1">
-                <Network chainId={terminal?.chainId} />
-                <span className="text-sm">
-                  · {truncateString(terminal?.safeAddress)}
-                </span>
-                <CopyToClipboard text={terminal?.safeAddress} />
+          <div className="h-[90%] border-r border-gray-90">
+            <section className="mt-4 rounded p-4">
+              <div className="rounded-t-xl bg-gray-100 p-4">
+                <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+                <div className="mt-2 flex flex-row items-center space-x-1">
+                  <Network chainId={terminal?.chainId} />
+                  <span className="text-sm">
+                    · {truncateString(terminal?.safeAddress)}
+                  </span>
+                  <CopyToClipboard text={terminal?.safeAddress} />
+                </div>
               </div>
-            </div>
-            <div className="rounded-b-xl bg-gray-90 p-4">
-              <h4 className="mb-1 text-sm text-gray">Total balance</h4>
-              <span>{`$${totalAssetValue
-                ?.toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
-              <h4 className="mb-1 mt-4 text-sm text-gray">Members</h4>
-              <span>{terminal?.signers?.length}</span>
-            </div>
-          </section>
-          <section className="mt-2">
-            {options(router).map((option, idx) => {
-              if (option.active) {
+              <div className="rounded-b-xl bg-gray-90 p-4">
+                <h4 className="mb-1 text-sm text-gray">Total balance</h4>
+                <span>{`$${totalAssetValue
+                  ?.toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
+                <h4 className="mb-1 mt-4 text-sm text-gray">Members</h4>
+                <span>{terminal?.signers?.length}</span>
+              </div>
+            </section>
+            <section className="mt-2">
+              {options(router).map((option, idx) => {
+                if (option.active) {
+                  return (
+                    <Link
+                      href={option.href}
+                      className={`block ${
+                        option.href ===
+                          decodeURIComponent(router.asPath.split("?")[0]) &&
+                        "bg-gray-100 font-bold"
+                      }`}
+                      key={`link-${idx}`}
+                    >
+                      <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-gray-90">
+                        <span>{option.label}</span>
+                        {option.label === "Proposals" &&
+                          requestsNeedingAttention && (
+                            <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-sm text-orange">
+                              {requestsNeedingAttention.length}
+                            </span>
+                          )}
+                      </div>
+                    </Link>
+                  )
+                }
                 return (
-                  <Link
-                    href={option.href}
-                    className={`block ${
-                      option.href ===
-                        decodeURIComponent(router.asPath.split("?")[0]) &&
-                      "bg-gray-100 font-bold"
-                    }`}
+                  <div
+                    className="flex flex-row items-center justify-between p-4 opacity-70"
                     key={`link-${idx}`}
                   >
-                    <div className="flex cursor-pointer flex-row items-center justify-between py-3 px-4 hover:bg-gray-90">
+                    <div className="flex flex-col">
                       <span>{option.label}</span>
-                      {option.label === "Proposals" &&
-                        isSigner &&
-                        requestsNeedingAttention && (
-                          <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-base text-orange">
-                            {requestsNeedingAttention.length}
-                          </span>
-                        )}
+                      <span className="text-sm text-gray">
+                        {option.description}
+                      </span>
                     </div>
-                  </Link>
-                )
-              }
-              return (
-                <div
-                  className="flex flex-row items-center justify-between p-4 opacity-70"
-                  key={`link-${idx}`}
-                >
-                  <div className="flex flex-col">
-                    <span>{option.label}</span>
-                    <span className="text-sm text-gray">
-                      {option.description}
-                    </span>
                   </div>
-                </div>
-              )
-            })}
-          </section>
+                )
+              })}
+            </section>
+          </div>
         </div>
         <div
           className={`flex grow flex-col overflow-y-auto ${

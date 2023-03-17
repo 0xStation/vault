@@ -26,7 +26,7 @@ export const PercentInput = ({
   errors: any
   registerOptions?: RegisterOptions
 }) => {
-  const requiredMessage = required ? { required: "Required." } : {}
+  const requiredMessage = required ? { required: "Required" } : {}
   return (
     <div className="mb-3 grid w-full items-center gap-1.5">
       <label className="text-base font-bold" htmlFor={name}>

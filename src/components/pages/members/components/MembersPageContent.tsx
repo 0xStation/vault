@@ -22,7 +22,7 @@ const EditButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} h-fit p-2 hover:bg-gray-80`}
+      className={`${className} h-fit p-3 hover:bg-gray-80`}
     >
       <PencilIcon className="w-4" />
     </button>
@@ -68,7 +68,7 @@ const MembersPageContent = () => {
       <RightSlider open={editMembersOpen} setOpen={closeEditMembersSlider}>
         <EditMembersContent />
       </RightSlider>
-      <div className="mt-6 w-full px-4">
+      <div className="mt-4 w-full px-3">
         <div className="mb-6 flex flex-row items-center justify-between">
           <h1>Members</h1>
           {isSigner && (
@@ -129,7 +129,7 @@ const MembersPageContent = () => {
             </div>
           )}
         </div>
-        <div>
+        <div className="mt-10 mb-8">
           {safeMetadata?.signers?.map((signerAddress) => {
             const activeRequest =
               data?.modifiedChangesToRequests?.modifiedAddresses?.[
@@ -152,7 +152,7 @@ const MembersPageContent = () => {
                   <p className="flex items-center text-sm text-gray">
                     Pending removal ·&nbsp;
                     <a
-                      className="text-sm text-white underline decoration-dotted"
+                      className="text-sm text-violet hover:text-violet-80"
                       href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
                     >
                       View proposal
@@ -206,7 +206,7 @@ const MembersPageContent = () => {
               <p className="text-sm text-gray">
                 Pending update ·&nbsp;
                 <a
-                  className="text-sm text-white underline decoration-dotted"
+                  className="text-sm text-violet hover:text-violet-80"
                   href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
                   View proposal
