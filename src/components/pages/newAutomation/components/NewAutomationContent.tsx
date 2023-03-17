@@ -281,84 +281,91 @@ const NewAutomationPage = () => {
                 {sumSplits(watchSplits)}/100%
               </span>
             </div>
-            <ul className="mt-2">
+            <ul className="mt-2 space-y-2">
               {splitFields.map((split, index) => (
                 <FieldArrayItem
                   key={split.id}
                   title={`Recipient ${index + 1}`}
                   remove={() => remove(index)}
                 >
-                  <div className="text-base font-bold">Recipient*</div>
-                  <Controller
-                    control={control}
-                    name={`splits.${index}.recipient`}
-                    render={({ field: { onChange, ref } }) => (
-                      <Select onValueChange={onChange} required>
-                        <SelectTrigger ref={ref}>
-                          <SelectValue placeholder="Select one" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem ref={ref} value={terminalAddress}>
-                            <div className="group">
-                              <span
-                                className={
-                                  "flex flex-row items-center group-hover:hidden"
-                                }
-                              >
-                                Your Project
-                              </span>
-                              <span
-                                // show on hover
-                                className={
-                                  "hidden flex-row items-center group-hover:block"
-                                }
-                              >
-                                {truncateString(terminalAddress)}
-                              </span>
-                            </div>
-                          </SelectItem>
-                          {terminal?.signers?.map((signer: string, i) => {
-                            return (
-                              <SelectItem key={signer} ref={ref} value={signer}>
-                                <Address address={signer} size="sm" />
-                              </SelectItem>
-                            )
-                          })}
-                          <SelectItem ref={ref} value="other">
-                            Other
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {isRecipientFieldOther(index) && (
-                    <AddressInput
-                      name={`splits.${index}.address`}
-                      register={register}
-                      errors={errors}
-                      label="Recipient*"
-                      placeholder="Enter a wallet or ENS address"
-                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
-                      required
-                      validations={{
-                        noDuplicates: async (v: string) => {
-                          const address = await resolveEnsAddress(v)
-                          const recipients: string[] = watchSplits.map(
-                            (split: { recipient: string; address: string }) =>
-                              split.recipient === "other"
-                                ? split.address
-                                : split.recipient,
-                          )
-
-                          return (
-                            !recipients.some(
-                              (val, i) => recipients.indexOf(val) !== i,
-                            ) || "Recipient already added."
-                          )
-                        },
-                      }}
+                  <div className="gap-1.5">
+                    <div className="text-base font-bold">Recipient*</div>
+                    <Controller
+                      control={control}
+                      name={`splits.${index}.recipient`}
+                      render={({ field: { onChange, ref } }) => (
+                        <Select onValueChange={onChange} required>
+                          <SelectTrigger ref={ref}>
+                            <SelectValue placeholder="Select one" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem ref={ref} value={terminalAddress}>
+                              <div className="group">
+                                <span
+                                  className={
+                                    "flex flex-row items-center group-hover:hidden"
+                                  }
+                                >
+                                  Your Project
+                                </span>
+                                <span
+                                  // show on hover
+                                  className={
+                                    "hidden flex-row items-center group-hover:block"
+                                  }
+                                >
+                                  {truncateString(terminalAddress)}
+                                </span>
+                              </div>
+                            </SelectItem>
+                            {terminal?.signers?.map((signer: string, i) => {
+                              return (
+                                <SelectItem
+                                  key={signer}
+                                  ref={ref}
+                                  value={signer}
+                                >
+                                  <Address address={signer} size="sm" />
+                                </SelectItem>
+                              )
+                            })}
+                            <SelectItem ref={ref} value="other">
+                              Other
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
                     />
-                  )}
+                    {isRecipientFieldOther(index) && (
+                      <AddressInput
+                        name={`splits.${index}.address`}
+                        register={register}
+                        errors={errors}
+                        label="Recipient*"
+                        placeholder="Enter a wallet or ENS address"
+                        className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
+                        required
+                        validations={{
+                          noDuplicates: async (v: string) => {
+                            const address = await resolveEnsAddress(v)
+                            const recipients: string[] = watchSplits.map(
+                              (split: { recipient: string; address: string }) =>
+                                split.recipient === "other"
+                                  ? split.address
+                                  : split.recipient,
+                            )
+
+                            return (
+                              !recipients.some(
+                                (val, i) => recipients.indexOf(val) !== i,
+                              ) || "Recipient already added."
+                            )
+                          },
+                        }}
+                      />
+                    )}
+                  </div>
+
                   <PercentInput
                     name={`splits.${index}.value`}
                     register={register}
