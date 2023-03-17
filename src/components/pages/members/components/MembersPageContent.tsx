@@ -66,7 +66,7 @@ const MembersPageContent = () => {
       <RightSlider open={editMembersOpen} setOpen={closeEditMembersSlider}>
         <EditMembersContent />
       </RightSlider>
-      <div className="mt-6 w-full px-4">
+      <div className="mt-4 w-full px-3">
         <div className="mb-6 flex flex-row items-center justify-between">
           <h1>Members</h1>
           <div className="flex flex-row">
