@@ -107,7 +107,7 @@ const DesktopTerminalLayout = ({
           <section className="flex flex-row items-center justify-between p-4">
             <StationLogo size="lg" />
           </section>
-          <div className="h-full border-r border-gray-80">
+          <div className="h-[90%] border-r border-gray-90">
             <section className="mt-4 rounded p-4">
               <div className="rounded-t-xl bg-gray-100 p-4">
                 <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
