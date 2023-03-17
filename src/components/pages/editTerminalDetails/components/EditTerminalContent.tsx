@@ -24,7 +24,7 @@ const EditTerminalContent = () => {
     message: string
   }>({
     isError: false,
-    message: "You’ll be directed to confirm. This action does not cost gas.",
+    message: "You’ll be directed to sign. This action does not cost gas.",
   })
 
   const { terminal, mutate } = useTerminalByChainIdAndSafeAddress(

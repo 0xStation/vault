@@ -291,7 +291,8 @@ export const ClaimItemsDrawer = ({
                 </Button>
                 {/* TODO change size of xs to match designs, needs to be smaller */}
                 <p className={"mt-1 text-sm text-gray"}>
-                  You’ll be directed to confirm. This action costs gas.
+                  This action will be recorded on-chain. You&apos;ll be directed
+                  to execute.
                 </p>
               </div>
             </BottomDrawer>
@@ -360,9 +361,9 @@ export const ClaimItemsDrawer = ({
               >
                 Claim
               </Button>
-              {/* TODO change size of xs to match designs, needs to be smaller */}
-              <p className={"mt-1 text-sm text-gray"}>
-                You’ll be directed to confirm. This action costs gas.
+              <p className={"mt-1 text-xs text-gray"}>
+                This action will be recorded on-chain. You&apos;ll be directed
+                to execute.
               </p>
             </div>
           </Modal>

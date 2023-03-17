@@ -102,7 +102,7 @@ const BatchVoteDrawer = ({
           </Button>
           {/* TODO change size of xs to match designs, needs to be smaller */}
           <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+            You&apos;ll be directed to sign. This action does not cost gas.
           </p>
         </div>
       </form>

@@ -42,21 +42,21 @@ const buttonStatusProps: Record<
 }
 const buttonStatusComboProps: Record<string, any> = {
   [`${ButtonStatus.VOTE}-${ButtonStatus.VOTE}`]:
-    "You’ll be directed to confirm.",
+    "You&apos;ll be directed to sign. This action does not cost gas.",
   [`${ButtonStatus.VOTE}-${ButtonStatus.VOTED}`]:
-    "You rejected the request. You will be able to execute rejection once the quorum has been met.",
+    "You rejected the request. You&apos;ll be able to execute rejection once the quorum has been met.",
   [`${ButtonStatus.VOTE}-${ButtonStatus.EXECUTE}`]:
-    "Execute the rejection or vote to approve. You’ll be directed to confirm.",
+    "Execute the rejection or vote to approve. This action will be recorded on-chain. You’ll be directed to execute.",
   [`${ButtonStatus.VOTED}-${ButtonStatus.VOTE}`]:
-    "You approved the request. You will be able to execute approval once the quorum has been met.",
+    "You approved the request. You'll' be able to execute approval once the quorum has been met.",
   [`${ButtonStatus.VOTED}-${ButtonStatus.EXECUTE}`]:
-    "You approved the request. Rejection met the quorum. Execute to change your vote. You’ll be directed to confirm.",
+    "You approved the request. Rejection has met the quorum. You can execute to change your vote. This action will be recorded on-chain. You’ll be directed to execute.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.VOTE}`]:
     "Execute the approval or vote to reject. You’ll be directed to confirm.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.VOTED}`]:
-    "You rejected the request. Approval met the quorum. Execute to change your vote. You’ll be directed to confirm.",
+    "You rejected the request. Approval has met the quorum. Execute to change your vote. This action will be recorded on-chain. You’ll be directed to execute.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.EXECUTE}`]:
-    "Both approval and rejection met the quorum. Choose one to execute. You’ll be directed to confirm.",
+    "Both approval and rejection have met the quorum. Choose one to execute. This action will be recorded on-chain. You’ll be directed to execute.",
 }
 
 export const RequestDetailsActions = ({
