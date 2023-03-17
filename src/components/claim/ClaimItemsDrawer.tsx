@@ -316,7 +316,8 @@ export const ClaimItemsDrawer = ({
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
                 </div>
-                <TokenTransfersAccordion
+                {/* TO DO: Add this once we get to aggregating the dollar amount */}
+                {/* <TokenTransfersAccordion
                   transfers={reduceTransfers(
                     items.reduce(
                       (acc: TokenTransfer[], item) => [
@@ -326,7 +327,7 @@ export const ClaimItemsDrawer = ({
                       [],
                     ),
                   )}
-                />
+                /> */}
               </div>
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (
