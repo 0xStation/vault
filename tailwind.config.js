@@ -42,6 +42,7 @@ module.exports = {
         },
         violet: {
           DEFAULT: "#AD72FF",
+          80: "#684499",
           100: "#AD72FF",
         },
         green: {
