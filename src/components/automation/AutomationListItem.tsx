@@ -47,16 +47,16 @@ export const AutomationListItem = ({
                 href={`/${router.query.chainNameAndSafeAddress}/automations/${automation.id}`}
               >
                 <div className="space-y-2 border-b border-gray-80 py-3 px-4 hover:bg-gray-90 sm:rounded sm:border-x sm:border-t">
-                  <div className="flex flex-row items-center space-x-1">
-                    <span className="h-2 w-2 rounded-full bg-green"></span>
-                    {/* TODO: Unhide this after we implement edit automation */}
-                    {/* <span className="text-base text-gray">Live</span> */}
-                  </div>
+                  {/* TODO: Unhide this after we implement edit automation */}
+                  {/* <div className="flex flex-row items-center space-x-1"> */}
+                  {/* <span className="h-2 w-2 rounded-full bg-green"></span> */}
+                  {/* <span className="text-base text-gray">Live</span> */}
+                  {/* </div> */}
                   <div className="mt-2 mb-2 flex flex-row items-center justify-between">
                     <span className="text-lg font-bold">
                       {automation.data.name}
                     </span>
-                    <span className="text-sm text-gray">
+                    <span className="text-sm text-gray-50">
                       {timeSince(automation.createdAt)}
                     </span>
                   </div>
@@ -77,13 +77,16 @@ export const AutomationListItem = ({
                 addQueryParam(router, "automationId", automation.id)
               }}
             >
-              <div className="flex flex-row items-center space-x-1">
+              {/* TODO: Unhide this after we implement edit automation */}
+              {/* <div className="flex flex-row items-center space-x-1">
                 <span className="h-2 w-2 rounded-full bg-green"></span>
                 <span className="text-base text-gray">Live</span>
-              </div>
+              </div> */}
               <div className="flex flex-row items-center justify-between">
-                <span>{automation.data.name}</span>
-                <span className="text-sm text-gray">
+                <span className="text-lg font-bold">
+                  {automation.data.name}
+                </span>
+                <span className="text-sm text-gray-50">
                   {timeSince(automation.createdAt)}
                 </span>
               </div>
