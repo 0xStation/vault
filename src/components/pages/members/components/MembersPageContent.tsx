@@ -145,7 +145,7 @@ const MembersPageContent = () => {
                       className="text-sm text-white underline decoration-dotted"
                       href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
                     >
-                      View request
+                      View proposal
                     </a>
                   </p>
                 ) : null}
@@ -178,7 +178,7 @@ const MembersPageContent = () => {
                           (requestIds as string[])?.[0]
                         }`}
                       >
-                        View request
+                        View proposal
                       </a>
                     </p>
                   ) : null}
@@ -199,7 +199,7 @@ const MembersPageContent = () => {
                   className="text-sm text-white underline decoration-dotted"
                   href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
-                  View request
+                  View proposal
                 </a>
               </p>
             ) : null}

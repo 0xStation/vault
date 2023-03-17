@@ -31,7 +31,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
         <div className="flex h-[calc(100%+18px)] px-4 pt-4">
           <EmptyState
             title="Create your first Project"
-            subtitle="Start raising funds, building cool shit, managing spend, and splitting revenue with your squad."
+            subtitle="Start raising funds, managing spend, and splitting revenue with your collective."
           />
         </div>
       ) : (
