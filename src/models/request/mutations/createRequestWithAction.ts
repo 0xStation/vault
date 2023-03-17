@@ -152,6 +152,6 @@ export const createRequestWithAction = async (
 
     return request
   } catch (err) {
-    throw Error(`Failed to create request with action ${err}`)
+    throw Error(`Failed to create Proposal with action ${err}`)
   }
 }

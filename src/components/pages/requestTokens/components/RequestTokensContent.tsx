@@ -458,7 +458,7 @@ export const NewTokensPage = () => {
               fullWidth={true}
               onBlur={() => setFormMessage({ isError: false, message: "" })}
             >
-              Create request
+              Create Proposal
             </Button>
             <p
               className={`mt-1 text-sm  ${
