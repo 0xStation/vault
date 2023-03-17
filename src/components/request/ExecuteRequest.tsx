@@ -163,29 +163,34 @@ export const ExecuteWrapper = ({
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6 pb-[70px]">
-          <div className="text-2xl font-bold">{title}</div>
-          <div>{subtitle}</div>
-          {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
-            <TokenTransferRequestContent request={request} />
-          )}
-          {request?.variant === RequestVariantType.SIGNER_QUORUM && (
-            <SignerQuorumRequestContent request={request} />
-          )}
+          <div className="space-y-4">
+            <div className="text-xl font-bold">{title}</div>
+            <div>{subtitle}</div>
+          </div>
+          <div className="mb-6 space-y-2">
+            {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
+              <TokenTransferRequestContent request={request} />
+            )}
+            {request?.variant === RequestVariantType.SIGNER_QUORUM && (
+              <SignerQuorumRequestContent request={request} />
+            )}
+          </div>
           <TextareaWithLabel
-            label="Note (optional)"
+            label="Note"
             register={register}
             placeholder="Add a note"
             name="comment"
             errors={errors}
           />
         </div>
+
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full px-5 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>
             Execute
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
           <p className={"mt-1 text-xs text-gray-50"}>
-            You’ll be directed to confirm. This action is on-chain and cost gas.
+            This action will be recorded on-chain. You’ll be directed to
+            execute.
           </p>
         </div>
       </form>
@@ -246,7 +251,7 @@ export const ExecuteRequest = ({
   return (
     <ExecuteWrapper
       title={`Execute ${approve ? "approval" : "rejection"}`}
-      subtitle="This action is on-chain and will not be reversible."
+      subtitle="Your group action will be recorded on-chain."
       request={request}
       actionToExecute={actionsToExecute?.[0]}
       isOpen={isOpen}

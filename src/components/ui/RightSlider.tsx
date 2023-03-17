@@ -40,7 +40,7 @@ export default function RightSlider({
                         </button>
                       </div>
                     </div>
-                    <div className="relative mt-4 flex-1">{children}</div>
+                    <div className="relative mt-4 flex-1 px-4">{children}</div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

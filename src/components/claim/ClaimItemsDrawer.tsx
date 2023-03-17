@@ -237,16 +237,17 @@ export const ClaimItemsDrawer = ({
                 setIsOpen(v)
               }}
             >
-              <h1 className="pb-2">Claim tokens</h1>
+              <h2 className="pb-2">Claim tokens</h2>
               <div className="h-full overflow-y-auto pb-32">
                 <div className="mt-4 space-y-2 border-b border-gray-80 pb-6">
                   <div className="flex flex-row space-x-2">
-                    <span className="text-sm text-gray">Network</span>
+                    <span className="text-sm text-gray">Chain</span>
                     <Network
                       chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                     />
                   </div>
-                  <TokenTransfersAccordion
+                  {/* TO DO: Add this once we get to aggregating the dollar amount */}
+                  {/* <TokenTransfersAccordion
                     transfers={reduceTransfers(
                       items.reduce(
                         (acc: TokenTransfer[], item) => [
@@ -256,16 +257,15 @@ export const ClaimItemsDrawer = ({
                         [],
                       ),
                     )}
-                  />
+                  /> */}
                 </div>
                 <div className="mt-6 space-y-2">
                   {items.map((item, index) => (
                     <div
-                      className="space-y-3 rounded-lg bg-gray-90 p-4"
+                      className="space-y-3 rounded-lg bg-gray-100 p-4"
                       key={`item-${index}`}
                     >
                       <div>
-                        <p className="text-sm text-gray">Note</p>
                         <p className="mt-1">{item.note}</p>
                       </div>
                       <TokenTransfersAccordion
@@ -291,7 +291,8 @@ export const ClaimItemsDrawer = ({
                 </Button>
                 {/* TODO change size of xs to match designs, needs to be smaller */}
                 <p className={"mt-1 text-sm text-gray"}>
-                  You’ll be directed to confirm. This action costs gas.
+                  This action will be recorded on-chain. You&apos;ll be directed
+                  to execute.
                 </p>
               </div>
             </BottomDrawer>
@@ -307,7 +308,7 @@ export const ClaimItemsDrawer = ({
               setIsOpen(v)
             }}
           >
-            <h1 className="pb-2">Claim tokens</h1>
+            <h2 className="pb-2">Claim tokens</h2>
             <div className="h-full overflow-y-auto pb-32">
               <div className="mt-4 space-y-2 border-b border-gray-90 pb-6">
                 <div className="flex flex-row space-x-2">
@@ -316,7 +317,8 @@ export const ClaimItemsDrawer = ({
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
                 </div>
-                <TokenTransfersAccordion
+                {/* TO DO: Add this once we get to aggregating the dollar amount */}
+                {/* <TokenTransfersAccordion
                   transfers={reduceTransfers(
                     items.reduce(
                       (acc: TokenTransfer[], item) => [
@@ -326,12 +328,12 @@ export const ClaimItemsDrawer = ({
                       [],
                     ),
                   )}
-                />
+                /> */}
               </div>
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (
                   <div
-                    className="space-y-3 rounded-lg bg-gray-90 p-4"
+                    className="space-y-3 rounded-lg bg-gray-100 p-4"
                     key={`item-${index}`}
                   >
                     <div>
@@ -359,9 +361,9 @@ export const ClaimItemsDrawer = ({
               >
                 Claim
               </Button>
-              {/* TODO change size of xs to match designs, needs to be smaller */}
-              <p className={"mt-1 text-sm text-gray"}>
-                You’ll be directed to confirm. This action costs gas.
+              <p className={"mt-1 text-xs text-gray"}>
+                This action will be recorded on-chain. You&apos;ll be directed
+                to execute.
               </p>
             </div>
           </Modal>

@@ -21,7 +21,7 @@ export const BatchStatusBar = ({
         leaveFrom="translate-y-0"
         leaveTo="translate-y-[200%]"
       >
-        <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-md bg-violet px-2 py-2">
+        <div className="mx-auto flex w-full max-w-[580px] flex-row items-center justify-between rounded-md bg-violet px-3 py-3">
           <p className="text-base text-black">{totalCount} selected</p>
           <div className="flex flex-row items-center space-x-3 text-black">
             {children}

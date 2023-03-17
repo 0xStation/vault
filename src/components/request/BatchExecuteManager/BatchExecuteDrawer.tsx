@@ -163,9 +163,7 @@ const BatchExecuteWrapper = ({
         }`}
       </h1>
       <div className="h-full overflow-auto pb-32">
-        <div className="mt-4">
-          This action is on-chain and will not be reversible.
-        </div>
+        <div className="mt-4">Your group action will be recorded on-chain.</div>
 
         <div className="mt-6 space-y-2">
           {requestsToApprove.map((request, idx) => {
@@ -196,7 +194,8 @@ const BatchExecuteWrapper = ({
           </Button>
           {/* TODO change size of xs to match designs, needs to be smaller */}
           <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+            This action will be recorded on-chain. You&apos;ll be directed to
+            execute.
           </p>
         </div>
       </form>
