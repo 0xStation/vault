@@ -251,7 +251,7 @@ export const ExecuteRequest = ({
   return (
     <ExecuteWrapper
       title={`Execute ${approve ? "approval" : "rejection"}`}
-      subtitle="This action is on-chain and will not be reversible."
+      subtitle="Your group action will be recorded on-chain."
       request={request}
       actionToExecute={actionsToExecute?.[0]}
       isOpen={isOpen}
