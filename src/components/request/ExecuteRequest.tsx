@@ -162,11 +162,11 @@ export const ExecuteWrapper = ({
   const FormContent = () => {
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 pb-[70px]">
-          <div className="text-xl font-bold">{title}</div>
-          <div>{subtitle}</div>
-        </div>
         <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="text-xl font-bold">{title}</div>
+            <div>{subtitle}</div>
+          </div>
           <div className="mb-6 space-y-2">
             {request?.variant === RequestVariantType.TOKEN_TRANSFER && (
               <TokenTransferRequestContent request={request} />
