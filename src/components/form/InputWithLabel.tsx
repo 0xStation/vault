@@ -24,7 +24,7 @@ export const InputWithLabel = ({
   className?: string
   type?: string
 }) => {
-  const requiredMessage = required ? { required: "Required." } : {}
+  const requiredMessage = required ? { required: "Required" } : {}
 
   return (
     <div className={`${className} grid w-full items-center gap-1.5`}>
