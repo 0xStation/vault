@@ -30,7 +30,6 @@ import AddressInput from "../../../form/AddressInput"
 import QuorumInput from "../../../form/QuorumInput"
 import TextareaWithLabel from "../../../form/TextareaWithLabel"
 import RemoveSignerConfirmationDrawer from "../../../memberEditing/RemoveSignerConfirmationDrawer"
-import Layout from "../../../terminalCreation/Layout"
 
 export const EditMembersContent = () => {
   const router = useRouter()
@@ -323,11 +322,8 @@ export const EditMembersContent = () => {
         addressToBeRemoved={addressToBeRemoved}
         activeUserAddress={activeUser?.address as string}
       />
-      <Layout
-        backFunc={() => router.push(`/${chainNameAndSafeAddress}/members`)}
-        isCloseIcon={true}
-      >
-        <h2 className="mb-[30px] font-bold">Edit members</h2>
+      <>
+        <h2 className="mb-[30px]">Edit members</h2>
         <form
           onSubmit={handleSubmit(onSubmit, onError)}
           className="flex h-[calc(100%-120px)] flex-col"
@@ -471,7 +467,7 @@ export const EditMembersContent = () => {
               />
             ) : null}
           </div>
-          <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+          <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-4 text-center">
             <Button
               type="submit"
               fullWidth={true}
@@ -491,7 +487,7 @@ export const EditMembersContent = () => {
             </p>
           </div>
         </form>
-      </Layout>
+      </>
     </>
   )
 }

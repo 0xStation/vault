@@ -11,7 +11,6 @@ import {
 } from "../../../../models/terminal/hooks"
 import { parseGlobalId } from "../../../../models/terminal/utils"
 import { InputWithLabel } from "../../../form"
-import Layout from "../../../terminalCreation/Layout"
 
 const EditTerminalContent = () => {
   const router = useRouter()
@@ -66,7 +65,7 @@ const EditTerminalContent = () => {
   }
 
   return (
-    <Layout backFunc={() => router.back()} isCloseIcon={false}>
+    <>
       <h2 className="font-bold">Add Terminal Details</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
@@ -116,7 +115,7 @@ const EditTerminalContent = () => {
               "Invalid URL. Please enter a url in the format https://example.xyz.",
           }}
         />
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-4 text-center">
           <Button type="submit" fullWidth={true}>
             Save
           </Button>
@@ -129,7 +128,7 @@ const EditTerminalContent = () => {
           </p>
         </div>
       </form>
-    </Layout>
+    </>
   )
 }
 

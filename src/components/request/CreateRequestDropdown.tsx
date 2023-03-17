@@ -85,34 +85,28 @@ export const CreateRequestDropdown = () => {
   return (
     <>
       <RightSlider open={sendTokensSliderOpen} setOpen={closeSendTokensSlider}>
-        <div className="px-4">
-          <SendTokensContent
-            successCallback={() => {
-              closeSendTokensSlider(false)
-              successToast({
-                message: "Created request",
-              })
-              const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${safeAddress}`
-              mutate(key)
-            }}
-          />
-        </div>
+        <SendTokensContent
+          successCallback={() => {
+            closeSendTokensSlider(false)
+            successToast({
+              message: "Created request",
+            })
+            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${safeAddress}`
+            mutate(key)
+          }}
+        />
       </RightSlider>
       <RightSlider
         open={requestTokensSliderOpen}
         setOpen={closeRequestTokensSlider}
       >
-        <div className="px-4">
-          <RequestTokensContent />
-        </div>
+        <RequestTokensContent />
       </RightSlider>
       <RightSlider
         open={editMembersSliderOpen}
         setOpen={closeEditMembersSlider}
       >
-        <div className="px-4">
-          <EditMembersContent />
-        </div>
+        <EditMembersContent />
       </RightSlider>
       <DropdownMenu>
         <DropdownMenuTrigger className="">

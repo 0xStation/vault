@@ -1,8 +1,8 @@
-import Layout from "components/terminalCreation/Layout"
 import { useRouter } from "next/router"
-import SendTokensContent from "./components/SendTokensContent"
+import Layout from "../../terminalCreation/Layout"
+import SendTokensContent from "./components/RequestTokensContent"
 
-const SendTokensMobile = () => {
+const RequestTokensDesktop = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   return (
@@ -15,4 +15,4 @@ const SendTokensMobile = () => {
   )
 }
 
-export default SendTokensMobile
+export default RequestTokensDesktop
