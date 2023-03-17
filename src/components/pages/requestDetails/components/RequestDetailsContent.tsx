@@ -80,7 +80,7 @@ const RequestDetailsContent = ({
             return (
               <AvatarAddress
                 key={`approval-Account-${idx}`}
-                className="mt-0"
+                className="mt-2"
                 size="sm"
                 address={activity.address}
               />
