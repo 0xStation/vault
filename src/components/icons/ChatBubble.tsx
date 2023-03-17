@@ -6,7 +6,7 @@ export const ChatBubble = ({ size = "base" }: IconProps) => {
       fill="#979797"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
-      stroke="#979797"
+      stroke="black"
       className={icon({ size })}
     >
       <path

@@ -65,8 +65,8 @@ export const TabBar = ({
         <FilterTabsList
           className={cn(
             // top-[33px] assumes that filter is used within tab to get sticky lined up right
-            "sticky top-[33px] z-10 bg-black px-4 py-2",
-            showBorder ? "border-b border-gray-80" : "",
+            "sticky top-[33px] z-10 mt-2 bg-black px-4 py-2",
+            showBorder ? "border-b border-gray-90" : "",
           )}
         >
           {options.map((option) => (
