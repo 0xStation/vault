@@ -49,7 +49,7 @@ const ProfileRequestTableRow = ({
 
   return (
     <div
-      className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-gray-80 py-3 px-4 hover:bg-gray-90 ${
+      className={`flex cursor-pointer flex-row items-center space-x-4 border-b border-gray-90 py-3 px-4 hover:bg-gray-90 ${
         disabled ? "opacity-30" : "hover:bg-gray-90"
       }`}
       onClick={() => triggerDetails(request)}

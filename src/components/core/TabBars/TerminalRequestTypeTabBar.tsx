@@ -22,7 +22,7 @@ export const TerminalRequestStatusTabBar = ({
     { value: TerminalRequestTypeTab.ALL, label: "All" },
     {
       value: TerminalRequestTypeTab.TOKENS,
-      label: "Tokens",
+      label: "Assets",
     },
     {
       value: TerminalRequestTypeTab.MEMBERS,

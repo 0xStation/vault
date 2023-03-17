@@ -40,7 +40,7 @@ const RequestTableRow = ({
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <tr
         className={cn(
-          "h-14 cursor-pointer border-b border-gray-80 px-4 hover:bg-gray-90",
+          "h-14 cursor-pointer border-b border-gray-90 hover:bg-gray-90",
           disabled ? "disabled:opacity-30" : "hover:bg-gray-90",
         )}
         onClick={() => triggerDetails(request)}

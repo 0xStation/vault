@@ -18,7 +18,7 @@ const AutomationsPageContent = () => {
   const noAutomations = !isLoading && automations?.length === 0
 
   return (
-    <div className="h-[calc(100%-84px)]">
+    <div className="mt-3 ml-2 h-[calc(100%-84px)]">
       <div
         className={cn(
           "mt-4 flex flex-row items-center justify-between px-4 pb-4 sm:px-0",
@@ -38,7 +38,7 @@ const AutomationsPageContent = () => {
           />
         </div>
       ) : (
-        <ul className="px-0 sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-4">
+        <ul className="px-0 sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-4">
           {automations?.map((automation) => (
             <AutomationListItem
               automation={automation}
