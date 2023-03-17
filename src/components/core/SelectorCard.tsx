@@ -11,7 +11,7 @@ export const SelectorCard = ({
 }) => {
   return (
     <button
-      className={`${className} w-full rounded-md border border-gray-90 px-4 py-3 text-left hover:bg-gray-90`}
+      className={`${className} w-full rounded-md border border-gray-90 px-4 py-4 text-left hover:bg-gray-90`}
       onClick={onClick}
     >
       {children}

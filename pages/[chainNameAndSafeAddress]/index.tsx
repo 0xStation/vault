@@ -16,6 +16,7 @@ import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminal
 import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
 import LabelCard from "../../src/components/ui/LabelCard"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
+import { usePermissionsStore } from "../../src/hooks/stores/usePermissionsStore"
 import useGetTerminal from "../../src/hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import { useRequests } from "../../src/hooks/useRequests"
@@ -74,6 +75,7 @@ const MobileTerminalIndexPage = () => {
     chainId: chainId as number,
     address: address as string,
   })
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   const { data: tokenData } = useFungibleTokenData(chainId || 1, address)
 
@@ -144,6 +146,7 @@ const MobileTerminalIndexPage = () => {
                   </div>
                   <div className="flex flex-row items-center space-x-2">
                     {option.label === "Proposals" &&
+                      isSigner &&
                       requestsNeedingAttention && (
                         <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-base text-orange">
                           {requestsNeedingAttention.length}

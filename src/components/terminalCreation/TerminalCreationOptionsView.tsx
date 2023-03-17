@@ -12,7 +12,6 @@ import { SelectorCard } from "../core/SelectorCard"
 import SelectWithLabel from "../form/SelectWithLabel"
 import { ExistingSafeCard } from "./ExistingSafeCard"
 import Layout from "./Layout"
-import { SafeDetailsDrawer } from "./SafeDetailsDrawer"
 
 export const TerminalCreationOptionsView = ({
   setView,
@@ -28,7 +27,6 @@ export const TerminalCreationOptionsView = ({
     chainId: chain?.id as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [selectedAddress, setSelectedAddress] = useState<string>("")
 
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
@@ -85,17 +83,11 @@ export const TerminalCreationOptionsView = ({
 
   return (
     <>
-      <SafeDetailsDrawer
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        safeAddress={selectedAddress}
-        chainId={watchChainId}
-      />
       <Layout backFunc={() => router.back()} isCloseIcon={true}>
         <h2 className="font-bold">New Project</h2>
         <p className="mb-7 mt-3 text-white">
-          Use an existing Safe, or create Project with a new Safe.
-        </p>{" "}
+          Use an existing Safe, or create a Project with a new Safe.
+        </p>
         <SelectWithLabel
           label="Chain*"
           name="chainId"
@@ -148,8 +140,6 @@ export const TerminalCreationOptionsView = ({
                           chainId={watchChainId}
                           safeAddress={safeAddress}
                           setView={setView}
-                          setSelectedAddress={setSelectedAddress}
-                          setDrawerOpen={setIsOpen}
                         />
                       )
                     })

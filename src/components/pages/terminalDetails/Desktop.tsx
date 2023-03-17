@@ -3,6 +3,7 @@ import { EditButton } from "components/core/EditButton"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Terminal } from "../../../../src/models/terminal/types"
+import { usePermissionsStore } from "../../../hooks/stores/usePermissionsStore"
 import {
   addQueryParam,
   removeQueryParam,
@@ -14,6 +15,7 @@ import TerminalDetailsPageContent from "./components/TerminalDetailsPageContent"
 const Desktop = ({ terminal }: { terminal: Terminal }) => {
   const router = useRouter()
   const [editDetailsSliderOpen, setEditSliderOpen] = useState<boolean>(false)
+  const isSigner = usePermissionsStore((state) => state.isSigner)
   const toggleDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
       removeQueryParam(router, "editDetails")
@@ -21,7 +23,7 @@ const Desktop = ({ terminal }: { terminal: Terminal }) => {
   }
 
   useEffect(() => {
-    if ("editDetails" in router.query) {
+    if (isSigner && "editDetails" in router.query) {
       setEditSliderOpen(true)
     } else {
       setEditSliderOpen(false)
@@ -31,15 +33,22 @@ const Desktop = ({ terminal }: { terminal: Terminal }) => {
   return (
     <>
       <DesktopTerminalLayout>
-        <RightSlider open={editDetailsSliderOpen} setOpen={toggleDetailsSlider}>
-          <EditTerminalContent />
-        </RightSlider>
-        <div className="absolute right-[48px] top-[72px]">
-          <EditButton
-            onClick={() => addQueryParam(router, "editDetails", "true")}
-            className="rounded border border-gray-80"
-          />
-        </div>
+        {isSigner && (
+          <>
+            <RightSlider
+              open={editDetailsSliderOpen}
+              setOpen={toggleDetailsSlider}
+            >
+              <EditTerminalContent />
+            </RightSlider>
+            <div className="absolute right-[48px] top-[72px]">
+              <EditButton
+                onClick={() => addQueryParam(router, "editDetails", "true")}
+                className="rounded border border-gray-80"
+              />
+            </div>
+          </>
+        )}
         <TerminalDetailsPageContent terminal={terminal} />
       </DesktopTerminalLayout>
     </>

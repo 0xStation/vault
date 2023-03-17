@@ -15,13 +15,16 @@ import { CreateRequestDropdown } from "../../src/components/request/CreateReques
 import RequestTabContent from "../../src/components/request/RequestTabContent"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
+import { usePermissionsStore } from "../../src/hooks/stores/usePermissionsStore"
+import { useIsSigner } from "../../src/hooks/useIsSigner"
 
 const DesktopTerminalRequestsPage = () => {
+  const isSigner = usePermissionsStore((state) => state.isSigner)
   return (
     <DesktopTerminalLayout>
       <div className="my-4 flex flex-row items-center justify-between px-4">
         <span className="text-2xl font-bold">Proposals</span>
-        <CreateRequestDropdown />
+        {isSigner && <CreateRequestDropdown />}
       </div>
       <TerminalRequestTypeTabBar>
         <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
@@ -34,6 +37,7 @@ const DesktopTerminalRequestsPage = () => {
 
 const MobileTerminalRequestsPage = () => {
   const router = useRouter()
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   return (
     <div className="flex h-screen grow flex-col pb-4">
@@ -46,7 +50,7 @@ const MobileTerminalRequestsPage = () => {
       </Link>
       <div className="my-4 flex flex-row items-center justify-between px-4">
         <h1>Proposals</h1>
-        <CreateRequestDropdown />
+        {isSigner && <CreateRequestDropdown />}
       </div>
       <TerminalRequestTypeTabBar>
         <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
@@ -68,6 +72,11 @@ const TerminalRequestsPage = () => {
     address: terminal?.safeAddress as string,
     chainId: terminal?.chainId as number,
   })
+  useIsSigner({
+    address: address as string,
+    chainId: chainId as number,
+  })
+
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
   return (
     <>

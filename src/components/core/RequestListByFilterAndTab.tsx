@@ -48,7 +48,9 @@ const RequestListByFilterAndTab = ({
     )
   }
 
-  if (filter === TerminalRequestStatusFilter.CLOSED) {
+  if (filter === TerminalRequestStatusFilter.OPEN) {
+    requests = requests.filter((r) => !isExecuted(r))
+  } else if (filter === TerminalRequestStatusFilter.CLOSED) {
     requests = requests.filter((r) => isExecuted(r))
   }
 

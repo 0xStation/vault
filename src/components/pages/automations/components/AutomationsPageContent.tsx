@@ -3,6 +3,7 @@ import { cn } from "lib/utils"
 import { useRouter } from "next/router"
 import { useAutomations } from "../../../../../src/models/automation/hooks"
 import { parseGlobalId } from "../../../../../src/models/terminal/utils"
+import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
 import { AutomationListItem } from "../../../automation/AutomationListItem"
 import { CreateAutomationDropdown } from "../../../automation/CreateAutomationDropdown"
 
@@ -11,6 +12,7 @@ const AutomationsPageContent = () => {
   const { chainId, address } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   const { isLoading, automations } = useAutomations(chainId, address)
   const noAutomations = !isLoading && automations?.length === 0
@@ -24,7 +26,7 @@ const AutomationsPageContent = () => {
         )}
       >
         <h1>Automations</h1>
-        <CreateAutomationDropdown />
+        {isSigner && <CreateAutomationDropdown />}
       </div>
       {isLoading ? (
         <></>

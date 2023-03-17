@@ -3,6 +3,7 @@ import { Avatar } from "@ui/Avatar"
 import { RequestStatusIcon } from "components/request/RequestStatusIcon"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import Link from "next/link"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import { timeSince } from "../../lib/utils"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { isExecuted } from "../../models/request/utils"
@@ -41,6 +42,7 @@ const RequestCard = ({
   let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
   let transferCount = (request.data.meta as TokenTransferVariant).transfers
     ?.length
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   return (
     <>
@@ -59,18 +61,21 @@ const RequestCard = ({
           <div className="flex flex-col space-y-3">
             {showTerminal ? (
               <RequestTerminalLink terminal={showTerminal} />
-            ) : (
+            ) : isSigner ? (
               <RequestActionPrompt request={request} />
-            )}
+            ) : null}
             <div className="flex w-full items-center space-x-2">
-              {!showTerminal && onCheckboxChange && !isExecuted(request) && (
-                <Checkbox
-                  onChange={onCheckboxChange}
-                  name={request.id}
-                  isDisabled={disabled || false}
-                  checked={checked}
-                />
-              )}
+              {isSigner &&
+                !showTerminal &&
+                onCheckboxChange &&
+                !isExecuted(request) && (
+                  <Checkbox
+                    onChange={onCheckboxChange}
+                    name={request.id}
+                    isDisabled={disabled || false}
+                    checked={checked}
+                  />
+                )}
               <RequestStatusIcon status={request.status} />
               <Avatar size="sm" address={request.data.createdBy} />
 

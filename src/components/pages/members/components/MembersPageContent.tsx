@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { useGetSignerQuorumRequestChanges } from "../../../..//hooks/useGetSignerQuorumRequestChanges"
 import { convertGlobalId } from "../../../..//models/terminal/utils"
 import { useSafeMetadata } from "../../../../hooks/safe/useSafeMetadata"
+import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
 import { AvatarAddress } from "../../../core/AvatarAddress"
 import EditMembersContent from "../../editMembers/components/EditMembersContent"
 
@@ -34,6 +35,7 @@ const MembersPageContent = () => {
   const { chainId, address } = convertGlobalId(
     chainNameAndSafeAddress as string,
   )
+  const isSigner = usePermissionsStore((state) => state.isSigner)
 
   const { safeMetadata } = useSafeMetadata({
     chainId: chainId as number,
@@ -54,12 +56,12 @@ const MembersPageContent = () => {
   }
 
   useEffect(() => {
-    if (router.query.editMembers) {
+    if (router.query.editMembers && isSigner) {
       setEditMembersOpen(true)
     } else {
       setEditMembersOpen(false)
     }
-  }, [router.query])
+  }, [router.query, isSigner])
 
   return (
     <>
@@ -69,55 +71,63 @@ const MembersPageContent = () => {
       <div className="mt-4 w-full px-3">
         <div className="mb-6 flex flex-row items-center justify-between">
           <h1>Members</h1>
-          <div className="flex flex-row">
-            <Breakpoint>
-              {(isMobile) => {
-                if (isMobile) {
+          {isSigner && (
+            <div className="flex flex-row">
+              <Breakpoint>
+                {(isMobile) => {
+                  if (isMobile) {
+                    return (
+                      <Button
+                        size="base"
+                        onClick={() =>
+                          router.push(
+                            `/${chainNameAndSafeAddress}/members/edit`,
+                          )
+                        }
+                      >
+                        + Add
+                      </Button>
+                    )
+                  }
                   return (
                     <Button
                       size="base"
-                      onClick={() =>
-                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
-                      }
+                      onClick={() => {
+                        addQueryParam(router, "editMembers", "true")
+                      }}
                     >
                       + Add
                     </Button>
                   )
-                }
-                return (
-                  <Button
-                    size="base"
-                    onClick={() => {
-                      addQueryParam(router, "editMembers", "true")
-                    }}
-                  >
-                    + Add
-                  </Button>
-                )
-              }}
-            </Breakpoint>
+                }}
+              </Breakpoint>
 
-            <Breakpoint>
-              {(isMobile) => {
-                if (isMobile) {
+              <Breakpoint>
+                {(isMobile) => {
+                  if (isMobile) {
+                    return (
+                      <EditButton
+                        onClick={() =>
+                          router.push(
+                            `/${chainNameAndSafeAddress}/members/edit`,
+                          )
+                        }
+                        className="ml-2 rounded border border-gray-80"
+                      />
+                    )
+                  }
                   return (
                     <EditButton
                       onClick={() =>
-                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
+                        addQueryParam(router, "editMembers", "true")
                       }
                       className="ml-2 rounded border border-gray-80"
                     />
                   )
-                }
-                return (
-                  <EditButton
-                    onClick={() => addQueryParam(router, "editMembers", "true")}
-                    className="ml-2 rounded border border-gray-80"
-                  />
-                )
-              }}
-            </Breakpoint>
-          </div>
+                }}
+              </Breakpoint>
+            </div>
+          )}
         </div>
         <div className="mt-10 mb-8">
           {safeMetadata?.signers?.map((signerAddress) => {

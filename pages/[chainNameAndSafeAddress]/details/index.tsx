@@ -7,6 +7,7 @@ import { useState } from "react"
 import Desktop from "../../../src/components/pages/terminalDetails/Desktop"
 import Mobile from "../../../src/components/pages/terminalDetails/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
+import { useIsSigner } from "../../../src/hooks/useIsSigner"
 import { Terminal } from "../../../src/models/terminal/types"
 
 const TerminalDetailsPage = () => {
@@ -14,6 +15,7 @@ const TerminalDetailsPage = () => {
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  useIsSigner({ address: address as string, chainId: chainId as number })
 
   const { terminal, mutate: mutateGetTerminal } =
     useTerminalByChainIdAndSafeAddress(address as string, chainId as number)

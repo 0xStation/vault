@@ -65,8 +65,8 @@ function Page() {
         <main className="absolute top-0 right-0 z-10 mx-5 mt-12 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
           <StationLogo size={isMobile ? "mobileLanding" : "landing"} />
           <p className="mt-4 mb-8 text-sm md:text-base lg:my-0 lg:text-2xl ">
-            Group wallet for your collective to raise funds, build cool shit,
-            manage spend, and split revenue.
+            Group wallet for on-chain operations — raise funds, manage spend,
+            and split revenue.
           </p>
           <div className="mx-auto block h-auto max-w-[80%] lg:hidden">
             <Image src={LandingImage} alt="Landing image" />

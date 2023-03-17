@@ -6,6 +6,7 @@ import { EmptyState } from "components/emptyStates/EmptyState"
 import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useStore from "../../hooks/stores/useStore"
 import { listIntersection } from "../../lib/utils/listIntersection"
 import {
@@ -85,6 +86,7 @@ const RequestListForm = ({
   isProfile?: boolean
 }) => {
   const router = useRouter()
+  const isSigner = usePermissionsStore((state) => state.isSigner)
   const [drawerManagerState, setDrawerManagerState] = useState({
     batchVoteDrawer: false,
     batchExecuteDrawer: false,
@@ -217,14 +219,19 @@ const RequestListForm = ({
     let subtitle = ""
 
     switch (router.query.filter) {
+      case TerminalRequestStatusFilter.OPEN:
+        title = "No proposals"
+        subtitle = "The members of this Project have not created a proposal. "
+        break
       case TerminalRequestStatusFilter.AWAITING_OTHERS:
         title = "No pending Proposals"
         subtitle = "You and your collective have reviewed all proposals."
         break
       case TerminalRequestStatusFilter.CLOSED:
-        title = "Create your first Proposal"
-        subtitle =
-          "Proposals enable collectives distribute tokens and manage members with more trust."
+        title = isSigner ? "Create your first Proposal" : "No proposals"
+        subtitle = isSigner
+          ? "Proposals enable collectives distribute tokens and manage members with more trust."
+          : "The members of this Project have not created a proposal."
         break
       default: // default filter is needs-action
         title = "Hurray!"
