@@ -33,7 +33,7 @@ export const Toast = () => {
   if (!isToastShowing) return <></>
 
   return (
-    <div className="fixed bottom-0 w-full p-4 sm:w-[400px]">
+    <div className="fixed bottom-0 w-full p-4 sm:top-0 sm:right-0 sm:w-[400px]">
       <div className={toast({ variant })}>
         <div className="flex flex-row items-center space-x-2">
           {variant === "success" && <CheckIcon />}
