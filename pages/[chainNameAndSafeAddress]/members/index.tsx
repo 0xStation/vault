@@ -4,6 +4,7 @@ import { useState } from "react"
 import Desktop from "../../../src/components/pages/members/Desktop"
 import Mobile from "../../../src/components/pages/members/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
+import { useIsSigner } from "../../../src/hooks/useIsSigner"
 import { useTerminalByChainIdAndSafeAddress } from "../../../src/models/terminal/hooks"
 
 const chainNameToChainId: Record<string, number | undefined> = {
@@ -21,6 +22,8 @@ const MembersPage = () => {
   const chainId = chainNameToChainId[chainName] as number
   const { terminal, mutate: mutateGetTerminal } =
     useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
+
+  useIsSigner({ address: safeAddress, chainId })
 
   const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
     address: terminal?.safeAddress as string,
