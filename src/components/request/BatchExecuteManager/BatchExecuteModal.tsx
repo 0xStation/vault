@@ -192,9 +192,9 @@ const BatchExecuteWrapper = ({
           <Button type="submit" fullWidth={true} loading={loading}>
             Execute
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+          <p className={"mt-1 text-xs text-gray"}>
+            This action will be recorded on-chain. You’ll be directed to
+            execute.
           </p>
         </div>
       </form>
