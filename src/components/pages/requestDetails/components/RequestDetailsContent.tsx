@@ -116,58 +116,60 @@ const RequestDetailsContent = ({
         </section>
         <section className="p-4">
           <h2 className="font-regular mb-6">Activity</h2>
-          <ul className="space-y-2">
-            {request?.activities?.map((activity, idx) => (
-              <ActivityItem
-                key={`activity-${idx}`}
-                activity={activity}
-                chainId={request.chainId}
-                mutateRequest={(
-                  fn: Promise<any>,
-                  update: {
-                    activityId: string
-                    comment: string
-                  },
-                ) => {
-                  mutateRequest({
-                    fn,
-                    requestId: request.id,
-                    payload: {
-                      ...request!,
-                      activities: request!.activities.map((a) => {
-                        if (update.activityId !== a.id) {
-                          return a
-                        }
-                        return {
-                          ...a,
-                          data: {
-                            comment: update.comment,
-                            edited: true,
-                          },
-                        }
-                      }),
+          <div className="space-y-2">
+            <ul className="space-y-2">
+              {request?.activities?.map((activity, idx) => (
+                <ActivityItem
+                  key={`activity-${idx}`}
+                  activity={activity}
+                  chainId={request.chainId}
+                  mutateRequest={(
+                    fn: Promise<any>,
+                    update: {
+                      activityId: string
+                      comment: string
                     },
-                  })
-                }}
-              />
-            ))}
-          </ul>
-          <NewCommentForm
-            mutateRequest={(fn: Promise<any>, commentActivity: any) => {
-              mutateRequest({
-                fn: fn,
-                requestId: request.id,
-                payload: {
-                  ...request!,
-                  activities: [...request!.activities, commentActivity],
-                  commentActivities: [
-                    commentActivity,
-                    ...request!.commentActivities,
-                  ],
-                },
-              })
-            }}
-          />
+                  ) => {
+                    mutateRequest({
+                      fn,
+                      requestId: request.id,
+                      payload: {
+                        ...request!,
+                        activities: request!.activities.map((a) => {
+                          if (update.activityId !== a.id) {
+                            return a
+                          }
+                          return {
+                            ...a,
+                            data: {
+                              comment: update.comment,
+                              edited: true,
+                            },
+                          }
+                        }),
+                      },
+                    })
+                  }}
+                />
+              ))}
+            </ul>
+            <NewCommentForm
+              mutateRequest={(fn: Promise<any>, commentActivity: any) => {
+                mutateRequest({
+                  fn: fn,
+                  requestId: request.id,
+                  payload: {
+                    ...request!,
+                    activities: [...request!.activities, commentActivity],
+                    commentActivities: [
+                      commentActivity,
+                      ...request!.commentActivities,
+                    ],
+                  },
+                })
+              }}
+            />
+          </div>
         </section>
       </div>
       {/* updating status on transaction success handled elsewhere, can remove this when execution pending */}
