@@ -250,7 +250,7 @@ const NewAutomationPage = () => {
       txnHash={txData?.hash}
     />
   ) : (
-    <div className="mt-12 mb-24 grow sm:mt-6">
+    <div className="mt-12 mb-24 grow px-4 sm:mt-6">
       <button onClick={() => router.back()} className="sm:hidden">
         <XMarkIcon className="h-6 w-6" />
       </button>
