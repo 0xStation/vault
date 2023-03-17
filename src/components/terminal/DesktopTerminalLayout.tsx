@@ -146,7 +146,7 @@ const DesktopTerminalLayout = ({
                         <span>{option.label}</span>
                         {option.label === "Proposals" &&
                           requestsNeedingAttention && (
-                            <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-base text-orange">
+                            <span className="flex h-5 w-5 items-center justify-center rounded bg-orange bg-opacity-20 text-sm text-orange">
                               {requestsNeedingAttention.length}
                             </span>
                           )}
