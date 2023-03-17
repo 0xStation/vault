@@ -67,7 +67,7 @@ const EditTerminalContent = () => {
 
   return (
     <Layout backFunc={() => router.back()} isCloseIcon={false}>
-      <h2 className="font-bold">Add Terminal Details</h2>
+      <h2 className="font-bold">Edit Project details</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="mt-6 space-y-6"
