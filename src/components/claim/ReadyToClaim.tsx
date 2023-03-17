@@ -12,7 +12,7 @@ export const ReadyToClaim = ({ address }: { address: string }) => {
         <div className="flex flex-row items-center space-x-3">
           {!!itemsCount && <span className="h-2 w-2 rounded-full bg-orange" />}
           <div className="text-base">
-            {itemsCount} item{itemsCount === 1 ? "" : "s"} ready to claim
+            {itemsCount} item{itemsCount === 1 ? "" : "s"} to claim
           </div>
         </div>
         <ChevronRight size="sm" color="gray" />
