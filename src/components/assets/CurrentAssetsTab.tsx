@@ -1,4 +1,4 @@
-import { EmptyState } from "components/emptyStates/EmptyState"
+import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
 import Image from "next/image"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import useNFTAssetData from "../../hooks/useNFTAssetData"
@@ -26,9 +26,11 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
     <TabsContent value={TerminalAssetsTab.CURRENT}>
       {!tokenData?.length && !nftData?.length ? (
         <div className="flex h-[calc(100%+18px)] px-4 pb-4 pt-4">
-          <EmptyState
-            title="Add tokens"
+          <QrCodeEmptyState
+            title="No tokens"
             subtitle="Transfer tokens to the Project address or share the address to receive tokens."
+            address={terminal?.safeAddress}
+            qrCodeSize={96}
           />
         </div>
       ) : (

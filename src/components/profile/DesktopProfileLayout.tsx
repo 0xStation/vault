@@ -3,7 +3,7 @@ import { Avatar } from "@ui/Avatar"
 import { useRouter } from "next/router"
 import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { AccountNavBar } from "../core/AccountNavBar/AccountDropdown"
-import { StationLogo } from "../icons"
+import { TerminalLogo } from "../icons"
 
 const DesktopProfileLayout = ({
   assumeDefaultPadding = true,
@@ -21,7 +21,7 @@ const DesktopProfileLayout = ({
       <div className="flex h-screen flex-row">
         <div className="relative h-full w-[300px]">
           <section className="flex flex-row items-center justify-between p-4">
-            <StationLogo size="lg" />
+            <TerminalLogo size="lg" />
           </section>
           <div className="h-[90%] border-r border-gray-90">
             <section className="mt-4 p-4">
