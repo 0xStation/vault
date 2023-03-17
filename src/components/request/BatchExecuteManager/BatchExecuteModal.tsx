@@ -162,7 +162,7 @@ const BatchExecuteWrapper = ({
             Execute {`${approve ? "to approve" : "to reject"}`}{" "}
             {requestsToApprove.length} Proposals
           </div>
-          <div>This action is on-chain and will not be reversible.</div>
+          <div>Your group action will be recorded on-chain.</div>
         </div>
 
         <div className="max-h-[400px] space-y-4 overflow-auto">
