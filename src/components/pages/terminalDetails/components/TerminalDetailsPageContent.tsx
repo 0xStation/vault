@@ -10,7 +10,7 @@ const TerminalDetailsPageContent = ({ terminal }: { terminal: Terminal }) => {
           <a
             href={terminal?.data?.url}
             target="_blank"
-            className="mt-6 inline-block border-b border-dotted text-base hover:text-gray"
+            className="mt-6 inline-block text-base text-violet hover:text-violet-80"
             rel="noreferrer"
           >
             {terminal?.data?.url}
