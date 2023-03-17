@@ -281,7 +281,7 @@ export const SendTokensContent = ({
                 </div>
               ) : !tokens.length ? (
                 <div className="w-full rounded bg-gray-90 p-4 text-center">
-                  <p className="font-bold">Add tokens</p>
+                  <p className="font-bold">No tokens found</p>
                   <p className="pt-2 text-base">
                     Transfer tokens to the Project address or share the address
                     to receive tokens.

@@ -333,7 +333,7 @@ export const EditMembersContent = () => {
           className="flex h-[calc(100%-120px)] flex-col"
         >
           <div
-            className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
+            className={`flex ${formHeight} grow flex-col space-y-4 overflow-auto pb-6`}
           >
             <div className="mb-3">
               {safeMetadata?.signers?.map((address) => {
@@ -467,7 +467,7 @@ export const EditMembersContent = () => {
                 required
                 name="note"
                 errors={errors}
-                placeholder="Onboard Alice to the team"
+                placeholder="Add Alice as a memberß"
               />
             ) : null}
           </div>
