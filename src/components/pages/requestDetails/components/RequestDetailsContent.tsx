@@ -68,7 +68,7 @@ const RequestDetailsContent = ({
         </section>
         <section className="p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h2>Votes</h2>
+            <h2 className="font-regular">Votes</h2>
             <span className="text-sm text-gray-50">
               <span className="font-bold">Quorum:</span> {request?.quorum}
             </span>
@@ -115,7 +115,7 @@ const RequestDetailsContent = ({
           })}
         </section>
         <section className="p-6">
-          <h2 className="mb-6">Activity</h2>
+          <h2 className="font-regular mb-6">Activity</h2>
           <ul className="space-y-3">
             {request?.activities?.map((activity, idx) => (
               <ActivityItem
