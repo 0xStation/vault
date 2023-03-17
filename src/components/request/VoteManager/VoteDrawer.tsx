@@ -166,21 +166,23 @@ const VoteDrawer = ({
   return (
     <BottomDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-6">
-          <div className="text-2xl font-bold">
-            {approve ? "Approve" : "Reject"} request
+        <div className="space-y-6 pb-[70px]">
+          <div className="space-y-4">
+            <div className="text-xl font-bold">
+              {approve ? "Approve" : "Reject"} request
+            </div>
+            <div>
+              The {approve ? "approval" : "rejection"} will be executed once the
+              quorum has been met.
+            </div>
+            <TextareaWithLabel
+              label="Note"
+              register={register}
+              placeholder="Add a note"
+              name="comment"
+              errors={errors}
+            />
           </div>
-          <div>
-            The {approve ? "approval" : "rejection"} will be executed once the
-            quorum has been met.
-          </div>
-          <TextareaWithLabel
-            label="Note (optional)"
-            register={register}
-            placeholder="Add a note"
-            name="comment"
-            errors={errors}
-          />
         </div>
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full max-w-[580px] px-5 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>

@@ -52,7 +52,7 @@ const buttonStatusComboProps: Record<string, any> = {
   [`${ButtonStatus.VOTED}-${ButtonStatus.EXECUTE}`]:
     "You approved the request. Rejection has met the quorum. You can execute to change your vote. This action will be recorded on-chain. You’ll be directed to execute.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.VOTE}`]:
-    "Execute the approval or vote to reject. You’ll be directed to confirm.",
+    "Execute the approval or vote to reject. You’ll be directed to confirm and execute your choice.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.VOTED}`]:
     "You rejected the request. Approval has met the quorum. Execute to change your vote. This action will be recorded on-chain. You’ll be directed to execute.",
   [`${ButtonStatus.EXECUTE}-${ButtonStatus.EXECUTE}`]:
