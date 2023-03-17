@@ -331,7 +331,7 @@ export const ClaimItemsDrawer = ({
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (
                   <div
-                    className="space-y-3 rounded-lg bg-gray-90 p-4"
+                    className="space-y-3 rounded-lg bg-gray-100 p-4"
                     key={`item-${index}`}
                   >
                     <div>
