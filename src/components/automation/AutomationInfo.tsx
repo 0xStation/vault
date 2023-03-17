@@ -48,7 +48,7 @@ export const AutomationInfo = () => {
             </div>
             <div className="mt-4">
               {automation?.splits!.map((split) => (
-                <div className="py-3" key={`split-${split.address}`}>
+                <div className="py-2" key={`split-${split.address}`}>
                   <div
                     className="flex flex-row items-center justify-between"
                     key={`split-${split.address}`}
@@ -61,8 +61,8 @@ export const AutomationInfo = () => {
             </div>
           </div>
           <div className="mb-24 mt-4 border-t border-gray-90 px-4">
-            <h2 className="mt-4">Balance</h2>
-            <div className="space-y-3">
+            <h2 className="mt-6">Balance</h2>
+            <div className="space-y-4">
               <LabelCard
                 className="mt-3 w-full"
                 label={"Total balance"}
