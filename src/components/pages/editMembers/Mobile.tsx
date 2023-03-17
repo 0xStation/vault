@@ -6,12 +6,14 @@ const EditMembersMobile = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   return (
-    <Layout
-      backFunc={() => router.push(`/${chainNameAndSafeAddress}/members`)}
-      isCloseIcon={true}
-    >
-      <EditMembersContent />
-    </Layout>
+    <div className="px-4">
+      <Layout
+        backFunc={() => router.push(`/${chainNameAndSafeAddress}/members`)}
+        isCloseIcon={true}
+      >
+        <EditMembersContent />
+      </Layout>
+    </div>
   )
 }
 
