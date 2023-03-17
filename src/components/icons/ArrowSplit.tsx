@@ -4,7 +4,7 @@ import { IconProps } from "./utils"
 export const ArrowSplit = ({ size = "base", color = "base" }: IconProps) => {
   return (
     <svg
-      width="20"
+      width="16"
       height="18"
       viewBox="0 0 20 18"
       fill="none"

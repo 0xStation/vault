@@ -61,7 +61,7 @@ export const AutomationListItem = ({
                       {timeSince(automation.createdAt)}
                     </span>
                   </div>
-                  <div className="flex flex-row items-center space-x-2">
+                  <div className="flex flex-row items-center space-x-1.5">
                     <ArrowSplit size="sm" color="gray" />
                     <span className="text-base text-gray">Revenue Share</span>
                   </div>
