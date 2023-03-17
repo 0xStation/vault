@@ -1,17 +1,17 @@
 import { useRouter } from "next/router"
-import Layout from "../../terminalCreation/Layout"
 import SendTokensContent from "./components/SendTokensContent"
 
 const SendTokensMobile = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   return (
-    <Layout
-      backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
-      isCloseIcon={true}
-    >
-      <SendTokensContent />
-    </Layout>
+    // Note: This creates duplication of 'x' on mobile but not sure if removing it will impact anything else or not
+    // <Layout
+    //   backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
+    //   isCloseIcon={true}
+    // >
+    <SendTokensContent />
+    // </Layout>
   )
 }
 
