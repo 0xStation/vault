@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "@icons"
+import { ArrowSplit } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
 import { timeSince } from "lib/utils"
@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import AutomationDetailsContent from "../../../src/components/pages/automationDetails/components/AutomationDetailsContent"
 import { Automation } from "../../models/automation/types"
+// import { ArrowSplit }   "../icons"
 
 export const AutomationListItem = ({
   automation,
@@ -61,8 +62,7 @@ export const AutomationListItem = ({
                     </span>
                   </div>
                   <div className="flex flex-row items-center space-x-1">
-                    {/* TODO: ArrowSplit isn't working for some reason :( */}
-                    <ArrowUpRight size="sm" color="gray" />
+                    <ArrowSplit size="sm" color="gray" />
                     <span className="text-base text-gray">Revenue Share</span>
                   </div>
                 </div>
@@ -91,8 +91,7 @@ export const AutomationListItem = ({
                 </span>
               </div>
               <div className="flex flex-row items-center space-x-1">
-                {/* TODO: ArrowSplit isn't working for some reason :( */}
-                <ArrowUpRight size="sm" color="gray" />
+                <ArrowSplit size="sm" color="gray" />
                 <span className="text-base text-gray">Revenue Share</span>
               </div>
             </div>
