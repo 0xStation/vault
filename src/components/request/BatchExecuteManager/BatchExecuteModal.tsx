@@ -157,10 +157,10 @@ const BatchExecuteWrapper = ({
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="overflow-auto pb-[110px]">
-        <div className="mb-4 space-y-6">
-          <div className="text-2xl font-bold">
+        <div className="mb-4 space-y-4">
+          <div className="text-xl font-bold">
             Execute ({`${approve ? "approve" : "reject"}`}){" "}
-            {requestsToApprove.length} requests
+            {requestsToApprove.length} Proposals
           </div>
           <div>This action is on-chain and will not be reversible.</div>
         </div>
