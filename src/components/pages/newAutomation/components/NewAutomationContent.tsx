@@ -1,5 +1,4 @@
 import { isAddress } from "@ethersproject/address"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import { Address } from "@ui/Address"
 import { Button } from "@ui/Button"
 import {
@@ -250,11 +249,8 @@ const NewAutomationPage = () => {
       txnHash={txData?.hash}
     />
   ) : (
-    <div className="mt-12 mb-24 grow px-4 sm:mt-6">
-      <button onClick={() => router.back()} className="sm:hidden">
-        <XMarkIcon className="h-6 w-6" />
-      </button>
-      <h2 className="mt-8 mb-[30px] sm:mt-0">New Revenue Share</h2>
+    <div className="mb-24 grow sm:mt-6">
+      <h2 className="mb-[30px] sm:mt-0">New Revenue Share</h2>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="flex-col">
           <InputWithLabel
@@ -383,7 +379,7 @@ const NewAutomationPage = () => {
             {(splitsFieldError as string) || ""}
           </p>
         </div>
-        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-black px-5 py-3 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full bg-black px-5 py-3 text-center">
           <Button
             type="submit"
             fullWidth={true}

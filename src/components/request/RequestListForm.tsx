@@ -1,5 +1,6 @@
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
+import { Button } from "@ui/Button"
 import RightSlider from "@ui/RightSlider"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
@@ -255,7 +256,13 @@ const RequestListForm = ({
     }
     return (
       <div className="flex h-full px-4 pb-4">
-        <EmptyState title={title} subtitle={subtitle} />
+        <EmptyState title={title} subtitle={subtitle}>
+          {isSigner ? (
+            <span className="mx-auto">
+              <Button>Create</Button>
+            </span>
+          ) : null}
+        </EmptyState>
       </div>
     )
   } else {
