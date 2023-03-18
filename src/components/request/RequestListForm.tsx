@@ -107,6 +107,7 @@ const RequestListForm = ({
     RequestFrob | undefined
   >(undefined)
 
+  const [requestActionsOpen, setRequestActionsOpen] = useState<boolean>(false)
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const closeDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
@@ -117,6 +118,9 @@ const RequestListForm = ({
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
   const resetBatchState = () => dispatch({ type: "RESET" })
+  const setIsRequestActionsOpen = useStore(
+    (state) => state.setIsRequestActionsOpen,
+  )
 
   const onCheckboxChange = (e: any) => {
     const requestId = e.target.name
@@ -228,7 +232,9 @@ const RequestListForm = ({
           <NuxEmptyState
             title="Create your first Proposal"
             subtitle="Proposals help collectives distribute tokens and manage members with more trust."
-            onClick={() => alert("TODO: show a modal")}
+            onClick={() => {
+              setIsRequestActionsOpen(true)
+            }}
           />
         </div>
       )
@@ -259,7 +265,9 @@ const RequestListForm = ({
         <EmptyState title={title} subtitle={subtitle}>
           {isSigner ? (
             <span className="mx-auto">
-              <Button>Create</Button>
+              <Button onClick={() => setIsRequestActionsOpen(true)}>
+                Create
+              </Button>
             </span>
           ) : null}
         </EmptyState>

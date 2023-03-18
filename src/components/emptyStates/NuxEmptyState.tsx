@@ -16,7 +16,7 @@ export const NuxEmptyState = ({
     <EmptyState title={title} subtitle={subtitle}>
       <Image src={RequestImage} alt={"Request"} />
       <div className="mx-auto mt-7">
-        <Button onClick={onClick}>Create</Button>
+        <Button onClick={() => onClick()}>Create</Button>
       </div>
     </EmptyState>
   )
