@@ -1,3 +1,4 @@
+import { RequestFrob } from "models/request/types"
 import { useAccount } from "wagmi"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
@@ -18,14 +19,15 @@ const RequestListByFilterAndTab = ({
 }) => {
   const { address } = useAccount()
 
-  let { data: requests, mutate } = useRequests(safeChainId, safeAddress, {
+  const { data: requests, mutate } = useRequests(safeChainId, safeAddress, {
     tab,
   })
+  let filteredRequests = [] as RequestFrob[]
 
   if (!requests) return <LoadingCardList />
 
   if (filter === TerminalRequestStatusFilter.NEEDS_ACTION) {
-    requests = requests.filter(
+    filteredRequests = requests.filter(
       (r) =>
         !isExecuted(r) &&
         (!(
@@ -38,7 +40,7 @@ const RequestListByFilterAndTab = ({
   }
 
   if (filter === TerminalRequestStatusFilter.AWAITING_OTHERS) {
-    requests = requests.filter(
+    filteredRequests = requests.filter(
       (r) =>
         !isExecuted(r) &&
         (r.approveActivities.some((a) => a.address === address) ||
@@ -49,12 +51,18 @@ const RequestListByFilterAndTab = ({
   }
 
   if (filter === TerminalRequestStatusFilter.OPEN) {
-    requests = requests.filter((r) => !isExecuted(r))
+    filteredRequests = requests.filter((r) => !isExecuted(r))
   } else if (filter === TerminalRequestStatusFilter.CLOSED) {
-    requests = requests.filter((r) => isExecuted(r))
+    filteredRequests = requests.filter((r) => isExecuted(r))
   }
 
-  return <RequestListForm requests={requests} mutate={mutate} />
+  return (
+    <RequestListForm
+      requests={filteredRequests}
+      mutate={mutate}
+      totalNumRequests={requests?.length}
+    />
+  )
 }
 
 export default RequestListByFilterAndTab

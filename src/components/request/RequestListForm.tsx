@@ -1,8 +1,10 @@
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
+import { Button } from "@ui/Button"
 import RightSlider from "@ui/RightSlider"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
+import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
 import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
@@ -80,10 +82,12 @@ const RequestListForm = ({
   requests,
   mutate,
   isProfile = false,
+  totalNumRequests,
 }: {
   requests: RequestFrob[]
   mutate: KeyedMutator<RequestFrob[] | undefined>
   isProfile?: boolean
+  totalNumRequests: number
 }) => {
   const router = useRouter()
   const isSigner = usePermissionsStore((state) => state.isSigner)
@@ -103,6 +107,7 @@ const RequestListForm = ({
     RequestFrob | undefined
   >(undefined)
 
+  const [requestActionsOpen, setRequestActionsOpen] = useState<boolean>(false)
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const closeDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
@@ -113,6 +118,9 @@ const RequestListForm = ({
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
   const resetBatchState = () => dispatch({ type: "RESET" })
+  const setIsRequestActionsOpen = useStore(
+    (state) => state.setIsRequestActionsOpen,
+  )
 
   const onCheckboxChange = (e: any) => {
     const requestId = e.target.name
@@ -218,10 +226,24 @@ const RequestListForm = ({
     let title = ""
     let subtitle = ""
 
+    if (totalNumRequests === 0 && isSigner) {
+      return (
+        <div className="flex h-full px-4 pb-4">
+          <NuxEmptyState
+            title="Create your first Proposal"
+            subtitle="Proposals help collectives distribute tokens and manage members with more trust."
+            onClick={() => {
+              setIsRequestActionsOpen(true)
+            }}
+          />
+        </div>
+      )
+    }
+
     switch (router.query.filter) {
       case TerminalRequestStatusFilter.OPEN:
         title = "No proposals"
-        subtitle = "The members of this Project have not created a proposal. "
+        subtitle = "The members of this Project have no proposals to review. "
         break
       case TerminalRequestStatusFilter.AWAITING_OTHERS:
         title = "No pending Proposals"
@@ -240,7 +262,15 @@ const RequestListForm = ({
     }
     return (
       <div className="flex h-full px-4 pb-4">
-        <EmptyState title={title} subtitle={subtitle} />
+        <EmptyState title={title} subtitle={subtitle}>
+          {isSigner ? (
+            <span className="mx-auto">
+              <Button onClick={() => setIsRequestActionsOpen(true)}>
+                Create
+              </Button>
+            </span>
+          ) : null}
+        </EmptyState>
       </div>
     )
   } else {

@@ -1,5 +1,7 @@
 import { ArrowLeft } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
+import RequestActionsDrawer from "components/request/RequestActions/Drawer"
+import RequestActionsModal from "components/request/RequestActions/Modal"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
 import { Terminal } from "models/terminal/types"
@@ -16,48 +18,69 @@ import RequestTabContent from "../../src/components/request/RequestTabContent"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import { usePermissionsStore } from "../../src/hooks/stores/usePermissionsStore"
+import useStore from "../../src/hooks/stores/useStore"
 import { useIsSigner } from "../../src/hooks/useIsSigner"
 
 const DesktopTerminalRequestsPage = () => {
   const isSigner = usePermissionsStore((state) => state.isSigner)
+
+  const isRequestActionsOpen = useStore((state) => state.isRequestActionsOpen)
+  const setIsRequestActionsOpen = useStore(
+    (state) => state.setIsRequestActionsOpen,
+  )
   return (
-    <DesktopTerminalLayout>
-      <div className="my-4 flex flex-row items-center justify-between px-4">
-        <span className="text-2xl font-bold">Proposals</span>
-        {isSigner && <CreateRequestDropdown />}
-      </div>
-      <TerminalRequestTypeTabBar>
-        <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
-        <RequestTabContent tab={TerminalRequestTypeTab.TOKENS} />
-        <RequestTabContent tab={TerminalRequestTypeTab.MEMBERS} />
-      </TerminalRequestTypeTabBar>
-    </DesktopTerminalLayout>
+    <>
+      <RequestActionsModal
+        isOpen={isRequestActionsOpen}
+        setIsOpen={setIsRequestActionsOpen}
+      />
+      <DesktopTerminalLayout>
+        <div className="my-4 flex flex-row items-center justify-between px-4">
+          <span className="text-2xl font-bold">Proposals</span>
+          {isSigner && <CreateRequestDropdown />}
+        </div>
+        <TerminalRequestTypeTabBar>
+          <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
+          <RequestTabContent tab={TerminalRequestTypeTab.TOKENS} />
+          <RequestTabContent tab={TerminalRequestTypeTab.MEMBERS} />
+        </TerminalRequestTypeTabBar>
+      </DesktopTerminalLayout>
+    </>
   )
 }
 
 const MobileTerminalRequestsPage = () => {
   const router = useRouter()
   const isSigner = usePermissionsStore((state) => state.isSigner)
-
+  const isRequestActionsOpen = useStore((state) => state.isRequestActionsOpen)
+  const setIsRequestActionsOpen = useStore(
+    (state) => state.setIsRequestActionsOpen,
+  )
   return (
-    <div className="flex h-screen grow flex-col pb-4">
-      <AccountNavBar />
-      <Link
-        href={`/${router.query.chainNameAndSafeAddress}`}
-        className="block w-fit px-4"
-      >
-        <ArrowLeft />
-      </Link>
-      <div className="my-4 flex flex-row items-center justify-between px-4">
-        <h1>Proposals</h1>
-        {isSigner && <CreateRequestDropdown />}
+    <>
+      <RequestActionsDrawer
+        isOpen={isRequestActionsOpen}
+        setIsOpen={setIsRequestActionsOpen}
+      />
+      <div className="flex h-screen grow flex-col pb-4">
+        <AccountNavBar />
+        <Link
+          href={`/${router.query.chainNameAndSafeAddress}`}
+          className="block w-fit px-4"
+        >
+          <ArrowLeft />
+        </Link>
+        <div className="my-4 flex flex-row items-center justify-between px-4">
+          <h1>Proposals</h1>
+          {isSigner && <CreateRequestDropdown />}
+        </div>
+        <TerminalRequestTypeTabBar>
+          <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
+          <RequestTabContent tab={TerminalRequestTypeTab.TOKENS} />
+          <RequestTabContent tab={TerminalRequestTypeTab.MEMBERS} />
+        </TerminalRequestTypeTabBar>
       </div>
-      <TerminalRequestTypeTabBar>
-        <RequestTabContent tab={TerminalRequestTypeTab.ALL} />
-        <RequestTabContent tab={TerminalRequestTypeTab.TOKENS} />
-        <RequestTabContent tab={TerminalRequestTypeTab.MEMBERS} />
-      </TerminalRequestTypeTabBar>
-    </div>
+    </>
   )
 }
 
@@ -78,6 +101,7 @@ const TerminalRequestsPage = () => {
   })
 
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+
   return (
     <>
       {isSuccess && !isModuleEnabled && (

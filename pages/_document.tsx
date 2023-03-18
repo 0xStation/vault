@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href="/favicons/terminal-logo.ico" sizes="any" />
+        <link rel="icon" href="/favicons/terminal-logo.svg" sizes="any" />
         <meta
           name="description"
           content="Doing work with people who share your mission."

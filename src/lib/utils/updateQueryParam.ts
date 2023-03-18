@@ -20,6 +20,7 @@ export const addQueryParam = (
 export const removeQueryParam = (router: NextRouter, paramName: string) => {
   const query = { ...router.query }
   delete query[paramName]
+
   router.push(
     {
       pathname: router.pathname,
