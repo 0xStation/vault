@@ -1,4 +1,3 @@
-import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
 import Breakpoint from "@ui/Breakpoint"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Network } from "@ui/Network"
@@ -12,7 +11,8 @@ import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
-import { ArrowUpRight, ChevronRight } from "../../src/components/icons"
+import TerminalActionsBar from "../../src/components/core/TerminalActionBar"
+import { ChevronRight } from "../../src/components/icons"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
 import LabelCard from "../../src/components/ui/LabelCard"
@@ -134,38 +134,7 @@ const MobileTerminalIndexPage = () => {
         </div>
       </section>
       <section className="mt-8">
-        <div className="mx-auto flex flex-row justify-center space-x-6">
-          <Link href={"/"} className="block">
-            <div className="flex flex-col items-center space-y-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white ">
-                <PlusIcon className="h-6 w-6" />
-              </div>
-              <span className="text-sm">Add Tokens</span>
-            </div>
-          </Link>
-          <Link
-            href={`/${router.query.chainNameAndSafeAddress}/proposals/tokens/new`}
-            className="block"
-          >
-            <div className="flex flex-col items-center space-y-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white">
-                <ArrowUpRight />
-              </div>
-              <span className="text-sm">Send</span>
-            </div>
-          </Link>
-          <Link
-            href={`/${router.query.chainNameAndSafeAddress}/automations/new`}
-            className="block"
-          >
-            <div className="flex flex-col items-center space-y-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white">
-                <CogIcon className="h-6 w-6" />
-              </div>
-              <span className="text-sm">Automate</span>
-            </div>
-          </Link>
-        </div>
+        <TerminalActionsBar />
       </section>
       <section className="mt-8 divide-y divide-gray-80 border-t border-b border-gray-80">
         {options(router).map((option, idx) => {

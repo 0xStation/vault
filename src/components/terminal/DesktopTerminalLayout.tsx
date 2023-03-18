@@ -13,6 +13,7 @@ import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
+import TerminalActionBar from "../core/TerminalActionBar"
 
 type TerminalNavOption = {
   label: string
@@ -131,7 +132,10 @@ const DesktopTerminalLayout = ({
                 <span>{terminal?.signers?.length}</span>
               </div>
             </section>
-            <section className="mt-2">
+            <section className="mt-6">
+              <TerminalActionBar />
+            </section>
+            <section className="mt-8">
               {options(router).map((option, idx) => {
                 if (option.active) {
                   return (
