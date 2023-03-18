@@ -17,7 +17,9 @@ export const QrCodeEmptyState = ({
   return (
     <EmptyState title={title} subtitle={subtitle}>
       <QRCode value={address} size={qrCodeSize} />
-      <CopyAddressButton address={address} className="mt-6" />
+      <span className="mt-6">
+        <CopyAddressButton address={address} />
+      </span>
     </EmptyState>
   )
 }
