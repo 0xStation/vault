@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@ui/Select"
 import axios from "axios"
+import { CopyAddressButton } from "components/core/CopyAddressButton"
 import { ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransfer } from "lib/encodings/token"
 import { newActionTree } from "lib/signatures/tree"
@@ -253,23 +254,13 @@ export const RequestTokensContent = () => {
                   </p>
                 </div>
               ) : !tokens.length ? (
-                <div className="w-full rounded bg-gray-90 p-4 text-center">
-                  <p className="font-bold">No tokens found</p>
-                  <p className="pt-2 text-base">
+                <div className="w-full justify-center rounded bg-gray-90 p-4 text-center">
+                  <p className="font-bold">No tokens to send from Project</p>
+                  <p className="mb-6 pt-2 text-base">
                     Transfer tokens to the Project address or share the address
                     to receive tokens.
                   </p>
-                  <button
-                    type="button"
-                    className="pt-2 text-base font-bold text-violet"
-                    onClick={() => {
-                      navigator.clipboard.writeText(address as string)
-                      setAddressCopied(true)
-                      setTimeout(() => setAddressCopied(false), 1500)
-                    }}
-                  >
-                    {addressCopied ? "Copied!" : "Copy address"}
-                  </button>
+                  <CopyAddressButton address={address as string} />
                 </div>
               ) : (
                 <>
