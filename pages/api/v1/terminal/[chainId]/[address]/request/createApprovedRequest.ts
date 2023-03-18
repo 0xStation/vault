@@ -73,7 +73,7 @@ export default async function handler(
     try {
       const safeDetails = await getSafeDetails(body.chainId, body.address)
       const { quorum, signers } = safeDetails
-      const emails = await getEmails(signers)
+      const signerEmails = await getEmails(signers)
       request = request as unknown as Request
 
       // need to get terminal by chainName and safeAddress because it's not available yet off of the request
@@ -83,7 +83,7 @@ export default async function handler(
       )) as Terminal
 
       await sendNewProposalEmail({
-        recipients: emails,
+        recipients: signerEmails,
         proposalCreatedBy: body.createdBy,
         proposalTitle: body.note,
         requestId: request.id,
@@ -109,7 +109,7 @@ export default async function handler(
         }
 
         await sendNewProposalReadyForExecutionEmail({
-          recipients: emails,
+          recipients: signerEmails,
           proposalTitle: request.data.note,
           requestId: request.id,
           chainId: body.chainId,

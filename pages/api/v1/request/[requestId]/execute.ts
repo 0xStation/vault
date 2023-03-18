@@ -3,7 +3,7 @@ import { getEmails } from "lib/dynamic"
 import { sendNewProposalExecutionEmail } from "lib/sendgrid"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
-import { Request } from "../../../../../src/models/request/types"
+import { getRequestById } from "../../../../../src/models/request/queries/getRequestById"
 import { Terminal } from "../../../../../src/models/terminal/types"
 
 export default async function handler(
@@ -34,19 +34,10 @@ export default async function handler(
   })
 
   try {
-    const request = (await db.request.findUnique({
-      where: {
-        id: query.requestId as string,
-      },
-      include: {
-        terminal: true,
-      },
-    })) as Request & { terminal: Terminal }
-
+    const request = await getRequestById(query.requestId as string)
     const terminal = request?.terminal as Terminal
 
-    // 1. get gnosis signer addresses by body.chainId and body.address
-    const addresses = ["0x65A3870F48B5237f27f674Ec42eA1E017E111D63"]
+    const addresses = request.signers
     const emails = await getEmails(addresses)
 
     await sendNewProposalExecutionEmail({
