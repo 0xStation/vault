@@ -32,9 +32,6 @@ export const RequestActionsModal = ({
       label: OptionsCopy.EDIT_MEMBERS,
       subtitle: OptionsCopy.EDIT_MEMBERS_SUBTITLE,
       onClick: () => {
-        // router.push(
-        //   `/${router.query.chainNameAndSafeAddress}/members?editMembers=true`,
-        // )
         addQueryParam(router, "editMembersSliderOpen", "true")
         setIsOpen(false)
       },
