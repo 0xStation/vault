@@ -14,7 +14,7 @@ const QRCode = ({
     <div className="mx-auto w-fit rounded bg-white p-3">
       <QRCodeReact
         value={value}
-        size={size}
+        size={183}
         bgColor="#0D0E11"
         fgColor="#ffffff"
       />

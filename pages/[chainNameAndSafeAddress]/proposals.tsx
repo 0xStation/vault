@@ -1,3 +1,4 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { ArrowLeft } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
@@ -76,6 +77,7 @@ const TerminalRequestsPage = () => {
     address: address as string,
     chainId: chainId as number,
   })
+  const { primaryWallet } = useDynamicContext()
 
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
   return (
