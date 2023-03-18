@@ -1,3 +1,4 @@
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { useEffect, useState } from "react"
 import TerminalCreationForm from "../../src/components/terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/TerminalCreationOptionsView"
@@ -13,6 +14,8 @@ export const TerminalCreationPage = () => {
     VIEW.CREATION_OPTIONS,
   )
   const activeUser = useStore((state) => state.activeUser)
+  const breakpoint = useBreakpoint()
+  const isMobile = breakpoint === "S"
 
   useEffect(() => {
     if (!activeUser) {
@@ -22,10 +25,25 @@ export const TerminalCreationPage = () => {
 
   return (
     <>
-      {view === VIEW.CREATION_OPTIONS && (
-        <TerminalCreationOptionsView setView={setView} />
+      {isMobile ? (
+        <div className="px-4">
+          {view === VIEW.CREATION_OPTIONS && (
+            <TerminalCreationOptionsView setView={setView} />
+          )}
+          {view === VIEW.CREATE_FORM && (
+            <TerminalCreationForm setView={setView} />
+          )}
+        </div>
+      ) : (
+        <>
+          {view === VIEW.CREATION_OPTIONS && (
+            <TerminalCreationOptionsView setView={setView} />
+          )}
+          {view === VIEW.CREATE_FORM && (
+            <TerminalCreationForm setView={setView} />
+          )}
+        </>
       )}
-      {view === VIEW.CREATE_FORM && <TerminalCreationForm setView={setView} />}
     </>
   )
 }
