@@ -1,7 +1,12 @@
 import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
+import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
+import Modal from "@ui/Modal"
 import RightSlider from "@ui/RightSlider"
+import { CopyAddressButton } from "components/core/CopyAddressButton"
+import QRCode from "components/core/QrCode"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
+import { convertGlobalId } from "models/terminal/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -11,6 +16,9 @@ import RequestTokensContent from "../pages/requestTokens/components/RequestToken
 
 const TerminalActionBar = () => {
   const router = useRouter()
+  const { address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
+  )
   const [requestTokenSliderOpen, setRequestTokenSliderOpen] =
     useState<boolean>(false)
 
@@ -28,6 +36,8 @@ const TerminalActionBar = () => {
       removeQueryParam(router, "automationSliderOpen")
     }
   }
+
+  const [qrCodeOpen, setQrCodeOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (router.query.requestTokenSliderOpen) {
@@ -57,38 +67,41 @@ const TerminalActionBar = () => {
         <NewAutomationContent />
       </RightSlider>
 
-      <div className="mx-auto flex flex-row justify-center space-x-6">
-        <Breakpoint>
-          {(isMobile) => {
-            if (isMobile) {
-              return (
-                <Link href={"/"} className="block">
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white ">
-                      <PlusIcon className="h-6 w-6" />
-                    </div>
-                    <span className="text-sm">Add Tokens</span>
-                  </div>
-                </Link>
-              )
-            }
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
             return (
-              <div className="flex cursor-pointer flex-col items-center space-y-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
-                  <PlusIcon className="h-6 w-6" />
+              <BottomDrawer isOpen={qrCodeOpen} setIsOpen={setQrCodeOpen}>
+                <div className="space-y-4">
+                  <QRCode value={address} size={42}></QRCode>
+                  <CopyAddressButton address={address as string} />
                 </div>
-                <span
-                  className="text-sm"
-                  onClick={() => {
-                    //
-                  }}
-                >
-                  Add Tokens
-                </span>
-              </div>
+              </BottomDrawer>
             )
+          }
+          return (
+            <Modal isOpen={qrCodeOpen} setIsOpen={setQrCodeOpen}>
+              <div className="space-y-4">
+                <QRCode value={address} size={42}></QRCode>
+                <CopyAddressButton address={address as string} />
+              </div>
+            </Modal>
+          )
+        }}
+      </Breakpoint>
+
+      <div className="mx-auto flex flex-row justify-center space-x-6">
+        <div
+          className="flex cursor-pointer flex-col items-center space-y-2"
+          onClick={() => {
+            setQrCodeOpen(true)
           }}
-        </Breakpoint>
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
+            <PlusIcon className="h-6 w-6" />
+          </div>
+          <span className="text-sm">Add Tokens</span>
+        </div>
 
         <Breakpoint>
           {(isMobile) => {
