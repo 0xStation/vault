@@ -75,6 +75,7 @@ const EmailNotificationForm = ({
         <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
           <Button
             type="submit"
+            size="lg"
             disabled={isSubmitting}
             loading={isSubmitting}
             fullWidth={true}
@@ -83,7 +84,7 @@ const EmailNotificationForm = ({
             Save
           </Button>
           <p
-            className={`mt-1 text-xs  ${
+            className={`mt-1 text-sm  ${
               formMessage?.isError ? "text-red" : "text-gray"
             }`}
           >
