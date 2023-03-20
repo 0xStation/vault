@@ -51,7 +51,7 @@ const EmailNotificationForm = ({
   }
 
   return (
-    <div className="px-4">
+    <div className="px-0">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
       <p>
         Enter your email to get notified about your Projects. We’ll never spam
