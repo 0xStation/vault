@@ -4,10 +4,11 @@ import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { Terminal } from "models/terminal/types"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Desktop from "../../../../src/components/pages/sendTokens/Desktop"
 import Mobile from "../../../../src/components/pages/sendTokens/Mobile"
 import { useIsModuleEnabled } from "../../../../src/hooks/safe/useIsModuleEnabled"
+import { useIsSigner } from "../../../../src/hooks/useIsSigner"
 
 const NewTokensPage = () => {
   const router = useRouter()
@@ -22,6 +23,17 @@ const NewTokensPage = () => {
     chainId: terminal?.chainId as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+  const isSigner = useIsSigner({
+    address: terminal?.safeAddress as string,
+    chainId: terminal?.chainId as number,
+  })
+
+  useEffect(() => {
+    if (!isSigner || !terminal) {
+      router.push(`/${router.query.chainNameAndSafeAddress}/members`)
+    }
+  }, [isSigner])
+
   return (
     <>
       {isSuccess && !isModuleEnabled && (
