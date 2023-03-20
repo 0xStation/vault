@@ -72,10 +72,10 @@ const EmailNotificationForm = ({
             validate: (v) => !v || isValidEmail(v) || "Invalid email.",
           }}
         />
-        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-4 w-full max-w-[580px] px-4 text-center">
           <Button
-            type="submit"
             size="lg"
+            type="submit"
             disabled={isSubmitting}
             loading={isSubmitting}
             fullWidth={true}
