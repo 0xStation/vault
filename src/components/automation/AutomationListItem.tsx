@@ -36,6 +36,7 @@ export const AutomationListItem = ({
       <RightSlider
         open={automationDetailsOpen}
         setOpen={closeAutomationDetailsSlider}
+        useInnerPadding={false}
       >
         <AutomationDetailsContent />
       </RightSlider>
