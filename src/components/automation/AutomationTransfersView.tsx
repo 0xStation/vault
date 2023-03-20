@@ -1,4 +1,5 @@
-import { EmptyState } from "components/emptyStates/EmptyState"
+import React from "react"
+import { EmptyState } from "../../components/emptyStates/EmptyState"
 import {
   TransferDirection,
   TransferItem,
@@ -7,6 +8,7 @@ import {
 import { timeSince } from "../../lib/utils"
 import networks from "../../lib/utils/networks"
 import { TokenType } from "../../models/token/types"
+import { CopyAddressButton } from "../core/CopyAddressButton"
 import { Address } from "../ui/Address"
 import { Avatar } from "../ui/Avatar"
 import { Hyperlink } from "../ui/Hyperlink"
@@ -84,9 +86,10 @@ export const AutomationTransfersView = ({
           title="Start sharing revenue"
           subtitle="Copy the Automation address and paste it as the payout recipient."
         >
-          <video loop autoPlay muted controls>
+          <video loop autoPlay muted controls className="mb-6">
             <source src="/videos/nft-rev-share-tutorial.mp4" type="video/mp4" />
           </video>
+          <CopyAddressButton address={address} />
         </EmptyState>
       </div>
     )
