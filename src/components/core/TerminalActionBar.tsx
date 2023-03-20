@@ -12,17 +12,16 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { ArrowUpRight } from "../icons"
 import NewAutomationContent from "../pages/newAutomation/components/NewAutomationContent"
-import RequestTokensContent from "../pages/requestTokens/components/RequestTokensContent"
+import SendTokensContent from "../pages/sendTokens/components/SendTokensContent"
 
 const TerminalActionBar = () => {
   const router = useRouter()
   const { address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const [requestTokenSliderOpen, setRequestTokenSliderOpen] =
-    useState<boolean>(false)
+  const [sendTokenSliderOpen, setSendTokenSliderOpen] = useState<boolean>(false)
 
-  const closeRequestTokenSlider = (isOpen: boolean) => {
+  const closeSendTokenSlider = (isOpen: boolean) => {
     if (!isOpen) {
       removeQueryParam(router, "requestTokenSliderOpen")
     }
@@ -41,24 +40,21 @@ const TerminalActionBar = () => {
 
   useEffect(() => {
     if (router.query.requestTokenSliderOpen) {
-      setRequestTokenSliderOpen(true)
+      setSendTokenSliderOpen(true)
       setNewAutomationSliderOpen(false)
     } else if (router.query.automationSliderOpen) {
       setNewAutomationSliderOpen(true)
-      setRequestTokenSliderOpen(false)
+      setSendTokenSliderOpen(false)
     } else {
-      setRequestTokenSliderOpen(false)
+      setSendTokenSliderOpen(false)
       setNewAutomationSliderOpen(false)
     }
   }, [router.query])
 
   return (
     <>
-      <RightSlider
-        open={requestTokenSliderOpen}
-        setOpen={closeRequestTokenSlider}
-      >
-        <RequestTokensContent />
+      <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
+        <SendTokensContent />
       </RightSlider>
       <RightSlider
         open={newAutomationSliderOpen}
