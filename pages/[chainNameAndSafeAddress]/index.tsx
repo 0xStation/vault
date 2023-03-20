@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
+import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import TerminalActionsBar from "../../src/components/core/TerminalActionBar"
@@ -104,6 +105,9 @@ const MobileTerminalIndexPage = () => {
     <>
       <AccountNavBar />
       <section className="mt-6 px-4">
+        <TerminalReadyToClaim />
+      </section>
+      <section className="mt-4 px-4">
         <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
@@ -133,6 +137,7 @@ const MobileTerminalIndexPage = () => {
           />
         </div>
       </section>
+
       <section className="mt-8">
         <TerminalActionsBar />
       </section>

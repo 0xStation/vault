@@ -13,6 +13,7 @@ import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
+import { TerminalReadyToClaim } from "../claim/TerminalReadyToClaim"
 import TerminalActionBar from "../core/TerminalActionBar"
 
 type TerminalNavOption = {
@@ -132,6 +133,10 @@ const DesktopTerminalLayout = ({
                 <span>{terminal?.signers?.length}</span>
               </div>
             </section>
+            <section className="px-4">
+              <TerminalReadyToClaim />
+            </section>
+
             <section className="mt-6">
               <TerminalActionBar />
             </section>
