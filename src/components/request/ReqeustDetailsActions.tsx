@@ -129,7 +129,7 @@ export const RequestDetailsActions = ({
         mutateRequest={mutateRequest}
       />
       {/* TODO: max-w-[580px] is shrinking to mobile size for easier demoing, fix when doing actual desktop implementation */}
-      <div className="fixed bottom-0 border-t border-gray-80 bg-black px-4 pt-3 pb-6">
+      <div className="fixed bottom-0 w-full border-t border-gray-80 bg-black px-4 pt-3 pb-6">
         <div className="flex flex-row items-center space-x-2">
           <Button
             size="lg"
