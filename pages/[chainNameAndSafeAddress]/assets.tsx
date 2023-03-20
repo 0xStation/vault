@@ -1,6 +1,7 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { Terminal } from "models/terminal/types"
+import Head from "next/head"
 import { useState } from "react"
 import Desktop from "../../src/components/pages/assets/Desktop"
 import Mobile from "../../src/components/pages/assets/Mobile"
@@ -29,6 +30,11 @@ const AssetsPage = () => {
 
   return (
     <>
+      <>
+        <Head>
+          <title>${terminal?.data.name} | Assets</title>
+        </Head>
+      </>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}

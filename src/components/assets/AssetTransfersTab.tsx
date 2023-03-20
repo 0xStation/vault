@@ -1,5 +1,4 @@
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
-import Head from "next/head"
 import {
   TransferDirection,
   TransferItem,
@@ -31,11 +30,6 @@ const TransactionItem = ({
     .explorer
   return (
     <>
-      <>
-        <Head>
-          <title>Assets</title>
-        </Head>
-      </>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center space-x-2">
           <div className="relative h-6 w-6 rounded-full">

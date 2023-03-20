@@ -27,7 +27,7 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
     <>
       <>
         <Head>
-          <title>Assets</title>
+          <title>${terminal?.data.name} | Assets</title>
         </Head>
       </>
       <TabsContent value={TerminalAssetsTab.CURRENT}>
