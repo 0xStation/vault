@@ -83,7 +83,11 @@ export const AutomationTransfersView = ({
         <EmptyState
           title="Start sharing revenue"
           subtitle="Copy the Automation address and paste it as the payout recipient."
-        />
+        >
+          <video loop autoPlay muted controls>
+            <source src="/videos/nft-rev-share-tutorial.mp4" type="video/mp4" />
+          </video>
+        </EmptyState>
       </div>
     )
   }
