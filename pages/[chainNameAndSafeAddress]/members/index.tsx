@@ -40,7 +40,7 @@ const MembersPage = () => {
     <>
       <>
         <Head>
-          <title>{terminal?.data.name} | Members</title>
+          <title>Members | {terminal?.data.name}</title>
         </Head>
       </>
       {isSuccess && !isModuleEnabled && (

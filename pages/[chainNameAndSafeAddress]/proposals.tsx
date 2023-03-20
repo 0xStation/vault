@@ -6,6 +6,7 @@ import TerminalActivationView from "components/terminalCreation/import/TerminalA
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
 import { Terminal } from "models/terminal/types"
 import { convertGlobalId } from "models/terminal/utils"
+import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -25,11 +26,22 @@ const DesktopTerminalRequestsPage = () => {
   const isSigner = usePermissionsStore((state) => state.isSigner)
 
   const isRequestActionsOpen = useStore((state) => state.isRequestActionsOpen)
+  const router = useRouter()
+  const { chainId, address } = convertGlobalId(
+    router.query.chainNameAndSafeAddress as string,
+  )
+  const { terminal } = useTerminalByChainIdAndSafeAddress(
+    address as string,
+    chainId as number,
+  )
   const setIsRequestActionsOpen = useStore(
     (state) => state.setIsRequestActionsOpen,
   )
   return (
     <>
+      <Head>
+        <title>Proposals{terminal?.data.name}</title>
+      </Head>
       <RequestActionsModal
         isOpen={isRequestActionsOpen}
         setIsOpen={setIsRequestActionsOpen}

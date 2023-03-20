@@ -29,7 +29,7 @@ const TerminalDetailsPage = () => {
   return (
     <>
       <Head>
-        <title>{terminal?.data.name} | About</title>
+        <title>About | {terminal?.data.name}</title>
       </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView

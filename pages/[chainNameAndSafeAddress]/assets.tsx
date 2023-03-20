@@ -32,7 +32,7 @@ const AssetsPage = () => {
     <>
       <>
         <Head>
-          <title>${terminal?.data.name} | Assets</title>
+          <title>Assets | {terminal?.data.name}</title>
         </Head>
       </>
       {isSuccess && !isModuleEnabled && (
