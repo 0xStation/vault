@@ -2,6 +2,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
+import LoadingTerminalList from "components/core/LoadingTerminalList"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { addQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
@@ -33,7 +34,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
   return (
     <TabsContent value={ProfileTab.TERMINALS}>
       {isLoading ? (
-        <></>
+        <LoadingTerminalList />
       ) : terminals?.length === 0 ? (
         <div className="flex h-[calc(100%+18px)] px-4 pt-4">
           <EmptyState
