@@ -1,6 +1,10 @@
 import { ActivityVariant } from "@prisma/client"
+import { getEmails } from "lib/dynamic"
+import { sendNewCommentEmail } from "lib/sendgrid"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
+import { getRequestById } from "../../../../../src/models/request/queries/getRequestById"
+import { Terminal } from "../../../../../src/models/terminal/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,6 +36,27 @@ export default async function handler(
       },
     },
   })
+
+  const request = await getRequestById(query.requestId as string)
+  const terminal = request?.terminal as Terminal
+
+  try {
+    const addresses = request.signers
+    const emails = await getEmails(addresses)
+
+    await sendNewCommentEmail({
+      recipients: emails,
+      commentCreatedBy: address,
+      commentBody: comment,
+      requestId: query.requestId as string,
+      terminalName: terminal.data.name,
+      chainId: terminal.chainId,
+      safeAddress: terminal.safeAddress,
+    })
+  } catch (e) {
+    // silently fail
+    console.warn("Failed to send notification emails in `createProposal`", e)
+  }
 
   res.status(200).json(newComment)
 }

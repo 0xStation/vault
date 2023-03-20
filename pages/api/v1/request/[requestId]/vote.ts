@@ -1,10 +1,20 @@
-import { ActionVariant, ActivityVariant } from "@prisma/client"
+import {
+  ActionVariant,
+  ActivityVariant,
+  RequestVariantType,
+} from "@prisma/client"
+import { getEmails } from "lib/dynamic"
+import {
+  sendNewProposalReadyForClaimingEmail,
+  sendNewProposalReadyForExecutionEmail,
+} from "lib/sendgrid"
 import { hashAction } from "lib/signatures/action"
 import { actionsTree } from "lib/signatures/tree"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
-import { Request } from "../../../../../src/models/request/types"
+import { getRequestById } from "../../../../../src/models/request/queries/getRequestById"
+import { TokenTransferVariant } from "../../../../../src/models/request/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,14 +34,7 @@ export default async function handler(
 
   const { signature, address, approve, comment, newActivityId } = body
 
-  const request = (await db.request.findUnique({
-    where: {
-      id: query.requestId as string,
-    },
-    include: {
-      actions: true,
-    },
-  })) as Request
+  const request = await getRequestById(query.requestId as string)
 
   if (!request) {
     res.statusCode = 404
@@ -94,6 +97,41 @@ export default async function handler(
 
   // bundle creates as one atomic transaction
   await db.$transaction([signatureCreate, activityCreate])
+
+  try {
+    // this means we are approving the request and we are the final signer
+    // request object is a snapshot before this vote is taken into account
+    // we want to dispatch a "request approved" email to all signers
+    // we want to dispatch a "claim available" email if request is token send
+    if (approve && request.approveActivities.length - request.quorum === 1) {
+      const signerEmails = await getEmails(request.signers)
+
+      if (request.variant === RequestVariantType.TOKEN_TRANSFER) {
+        const meta = request.data.meta as TokenTransferVariant
+        const recipientEmail = await getEmails([meta.recipient])
+
+        await sendNewProposalReadyForClaimingEmail({
+          recipients: recipientEmail,
+          requestId: request.id,
+          chainId: request.terminal.chainId,
+          safeAddress: request.terminal.safeAddress,
+          terminalName: request.terminal.data.name,
+        })
+      }
+
+      await sendNewProposalReadyForExecutionEmail({
+        recipients: signerEmails,
+        proposalTitle: request.data.note,
+        requestId: request.id,
+        chainId: request.terminal.chainId,
+        safeAddress: request.terminal.safeAddress,
+        terminalName: request.terminal.data.name,
+      })
+    }
+  } catch (e) {
+    // silently fail
+    console.warn("Failed to send notification emails in `createProposal`", e)
+  }
 
   res.status(200).json({})
 }
