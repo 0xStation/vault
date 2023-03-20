@@ -1,5 +1,4 @@
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
-import Head from "next/head"
 import Image from "next/image"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import useNFTAssetData from "../../hooks/useNFTAssetData"
@@ -25,11 +24,6 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
 
   return (
     <>
-      <>
-        <Head>
-          <title>${terminal?.data.name} | Assets</title>
-        </Head>
-      </>
       <TabsContent value={TerminalAssetsTab.CURRENT}>
         {!tokenData?.length && !nftData?.length ? (
           <div className="flex h-[calc(100%+18px)] px-4 pb-4 pt-4">
