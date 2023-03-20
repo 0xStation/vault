@@ -1,5 +1,6 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
+import Head from "next/head"
 import { useState } from "react"
 import Desktop from "../../../src/components/pages/members/Desktop"
 import Mobile from "../../../src/components/pages/members/Mobile"
@@ -37,6 +38,11 @@ const MembersPage = () => {
 
   return (
     <>
+      <>
+        <Head>
+          <title>{terminal?.data.name} | Members</title>
+        </Head>
+      </>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}

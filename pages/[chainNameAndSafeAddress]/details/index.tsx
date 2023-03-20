@@ -2,6 +2,7 @@ import Breakpoint from "@ui/Breakpoint"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
 import { convertGlobalId } from "models/terminal/utils"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Desktop from "../../../src/components/pages/terminalDetails/Desktop"
@@ -27,6 +28,9 @@ const TerminalDetailsPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
   return (
     <>
+      <Head>
+        <title>{terminal?.data.name} | About</title>
+      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}
