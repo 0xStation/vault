@@ -6,7 +6,7 @@ import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalReq
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
 import { useRouter } from "next/router"
-import { useEffect, useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useStore from "../../hooks/stores/useStore"
