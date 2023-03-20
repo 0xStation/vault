@@ -66,7 +66,7 @@ const EditTerminalContent = () => {
 
   return (
     <>
-      <h2 className="font-bold">Add Terminal Details</h2>
+      <h2 className="font-bold">Add Project Details</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="mt-6 space-y-6"

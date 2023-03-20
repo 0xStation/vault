@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "@icons"
+import { ArrowSplit } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
 import RightSlider from "@ui/RightSlider"
 import { timeSince } from "lib/utils"
@@ -47,11 +47,12 @@ export const AutomationListItem = ({
                 href={`/${router.query.chainNameAndSafeAddress}/automations/${automation.id}`}
               >
                 <div className="space-y-2 border-b border-gray-80 py-3 px-4 hover:bg-gray-90 sm:rounded sm:border-x sm:border-t">
-                  {/* TODO: Unhide this after we implement edit automation */}
-                  {/* <div className="flex flex-row items-center space-x-1"> */}
-                  {/* <span className="h-2 w-2 rounded-full bg-green"></span> */}
-                  {/* <span className="text-base text-gray">Live</span> */}
-                  {/* </div> */}
+                  {/* TODO: Unhide this after we implement edit automation
+                   <div className="flex flex-row items-center space-x-1">
+                      <span className="h-2 w-2 rounded-full bg-green"></span>
+                      <span className="text-base text-gray">Live</span>
+                    </div> 
+                  */}
                   <div className="mt-2 mb-2 flex flex-row items-center justify-between">
                     <span className="text-lg font-bold">
                       {automation.data.name}
@@ -60,9 +61,8 @@ export const AutomationListItem = ({
                       {timeSince(automation.createdAt)}
                     </span>
                   </div>
-                  <div className="flex flex-row items-center space-x-1">
-                    {/* TODO: ArrowSplit isn't working for some reason :( */}
-                    <ArrowUpRight size="sm" color="gray" />
+                  <div className="flex flex-row items-center space-x-1.5">
+                    <ArrowSplit size="sm" color="gray" />
                     <span className="text-base text-gray">Revenue Share</span>
                   </div>
                 </div>
@@ -91,8 +91,7 @@ export const AutomationListItem = ({
                 </span>
               </div>
               <div className="flex flex-row items-center space-x-1">
-                {/* TODO: ArrowSplit isn't working for some reason :( */}
-                <ArrowUpRight size="sm" color="gray" />
+                <ArrowSplit size="sm" color="gray" />
                 <span className="text-base text-gray">Revenue Share</span>
               </div>
             </div>

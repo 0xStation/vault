@@ -252,7 +252,7 @@ const NewAutomationPage = () => {
     <div className="mb-24 grow sm:mt-6">
       <h2 className="mb-[30px] sm:mt-0">New Revenue Share</h2>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <div className="flex-col">
+        <div className="flex-col space-y-6">
           <InputWithLabel
             className="mb-3"
             label="What for?*"
@@ -268,116 +268,126 @@ const NewAutomationPage = () => {
               },
             }}
           />
-          <div className="flex flex-row items-center justify-between">
-            <label className="text-base font-bold">
-              Recipients and splits*
-            </label>
-            <span className="text-sm text-gray">
-              {sumSplits(watchSplits)}/100%
-            </span>
-          </div>
-          <ul className="mt-2">
-            {splitFields.map((split, index) => (
-              <FieldArrayItem
-                key={split.id}
-                title={`Recipient ${index + 1}`}
-                remove={() => remove(index)}
-              >
-                <Controller
-                  control={control}
-                  name={`splits.${index}.recipient`}
-                  render={({ field: { onChange, ref } }) => (
-                    <Select onValueChange={onChange} required>
-                      <SelectTrigger ref={ref}>
-                        <SelectValue placeholder="Select one" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem ref={ref} value={terminalAddress}>
-                          <div className="group">
-                            <span
-                              className={
-                                "flex flex-row items-center group-hover:hidden"
-                              }
-                            >
-                              This Project
-                            </span>
-                            <span
-                              // show on hover
-                              className={
-                                "hidden flex-row items-center group-hover:block"
-                              }
-                            >
-                              {truncateString(terminalAddress)}
-                            </span>
-                          </div>
-                        </SelectItem>
-                        {terminal?.signers?.map((signer: string, i) => {
-                          return (
-                            <SelectItem key={signer} ref={ref} value={signer}>
-                              <Address address={signer} size="sm" />
+          <div className="space-y-2">
+            <div className="flex flex-row items-center justify-between">
+              <label className="text-base font-bold">
+                Recipients and split percentages*
+              </label>
+              <span className="text-sm text-gray">
+                {sumSplits(watchSplits)}/100%
+              </span>
+            </div>
+            <ul className="mt-2 space-y-2">
+              {splitFields.map((split, index) => (
+                <FieldArrayItem
+                  key={split.id}
+                  title={`Recipient ${index + 1}`}
+                  remove={() => remove(index)}
+                >
+                  <div className="gap-1.5">
+                    <div className="text-base font-bold">Recipient*</div>
+                    <Controller
+                      control={control}
+                      name={`splits.${index}.recipient`}
+                      render={({ field: { onChange, ref } }) => (
+                        <Select onValueChange={onChange} required>
+                          <SelectTrigger ref={ref}>
+                            <SelectValue placeholder="Select one" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem ref={ref} value={terminalAddress}>
+                              <div className="group">
+                                <span
+                                  className={
+                                    "flex flex-row items-center group-hover:hidden"
+                                  }
+                                >
+                                  Your Project
+                                </span>
+                                <span
+                                  // show on hover
+                                  className={
+                                    "hidden flex-row items-center group-hover:block"
+                                  }
+                                >
+                                  {truncateString(terminalAddress)}
+                                </span>
+                              </div>
                             </SelectItem>
-                          )
-                        })}
-                        <SelectItem ref={ref} value="other">
-                          Other
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {isRecipientFieldOther(index) && (
-                  <AddressInput
-                    name={`splits.${index}.address`}
+                            {terminal?.signers?.map((signer: string, i) => {
+                              return (
+                                <SelectItem
+                                  key={signer}
+                                  ref={ref}
+                                  value={signer}
+                                >
+                                  <Address address={signer} size="sm" />
+                                </SelectItem>
+                              )
+                            })}
+                            <SelectItem ref={ref} value="other">
+                              Other
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {isRecipientFieldOther(index) && (
+                      <AddressInput
+                        name={`splits.${index}.address`}
+                        register={register}
+                        errors={errors}
+                        label="Recipient*"
+                        placeholder="Enter a wallet or ENS address"
+                        className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
+                        required
+                        validations={{
+                          noDuplicates: async (v: string) => {
+                            const address = await resolveEnsAddress(v)
+                            const recipients: string[] = watchSplits.map(
+                              (split: { recipient: string; address: string }) =>
+                                split.recipient === "other"
+                                  ? split.address
+                                  : split.recipient,
+                            )
+
+                            return (
+                              !recipients.some(
+                                (val, i) => recipients.indexOf(val) !== i,
+                              ) || "Recipient already added."
+                            )
+                          },
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  <PercentInput
+                    name={`splits.${index}.value`}
                     register={register}
                     errors={errors}
-                    label="Wallet or ENS address*"
-                    placeholder="Enter a wallet or ENS address"
-                    className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
+                    label="Split*"
+                    placeholder="Enter a percent of revenue to share"
                     required
-                    validations={{
-                      noDuplicates: async (v: string) => {
-                        const address = await resolveEnsAddress(v)
-                        const recipients: string[] = watchSplits.map(
-                          (split: { recipient: string; address: string }) =>
-                            split.recipient === "other"
-                              ? split.address
-                              : split.recipient,
-                        )
-
-                        return (
-                          !recipients.some(
-                            (val, i) => recipients.indexOf(val) !== i,
-                          ) || "Recipient already added."
-                        )
-                      },
-                    }}
+                    // prevent splits with 0-value recipients
+                    min={0.1}
+                    max={99.9}
                   />
-                )}
-                <PercentInput
-                  name={`splits.${index}.value`}
-                  register={register}
-                  errors={errors}
-                  label="Split"
-                  placeholder="Enter a percent of revenue to share"
-                  required
-                  // prevent splits with 0-value recipients
-                  min={0.1}
-                  max={99.9}
-                />
-              </FieldArrayItem>
-            ))}
-          </ul>
-          <Button
-            variant="tertiary"
-            fullWidth={true}
-            size="base"
-            onClick={() => append({ recipient: "", value: 0, address: "" })}
-          >
-            + Add recipient
-          </Button>
-          <p className="text-center text-sm text-red">
-            {(splitsFieldError as string) || ""}
-          </p>
+                </FieldArrayItem>
+              ))}
+            </ul>
+            <Button
+              variant="tertiary"
+              fullWidth={true}
+              size="base"
+              onClick={() => append({ recipient: "", value: 0, address: "" })}
+            >
+              + Add recipient
+            </Button>
+            <p className="text-center text-sm text-red">
+              {(splitsFieldError as string) || ""}
+            </p>
+          </div>
         </div>
         <div className="fixed bottom-0 right-0 left-0 mx-auto w-full bg-black px-5 py-3 text-center">
           <Button
