@@ -30,7 +30,7 @@ const NewTokensPage = () => {
 
   useEffect(() => {
     if (!isSigner || !terminal) {
-      router.push(`/${router.query.chainNameAndSafeAddress}/members`)
+      router.push(`/${router.query.chainNameAndSafeAddress}/proposals`)
     }
   }, [isSigner])
 

@@ -35,7 +35,7 @@ const NewAutomationsPage = () => {
 
   useEffect(() => {
     if (!isSigner || !terminal) {
-      router.push(`/${chainNameAndSafeAddress}/members`)
+      router.push(`/${chainNameAndSafeAddress}/automations`)
     }
   }, [isSigner])
 
