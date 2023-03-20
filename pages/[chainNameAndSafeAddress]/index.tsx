@@ -104,10 +104,8 @@ const MobileTerminalIndexPage = () => {
   return (
     <>
       <AccountNavBar />
+
       <section className="mt-6 px-4">
-        <TerminalReadyToClaim />
-      </section>
-      <section className="mt-4 px-4">
         <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
           <Network chainId={terminal?.chainId} />
@@ -117,8 +115,7 @@ const MobileTerminalIndexPage = () => {
           </span>
           <CopyToClipboard text={terminal?.safeAddress} />
         </div>
-        {/* TODO: Add this back when Claim tokens for Project is done */}
-        {/* <TerminalReadyToClaim /> */}
+        {isSigner && <TerminalReadyToClaim />}
       </section>
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">

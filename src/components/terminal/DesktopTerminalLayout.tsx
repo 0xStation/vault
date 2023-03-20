@@ -133,9 +133,11 @@ const DesktopTerminalLayout = ({
                 <span>{terminal?.signers?.length}</span>
               </div>
             </section>
-            <section className="px-4">
-              <TerminalReadyToClaim />
-            </section>
+            {isSigner && (
+              <section className="px-4">
+                <TerminalReadyToClaim />
+              </section>
+            )}
 
             <section className="mt-6">
               <TerminalActionBar />
