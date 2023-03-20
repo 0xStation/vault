@@ -14,8 +14,7 @@ export const TerminalCreationPage = () => {
     VIEW.CREATION_OPTIONS,
   )
   const activeUser = useStore((state) => state.activeUser)
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
+  const { isMobile } = useBreakpoint()
 
   useEffect(() => {
     if (!activeUser) {

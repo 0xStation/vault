@@ -16,8 +16,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
   const { isLoading, terminals } = useTerminalsBySigner(address)
   const { primaryWallet } = useDynamicContext()
   const router = useRouter()
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
+  const { isMobile } = useBreakpoint()
 
   const setShowTabBottomBorder = useStore(
     (state) => state.setShowTabBottomBorder,

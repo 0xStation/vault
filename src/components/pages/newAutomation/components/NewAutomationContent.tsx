@@ -10,6 +10,7 @@ import {
 } from "@ui/Select"
 import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
 import truncateString, { isEns } from "lib/utils"
+import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
@@ -72,7 +73,7 @@ const NewAutomationPage = () => {
       const logsLastIndex = transaction.logs?.length - 1
       const log = transaction.logs[logsLastIndex] // CreatedSplit(address indexed split)
       const addressTopic = log.topics[1] // address is indexed so stored in topics, and first topic is for event name so grab second index
-      const proxyAddress = "0x" + addressTopic.substring(26) // 20-byte address is padded into a 32-byte slot so remove padding (24 char + '0x')
+      const proxyAddress = toChecksumAddress("0x" + addressTopic.substring(26)) // 20-byte address is padded into a 32-byte slot so remove padding (24 char + '0x')
 
       await createAutomation({
         name: formData?.name,
@@ -80,7 +81,9 @@ const NewAutomationPage = () => {
         splits: formData?.splits,
       })
       successToast({ message: "Revenue Share Automation created" })
-      router.push(`/${router.query.chainNameAndSafeAddress}/automations`)
+      router.push(
+        `/${router.query.chainNameAndSafeAddress}/automations?showPrompt=${proxyAddress}`,
+      )
     },
     onSettled: () => {
       setIsLoading(false)
@@ -332,35 +335,35 @@ const NewAutomationPage = () => {
                         </Select>
                       )}
                     />
-                    {isRecipientFieldOther(index) && (
-                      <AddressInput
-                        name={`splits.${index}.address`}
-                        register={register}
-                        errors={errors}
-                        label="Recipient*"
-                        placeholder="Enter a wallet or ENS address"
-                        className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
-                        required
-                        validations={{
-                          noDuplicates: async (v: string) => {
-                            const address = await resolveEnsAddress(v)
-                            const recipients: string[] = watchSplits.map(
-                              (split: { recipient: string; address: string }) =>
-                                split.recipient === "other"
-                                  ? split.address
-                                  : split.recipient,
-                            )
-
-                            return (
-                              !recipients.some(
-                                (val, i) => recipients.indexOf(val) !== i,
-                              ) || "Recipient already added."
-                            )
-                          },
-                        }}
-                      />
-                    )}
                   </div>
+                  {isRecipientFieldOther(index) && (
+                    <AddressInput
+                      name={`splits.${index}.address`}
+                      register={register}
+                      errors={errors}
+                      label="Recipient*"
+                      placeholder="Enter a wallet or ENS address"
+                      className="[&>input]:bg-gray-90 [&>input]:placeholder:text-gray"
+                      required
+                      validations={{
+                        noDuplicates: async (v: string) => {
+                          const address = await resolveEnsAddress(v)
+                          const recipients: string[] = watchSplits.map(
+                            (split: { recipient: string; address: string }) =>
+                              split.recipient === "other"
+                                ? split.address
+                                : split.recipient,
+                          )
+
+                          return (
+                            !recipients.some(
+                              (val, i) => recipients.indexOf(val) !== i,
+                            ) || "Recipient already added."
+                          )
+                        },
+                      }}
+                    />
+                  )}
 
                   <PercentInput
                     name={`splits.${index}.value`}
