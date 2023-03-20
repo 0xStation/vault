@@ -107,7 +107,7 @@ const MobileTerminalIndexPage = () => {
       <AccountNavBar />
       <>
         <Head>
-          <title>${terminal?.data.name} | Home</title>
+          <title>{terminal?.data.name} | Home</title>
         </Head>
       </>
       <section className="mt-6 px-4">
