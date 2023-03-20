@@ -30,12 +30,12 @@ export const QuorumInput = ({
       <div className="flex flex-row justify-between border-b border-b-gray-80">
         <input
           type="number"
-          className="bg-black placeholder:text-white"
+          className="w-full bg-black placeholder:text-white"
           placeholder={placeholder}
           {...register(name, { ...registerOptions, ...requiredMessage })}
           {...rest}
         />
-        <p className="text-white">out of {quorumSize} members</p>
+        <p className="w-1/3 text-white">out of {quorumSize} members</p>
       </div>
       <p className="text-sm text-red">
         {errors[name] && errors[name]?.message}
