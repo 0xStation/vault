@@ -37,7 +37,7 @@ const sumSplits = (splits: { value: number }[]) => {
   )
 }
 
-const NewAutomationPage = () => {
+export const NewAutomationContent = () => {
   const router = useRouter()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -422,4 +422,4 @@ const NewAutomationPage = () => {
   )
 }
 
-export default NewAutomationPage
+export default NewAutomationContent

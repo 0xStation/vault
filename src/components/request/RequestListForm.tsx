@@ -1,10 +1,10 @@
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
-import RightSlider from "@ui/RightSlider"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
@@ -20,10 +20,19 @@ import { RequestFrob } from "../../models/request/types"
 import { BatchStatusBar } from "../core/BatchStatusBar"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
-import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
+
+const RequestDetailsContent = dynamic(() =>
+  import("../pages/requestDetails/components/RequestDetailsContent").then(
+    (mod) => mod.RequestDetailsContent,
+  ),
+)
 
 type BatchState = {
   selectedRequests: RequestFrob[]
@@ -106,7 +115,6 @@ const RequestListForm = ({
     RequestFrob | undefined
   >(undefined)
 
-  const [requestActionsOpen, setRequestActionsOpen] = useState<boolean>(false)
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const closeDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {

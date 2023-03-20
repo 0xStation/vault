@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { cn } from "lib/utils"
 import { Fragment } from "react"
 
-export default function RightSlider({
+export const RightSlider = ({
   open,
   setOpen,
   useInnerPadding = true,
@@ -12,7 +12,7 @@ export default function RightSlider({
   setOpen: any
   useInnerPadding?: boolean
   children: React.ReactNode
-}) {
+}) => {
   return (
     <Transition.Root show={open} as={Fragment} appear={true}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -61,3 +61,5 @@ export default function RightSlider({
     </Transition.Root>
   )
 }
+
+export default RightSlider
