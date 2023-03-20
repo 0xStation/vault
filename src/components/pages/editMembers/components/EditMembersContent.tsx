@@ -463,7 +463,7 @@ export const EditMembersContent = () => {
                 required
                 name="note"
                 errors={errors}
-                placeholder="Add Alice as a memberß"
+                placeholder="Add Alice as a member"
               />
             ) : null}
           </div>

@@ -1,6 +1,7 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
 import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import Desktop from "../../../src/components/pages/editMembers/Desktop"
 import Mobile from "../../../src/components/pages/editMembers/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
@@ -23,13 +24,20 @@ const MembersPage = () => {
   const { terminal, mutate: mutateGetTerminal } =
     useTerminalByChainIdAndSafeAddress(safeAddress, chainId)
 
-  useIsSigner({ address: safeAddress, chainId })
+  const isSigner = useIsSigner({ address: safeAddress, chainId })
 
   const { data: isModuleEnabled, isSuccess } = useIsModuleEnabled({
     address: terminal?.safeAddress as string,
     chainId: terminal?.chainId as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isSigner || !terminal) {
+      router.push(`/${chainNameAndSafeAddress}/members`)
+    }
+  }, [isSigner])
 
   if (!terminal) {
     return <></> // TODO: show the 404 page
