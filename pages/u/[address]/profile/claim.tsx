@@ -4,7 +4,7 @@ import AccountNavBar from "components/core/AccountNavBar"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-const ProfileClaimListView = ({}: {}) => {
+const ProfileClaimListView = () => {
   const router = useRouter()
   const accountAddress = router.query.address as string
 

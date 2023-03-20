@@ -19,11 +19,11 @@ const DesktopProfileLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className="relative h-full w-[300px]">
+        <div className="relative h-full w-[300px] overflow-scroll border-r border-gray-90">
           <section className="flex flex-row items-center justify-between p-4">
             <TerminalLogo size="lg" />
           </section>
-          <div className="h-[90%] border-r border-gray-90">
+          <div className="h-[90%]">
             <section className="mt-4 p-4">
               <div className="flex flex-row items-center space-x-2 rounded-t-xl bg-gray-100 p-4">
                 <Avatar address={accountAddress as string} size="lg" />

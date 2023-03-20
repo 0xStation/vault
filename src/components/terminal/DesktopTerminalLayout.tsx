@@ -13,6 +13,7 @@ import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
+import { TerminalReadyToClaim } from "../claim/TerminalReadyToClaim"
 import TerminalActionBar from "../core/TerminalActionBar"
 
 type TerminalNavOption = {
@@ -106,11 +107,11 @@ const DesktopTerminalLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className=" relative h-full w-[300px]">
+        <div className=" relative h-full w-[300px] overflow-scroll border-r border-gray-90">
           <section className="flex flex-row items-center justify-between p-4">
             <TerminalLogo size="lg" />
           </section>
-          <div className="h-[90%] border-r border-gray-90">
+          <div className="h-[90%]">
             <section className="mt-4 rounded p-4">
               <div className="rounded-t-xl bg-gray-100 p-4">
                 <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
@@ -132,6 +133,12 @@ const DesktopTerminalLayout = ({
                 <span>{terminal?.signers?.length}</span>
               </div>
             </section>
+            {isSigner && (
+              <section className="px-4">
+                <TerminalReadyToClaim />
+              </section>
+            )}
+
             <section className="mt-6">
               <TerminalActionBar />
             </section>
