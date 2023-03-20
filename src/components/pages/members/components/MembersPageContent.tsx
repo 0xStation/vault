@@ -183,7 +183,7 @@ const MembersPageContent = () => {
                     <p className="flex items-center text-sm text-gray">
                       Pending entry ·&nbsp;
                       <a
-                        className="text-sm text-white underline decoration-dotted"
+                        className="cursor-pointer text-sm text-violet hover:text-violet-80"
                         href={`/${chainNameAndSafeAddress}/proposals/${
                           (requestIds as string[])?.[0]
                         }`}
@@ -206,7 +206,7 @@ const MembersPageContent = () => {
               <p className="text-sm text-gray">
                 Pending update ·&nbsp;
                 <a
-                  className="text-sm text-violet hover:text-violet-80"
+                  className="cursor-pointer text-sm text-violet hover:text-violet-80"
                   href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
                 >
                   View proposal
