@@ -1,17 +1,25 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
 import { ArrowLeft } from "@icons"
+import { useAutomation } from "models/automation/hooks"
+import { RevShareFrob } from "models/automation/types"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useAutomation } from "../../../../../src/models/automation/hooks"
+import { useEffect, useState } from "react"
 import AutomationHistory from "../../../automation/AutomationHistory"
 import { AutomationInfo } from "../../../automation/AutomationInfo"
 import { AutomationTabBar } from "../../../automation/AutomationTabBar"
 
 export const AutomationDetailsContent = () => {
   const router = useRouter()
-  // The automation id can be undefined when the page loads so the isLoading state
-  // really isn't reliable
   const { automation } = useAutomation(router.query.automationId as string)
+  const [revShare, setRevShare] = useState<RevShareFrob>()
+
+  // prevents sliders from making content invisible as they disappear when query param is unset
+  useEffect(() => {
+    if (automation && router.query.automationId) {
+      setRevShare(automation)
+    }
+  }, [automation, router.query.automationId])
 
   return (
     <div className="flex h-full flex-col">
@@ -24,9 +32,7 @@ export const AutomationDetailsContent = () => {
           <ArrowLeft />
         </Link>
 
-        <h4 className="text-base text-gray sm:hidden">
-          {automation?.data.name}
-        </h4>
+        <h4 className="text-base text-gray sm:hidden">{revShare?.data.name}</h4>
         {/* TODO: add editing */}
         <button
           onClick={() => {
@@ -40,8 +46,8 @@ export const AutomationDetailsContent = () => {
         </button>
       </div>
       <AutomationTabBar>
-        <AutomationInfo />
-        <AutomationHistory automation={automation} isLoading={!automation} />
+        <AutomationInfo automation={revShare} />
+        <AutomationHistory automation={revShare} isLoading={!revShare} />
       </AutomationTabBar>
     </div>
   )

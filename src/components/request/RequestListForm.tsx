@@ -279,7 +279,11 @@ const RequestListForm = ({
   return (
     <>
       {requestForDetails && (
-        <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
+        <RightSlider
+          open={detailsSliderOpen}
+          setOpen={closeDetailsSlider}
+          useInnerPadding={false}
+        >
           <RequestDetailsContent
             request={requestForDetails}
             mutateRequest={(args) => {
