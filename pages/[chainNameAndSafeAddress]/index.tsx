@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
+import TerminalActionsBar from "../../src/components/core/TerminalActionBar"
 import { ChevronRight } from "../../src/components/icons"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
 import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
@@ -132,7 +133,10 @@ const MobileTerminalIndexPage = () => {
           />
         </div>
       </section>
-      <section className="mt-4 divide-y divide-gray-80 border-t border-b border-gray-80">
+      <section className="mt-8">
+        <TerminalActionsBar />
+      </section>
+      <section className="mt-8 divide-y divide-gray-80 border-t border-b border-gray-80">
         {options(router).map((option, idx) => {
           if (option.active) {
             return (

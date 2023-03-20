@@ -167,28 +167,29 @@ const VoteModal = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6 pb-[70px]">
-          <div className="text-2xl font-bold">
-            {approve ? "Approve" : "Reject"} request
-          </div>
-          <div>
-            The {approve ? "approval" : "rejection"} will be executed once the
-            quorum has been met.
+          <div className="space-y-4">
+            <div className="text-xl font-bold">
+              {approve ? "Approve" : "Reject"} Proposal
+            </div>
+            <div>
+              The {approve ? "approval" : "rejection"} will be executed once the
+              quorum has been met.
+            </div>
           </div>
           <TextareaWithLabel
-            label="Note (optional)"
+            label="Note"
             register={register}
             placeholder="Add a note"
             name="comment"
             errors={errors}
           />
         </div>
-        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full max-w-[580px] px-5 text-center">
+        <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full max-w-[580px] px-4 text-center">
           <Button type="submit" fullWidth={true} loading={loading}>
             {approve ? "Approve" : "Reject"}
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+          <p className={"mt-1 text-xs text-gray"}>
+            You’ll be directed to sign. This action does not cost gas.
           </p>
         </div>
       </form>

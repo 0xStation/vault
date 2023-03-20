@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes } from "react"
 export const buttonStyles = cva("relative rounded text-center", {
   variants: {
     variant: {
-      primary: "text-black border bg-violet",
+      primary: "text-black bg-violet",
       secondary: "border",
       unemphasized: "text-violet hover:text-violet-80",
       tertiary: "bg-gray-90 text-white hover:bg-gray-90/80",

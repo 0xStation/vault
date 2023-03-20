@@ -7,12 +7,13 @@ import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
-import { StationLogo } from "../../components/icons"
+import { TerminalLogo } from "../../components/icons"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
+import TerminalActionBar from "../core/TerminalActionBar"
 
 type TerminalNavOption = {
   label: string
@@ -107,7 +108,7 @@ const DesktopTerminalLayout = ({
       <div className="flex h-screen flex-row">
         <div className=" relative h-full w-[300px]">
           <section className="flex flex-row items-center justify-between p-4">
-            <StationLogo size="lg" />
+            <TerminalLogo size="lg" />
           </section>
           <div className="h-[90%] border-r border-gray-90">
             <section className="mt-4 rounded p-4">
@@ -131,7 +132,10 @@ const DesktopTerminalLayout = ({
                 <span>{terminal?.signers?.length}</span>
               </div>
             </section>
-            <section className="mt-2">
+            <section className="mt-6">
+              <TerminalActionBar />
+            </section>
+            <section className="mt-8">
               {options(router).map((option, idx) => {
                 if (option.active) {
                   return (

@@ -7,6 +7,7 @@ import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { valueToAmount } from "../../models/token/utils"
 import Checkbox from "../form/Checkbox"
 import { ArrowUpRight, ChatBubble } from "../icons"
+import RequestChangeMemberContent from "../request/RequestChangeMemberContent"
 import { RequestStatusIcon } from "../request/RequestStatusIcon"
 
 const RequestTransferContent = ({ request }: { request: RequestFrob }) => {
@@ -78,6 +79,10 @@ const ProfileRequestTableRow = ({
       <div className=" basis-1/4">
         {request.variant === RequestVariantType.TOKEN_TRANSFER && (
           <RequestTransferContent request={request} />
+        )}
+
+        {request.variant === RequestVariantType.SIGNER_QUORUM && (
+          <RequestChangeMemberContent request={request} />
         )}
       </div>
 

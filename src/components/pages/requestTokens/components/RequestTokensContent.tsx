@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@ui/Select"
 import axios from "axios"
+import { CopyAddressButton } from "components/core/CopyAddressButton"
 import { ZERO_ADDRESS } from "lib/constants"
 import { encodeTokenTransfer } from "lib/encodings/token"
 import { newActionTree } from "lib/signatures/tree"
@@ -34,7 +35,6 @@ import {
 import { convertGlobalId } from "../../../../../src/models/terminal/utils"
 import { Token, TokenType } from "../../../../../src/models/token/types"
 import TextareaWithLabel from "../../../form/TextareaWithLabel"
-import Layout from "../../../terminalCreation/Layout"
 
 interface nTokenInfoType {
   name: string
@@ -47,7 +47,7 @@ interface nTokenInfoType {
   tokenValue: number
 }
 
-export const NewTokensPage = () => {
+export const RequestTokensContent = () => {
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
@@ -232,18 +232,15 @@ export const NewTokensPage = () => {
 
   return (
     <>
-      <Layout
-        backFunc={() => router.push(`/${chainNameAndSafeAddress}/proposals`)}
-        isCloseIcon={true}
+      <h2 className="mb-[30px] font-bold">Request tokens</h2>
+      <form
+        onSubmit={handleSubmit(onSubmit, onError)}
+        className="flex h-[calc(100%-120px)] flex-col"
       >
-        <h2 className="mb-[30px] font-bold">Request tokens</h2>
-        <form
-          onSubmit={handleSubmit(onSubmit, onError)}
-          className="flex h-[calc(100%-120px)] flex-col"
+        <div
+          className={`flex ${formHeight} grow flex-col space-y-4 overflow-auto pb-6`}
         >
-          <div
-            className={`flex ${formHeight} grow flex-col overflow-auto pb-3`}
-          >
+          <div className="space-y-2">
             <label className="mt-3 mb-2 text-base font-bold" htmlFor="tokens">
               Tokens*
             </label>
@@ -252,29 +249,18 @@ export const NewTokensPage = () => {
                 <div className=" w-full rounded bg-gray-90 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-base">
-                    We apologize for the inconvenience, there was an error
-                    retrieving assets for you terminal. Please refresh the page
-                    or try again later.
+                    There was an error retrieving assets for your Project.
+                    Please refresh the page or try again later.
                   </p>
                 </div>
               ) : !tokens.length ? (
-                <div className="w-full rounded bg-gray-90 p-4 text-center">
-                  <p className="font-bold">No tokens found</p>
-                  <p className="pt-2 text-base">
-                    Look&apos;s like this Project doesn&apos;t have any tokens.
-                    Add tokens by sending them to the Project&apos;s address.
+                <div className="w-full justify-center rounded bg-gray-90 p-4 text-center">
+                  <p className="font-bold">No tokens to send from Project</p>
+                  <p className="mb-6 pt-2 text-base">
+                    Transfer tokens to the Project address or share the address
+                    to receive tokens.
                   </p>
-                  <button
-                    type="button"
-                    className="pt-2 text-base font-bold text-violet"
-                    onClick={() => {
-                      navigator.clipboard.writeText(address as string)
-                      setAddressCopied(true)
-                      setTimeout(() => setAddressCopied(false), 1500)
-                    }}
-                  >
-                    {addressCopied ? "Copied!" : "Copy address"}
-                  </button>
+                  <CopyAddressButton address={address as string} />
                 </div>
               ) : (
                 <>
@@ -311,7 +297,7 @@ export const NewTokensPage = () => {
                                   placeholder={
                                     tokens.length
                                       ? "Select one"
-                                      : "No tokens found."
+                                      : "No tokens found"
                                   }
                                 />
                               </SelectTrigger>
@@ -390,7 +376,7 @@ export const NewTokensPage = () => {
                                           ?.decimals || 0
                                       return (
                                         v.split(".")[1]?.length < decimals ||
-                                        `Cannot have more than ${decimals} decimal places.`
+                                        `${decimals} decimal places maximum.`
                                       )
                                       return
                                     },
@@ -419,7 +405,7 @@ export const NewTokensPage = () => {
                                   (getErc20FieldTokenData(index) as any)
                                     ?.tokenValue
                                 }
-                                . You can still create the request but will not
+                                . You can still create the proposal but will not
                                 be able to execute it unless the balance has
                                 been refilled.
                               </p>
@@ -441,38 +427,37 @@ export const NewTokensPage = () => {
                 </>
               )}
             </div>
-            <TextareaWithLabel
-              label={"What for?*"}
-              register={register}
-              required
-              name="description"
-              errors={errors}
-              placeholder="My contribution last month"
-            />
           </div>
-          <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
-              fullWidth={true}
-              onBlur={() => setFormMessage({ isError: false, message: "" })}
-            >
-              Create request
-            </Button>
-            <p
-              className={`mt-1 text-sm  ${
-                formMessage?.isError ? "text-red" : "text-gray"
-              }`}
-            >
-              {formMessage.message ||
-                "Complete the required fields to continue."}
-            </p>
-          </div>
-        </form>
-      </Layout>
+          <TextareaWithLabel
+            label={"What for?*"}
+            register={register}
+            required
+            name="description"
+            errors={errors}
+            placeholder="My contribution last month"
+          />
+        </div>
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-4 text-center">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            fullWidth={true}
+            onBlur={() => setFormMessage({ isError: false, message: "" })}
+          >
+            Create Proposal
+          </Button>
+          <p
+            className={`mt-1 text-sm  ${
+              formMessage?.isError ? "text-red" : "text-gray"
+            }`}
+          >
+            {formMessage.message || "Complete the required fields to continue."}
+          </p>
+        </div>
+      </form>
     </>
   )
 }
 
-export default NewTokensPage
+export default RequestTokensContent

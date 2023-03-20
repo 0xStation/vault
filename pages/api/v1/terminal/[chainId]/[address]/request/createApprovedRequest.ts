@@ -59,7 +59,7 @@ export default async function handler(
   } catch (err) {
     res.statusCode = 500
     return res.end(
-      JSON.stringify(`Internal error: failed to create Request ${err}`),
+      JSON.stringify(`Internal error: failed to create Proposal ${err}`),
     )
   }
 

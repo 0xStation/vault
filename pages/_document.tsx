@@ -4,23 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link
-          rel="preload"
-          href="/fonts/favoritpro-bold-webfont.woff2"
-          as="font"
-          crossOrigin=""
-        />
-        <link
-          rel="preload"
-          href="/fonts/favoritpro-regular-webfont.woff2"
-          as="font"
-          crossOrigin=""
-        />
-        <link
-          rel="icon"
-          href="/favicons/station-logo-favicon.ico"
-          sizes="any"
-        />
+        <link rel="icon" href="/favicons/terminal-logo.svg" sizes="any" />
         <meta
           name="description"
           content="Doing work with people who share your mission."
@@ -34,7 +18,7 @@ export default function Document() {
         />
         <link
           rel="apple-touch-icon"
-          href="/favicons/station-logo-favicon.ico"
+          href="/favicons/station-logo-favicon.svg"
         />
       </Head>
       <body>

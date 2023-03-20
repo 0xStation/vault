@@ -64,9 +64,9 @@ const BatchVoteModal = ({
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="overflow-auto pb-[110px]">
-        <div className="space-y-6">
-          <div className="text-2xl font-bold">
-            {approve ? "Approve" : "Reject"} {requestsToApprove.length} requests
+        <div className="mb-6 space-y-4">
+          <div className="text-xl font-bold">
+            {approve ? "Approve" : "Reject"} {requestsToApprove.length} Proposal
           </div>
           <div>
             The {approve ? "approval" : "rejection"} will be executed once the
@@ -74,7 +74,7 @@ const BatchVoteModal = ({
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           {requestsToApprove.map((request, idx) => {
             if (request?.variant === RequestVariantType.TOKEN_TRANSFER) {
               return (
@@ -101,9 +101,8 @@ const BatchVoteModal = ({
           <Button type="submit" fullWidth={true} loading={loading}>
             {approve ? "Approve" : "Reject"}
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+          <p className={"mt-1 text-xs text-gray"}>
+            You’ll be directed to sign. This action does not cost gas.
           </p>
         </div>
       </form>

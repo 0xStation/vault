@@ -157,12 +157,12 @@ const BatchExecuteWrapper = ({
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="overflow-auto pb-[110px]">
-        <div className="mb-4 space-y-6">
-          <div className="text-2xl font-bold">
-            Execute ({`${approve ? "approve" : "reject"}`}){" "}
-            {requestsToApprove.length} requests
+        <div className="mb-4 space-y-4">
+          <div className="text-xl font-bold">
+            Execute {`${approve ? "to approve" : "to reject"}`}{" "}
+            {requestsToApprove.length} Proposals
           </div>
-          <div>This action is on-chain and will not be reversible.</div>
+          <div>Your group action will be recorded on-chain.</div>
         </div>
 
         <div className="max-h-[400px] space-y-4 overflow-auto">
@@ -192,9 +192,9 @@ const BatchExecuteWrapper = ({
           <Button type="submit" fullWidth={true} loading={loading}>
             Execute
           </Button>
-          {/* TODO change size of xs to match designs, needs to be smaller */}
-          <p className={"mt-1 text-sm text-gray"}>
-            You’ll be directed to confirm.
+          <p className={"mt-1 text-xs text-gray"}>
+            This action will be recorded on-chain. You’ll be directed to
+            execute.
           </p>
         </div>
       </form>

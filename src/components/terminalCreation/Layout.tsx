@@ -11,7 +11,7 @@ export const Layout = ({
   isCloseIcon?: boolean
 }) => {
   return (
-    <div className="h-calc[100%-60px] mx-4 mt-[60px] flex flex-col sm:mt-0">
+    <div className="h-calc[100%-60px] mt-[60px] flex flex-col sm:mt-0">
       <button
         role="button"
         onClick={() => backFunc()}

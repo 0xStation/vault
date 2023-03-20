@@ -9,6 +9,8 @@ interface StoreState {
   setToastState: (toastState: any) => void
   showTabBottomBorder: boolean
   setShowTabBottomBorder: (show: boolean) => void
+  isRequestActionsOpen: boolean
+  setIsRequestActionsOpen: (isSigner: boolean) => void
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -41,6 +43,12 @@ export const useStore = create<StoreState>((set) => ({
   setShowTabBottomBorder(show) {
     set(() => ({
       showTabBottomBorder: show,
+    }))
+  },
+  isRequestActionsOpen: false,
+  setIsRequestActionsOpen: (isRequestActionsOpen: boolean) => {
+    set(() => ({
+      isRequestActionsOpen,
     }))
   },
 }))
