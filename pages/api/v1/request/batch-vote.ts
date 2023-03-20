@@ -9,6 +9,7 @@ import { actionsTree } from "lib/signatures/tree"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../prisma/client"
+import { clearRequestsCache } from "../../../../src/hooks/useRequests"
 import { Action } from "../../../../src/models/action/types"
 import { getRequestById } from "../../../../src/models/request/queries/getRequestById"
 import { TokenTransferVariant } from "../../../../src/models/request/types"
@@ -89,7 +90,13 @@ export default async function handler(
   // bundle creates as one atomic transaction
   await db.$transaction([createSignature, ...createActivities])
 
-  // add emails here
+  if (actions.length > 0) {
+    // clear redis cache since we are performing an update
+    const chainId = actions[0].chainId
+    const safeAddress = actions[0].safeAddress
+    await clearRequestsCache(chainId, safeAddress)
+  }
+
   const processedRequests = new Set<string>()
   for (const action of actions) {
     if (processedRequests.has(action.requestId)) {

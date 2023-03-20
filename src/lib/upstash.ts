@@ -33,7 +33,6 @@ export async function fetchFromRedisOrAPI(
   }
 
   const response = await fetcher()
-  console.log("response:", response)
   await setAPIResponse(endpoint, response)
   return response
 }

@@ -3,6 +3,7 @@ import { getEmails } from "lib/dynamic"
 import { sendNewProposalExecutionEmail } from "lib/sendgrid"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../prisma/client"
+import { clearRequestsCache } from "../../../../src/hooks/useRequests"
 import { Action } from "../../../../src/models/action/types"
 import { getRequestById } from "../../../../src/models/request/queries/getRequestById"
 
@@ -42,7 +43,13 @@ export default async function handler(
     },
   })) as Action[]
 
-  // add emails here
+  if (actions.length > 0) {
+    // clear redis cache since we are performing an update
+    const chainId = actions[0].chainId
+    const safeAddress = actions[0].safeAddress
+    await clearRequestsCache(chainId, safeAddress)
+  }
+
   const processedRequests = new Set<string>()
   for (const action of actions) {
     if (processedRequests.has(action.requestId)) {
