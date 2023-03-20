@@ -11,8 +11,8 @@ import RequestChangeMemberContent from "../request/RequestChangeMemberContent"
 import { RequestStatusIcon } from "../request/RequestStatusIcon"
 
 const RequestTransferContent = ({ request }: { request: RequestFrob }) => {
-  let transfer = (request.data.meta as TokenTransferVariant).transfers?.[0]
-  let transferCount = (request.data.meta as TokenTransferVariant).transfers
+  let transfer = (request?.data?.meta as TokenTransferVariant)?.transfers?.[0]
+  let transferCount = (request?.data?.meta as TokenTransferVariant)?.transfers
     ?.length
 
   return (
@@ -62,18 +62,18 @@ const ProfileRequestTableRow = ({
           ) : (
             <Checkbox
               onChange={onCheckboxChange}
-              name={request.id}
+              name={request?.id}
               isDisabled={disabled || false}
             />
           )}
         </>
       )}
-      <div className="text-sm text-gray-40">#{request.number}</div>
-      <RequestStatusIcon status={request.status} />
-      <Avatar size="sm" address={request.data.createdBy} />
+      <div className="text-sm text-gray-40">#{request?.number}</div>
+      <RequestStatusIcon status={request?.status} />
+      <Avatar size="sm" address={request?.data?.createdBy} />
       <div className="min-w-0 grow">
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {request.data.note}
+          {request?.data?.note}
         </div>
       </div>
       <div className=" basis-1/4">
@@ -88,14 +88,14 @@ const ProfileRequestTableRow = ({
 
       <div className="space-x-1">
         <span className="text-base font-bold text-white">
-          {request.approveActivities.length}
+          {request?.approveActivities?.length}
         </span>
 
         <span className="text-base text-gray-40">Approved</span>
       </div>
       <div className="space-x-1">
         <span className="text-base font-bold text-white">
-          {request.rejectActivities.length}
+          {request?.rejectActivities?.length}
         </span>
         <span className="text-base text-gray-40">Rejected</span>
       </div>
@@ -103,11 +103,11 @@ const ProfileRequestTableRow = ({
       <div className="flex cursor-pointer flex-row items-center space-x-1">
         <ChatBubble size={"sm"} />
         <span className="text-base text-gray-40">
-          {request.commentActivities.length}
+          {request?.commentActivities?.length}
         </span>
       </div>
       <div className="basis-16 text-right text-sm text-gray-40">
-        {timeSince(request.createdAt)}
+        {timeSince(request?.createdAt)}
       </div>
     </div>
   )

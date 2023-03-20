@@ -1,7 +1,7 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
 import { Action } from "../action/types"
 import { Activity } from "../activity/types"
-import { RequestFrob, RequestStatus } from "./types"
+import { RequestFrob, RequestStatus, SignerQuorumVariant } from "./types"
 
 export const getStatus = (
   actions: Action[],
@@ -47,4 +47,26 @@ export const isExecuted = (request: RequestFrob) => {
     request.status === RequestStatus.EXECUTED_APPROVAL ||
     request.status === RequestStatus.EXECUTED_REJECTION
   )
+}
+
+export const getSignerQuorumActionCopy = (request: RequestFrob) => {
+  let change = request?.data?.meta as SignerQuorumVariant
+  let copy = []
+  if (change.add.length > 0) {
+    copy.push("add members")
+  }
+  if (change.remove.length > 0) {
+    copy.push("remove members")
+  }
+  if (
+    change.setQuorum !== request?.quorum ||
+    change.remove.length + change.add.length === 0
+  ) {
+    copy.push("change quorum")
+  }
+
+  let joinedCopy = copy.join(" and ")
+  joinedCopy = joinedCopy[0]?.toUpperCase() + joinedCopy?.slice(1)
+
+  return joinedCopy
 }
