@@ -53,10 +53,9 @@ const EmailNotificationForm = ({
   return (
     <div className="px-4">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
-      <button onClick={() => testEmails()}>Test emails</button>
       <p>
-        Enter your email to get notifications about your Terminals. We’ll never
-        spam you with useless emails.
+        Enter your email to get notified about your Projects. We’ll never spam
+        you with useless emails.
       </p>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
