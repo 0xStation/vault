@@ -1,7 +1,27 @@
 import axios from "axios"
-import { fetchFromRedisOrAPI } from "lib/upstash"
+import { deleteAPIResponseFromCache, fetchFromRedisOrAPI } from "lib/upstash"
 import useSWR from "swr"
 import { RequestFrob } from "../models/request/types"
+
+export const clearRequestsCache = async (
+  safeChainId: number,
+  safeAddress: string,
+) => {
+  let base = `/api/v1/requests?safeChainId=${safeChainId}&safeAddress=${safeAddress}`
+  let endpoints = [
+    `${base}&tab=all`,
+    `${base}&tab=tokens`,
+    `${base}&tab=members`,
+  ]
+
+  try {
+    await Promise.all(
+      endpoints.map((endpoint) => deleteAPIResponseFromCache(endpoint)),
+    )
+  } catch (err) {
+    console.log("err:", err)
+  }
+}
 
 export const useRequests = (
   safeChainId: number,

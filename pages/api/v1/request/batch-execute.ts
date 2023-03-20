@@ -1,6 +1,10 @@
 import { ActionStatus } from "@prisma/client"
+import { getEmails } from "lib/dynamic"
+import { sendNewProposalExecutionEmail } from "lib/sendgrid"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../prisma/client"
+import { Action } from "../../../../src/models/action/types"
+import { getRequestById } from "../../../../src/models/request/queries/getRequestById"
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,6 +33,34 @@ export default async function handler(
       status: ActionStatus.SUCCESS,
     },
   })
+
+  const actions = (await db.action.findMany({
+    where: {
+      id: {
+        in: actionIds,
+      },
+    },
+  })) as Action[]
+
+  // add emails here
+  const processedRequests = new Set<string>()
+  for (const action of actions) {
+    if (processedRequests.has(action.requestId)) {
+      continue
+    }
+    processedRequests.add(action.requestId)
+    const request = await getRequestById(action.requestId)
+    const signerEmails = await getEmails(request.signers)
+
+    await sendNewProposalExecutionEmail({
+      recipients: signerEmails,
+      proposalTitle: request.data.note,
+      requestId: request.id,
+      terminalName: request.terminal.data.name,
+      chainId: request.terminal.chainId,
+      safeAddress: request.terminal.safeAddress,
+    })
+  }
 
   res.status(200).json({})
 }

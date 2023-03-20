@@ -3,6 +3,7 @@ import { getEmails } from "lib/dynamic"
 import { sendNewProposalExecutionEmail } from "lib/sendgrid"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
+import { clearRequestsCache } from "../../../../../src/hooks/useRequests"
 import { getRequestById } from "../../../../../src/models/request/queries/getRequestById"
 import { Terminal } from "../../../../../src/models/terminal/types"
 
@@ -36,6 +37,11 @@ export default async function handler(
   try {
     const request = await getRequestById(query.requestId as string)
     const terminal = request?.terminal as Terminal
+    // clear redis cache since we are performing an update
+    await clearRequestsCache(
+      request.terminal.chainId,
+      request.terminal.safeAddress,
+    )
 
     const addresses = request.signers
     const emails = await getEmails(addresses)

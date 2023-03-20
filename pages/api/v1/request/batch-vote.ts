@@ -1,10 +1,17 @@
-import { ActivityVariant } from "@prisma/client"
+import { ActivityVariant, RequestVariantType } from "@prisma/client"
+import { getEmails } from "lib/dynamic"
+import {
+  sendNewProposalReadyForClaimingEmail,
+  sendNewProposalReadyForExecutionEmail,
+} from "lib/sendgrid"
 import { hashAction } from "lib/signatures/action"
 import { actionsTree } from "lib/signatures/tree"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../prisma/client"
 import { Action } from "../../../../src/models/action/types"
+import { getRequestById } from "../../../../src/models/request/queries/getRequestById"
+import { TokenTransferVariant } from "../../../../src/models/request/types"
 
 export default async function handler(
   req: NextApiRequest,
@@ -81,6 +88,39 @@ export default async function handler(
 
   // bundle creates as one atomic transaction
   await db.$transaction([createSignature, ...createActivities])
+
+  // add emails here
+  const processedRequests = new Set<string>()
+  for (const action of actions) {
+    if (processedRequests.has(action.requestId)) {
+      continue
+    }
+    processedRequests.add(action.requestId)
+    const request = await getRequestById(action.requestId)
+    const signerEmails = await getEmails(request.signers)
+
+    if (request.variant === RequestVariantType.TOKEN_TRANSFER) {
+      const meta = request.data.meta as TokenTransferVariant
+      const recipientEmail = await getEmails([meta.recipient])
+
+      await sendNewProposalReadyForClaimingEmail({
+        recipients: recipientEmail,
+        requestId: request.id,
+        chainId: request.terminal.chainId,
+        safeAddress: request.terminal.safeAddress,
+        terminalName: request.terminal.data.name,
+      })
+    }
+
+    await sendNewProposalReadyForExecutionEmail({
+      recipients: signerEmails,
+      proposalTitle: request.data.note,
+      requestId: request.id,
+      chainId: request.terminal.chainId,
+      safeAddress: request.terminal.safeAddress,
+      terminalName: request.terminal.data.name,
+    })
+  }
 
   res.status(200).json({})
 }

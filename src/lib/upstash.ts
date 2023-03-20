@@ -18,6 +18,11 @@ async function setAPIResponse(endpoint: string, response: any) {
   return await redis.set(endpoint, JSON.stringify(response), { ex: expiresIn })
 }
 
+// useful for clearing cache on data write
+export async function deleteAPIResponseFromCache(endpoint: string) {
+  return await redis.del(endpoint)
+}
+
 export async function fetchFromRedisOrAPI(
   endpoint: string,
   fetcher: () => Promise<any>,
