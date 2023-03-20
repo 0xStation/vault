@@ -73,6 +73,11 @@ const TerminalActionBar = () => {
             return (
               <BottomDrawer isOpen={qrCodeOpen} setIsOpen={setQrCodeOpen}>
                 <div className="space-y-4">
+                  <h2>Add tokens</h2>
+                  <p>
+                    Share tokens to the Project address or share the address to
+                    receive tokens.
+                  </p>
                   <QRCode value={address} size={42}></QRCode>
                   <CopyAddressButton address={address as string} />
                 </div>
@@ -82,6 +87,11 @@ const TerminalActionBar = () => {
           return (
             <Modal isOpen={qrCodeOpen} setIsOpen={setQrCodeOpen}>
               <div className="space-y-4">
+                <h2>Add tokens</h2>
+                <p>
+                  Share tokens to the Project address or share the address to
+                  receive tokens.
+                </p>
                 <QRCode value={address} size={42}></QRCode>
                 <CopyAddressButton address={address as string} />
               </div>
