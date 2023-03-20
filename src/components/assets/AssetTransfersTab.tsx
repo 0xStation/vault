@@ -1,4 +1,5 @@
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
+import Head from "next/head"
 import {
   TransferDirection,
   TransferItem,
@@ -29,28 +30,35 @@ const TransactionItem = ({
   const blockExplorer = (networks as Record<string, any>)[String(chainId)]
     .explorer
   return (
-    <div className="flex flex-row items-center justify-between">
-      <div className="flex flex-row items-center space-x-2">
-        <div className="relative h-6 w-6 rounded-full">
-          <Avatar address={address} size="sm" />
-        </div>
-        <div className="flex flex-col">
-          <Address address={address} interactive={false} />
-          <div className="flex flex-row">
-            <p className="pr-1 text-sm text-gray">
-              {date}
-              {" · "}
-            </p>
-            <Hyperlink
-              href={`${blockExplorer}/tx/${hash}`}
-              label="View on Etherscan"
-              size="xs"
-            />
+    <>
+      <>
+        <Head>
+          <title>Assets</title>
+        </Head>
+      </>
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center space-x-2">
+          <div className="relative h-6 w-6 rounded-full">
+            <Avatar address={address} size="sm" />
+          </div>
+          <div className="flex flex-col">
+            <Address address={address} interactive={false} />
+            <div className="flex flex-row">
+              <p className="pr-1 text-sm text-gray">
+                {date}
+                {" · "}
+              </p>
+              <Hyperlink
+                href={`${blockExplorer}/tx/${hash}`}
+                label="View on Etherscan"
+                size="xs"
+              />
+            </div>
           </div>
         </div>
+        <p className="text-lg text-gray">{value}</p>
       </div>
-      <p className="text-lg text-gray">{value}</p>
-    </div>
+    </>
   )
 }
 
