@@ -65,7 +65,7 @@ export const getSignerQuorumActionCopy = (request: RequestFrob) => {
     copy.push("change quorum")
   }
 
-  let joinedCopy = copy.join(" and ")
+  let joinedCopy = copy.join(", ")
   joinedCopy = joinedCopy[0]?.toUpperCase() + joinedCopy?.slice(1)
 
   return joinedCopy

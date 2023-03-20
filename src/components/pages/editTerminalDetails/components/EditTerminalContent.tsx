@@ -25,6 +25,7 @@ const EditTerminalContent = () => {
     isError: false,
     message: "You’ll be directed to sign. This action does not cost gas.",
   })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { terminal, mutate } = useTerminalByChainIdAndSafeAddress(
     address,
@@ -43,7 +44,13 @@ const EditTerminalContent = () => {
   const { updateTerminal } = useUpdateTerminal(address, chainId)
 
   const onSubmit = async (data: any) => {
-    await signMessage(formatUpdateTerminalValues(data))
+    setIsLoading(true)
+    try {
+      await signMessage(formatUpdateTerminalValues(data))
+    } catch {
+      setIsLoading(false)
+      return
+    }
     await updateTerminal({
       ...data,
       safeAddress: terminal?.safeAddress,
@@ -53,6 +60,7 @@ const EditTerminalContent = () => {
     })
     mutate()
     router.back()
+    setIsLoading(false)
   }
 
   const onError = () => {
@@ -116,7 +124,7 @@ const EditTerminalContent = () => {
           }}
         />
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-4 text-center">
-          <Button type="submit" fullWidth={true}>
+          <Button type="submit" fullWidth={true} loading={isLoading}>
             Save
           </Button>
           <p
