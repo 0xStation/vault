@@ -19,7 +19,7 @@ const DesktopProfileLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className="relative h-full w-[300px] overflow-scroll border-r border-gray-90">
+        <div className="relative h-full w-[300px] overflow-auto border-r border-gray-90">
           <section className="flex flex-row items-center justify-between p-4">
             <TerminalLogo size="lg" />
           </section>
