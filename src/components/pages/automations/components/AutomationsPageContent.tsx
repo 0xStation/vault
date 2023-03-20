@@ -3,7 +3,9 @@ import { Button } from "@ui/Button"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { cn } from "lib/utils"
 import { addQueryParam } from "lib/utils/updateQueryParam"
+import Image from "next/image"
 import { useRouter } from "next/router"
+import NftRevShare2Image from "public/images/nft-rev-share-2.webp"
 import { useAutomations } from "../../../../../src/models/automation/hooks"
 import { parseGlobalId } from "../../../../../src/models/terminal/utils"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
@@ -45,25 +47,28 @@ const AutomationsPageContent = () => {
         <div className="flex h-[calc(100%-49px)] px-4 pb-4 pt-4 sm:h-full sm:px-0">
           <EmptyState title={emptyStateTitle} subtitle={emptyStateSubtitle}>
             {isSigner ? (
-              <span className="mx-auto">
-                <Button
-                  onClick={() => {
-                    if (isMobile) {
-                      router.push(
-                        `/${router.query.chainNameAndSafeAddress}/automations/new`,
-                      )
-                    } else {
-                      addQueryParam(
-                        router,
-                        "createAutomationSliderOpen",
-                        "true",
-                      )
-                    }
-                  }}
-                >
-                  Create
-                </Button>
-              </span>
+              <>
+                <Image src={NftRevShare2Image} alt="NFT rev share image" />
+                <span className="mx-auto mt-6">
+                  <Button
+                    onClick={() => {
+                      if (isMobile) {
+                        router.push(
+                          `/${router.query.chainNameAndSafeAddress}/automations/new`,
+                        )
+                      } else {
+                        addQueryParam(
+                          router,
+                          "createAutomationSliderOpen",
+                          "true",
+                        )
+                      }
+                    }}
+                  >
+                    Create
+                  </Button>
+                </span>
+              </>
             ) : null}
           </EmptyState>
         </div>
