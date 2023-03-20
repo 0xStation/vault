@@ -44,8 +44,7 @@ const options = (router: any) =>
 
 function Page() {
   const router = useRouter()
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
+  const { isMobile } = useBreakpoint()
   const { user, setShowAuthFlow } = useDynamicContext()
 
   useEffect(() => {

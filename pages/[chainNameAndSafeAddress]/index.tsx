@@ -186,18 +186,17 @@ const DesktopTerminalIndexPage = () => {
 }
 
 const TerminalPage = () => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
+  const { isLoading: breakpointLoading, isMobile } = useBreakpoint()
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
 
   useEffect(() => {
-    if (breakpoint && !isMobile) {
+    if (!breakpointLoading && !isMobile) {
       router.push(`/${chainNameAndSafeAddress}/proposals`, undefined, {
         shallow: true,
       })
     }
-  }, [breakpoint])
+  }, [breakpointLoading])
 
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
