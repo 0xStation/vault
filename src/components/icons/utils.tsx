@@ -6,7 +6,7 @@ export const icon = cva("", {
       xs: "h-2 w-2",
       sm: "h-4 w-4",
       base: "h-6 w-6",
-      lg: "h-8-w-8",
+      lg: "h-8 w-8",
       xl: "h-12 w-12",
       mobileLanding: "h-14 w-52",
       landing: "h-44 w-96",

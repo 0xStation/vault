@@ -2,12 +2,13 @@ import { Network } from "@ui/Network"
 import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
 import { convertGlobalId } from "models/terminal/utils"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import React from "react"
 import { useAccount } from "wagmi"
 import { AccountNavBar } from "../../components/core/AccountNavBar/AccountDropdown"
 import CopyToClipboard from "../../components/core/CopyToClipboard"
-import { TerminalLogo } from "../../components/icons"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
@@ -107,11 +108,16 @@ const DesktopTerminalLayout = ({
   return (
     <>
       <div className="flex h-screen flex-row">
-        <div className=" relative h-full w-[300px] overflow-auto border-r border-gray-90">
+        <div className="relative h-full w-[300px]">
           <section className="flex flex-row items-center justify-between p-4">
-            <TerminalLogo size="lg" />
+            <Image
+              src="/images/terminal-logo.webp"
+              alt=""
+              height={40}
+              width={40}
+            />
           </section>
-          <div className="h-[90%]">
+          <div className="h-[90%] overflow-auto border-r border-gray-90">
             <section className="mt-4 rounded p-4">
               <div className="rounded-t-xl bg-gray-100 p-4">
                 <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>

@@ -1,5 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority"
-import { ButtonHTMLAttributes } from "react"
+import React, { ButtonHTMLAttributes } from "react"
 
 export const buttonStyles = cva("relative rounded text-center", {
   variants: {
