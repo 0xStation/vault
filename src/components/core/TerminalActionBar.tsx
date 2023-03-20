@@ -107,7 +107,7 @@ const TerminalActionBar = () => {
             setQrCodeOpen(true)
           }}
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white transition-colors hover:bg-gray-90">
             <PlusIcon className="h-6 w-6" />
           </div>
           <span className="text-sm">Add Tokens</span>
@@ -137,7 +137,7 @@ const TerminalActionBar = () => {
                   addQueryParam(router, "requestTokenSliderOpen", "true")
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white transition-colors hover:bg-gray-90">
                   <ArrowUpRight />
                 </div>
                 <span className="text-sm">Send</span>
@@ -170,7 +170,7 @@ const TerminalActionBar = () => {
                   addQueryParam(router, "automationSliderOpen", "true")
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white transition-colors hover:bg-gray-90">
                   <CogIcon className="h-6 w-6" />
                 </div>
                 <span className="text-sm">Automate</span>

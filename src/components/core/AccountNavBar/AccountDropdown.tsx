@@ -1,7 +1,4 @@
-import {
-  DynamicUserProfile,
-  useDynamicContext,
-} from "@dynamic-labs/sdk-react"
+import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react"
 import { BellIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import BottomDrawer from "@ui/BottomDrawer"
@@ -139,7 +136,7 @@ export const AccountNavBar = () => {
               </Breakpoint>
             </div>
             <div
-              className="h-8 w-8 rounded bg-gray-80 p-1"
+              className="cur h-8 w-8 cursor-pointer rounded bg-gray-90 p-1 transition-colors hover:bg-gray-80"
               onClick={() => setNotificationOpen(true)}
             >
               <BellIcon />
