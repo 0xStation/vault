@@ -22,6 +22,7 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
     resetField,
     formState: { isDirty },
   } = useForm()
+
   const onSubmit = async (data: any) => {
     setLoading(true)
     const newCommentId = uuid()
@@ -41,6 +42,7 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
       }),
       commentActivity,
     )
+    resetField("comment")
     setLoading(false)
   }
 
@@ -71,7 +73,6 @@ export const NewCommentForm = ({ mutateRequest }: { mutateRequest: any }) => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     handleSubmit(onSubmit)()
-                    resetField("comment")
                     // @ts-ignore
                     e.target.style.height = ""
                     // @ts-ignore
