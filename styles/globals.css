@@ -39,6 +39,11 @@
   box-sizing: border-box;
 }
 
+*:focus-visible {
+  outline: 1px solid #4d4d4dff;
+  outline-offset: 2px;
+}
+
 body {
   background-color: #0d0e11;
   color: #ffffff;
