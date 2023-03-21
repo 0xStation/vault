@@ -118,7 +118,7 @@ const DesktopTerminalLayout = ({
             />
           </section>
           <div className="h-[90%] overflow-auto border-r border-gray-90">
-            <section className="mt-4 rounded p-4">
+            <section className="rounded p-4">
               <div className="rounded-t-xl bg-gray-100 p-4">
                 <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
                 <div className="mt-2 flex flex-row items-center space-x-1">
