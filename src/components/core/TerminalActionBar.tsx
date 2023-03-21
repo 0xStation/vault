@@ -77,7 +77,6 @@ const TerminalActionBar = () => {
       <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
         <SendTokensContent
           successCallback={() => {
-            setSendTokenSliderOpen(false)
             successToast({
               message: "Created request",
             })

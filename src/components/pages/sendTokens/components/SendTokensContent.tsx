@@ -14,6 +14,7 @@ import { encodeTokenTransfer } from "lib/encodings/token"
 import { newActionTree } from "lib/signatures/tree"
 import { RawCall } from "lib/transactions/call"
 import decimalToBigNumber from "lib/utils/decimalToBigNumber"
+import { removeQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import {
@@ -189,6 +190,7 @@ export const SendTokensContent = ({
       )
       if (successCallback) {
         successCallback()
+        removeQueryParam(router, "sendTokenSliderOpen")
       } else {
         // TODO: show toast
         router.push(`/${chainNameAndSafeAddress}/proposals`)
