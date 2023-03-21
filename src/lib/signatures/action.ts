@@ -19,6 +19,7 @@ export const hashActionValues = ({
   to,
   value,
   data,
+  senderParams,
 }: ActionCall & { chainId: number }): string => {
   const message: EIP712Message = {
     domain: actionDomain(chainId),
@@ -42,7 +43,7 @@ export const hashActionValues = ({
       to,
       value,
       data,
-      senderParams: "0x", // hard-coded for now, will leverage when creating express-lanes
+      senderParams: senderParams || ZERO_BYTES,
     },
   }
 
@@ -67,6 +68,6 @@ export const hashAction = (action: Action): string => {
     to: to,
     value: value,
     data: data,
-    senderParams: ZERO_BYTES,
+    senderParams: ZERO_BYTES, // hard-coded for now, will leverage when creating express-lanes
   })
 }
