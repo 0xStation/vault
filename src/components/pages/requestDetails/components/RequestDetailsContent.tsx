@@ -9,7 +9,7 @@ import { SignerQuorumRequestContent } from "../../../../components/request/Signe
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
 import { RequestFrob } from "../../../../models/request/types"
 import { isExecuted } from "../../../../models/request/utils"
-import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
+import { RequestDetailsActions } from "../../../request/RequestDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
 export const RequestDetailsContent = ({

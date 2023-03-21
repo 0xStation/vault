@@ -3,8 +3,8 @@ import { addressesAreEqual } from "lib/utils"
 import React, { useEffect, useState } from "react"
 import useStore from "../../hooks/stores/useStore"
 import { RequestFrob } from "../../models/request/types"
-import VoteManager from "../request/VoteManager"
 import { ExecuteRequest } from "./ExecuteRequest"
+import VoteManager from "./VoteManager"
 
 enum ButtonStatus {
   VOTE,
