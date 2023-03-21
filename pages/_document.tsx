@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href="/favicons/terminal-logo.svg" sizes="any" />
+        <link rel="icon" href="/favicons/terminal-logo.ico" sizes="any" />
         <meta
           name="description"
           content="Doing work with people who share your mission."
@@ -16,10 +16,7 @@ export default function Document() {
           name="twitter:description"
           content="Toolkit for digital orgs to curate and reward the best people and projects."
         />
-        <link
-          rel="apple-touch-icon"
-          href="/favicons/station-logo-favicon.svg"
-        />
+        <link rel="apple-touch-icon" href="/favicons/terminal-logo.ico" />
       </Head>
       <body>
         <Main />
