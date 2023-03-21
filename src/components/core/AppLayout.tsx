@@ -39,7 +39,7 @@ export const AppLayout = ({
     <>
       <Head>
         <title>{title || "Station"}</title>
-        <link rel="icon" href="/favicons/terminal-logo.svg" />
+        <link rel="icon" href="/favicons/terminal-logo.ico" />
         <meta
           name="description"
           content="Doing work with people who share your mission."
@@ -51,7 +51,7 @@ export const AppLayout = ({
           name="twitter:description"
           content="Toolkit for digital orgs to curate and reward the best people and projects."
         />
-        <link rel="apple-touch-icon" href="/favicons/terminal-logo.svg" />
+        <link rel="apple-touch-icon" href="/favicons/terminal-logo.ico" />
       </Head>
       {children}
       <Toast />
