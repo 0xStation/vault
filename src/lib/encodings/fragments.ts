@@ -16,7 +16,7 @@ const ev = (arg: string): EventFragment => {
 
 // https://github.com/0xStation/protocol-v1/blob/main/src/ParallelProcessor.sol#L101
 export const parallelProcessorExecute = fn(
-  "execute(tuple(address safe, uint256 nonce, address sender, uint8 operation, address to, uint256 value, bytes calldata data), tuple(bytes32[] calldata path, bytes signature)[] calldata proofs, string note) external returns (bool success)",
+  "execute(tuple(address safe, uint256 nonce, address sender, uint8 operation, address to, uint256 value, bytes calldata data, bytes calldata senderParams), tuple(bytes32[] calldata path, bytes signature)[] calldata proofs, string note) external returns (bool success)",
 )
 
 // https://github.com/safe-global/safe-contracts/blob/main/contracts/Safe.sol#L111

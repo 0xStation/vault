@@ -24,10 +24,11 @@ export const getHash = (message: EIP712Message): string => {
  * Convenience helper to retrieve domains for Action messages used to make Action hashes
  * @returns domain to use to construct EIP712Message's
  */
-export const actionDomain = (): TypedDataDomain => {
+export const actionDomain = (chainId: number): TypedDataDomain => {
   return {
     name: "Station",
     version: "0.0.1",
+    chainId,
     verifyingContract: PARALLEL_PROCESSOR_ADDRESS,
   }
 }

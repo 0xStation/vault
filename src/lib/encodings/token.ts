@@ -1,3 +1,4 @@
+import { ZERO_BYTES } from "lib/constants"
 import { RawCall } from "lib/transactions/call"
 import { TokenTransferVariant } from "../../models/request/types"
 import { Token, TokenType } from "../../models/token/types"
@@ -14,7 +15,7 @@ const encodeEthTransfer = (recipient: string, value: string) => {
   return {
     to: recipient, // recipient is getting called
     value: value, // value is always in wei
-    data: "0x", // no data to send
+    data: ZERO_BYTES, // no data to send
     operation: 0, // normal call receiving contract
   }
 }
