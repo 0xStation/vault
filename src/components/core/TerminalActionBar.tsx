@@ -123,7 +123,7 @@ const TerminalActionBar = () => {
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
             <PlusIcon className="h-6 w-6" />
           </div>
-          <span className="text-sm">Add Tokens</span>
+          <span className="text-sm">Add tokens</span>
         </div>
 
         <Breakpoint>
@@ -147,7 +147,7 @@ const TerminalActionBar = () => {
               <div
                 className="flex cursor-pointer flex-col items-center space-y-2"
                 onClick={() => {
-                  addQueryParam(router, "requestTokenSliderOpen", "true")
+                  addQueryParam(router, "sendTokenSliderOpen", "true")
                 }}
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
