@@ -1,11 +1,9 @@
 import { ArrowLeft } from "@icons"
 import Breakpoint from "@ui/Breakpoint"
-import RequestActionsDrawer from "components/request/RequestActions/Drawer"
-import RequestActionsModal from "components/request/RequestActions/Modal"
-import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
 import { Terminal } from "models/terminal/types"
 import { convertGlobalId } from "models/terminal/utils"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -20,6 +18,22 @@ import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import { usePermissionsStore } from "../../src/hooks/stores/usePermissionsStore"
 import useStore from "../../src/hooks/stores/useStore"
 import { useIsSigner } from "../../src/hooks/useIsSigner"
+
+const RequestActionsDrawer = dynamic(() =>
+  import("components/request/RequestActions/Drawer").then(
+    (mod) => mod.RequestActionsDrawer,
+  ),
+)
+const RequestActionsModal = dynamic(() =>
+  import("components/request/RequestActions/Modal").then(
+    (mod) => mod.RequestActionsModal,
+  ),
+)
+const TerminalActivationView = dynamic(() =>
+  import("components/terminalCreation/import/TerminalActivationView").then(
+    (mod) => mod.TerminalActivationView,
+  ),
+)
 
 const DesktopTerminalRequestsPage = () => {
   const isSigner = usePermissionsStore((state) => state.isSigner)

@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
-import RightSlider from "@ui/RightSlider"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -16,9 +16,25 @@ import {
   addQueryParam,
   removeQueryParam,
 } from "../../lib/utils/updateQueryParam"
-import EditMembersContent from "../pages/editMembers/components/EditMembersContent"
-import RequestTokensContent from "../pages/requestTokens/components/RequestTokensContent"
-import { SendTokensContent } from "../pages/sendTokens/components/SendTokensContent"
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
+const SendTokensContent = dynamic(() =>
+  import("../pages/sendTokens/components/SendTokensContent").then(
+    (mod) => mod.SendTokensContent,
+  ),
+)
+const RequestTokensContent = dynamic(() =>
+  import("../pages/requestTokens/components/RequestTokensContent").then(
+    (mod) => mod.RequestTokensContent,
+  ),
+)
+const EditMembersContent = dynamic(() =>
+  import("../pages/editMembers/components/EditMembersContent").then(
+    (mod) => mod.EditMembersContent,
+  ),
+)
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,

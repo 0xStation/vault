@@ -12,7 +12,7 @@ export const AutomationHistory = ({
   automation,
   isLoading,
 }: {
-  automation: Automation
+  automation?: Automation
   isLoading: boolean
 }) => {
   return (
@@ -21,8 +21,8 @@ export const AutomationHistory = ({
         <TabsContent value={TerminalAutomationHistoryFilter.DISTRIBUTED}>
           {!isLoading && (
             <AutomationTransfersView
-              address={automation.data.meta.address}
-              chainId={automation.chainId}
+              address={automation?.data.meta.address as string}
+              chainId={automation?.chainId as number}
               direction={TransferDirection.WITHDRAW_EVENT}
             />
           )}
@@ -30,8 +30,8 @@ export const AutomationHistory = ({
         <TabsContent value={TerminalAutomationHistoryFilter.RECEIVED}>
           {!isLoading && (
             <AutomationTransfersView
-              address={automation.data.meta.address}
-              chainId={automation.chainId}
+              address={automation?.data.meta.address as string}
+              chainId={automation?.chainId as number}
               direction={TransferDirection.INBOUND}
             />
           )}

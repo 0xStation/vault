@@ -1,5 +1,6 @@
 import { isAddress } from "@ethersproject/address"
 import { Address } from "@ui/Address"
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import {
   Select,
@@ -9,7 +10,7 @@ import {
   SelectValue,
 } from "@ui/Select"
 import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
-import truncateString, { isEns } from "lib/utils"
+import truncateString, { cn, isEns } from "lib/utils"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -36,7 +37,7 @@ const sumSplits = (splits: { value: number }[]) => {
   )
 }
 
-const NewAutomationPage = () => {
+export const NewAutomationContent = () => {
   const router = useRouter()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -55,6 +56,8 @@ const NewAutomationPage = () => {
 
   const { createAutomation } = useCreateAutomation(chainId, terminalAddress)
   const { successToast } = useToast()
+
+  const { isMobile } = useBreakpoint()
 
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
@@ -392,7 +395,12 @@ const NewAutomationPage = () => {
             </p>
           </div>
         </div>
-        <div className="fixed bottom-0 right-0 left-0 mx-auto w-full bg-black px-5 py-3 text-center">
+        <div
+          className={cn(
+            "fixed bottom-0 right-0 left-0 mx-auto w-full bg-black px-4 py-3 text-center",
+            isMobile ? "" : "border-l border-gray-90",
+          )}
+        >
           <Button
             type="submit"
             fullWidth={true}
@@ -414,4 +422,4 @@ const NewAutomationPage = () => {
   )
 }
 
-export default NewAutomationPage
+export default NewAutomationContent

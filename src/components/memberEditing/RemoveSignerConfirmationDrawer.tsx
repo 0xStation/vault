@@ -1,11 +1,15 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import truncateString, { addressesAreEqual } from "lib/utils"
-import { Dispatch, SetStateAction } from "react"
+import dynamic from "next/dynamic"
+import React, { Dispatch, SetStateAction } from "react"
 import { useEnsName } from "wagmi"
+
+const BottomDrawer = dynamic(() =>
+  import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
+)
 
 export const RemoveSignerConfirmationDrawer = ({
   isOpen,

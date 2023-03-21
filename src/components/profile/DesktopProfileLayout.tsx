@@ -30,7 +30,7 @@ const DesktopProfileLayout = ({
             />
           </section>
           <div className="h-[90%] overflow-auto border-r border-gray-90">
-            <section className="mt-4 p-4">
+            <section className="p-4">
               <div className="flex flex-row items-center space-x-2 rounded-t-xl bg-gray-100 p-4">
                 <Avatar address={accountAddress as string} size="lg" />
                 <Address address={accountAddress as string} size="lg" />
