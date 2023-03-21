@@ -15,11 +15,19 @@ export const RightSlider = ({
 }) => {
   return (
     <Transition.Root show={open} as={Fragment} appear={true}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <div className="fixed inset-0" />
 
-        <div className="fixed inset-0 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="fixed inset-0 overflow-hidden"
+          onClick={(e) => {
+            const target = e.target as HTMLElement
+            if (target.id === "close-slider") {
+              setOpen(false)
+            }
+          }}
+        >
+          <div className="absolute inset-0 overflow-hidden" id="close-slider">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}

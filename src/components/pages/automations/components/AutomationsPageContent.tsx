@@ -53,7 +53,6 @@ const AutomationsPageContent = () => {
     useState<boolean>(false)
   const closeAutomationDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
-      // setAutomationDetailsOpen(false)
       removeQueryParam(router, "automationId")
     }
   }
