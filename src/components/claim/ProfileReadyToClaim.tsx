@@ -1,14 +1,18 @@
 import Breakpoint from "@ui/Breakpoint"
-import RightSlider from "@ui/RightSlider"
 import ClaimListView from "components/claim/ClaimListView"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   addQueryParam,
   removeQueryParam,
 } from "../../lib/utils/updateQueryParam"
 import { ReadyToClaim } from "./ReadyToClaim"
+
+const RightSlider = dynamic(() =>
+  import("../../components/ui/RightSlider").then((mod) => mod.RightSlider),
+)
 
 export const ProfileReadyToClaim = () => {
   const router = useRouter()

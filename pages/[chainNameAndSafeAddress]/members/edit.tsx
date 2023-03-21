@@ -1,5 +1,5 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
-import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Desktop from "../../../src/components/pages/editMembers/Desktop"
@@ -7,6 +7,12 @@ import Mobile from "../../../src/components/pages/editMembers/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
 import { useIsSigner } from "../../../src/hooks/useIsSigner"
 import { useTerminalByChainIdAndSafeAddress } from "../../../src/models/terminal/hooks"
+
+const TerminalActivationView = dynamic(() =>
+  import("components/terminalCreation/import/TerminalActivationView").then(
+    (mod) => mod.TerminalActivationView,
+  ),
+)
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,

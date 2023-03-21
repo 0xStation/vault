@@ -1,12 +1,12 @@
 import { ActionVariant } from "@prisma/client"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
-import RightSlider from "@ui/RightSlider"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { useEffect, useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import useStore from "../../hooks/stores/useStore"
@@ -20,10 +20,19 @@ import { RequestFrob } from "../../models/request/types"
 import { BatchStatusBar } from "../core/BatchStatusBar"
 import RequestCard from "../core/RequestCard"
 import RequestTableRow from "../core/RequestTableRow"
-import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
+
+const RequestDetailsContent = dynamic(() =>
+  import("../pages/requestDetails/components/RequestDetailsContent").then(
+    (mod) => mod.RequestDetailsContent,
+  ),
+)
 
 type BatchState = {
   selectedRequests: RequestFrob[]
@@ -106,7 +115,6 @@ const RequestListForm = ({
     RequestFrob | undefined
   >(undefined)
 
-  const [requestActionsOpen, setRequestActionsOpen] = useState<boolean>(false)
   const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
   const closeDetailsSlider = (isOpen: boolean) => {
     if (!isOpen) {
@@ -279,7 +287,11 @@ const RequestListForm = ({
   return (
     <>
       {requestForDetails && (
-        <RightSlider open={detailsSliderOpen} setOpen={closeDetailsSlider}>
+        <RightSlider
+          open={detailsSliderOpen}
+          setOpen={closeDetailsSlider}
+          useInnerPadding={false}
+        >
           <RequestDetailsContent
             request={requestForDetails}
             mutateRequest={(args) => {

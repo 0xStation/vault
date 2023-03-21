@@ -4,23 +4,25 @@ import { Network } from "@ui/Network"
 import { TabsContent } from "@ui/Tabs"
 import truncateString from "lib/utils"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
+import { RevShareFrob } from "models/automation/types"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { useAutomation } from "../../models/automation/hooks"
 import { parseGlobalId } from "../../models/terminal/utils"
 import { valueToAmount } from "../../models/token/utils"
 import { AvatarAddress } from "../core/AvatarAddress"
 import CopyToClipboard from "../core/CopyToClipboard"
 import { AutomationTab } from "./AutomationTabBar"
 
-export const AutomationInfo = () => {
+export const AutomationInfo = ({
+  automation,
+}: {
+  automation?: RevShareFrob
+}) => {
   const router = useRouter()
 
   const { chainId } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { automation } = useAutomation(router.query.automationId as string)
-
   return (
     <TabsContent value={AutomationTab.INFO}>
       <div className="mt-6 px-4">

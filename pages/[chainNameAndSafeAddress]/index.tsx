@@ -5,10 +5,11 @@ import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestT
 import truncateString from "lib/utils"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { Terminal } from "models/terminal/types"
+import dynamic from "next/dynamic"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
@@ -16,7 +17,6 @@ import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import TerminalActionsBar from "../../src/components/core/TerminalActionBar"
 import { ChevronRight } from "../../src/components/icons"
 import DesktopTerminalLayout from "../../src/components/terminal/DesktopTerminalLayout"
-import TerminalActivationView from "../../src/components/terminalCreation/import/TerminalActivationView"
 import LabelCard from "../../src/components/ui/LabelCard"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import { usePermissionsStore } from "../../src/hooks/stores/usePermissionsStore"
@@ -25,6 +25,12 @@ import useFungibleTokenData from "../../src/hooks/useFungibleTokenData"
 import { useRequests } from "../../src/hooks/useRequests"
 import { isExecuted } from "../../src/models/request/utils"
 import { convertGlobalId } from "../../src/models/terminal/utils"
+
+const TerminalActivationView = dynamic(() =>
+  import(
+    "../../src/components/terminalCreation/import/TerminalActivationView"
+  ).then((mod) => mod.TerminalActivationView),
+)
 
 type TerminalNavOption = {
   label: string
@@ -105,11 +111,9 @@ const MobileTerminalIndexPage = () => {
   return (
     <>
       <AccountNavBar />
-      <>
-        <Head>
-          <title>{terminal?.data.name} | Home</title>
-        </Head>
-      </>
+      <Head>
+        <title>{terminal?.data.name} | Home</title>
+      </Head>
       <section className="mt-6 px-4">
         <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">
@@ -191,18 +195,17 @@ const DesktopTerminalIndexPage = () => {
 }
 
 const TerminalPage = () => {
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
+  const { isLoading: breakpointLoading, isMobile } = useBreakpoint()
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
 
   useEffect(() => {
-    if (breakpoint && !isMobile) {
+    if (!breakpointLoading && !isMobile) {
       router.push(`/${chainNameAndSafeAddress}/proposals`, undefined, {
         shallow: true,
       })
     }
-  }, [breakpoint])
+  }, [breakpointLoading])
 
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,

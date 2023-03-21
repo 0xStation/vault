@@ -1,5 +1,4 @@
 import { ActionStatus, ActionVariant } from "@prisma/client"
-import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
@@ -11,6 +10,7 @@ import { prepareSplitsWithdrawCall } from "lib/transactions/0xsplits"
 import { batchCalls } from "lib/transactions/batch"
 import { RawCall } from "lib/transactions/call"
 import { callAction } from "lib/transactions/parallelProcessor"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import useStore from "../../hooks/stores/useStore"
@@ -24,6 +24,10 @@ import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { TokenTransfer } from "../../models/token/types"
 import { addValues, transferId } from "../../models/token/utils"
 import { TokenTransfersAccordion } from "../core/TokensAccordion"
+
+const BottomDrawer = dynamic(() =>
+  import("@ui/BottomDrawer").then((mod) => mod.BottomDrawer),
+)
 
 const reduceTransfers = (transfers: TokenTransfer[]): TokenTransfer[] => {
   let transferAcc: Record<string, TokenTransfer> = {}

@@ -1,30 +1,46 @@
 import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
-import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
-import Modal from "@ui/Modal"
-import RightSlider from "@ui/RightSlider"
-import { CopyAddressButton } from "components/core/CopyAddressButton"
 import QRCode from "components/core/QrCode"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import { convertGlobalId } from "models/terminal/utils"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ArrowUpRight } from "../icons"
-import NewAutomationContent from "../pages/newAutomation/components/NewAutomationContent"
-import RequestTokensContent from "../pages/requestTokens/components/RequestTokensContent"
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
+const SendTokensContent = dynamic(() =>
+  import("../pages/sendTokens/components/SendTokensContent").then(
+    (mod) => mod.SendTokensContent,
+  ),
+)
+
+const NewAutomationContent = dynamic(() =>
+  import("../pages/newAutomation/components/NewAutomationContent").then(
+    (mod) => mod.NewAutomationContent,
+  ),
+)
+const BottomDrawer = dynamic(() =>
+  import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
+)
+const Modal = dynamic(() => import("../ui/Modal").then((mod) => mod.Modal))
+const CopyAddressButton = dynamic(() =>
+  import("../core/CopyAddressButton").then((mod) => mod.CopyAddressButton),
+)
 
 const TerminalActionBar = () => {
   const router = useRouter()
   const { address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const [requestTokenSliderOpen, setRequestTokenSliderOpen] =
-    useState<boolean>(false)
+  const [sendTokenSliderOpen, setSendTokenSliderOpen] = useState<boolean>(false)
 
-  const closeRequestTokenSlider = (isOpen: boolean) => {
+  const closeSendTokenSlider = (isOpen: boolean) => {
     if (!isOpen) {
-      removeQueryParam(router, "requestTokenSliderOpen")
+      removeQueryParam(router, "sendTokenSliderOpen")
     }
   }
 
@@ -40,25 +56,22 @@ const TerminalActionBar = () => {
   const [qrCodeOpen, setQrCodeOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    if (router.query.requestTokenSliderOpen) {
-      setRequestTokenSliderOpen(true)
+    if (router.query.sendTokenSliderOpen) {
+      setSendTokenSliderOpen(true)
       setNewAutomationSliderOpen(false)
     } else if (router.query.automationSliderOpen) {
       setNewAutomationSliderOpen(true)
-      setRequestTokenSliderOpen(false)
+      setSendTokenSliderOpen(false)
     } else {
-      setRequestTokenSliderOpen(false)
+      setSendTokenSliderOpen(false)
       setNewAutomationSliderOpen(false)
     }
   }, [router.query])
 
   return (
     <>
-      <RightSlider
-        open={requestTokenSliderOpen}
-        setOpen={closeRequestTokenSlider}
-      >
-        <RequestTokensContent />
+      <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
+        <SendTokensContent />
       </RightSlider>
       <RightSlider
         open={newAutomationSliderOpen}
@@ -110,7 +123,7 @@ const TerminalActionBar = () => {
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
             <PlusIcon className="h-6 w-6" />
           </div>
-          <span className="text-sm">Add Tokens</span>
+          <span className="text-sm">Add tokens</span>
         </div>
 
         <Breakpoint>
@@ -134,7 +147,7 @@ const TerminalActionBar = () => {
               <div
                 className="flex cursor-pointer flex-col items-center space-y-2"
                 onClick={() => {
-                  addQueryParam(router, "requestTokenSliderOpen", "true")
+                  addQueryParam(router, "sendTokenSliderOpen", "true")
                 }}
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">

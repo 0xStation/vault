@@ -1,12 +1,18 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
-import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { Terminal } from "models/terminal/types"
+import dynamic from "next/dynamic"
 import Head from "next/head"
-import { useState } from "react"
+import React, { useState } from "react"
 import Desktop from "../../src/components/pages/assets/Desktop"
 import Mobile from "../../src/components/pages/assets/Mobile"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
 import { useTerminalByChainIdAndSafeAddress } from "../../src/models/terminal/hooks"
+
+const TerminalActivationView = dynamic(() =>
+  import("components/terminalCreation/import/TerminalActivationView").then(
+    (mod) => mod.TerminalActivationView,
+  ),
+)
 
 const chainNameToChainId: Record<string, number | undefined> = {
   eth: 1,
@@ -30,11 +36,9 @@ const AssetsPage = () => {
 
   return (
     <>
-      <>
-        <Head>
-          <title>Assets | {terminal?.data.name}</title>
-        </Head>
-      </>
+      <Head>
+        <title>Assets | {terminal?.data.name}</title>
+      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}

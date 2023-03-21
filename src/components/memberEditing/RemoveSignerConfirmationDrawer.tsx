@@ -1,11 +1,15 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import truncateString, { addressesAreEqual } from "lib/utils"
-import { Dispatch, SetStateAction } from "react"
+import dynamic from "next/dynamic"
+import React, { Dispatch, SetStateAction } from "react"
 import { useEnsName } from "wagmi"
+
+const BottomDrawer = dynamic(() =>
+  import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
+)
 
 export const RemoveSignerConfirmationDrawer = ({
   isOpen,
@@ -29,11 +33,11 @@ export const RemoveSignerConfirmationDrawer = ({
   let title = `Are you sure you would like to remove
     ${ensName || truncateString(addressToBeRemoved, 8)}?`
   let subtitle =
-    "Member will be removed from the Terminal once the request has been approved and executed."
+    "Member will be removed from the Project once the Proposal has been approved and executed."
   if (addressesAreEqual(activeUserAddress, addressToBeRemoved)) {
-    title = "Are you sure you’d like to leave the Terminal?"
+    title = "Are you sure you’d like to leave the Project?"
     subtitle =
-      "You’ll be removed from the Terminal once the request has been approved and executed."
+      "You’ll be removed from the Project once the Proposal has been approved and executed."
   }
   return (
     <Breakpoint>

@@ -3,7 +3,7 @@ import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTer
 import { convertGlobalId } from "models/terminal/utils"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import TerminalCreationForm from "../../src/components/terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/TerminalCreationOptionsView"
 import useStore from "../../src/hooks/stores/useStore"
@@ -18,8 +18,6 @@ export const TerminalCreationPage = () => {
     VIEW.CREATION_OPTIONS,
   )
   const activeUser = useStore((state) => state.activeUser)
-  const breakpoint = useBreakpoint()
-  const isMobile = breakpoint === "S"
   const router = useRouter()
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
@@ -28,6 +26,8 @@ export const TerminalCreationPage = () => {
     address as string,
     chainId as number,
   )
+  const { isMobile } = useBreakpoint()
+
   useEffect(() => {
     if (!activeUser) {
       // redirect

@@ -12,7 +12,7 @@ import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/ReqeustDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
-const RequestDetailsContent = ({
+export const RequestDetailsContent = ({
   request,
   mutateRequest,
 }: {

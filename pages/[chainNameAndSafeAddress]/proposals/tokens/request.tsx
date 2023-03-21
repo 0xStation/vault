@@ -1,13 +1,19 @@
 import Breakpoint from "@ui/Breakpoint"
-import TerminalActivationView from "components/terminalCreation/import/TerminalActivationView"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { Terminal } from "models/terminal/types"
 import { convertGlobalId } from "models/terminal/utils"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Desktop from "../../../../src/components/pages/requestTokens/Desktop"
 import Mobile from "../../../../src/components/pages/requestTokens/Mobile"
 import { useIsModuleEnabled } from "../../../../src/hooks/safe/useIsModuleEnabled"
+
+const TerminalActivationView = dynamic(() =>
+  import("components/terminalCreation/import/TerminalActivationView").then(
+    (mod) => mod.TerminalActivationView,
+  ),
+)
 
 const RequestTokensPage = () => {
   const router = useRouter()
