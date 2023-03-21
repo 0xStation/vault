@@ -1,6 +1,7 @@
 import { hexlify } from "@ethersproject/bytes"
 import { keccak256 } from "@ethersproject/keccak256"
 import { BigNumber } from "ethers"
+import { ZERO_BYTES } from "lib/constants"
 import { bundleCalls } from "lib/transactions/bundle"
 import { RawCall } from "lib/transactions/call"
 import { MerkleTree } from "merkletreejs"
@@ -78,7 +79,11 @@ export const newActionTree = (values: {
   sender: string
   calls: RawCall[]
 }): Tree => {
-  const root = hashActionValues({ ...values, ...bundleCalls(values.calls) }) // only one node so this leaf is the root
+  const root = hashActionValues({
+    ...values,
+    ...bundleCalls(values.calls),
+    senderParams: ZERO_BYTES,
+  }) // only one node so this leaf is the root
   const proofs = { root: [] } // only one node so path from leaf to root requires no path
   const message = treeMessage(root)
   return { root, proofs, message }

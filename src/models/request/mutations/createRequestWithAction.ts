@@ -4,7 +4,7 @@ import {
   RequestVariantType,
   SubscriptionVariant,
 } from "@prisma/client"
-import { REJECTION_CALL, ZERO_ADDRESS } from "lib/constants"
+import { REJECTION_CALL, ZERO_ADDRESS, ZERO_BYTES } from "lib/constants"
 import { hashActionValues } from "lib/signatures/action"
 import { bundleCalls } from "lib/transactions/bundle"
 import {
@@ -115,6 +115,7 @@ export const createRequestWithAction = async (
                 to: actionCall.to,
                 value: actionCall.value,
                 data: actionCall.data,
+                senderParams: ZERO_BYTES,
               }),
               safeAddress: address as string,
               chainId,
@@ -133,6 +134,7 @@ export const createRequestWithAction = async (
                 to: rejectionCall.to,
                 value: rejectionCall.value,
                 data: rejectionCall.data,
+                senderParams: ZERO_BYTES,
               }),
               safeAddress: address as string,
               chainId,
