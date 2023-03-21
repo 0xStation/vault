@@ -1,6 +1,6 @@
 import { SUPPORTED_CHAINS } from "lib/constants"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useEffect } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import { useNetwork, useSwitchNetwork } from "wagmi"
 import { VIEW } from "../../../pages/project/new"
@@ -26,7 +26,6 @@ export const TerminalCreationOptionsView = ({
     accountAddress: activeUser?.address as string,
     chainId: chain?.id as number,
   })
-  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)

@@ -1,13 +1,13 @@
-import { IconProps } from "../utils"
+import React from "react"
+import { icon, IconProps } from "../utils"
 
-export const Optimism = ({}: IconProps) => {
+export const Optimism = ({ size = "sm" }: IconProps) => {
   return (
     <svg
-      width="12"
-      height="12"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={icon({ size })}
     >
       <rect width="28" height="28" rx="14" fill="#FF3131" />
       <rect

@@ -1,15 +1,30 @@
-import { Arbitrum } from "@icons/coins/Arbitrum"
-import { Avalanche } from "@icons/coins/Avalanche"
-import { Ethereum } from "@icons/coins/Ethereum"
-import { Optimism } from "@icons/coins/Optimism"
-import { Polygon } from "@icons/coins/Polygon"
-import { Testnet } from "@icons/coins/Testnet"
+import dynamic from "next/dynamic"
+import React from "react"
+
+const Testnet = dynamic(() =>
+  import("@icons/coins/Testnet").then((mod) => mod.Testnet),
+)
+const Polygon = dynamic(() =>
+  import("@icons/coins/Polygon").then((mod) => mod.Polygon),
+)
+const Optimism = dynamic(() =>
+  import("@icons/coins/Optimism").then((mod) => mod.Optimism),
+)
+const Ethereum = dynamic(() =>
+  import("@icons/coins/Ethereum").then((mod) => mod.Ethereum),
+)
+const Avalanche = dynamic(() =>
+  import("@icons/coins/Avalanche").then((mod) => mod.Avalanche),
+)
+const Arbitrum = dynamic(() =>
+  import("@icons/coins/Arbitrum").then((mod) => mod.Arbitrum),
+)
 
 interface NetworkProps {
   chainId: number
 }
 
-const config: Record<number, any> = {
+export const networkIconConfig: Record<number, any> = {
   1: {
     icon: <Ethereum />,
     name: "Ethereum",
@@ -39,8 +54,8 @@ const config: Record<number, any> = {
 export const Network = ({ chainId }: NetworkProps) => {
   return (
     <div className="flex flex-row items-center space-x-1.5">
-      {config[chainId]?.icon}
-      <span className="text-sm">{config[chainId]?.name}</span>
+      {networkIconConfig[chainId]?.icon}
+      <span className="text-sm">{networkIconConfig[chainId]?.name}</span>
     </div>
   )
 }

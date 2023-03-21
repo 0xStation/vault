@@ -1,6 +1,7 @@
 import { Address } from "@ui/Address"
 import { Avatar } from "@ui/Avatar"
 import { useRouter } from "next/router"
+import { useNetwork } from "wagmi"
 import { useTerminalsBySigner } from "../../../models/terminal/hooks"
 import AccountNavBar from "../../core/AccountNavBar"
 import ProfilePageContent from "./components/ProfilePageContent"
@@ -8,7 +9,11 @@ import ProfilePageContent from "./components/ProfilePageContent"
 const Mobile = () => {
   const router = useRouter()
   const accountAddress = router.query.address as string
-  const { isLoading, count } = useTerminalsBySigner(accountAddress)
+  const { chain } = useNetwork()
+  const { isLoading, count } = useTerminalsBySigner(
+    accountAddress,
+    chain?.id as number,
+  )
 
   return (
     <div className="flex h-screen flex-col pb-4">
