@@ -7,6 +7,8 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import { useSWRConfig } from "swr"
+import { useToast } from "../../hooks/useToast"
 import { ArrowUpRight } from "../icons"
 
 const RightSlider = dynamic(() =>
@@ -32,10 +34,12 @@ const CopyAddressButton = dynamic(() =>
 )
 
 const TerminalActionBar = () => {
+  const { mutate } = useSWRConfig()
   const router = useRouter()
-  const { address } = convertGlobalId(
+  const { address, chainId } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const { successToast } = useToast()
   const [sendTokenSliderOpen, setSendTokenSliderOpen] = useState<boolean>(false)
 
   const closeSendTokenSlider = (isOpen: boolean) => {
@@ -71,7 +75,16 @@ const TerminalActionBar = () => {
   return (
     <>
       <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
-        <SendTokensContent />
+        <SendTokensContent
+          successCallback={() => {
+            setSendTokenSliderOpen(false)
+            successToast({
+              message: "Created request",
+            })
+            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}`
+            mutate(key)
+          }}
+        />
       </RightSlider>
       <RightSlider
         open={newAutomationSliderOpen}

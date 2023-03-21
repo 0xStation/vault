@@ -80,38 +80,23 @@ export const CreateRequestDropdown = () => {
 
   useEffect(() => {
     if (router.query.sendTokenSliderOpen) {
-      setSendTokensSliderOpen(true)
+      // adding the query param will trigger the send tokens drawer from the terminal action bar
       setRequestTokensSliderOpen(false)
       setEditMembersSliderOpen(false)
     } else if (router.query.requestTokenSliderOpen) {
       setRequestTokensSliderOpen(true)
-      setSendTokensSliderOpen(false)
       setEditMembersSliderOpen(false)
     } else if (router.query.editMembersSliderOpen) {
       setEditMembersSliderOpen(true)
       setRequestTokensSliderOpen(false)
-      setSendTokensSliderOpen(false)
     } else {
       setEditMembersSliderOpen(false)
       setRequestTokensSliderOpen(false)
-      setSendTokensSliderOpen(false)
     }
   }, [router.query])
 
   return (
     <>
-      <RightSlider open={sendTokensSliderOpen} setOpen={closeSendTokensSlider}>
-        <SendTokensContent
-          successCallback={() => {
-            closeSendTokensSlider(false)
-            successToast({
-              message: "Created request",
-            })
-            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${safeAddress}`
-            mutate(key)
-          }}
-        />
-      </RightSlider>
       <RightSlider
         open={requestTokensSliderOpen}
         setOpen={closeRequestTokensSlider}
@@ -138,6 +123,7 @@ export const CreateRequestDropdown = () => {
             + Create
           </span>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent className="mr-2">
           <DropdownMenuItem className="cursor-pointer focus:bg-black">
             <Breakpoint>

@@ -2,10 +2,11 @@ import { goerli, mainnet, polygon } from "wagmi/chains"
 import { RawCall } from "./transactions/call"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+export const ZERO_BYTES = "0x"
 
 // one ParallelProcessor will be deployed to the same address on all chains
 export const PARALLEL_PROCESSOR_ADDRESS =
-  "0x9dC09176bCeE58482053b95c18AF067BfFF63F88"
+  "0x17B67e5Bdfcf5dF34711D151DA3422821beD2Ae6"
 
 export const SUPPORTED_CHAINS = [mainnet, goerli, polygon]
 
@@ -14,7 +15,7 @@ export const SUPPORTED_CHAIN_IDS = SUPPORTED_CHAINS.map((chain) => chain.id)
 export const REJECTION_CALL: RawCall = {
   to: ZERO_ADDRESS,
   value: "0",
-  data: "0x",
+  data: ZERO_BYTES,
   operation: 0,
 }
 

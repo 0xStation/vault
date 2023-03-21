@@ -1,4 +1,8 @@
-import { PARALLEL_PROCESSOR_ADDRESS, ZERO_ADDRESS } from "lib/constants"
+import {
+  PARALLEL_PROCESSOR_ADDRESS,
+  ZERO_ADDRESS,
+  ZERO_BYTES,
+} from "lib/constants"
 import { encodeFunctionData } from "lib/encodings/utils"
 import { compareAddresses } from "lib/utils/compareAddresses"
 import { Action } from "../../models/action/types"
@@ -71,6 +75,7 @@ export const callAction = ({
       to,
       value,
       data,
+      senderParams: ZERO_BYTES,
     },
     proofs: formattedProofs,
     note: "", // TODO: come from request

@@ -13,6 +13,7 @@ export type ActionCall = RawCall & {
   safe: string
   nonce: number
   sender: string
+  senderParams: string
 }
 
 export type ParallelProcessorCall = {

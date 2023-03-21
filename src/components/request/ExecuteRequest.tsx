@@ -24,10 +24,14 @@ import { callAction } from "../../lib/transactions/parallelProcessor"
 import { useSetActionPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
 import { Activity } from "../../models/activity/types"
-import { useCompleteRequestExecution } from "../../models/request/hooks"
 import { RequestFrob } from "../../models/request/types"
 import { getStatus } from "../../models/request/utils"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
+
+const chainIdToChainName: Record<number, string> = {
+  1: "eth",
+  5: "gor",
+}
 
 export const ExecuteWrapper = ({
   title,
@@ -50,14 +54,10 @@ export const ExecuteWrapper = ({
 }) => {
   const router = useRouter()
   const activeUser = useStore((state) => state.activeUser)
-  const { loadingToast, successToast, errorToast, closeCurrentToast } =
-    useToast()
+  const { loadingToast } = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>()
   // request.query.requestId is not found in the desktop version
-  const { completeRequestExecution } = useCompleteRequestExecution(
-    router.query.requestId as string,
-  )
   const { setActionPending } = useSetActionPending(actionToExecute.id)
 
   const { config } = usePrepareSendTransaction({
@@ -139,6 +139,14 @@ export const ExecuteWrapper = ({
           ),
         },
       })
+
+      router.push(
+        `/${chainIdToChainName[request.chainId]}:${
+          request.terminal.safeAddress
+        }/proposals?filter=closed`,
+        undefined,
+        { shallow: true },
+      )
     }
   }, [isSendTransactionSuccess])
 
