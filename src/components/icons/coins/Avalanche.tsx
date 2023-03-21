@@ -1,13 +1,13 @@
-import { IconProps } from "../utils"
+import React from "react"
+import { icon, IconProps } from "../utils"
 
-export const Avalanche = ({}: IconProps) => {
+export const Avalanche = ({ size = "sm" }: IconProps) => {
   return (
     <svg
-      width="12"
-      height="12"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={icon({ size })}
     >
       <circle cx="14" cy="14" r="14" fill="white" />
       <path

@@ -13,7 +13,7 @@ import {
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import useStore from "../../../hooks/stores/useStore"
 import { useToast } from "../../../hooks/useToast"
 import {
@@ -23,6 +23,7 @@ import {
 import EmailNotificationForm from "../../email/EmailNotificationForm"
 import CreateTerminalContent from "../../pages/createTerminal/components/CreateTerminalContent"
 import { AvatarAddress } from "../AvatarAddress"
+import NetworkDropdown from "../NetworkDropdown"
 
 const RightSlider = dynamic(() =>
   import("../../ui/RightSlider").then((mod) => mod.RightSlider),
@@ -139,6 +140,7 @@ export const AccountNavBar = () => {
                 }}
               </Breakpoint>
             </div>
+            <NetworkDropdown />
             <div
               className="h-8 w-8 rounded bg-gray-80 p-1"
               onClick={() => setNotificationOpen(true)}

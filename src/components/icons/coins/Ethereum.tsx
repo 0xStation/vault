@@ -1,13 +1,13 @@
-import { IconProps } from "../utils"
+import React from "react"
+import { icon, IconProps } from "../utils"
 
-export const Ethereum = ({}: IconProps) => {
+export const Ethereum = ({ size = "sm" }: IconProps) => {
   return (
     <svg
-      width="12"
-      height="12"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={icon({ size })}
     >
       <path
         fillRule="evenodd"
