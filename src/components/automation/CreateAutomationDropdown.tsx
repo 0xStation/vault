@@ -6,12 +6,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
-import RightSlider from "@ui/RightSlider"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import NewAutomationContent from "../pages/newAutomation/components/NewAutomationContent"
+
+const RightSlider = dynamic(() =>
+  import("../../../src/components/ui/RightSlider").then(
+    (mod) => mod.RightSlider,
+  ),
+)
+const NewAutomationContent = dynamic(() =>
+  import("../pages/newAutomation/components/NewAutomationContent").then(
+    (mod) => mod.NewAutomationContent,
+  ),
+)
 
 export const CreateAutomationDropdown = () => {
   const router = useRouter()

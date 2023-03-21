@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 
-export default function Modal({
+export const Modal = ({
   isOpen,
   setIsOpen,
   children,
@@ -9,7 +9,7 @@ export default function Modal({
   isOpen: boolean
   setIsOpen: any
   children: React.ReactNode
-}) {
+}) => {
   function closeModal() {
     setIsOpen(false)
   }
@@ -50,3 +50,5 @@ export default function Modal({
     </Transition>
   )
 }
+
+export default Modal

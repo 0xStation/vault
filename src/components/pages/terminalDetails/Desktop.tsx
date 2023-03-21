@@ -1,5 +1,5 @@
-import RightSlider from "@ui/RightSlider"
 import { EditButton } from "components/core/EditButton"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Terminal } from "../../../../src/models/terminal/types"
@@ -11,6 +11,10 @@ import {
 import DesktopTerminalLayout from "../../terminal/DesktopTerminalLayout"
 import EditTerminalContent from "../editTerminalDetails/components/EditTerminalContent"
 import TerminalDetailsPageContent from "./components/TerminalDetailsPageContent"
+
+const RightSlider = dynamic(() =>
+  import("../../ui/RightSlider").then((mod) => mod.RightSlider),
+)
 
 const Desktop = ({ terminal }: { terminal: Terminal }) => {
   const router = useRouter()

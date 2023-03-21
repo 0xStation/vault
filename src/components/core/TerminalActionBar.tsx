@@ -1,18 +1,35 @@
 import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
-import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
-import Modal from "@ui/Modal"
-import RightSlider from "@ui/RightSlider"
-import { CopyAddressButton } from "components/core/CopyAddressButton"
 import QRCode from "components/core/QrCode"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import { convertGlobalId } from "models/terminal/utils"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { ArrowUpRight } from "../icons"
-import NewAutomationContent from "../pages/newAutomation/components/NewAutomationContent"
-import SendTokensContent from "../pages/sendTokens/components/SendTokensContent"
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
+const SendTokensContent = dynamic(() =>
+  import("../pages/sendTokens/components/SendTokensContent").then(
+    (mod) => mod.SendTokensContent,
+  ),
+)
+
+const NewAutomationContent = dynamic(() =>
+  import("../pages/newAutomation/components/NewAutomationContent").then(
+    (mod) => mod.NewAutomationContent,
+  ),
+)
+const BottomDrawer = dynamic(() =>
+  import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
+)
+const Modal = dynamic(() => import("../ui/Modal").then((mod) => mod.Modal))
+const CopyAddressButton = dynamic(() =>
+  import("../core/CopyAddressButton").then((mod) => mod.CopyAddressButton),
+)
 
 const TerminalActionBar = () => {
   const router = useRouter()
