@@ -1,7 +1,7 @@
 import Breakpoint from "@ui/Breakpoint"
-import RightSlider from "@ui/RightSlider"
 import { TabsContent } from "@ui/Tabs"
 import { EmptyState } from "components/emptyStates/EmptyState"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import {
@@ -15,6 +15,10 @@ import RequestCard from "../core/RequestCard"
 import RequestTerminalLink from "../core/RequestTerminalLink"
 import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
+
+const RightSlider = dynamic(() =>
+  import("../ui/RightSlider").then((mod) => mod.RightSlider),
+)
 
 export const ProfileRequestsList = ({ address }: { address: string }) => {
   const router = useRouter()

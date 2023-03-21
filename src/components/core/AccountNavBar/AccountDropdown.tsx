@@ -1,7 +1,4 @@
-import {
-  DynamicUserProfile,
-  useDynamicContext,
-} from "@dynamic-labs/sdk-react"
+import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react"
 import { BellIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import BottomDrawer from "@ui/BottomDrawer"
@@ -13,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
-import RightSlider from "@ui/RightSlider"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -26,6 +23,10 @@ import {
 import EmailNotificationForm from "../../email/EmailNotificationForm"
 import CreateTerminalContent from "../../pages/createTerminal/components/CreateTerminalContent"
 import { AvatarAddress } from "../AvatarAddress"
+
+const RightSlider = dynamic(() =>
+  import("../../ui/RightSlider").then((mod) => mod.RightSlider),
+)
 
 export const AccountNavBar = () => {
   const router = useRouter()
