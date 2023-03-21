@@ -66,9 +66,9 @@ const AutomationsPageContent = () => {
     }
   }, [automations, router.query.automationId])
 
-  const emptyStateTitle = isSigner ? "Set up Automations" : "No automations"
+  const emptyStateTitle = isSigner ? "Set up Automations" : "No Automations"
   const emptyStateSubtitle = isSigner
-    ? "Automate revenue-sharing from NFT sales and sponsorships."
+    ? "Automate your collective operations — sharing on-chain revenue from NFT sales and project sponsorship"
     : "This Project hasn’t set up an Automation."
 
   const { children: revSharePrompt, isOpen, setIsOpen } = useRevSharePrompt()

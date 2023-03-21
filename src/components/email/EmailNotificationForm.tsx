@@ -51,12 +51,11 @@ const EmailNotificationForm = ({
   }
 
   return (
-    <div className="px-4">
+    <div className="px-0">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
-      <button onClick={() => testEmails()}>Test emails</button>
       <p>
-        Enter your email to get notifications about your Terminals. We’ll never
-        spam you with useless emails.
+        Enter your email to get notified about your Projects. We’ll never spam
+        you with useless emails.
       </p>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
@@ -73,8 +72,9 @@ const EmailNotificationForm = ({
             validate: (v) => !v || isValidEmail(v) || "Invalid email.",
           }}
         />
-        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-5 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-4 w-full max-w-[580px] px-4 text-center">
           <Button
+            size="lg"
             type="submit"
             disabled={isSubmitting}
             loading={isSubmitting}
@@ -84,7 +84,7 @@ const EmailNotificationForm = ({
             Save
           </Button>
           <p
-            className={`mt-1 text-xs  ${
+            className={`mt-1 text-sm  ${
               formMessage?.isError ? "text-red" : "text-gray"
             }`}
           >
