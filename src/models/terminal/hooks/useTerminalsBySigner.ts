@@ -2,7 +2,10 @@ import axios from "axios"
 import useSWR from "swr"
 import { Terminal } from "../types"
 
-export const useTerminalsBySigner = (address: string) => {
+export const useTerminalsBySigner = (
+  address: string,
+  chainId: number | string,
+) => {
   const fetcher = async (url: string) => {
     try {
       const response = await axios.get<Terminal[]>(url)
@@ -15,7 +18,9 @@ export const useTerminalsBySigner = (address: string) => {
   }
 
   const { isLoading, data: terminals } = useSWR(
-    address ? `/api/v1/account/${address}/terminals` : null,
+    address && chainId
+      ? `/api/v1/account/${address}/terminals?chainId=${chainId}`
+      : null,
     fetcher,
     {},
   )

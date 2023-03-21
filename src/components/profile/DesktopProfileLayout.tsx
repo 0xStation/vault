@@ -3,6 +3,7 @@ import { Avatar } from "@ui/Avatar"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import React from "react"
+import { useNetwork } from "wagmi"
 import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { AccountNavBar } from "../core/AccountNavBar/AccountDropdown"
 
@@ -14,8 +15,12 @@ const DesktopProfileLayout = ({
   children?: React.ReactNode
 }) => {
   const router = useRouter()
+  const { chain } = useNetwork()
   const { address: accountAddress } = router.query
-  const { isLoading, count } = useTerminalsBySigner(accountAddress as string)
+  const { isLoading, count } = useTerminalsBySigner(
+    accountAddress as string,
+    chain?.id as number,
+  )
 
   return (
     <>

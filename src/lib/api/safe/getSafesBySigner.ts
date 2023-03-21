@@ -2,7 +2,7 @@ import { SUPPORTED_CHAIN_IDS } from "lib/constants"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { safeEndpoint } from "./utils"
 
-const getSafesBySigner = async (
+export const getSafesBySigner = async (
   chainId: number,
   signerAddress: string,
 ): Promise<{ address: string; chainId: number }[]> => {

@@ -1,6 +1,6 @@
-import { getSupportedSafesBySigner } from "lib/api/safe/getSafesBySigner"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
+import { getSafesBySigner } from "../../../../../src/lib/api/safe/getSafesBySigner"
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,10 +19,16 @@ export default async function handler(
   }
 
   const accountAddress = query.address as string
+  const chainId = query.chainId
+
+  if (!chainId) {
+    res.statusCode = 500
+    return res.end(JSON.stringify("Chain id required."))
+  }
 
   let safes
   try {
-    safes = await getSupportedSafesBySigner(accountAddress)
+    safes = await getSafesBySigner(parseInt(chainId as string), accountAddress)
   } catch {
     res.statusCode = 500
     return res.end(JSON.stringify("Failure fetching signer's supported Safes"))
