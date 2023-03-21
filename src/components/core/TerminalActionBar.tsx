@@ -6,7 +6,7 @@ import { convertGlobalId } from "models/terminal/utils"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ArrowUpRight } from "../icons"
 
 const RightSlider = dynamic(() =>
@@ -40,7 +40,7 @@ const TerminalActionBar = () => {
 
   const closeSendTokenSlider = (isOpen: boolean) => {
     if (!isOpen) {
-      removeQueryParam(router, "requestTokenSliderOpen")
+      removeQueryParam(router, "sendTokenSliderOpen")
     }
   }
 
@@ -56,7 +56,7 @@ const TerminalActionBar = () => {
   const [qrCodeOpen, setQrCodeOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    if (router.query.requestTokenSliderOpen) {
+    if (router.query.sendTokenSliderOpen) {
       setSendTokenSliderOpen(true)
       setNewAutomationSliderOpen(false)
     } else if (router.query.automationSliderOpen) {
