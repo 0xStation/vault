@@ -7,6 +7,7 @@ import {
 import dynamic from "next/dynamic"
 import React from "react"
 import { useNetwork, useSwitchNetwork } from "wagmi"
+import { useToast } from "../../hooks/useToast"
 import { SUPPORTED_CHAINS } from "../../lib/constants"
 import { Network } from "../ui/Network"
 
@@ -38,10 +39,11 @@ export const networkIconConfig: Record<number, any> = {
 export const NetworkDropdown = () => {
   const { switchNetworkAsync, error: networkError } = useSwitchNetwork()
   const { chain } = useNetwork()
+  const { successToast, errorToast } = useToast()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="h-8 w-8 rounded bg-gray-80 p-1">
+        <div className="h-8 w-8 rounded bg-gray-90 p-1">
           {networkIconConfig[chain?.id as number]?.icon}
         </div>
       </DropdownMenuTrigger>
@@ -53,8 +55,24 @@ export const NetworkDropdown = () => {
                 onClick={async () => {
                   try {
                     await switchNetworkAsync?.(chain?.id as number)
-                  } catch (err) {
-                    console.log(err)
+
+                    successToast({
+                      message: `Switched network to ${chain?.name}`,
+                    })
+                  } catch (err: any) {
+                    if (
+                      (err?.name && err?.name === "UserRejectedRequestError") ||
+                      err?.code === 4001 ||
+                      err?.message?.includes("rejected")
+                    ) {
+                      errorToast({
+                        message: "Network switch was rejected.",
+                      })
+                    } else {
+                      errorToast({
+                        message: `Something went wrong: ${err?.message}`,
+                      })
+                    }
                   }
                 }}
               >

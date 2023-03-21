@@ -142,7 +142,7 @@ export const AccountNavBar = () => {
             </div>
             <NetworkDropdown />
             <div
-              className="h-8 w-8 rounded bg-gray-80 p-1"
+              className="h-8 w-8 rounded bg-gray-90 p-1"
               onClick={() => setNotificationOpen(true)}
             >
               <BellIcon />
