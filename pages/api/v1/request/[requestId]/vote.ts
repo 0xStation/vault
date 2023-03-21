@@ -13,6 +13,7 @@ import { actionsTree } from "lib/signatures/tree"
 import { verifyTree } from "lib/signatures/verify"
 import { NextApiRequest, NextApiResponse } from "next"
 import db from "../../../../../prisma/client"
+import { clearRequestsCache } from "../../../../../src/hooks/useRequests"
 import { getRequestById } from "../../../../../src/models/request/queries/getRequestById"
 import { TokenTransferVariant } from "../../../../../src/models/request/types"
 
@@ -97,6 +98,12 @@ export default async function handler(
 
   // bundle creates as one atomic transaction
   await db.$transaction([signatureCreate, activityCreate])
+
+  // clear redis cache since we are performing an update
+  await clearRequestsCache(
+    request.terminal.chainId,
+    request.terminal.safeAddress,
+  )
 
   try {
     // this means we are approving the request and we are the final signer

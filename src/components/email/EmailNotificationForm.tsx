@@ -40,16 +40,6 @@ const EmailNotificationForm = ({
   }
   const onError = async (data: any) => {}
 
-  const testEmails = async () => {
-    fetch("/api/v1/demo")
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-    // const emails = await getEmails([
-    //   "0x65A3870F48B5237f27f674Ec42eA1E017E111D63",
-    // ])
-    // console.log(emails)
-  }
-
   return (
     <div className="px-0">
       <h2 className="mb-[30px] font-bold">Notifications</h2>
