@@ -189,10 +189,11 @@ export const SendTokensContent = ({
         },
       )
       if (successCallback) {
-        successCallback()
         removeQueryParam(router, "sendTokenSliderOpen")
+        successCallback()
       } else {
         // TODO: show toast
+        removeQueryParam(router, "sendTokenSliderOpen")
         router.push(`/${chainNameAndSafeAddress}/proposals`)
       }
     } catch (err: any) {

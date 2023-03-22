@@ -80,7 +80,7 @@ const TerminalActionBar = () => {
             successToast({
               message: "Created request",
             })
-            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}`
+            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}&tab=all`
             mutate(key)
           }}
         />

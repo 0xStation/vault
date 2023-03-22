@@ -10,8 +10,6 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useSWRConfig } from "swr"
-import { useToast } from "../../hooks/useToast"
 import {
   addQueryParam,
   removeQueryParam,
@@ -20,11 +18,7 @@ import {
 const RightSlider = dynamic(() =>
   import("../ui/RightSlider").then((mod) => mod.RightSlider),
 )
-const SendTokensContent = dynamic(() =>
-  import("../pages/sendTokens/components/SendTokensContent").then(
-    (mod) => mod.SendTokensContent,
-  ),
-)
+
 const RequestTokensContent = dynamic(() =>
   import("../pages/requestTokens/components/RequestTokensContent").then(
     (mod) => mod.RequestTokensContent,
@@ -36,30 +30,8 @@ const EditMembersContent = dynamic(() =>
   ),
 )
 
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
-
 export const CreateRequestDropdown = () => {
-  const { mutate } = useSWRConfig()
-  const { successToast } = useToast()
   const router = useRouter()
-  const { chainNameAndSafeAddress } = router.query as {
-    chainNameAndSafeAddress: string
-  }
-  const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
-  const chainId = chainNameToChainId[chainName] as number
-
-  const [sendTokensSliderOpen, setSendTokensSliderOpen] =
-    useState<boolean>(false)
-
-  const closeSendTokensSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "sendTokenSliderOpen")
-    }
-  }
-
   const [requestTokensSliderOpen, setRequestTokensSliderOpen] =
     useState<boolean>(false)
 
