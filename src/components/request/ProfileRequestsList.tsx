@@ -4,6 +4,7 @@ import { EmptyState } from "components/emptyStates/EmptyState"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { useNetwork } from "wagmi"
 import {
   addQueryParam,
   removeQueryParam,
@@ -22,7 +23,11 @@ const RightSlider = dynamic(() =>
 
 export const ProfileRequestsList = ({ address }: { address: string }) => {
   const router = useRouter()
-  const { isLoading, requests, mutate } = useRequestsCreatedByAccount(address)
+  const { chain } = useNetwork()
+  const { isLoading, requests, mutate } = useRequestsCreatedByAccount(
+    address,
+    chain?.id,
+  )
   const [requestForDetails, setRequestForDetails] = useState<
     RequestFrob | undefined
   >(undefined)
