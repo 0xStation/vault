@@ -68,3 +68,9 @@ export const nChainIdToChainName: Record<number, string | undefined> = {
   5: "gor",
   137: "polygon",
 }
+
+export const subgraphChainIdToChainName: Record<number, string> = {
+  1: "mainnet",
+  5: "goerli",
+  137: "polygon",
+}

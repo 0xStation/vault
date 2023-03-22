@@ -93,7 +93,7 @@ export default async function handler(
     )
 
     const splitsClaimableAcc: Record<
-      string, // chainId:splitAddress
+      string,
       {
         chainId: number
         address: string
