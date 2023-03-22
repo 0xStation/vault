@@ -77,11 +77,10 @@ const TerminalActionBar = () => {
       <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
         <SendTokensContent
           successCallback={() => {
-            setSendTokenSliderOpen(false)
             successToast({
               message: "Created request",
             })
-            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}`
+            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}&tab=all`
             mutate(key)
           }}
         />
