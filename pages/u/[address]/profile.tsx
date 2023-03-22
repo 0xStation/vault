@@ -23,6 +23,10 @@ const ProfilePage = ({}: {}) => {
             (router?.query?.address &&
               truncateString(router.query?.address as string))}
         </title>
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/api/v1/og?title=my post title`}
+        />
       </Head>
       <Breakpoint>
         {(isMobile) => {

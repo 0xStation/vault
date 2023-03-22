@@ -7,7 +7,7 @@ export const config = {
 
 export default function (req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const title = searchParams.get("requestTitle")
+  const title = searchParams.get("title")
 
   return new ImageResponse(
     (

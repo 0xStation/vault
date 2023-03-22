@@ -42,7 +42,7 @@ export const RequestDetailsContent = ({
       <Head>
         <meta
           property="og:image"
-          content={`${window.location.origin}/api/v1/og?requestTitle=my post title`}
+          content={`${window.location.origin}/api/v1/og?title=${request?.data?.note}}`}
         />
       </Head>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
