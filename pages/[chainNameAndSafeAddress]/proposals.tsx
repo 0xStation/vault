@@ -49,7 +49,7 @@ const DesktopTerminalRequestsPage = () => {
         setIsOpen={setIsRequestActionsOpen}
       />
       <DesktopTerminalLayout>
-        <div className="my-4 flex flex-row items-center justify-between px-4">
+        <div className="my-4 flex flex-row items-center justify-between px-4 pt-3">
           <span className="text-2xl font-bold">Proposals</span>
           {isSigner && <CreateRequestDropdown />}
         </div>
