@@ -1,7 +1,7 @@
 import { MailService as SendGrid } from "@sendgrid/mail"
 import truncateString from "lib/utils"
+import { globalId } from "models/terminal/utils"
 import { getUrlHost } from "../utils/getUrlHost"
-import { chainIdToChainName } from "../utils/networks/chains"
 import { requireEnv } from "../utils/requireEnv"
 
 export const SENDGRID_TEMPLATES = {
@@ -57,10 +57,12 @@ export const sendNewProposalReadyForClaimingEmail = async ({
   chainId: number
   safeAddress: string
 }) => {
-  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     terminalName,
-    buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      safeAddress,
+    )}/proposals/${requestId}`,
   }
 
   await email(
@@ -85,11 +87,13 @@ export const sendNewProposalReadyForExecutionEmail = async ({
   chainId: number
   safeAddress: string
 }) => {
-  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     proposalTitle,
     terminalName,
-    buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      safeAddress,
+    )}/proposals/${requestId}`,
   }
 
   await email(
@@ -114,11 +118,13 @@ export const sendNewProposalExecutionEmail = async ({
   chainId: number
   safeAddress: string
 }) => {
-  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     proposalTitle,
     terminalName,
-    buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      safeAddress,
+    )}/proposals/${requestId}`,
   }
 
   await email(
@@ -145,12 +151,14 @@ export const sendNewCommentEmail = async ({
   chainId: number
   safeAddress: string
 }) => {
-  const chainName = chainIdToChainName[chainId]
   const dynamicTemplateData = {
     terminalName,
     commentCreatedBy: truncateString(commentCreatedBy, 6),
     commentBody,
-    buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      safeAddress,
+    )}/proposals/${requestId}`,
   }
 
   await email(recipients, SENDGRID_TEMPLATES.NEW_COMMENT, dynamicTemplateData)
@@ -173,13 +181,14 @@ export const sendNewProposalEmail = async ({
   safeAddress: string
   terminalName: string
 }) => {
-  const chainName = chainIdToChainName[chainId]
-
   const dynamicTemplateData = {
     proposalCreatedBy: truncateString(proposalCreatedBy, 6),
     proposalTitle,
     terminalName,
-    buttonLink: `${hostname}/${chainName}:${safeAddress}/proposals/${requestId}`,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      safeAddress,
+    )}/proposals/${requestId}`,
   }
 
   await email(recipients, SENDGRID_TEMPLATES.NEW_PROPOSAL, dynamicTemplateData)

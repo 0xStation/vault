@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ZERO_ADDRESS } from "lib/constants"
+import { nChainIdToChainName, ZERO_ADDRESS } from "lib/constants"
 import { FungibleToken, TokenType } from "../types"
 
 export const getFungibleTokenDetails = async (
@@ -10,14 +10,9 @@ export const getFungibleTokenDetails = async (
     return []
   }
 
-  const chainNameToChainId: Record<number, string | undefined> = {
-    1: "ethereum",
-    5: "gor",
-  }
-
   const endpoint = `https://api.n.xyz/api/v1/fungibles/metadata?contractAddresses=${addresses.join(
     ",",
-  )}&includeMetadata=true&chainID=${chainNameToChainId[chainId]}&apikey=${
+  )}&includeMetadata=true&chainID=${nChainIdToChainName[chainId]}&apikey=${
     process.env.NEXT_PUBLIC_N_XYZ_API_KEY
   }`
 

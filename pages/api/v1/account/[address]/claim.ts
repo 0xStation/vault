@@ -216,12 +216,13 @@ export default async function handler(
     let splitTokensAcc: Record<string, RevShareWithdraw> = {} // token address ->
     allIncludedSplits.forEach((split) => {
       split.tokens.forEach((token) => {
+        const tokenId = globalId(split.chainId, token.tokenAddress)
         if (token.unclaimedValue === "0" && token.undistributedValue === "0") {
           return
         }
 
-        if (!splitTokensAcc[token.tokenAddress]) {
-          splitTokensAcc[token.tokenAddress] = {
+        if (!splitTokensAcc[tokenId]) {
+          splitTokensAcc[tokenId] = {
             ...tokens.find(
               (tkn) =>
                 tkn.chainId === split.chainId &&
@@ -243,12 +244,12 @@ export default async function handler(
             ],
           }
         } else {
-          splitTokensAcc[token.tokenAddress].totalValue = addValues(
-            splitTokensAcc[token.tokenAddress].totalValue,
+          splitTokensAcc[tokenId].totalValue = addValues(
+            splitTokensAcc[tokenId].totalValue,
             token.unclaimedValue,
             token.undistributedValue,
           )
-          splitTokensAcc[token.tokenAddress].splits.push({
+          splitTokensAcc[tokenId].splits.push({
             address: split.address,
             unclaimedValue: token.unclaimedValue,
             undistributedValue: token.undistributedValue,

@@ -173,7 +173,7 @@ export const ClaimItemsDrawer = ({
   const activeUser = useStore((state) => state.activeUser)
 
   const { ready, trigger, transactionHash } = usePreparedTransaction({
-    chainId: 5,
+    chainId: items?.[0]?.transfers?.[0]?.token.chainId,
     txPayload: claimCall,
     onError: () => {
       setLoading(false)

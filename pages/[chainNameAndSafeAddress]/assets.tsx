@@ -1,4 +1,5 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
+import { chainNameToChainId } from "lib/constants"
 import { Terminal } from "models/terminal/types"
 import dynamic from "next/dynamic"
 import { useState } from "react"
@@ -12,11 +13,6 @@ const TerminalActivationView = dynamic(() =>
     (mod) => mod.TerminalActivationView,
   ),
 )
-
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
 
 const AssetsPage = () => {
   // router.query doesn't work during pre-rendering unless we are using ssr

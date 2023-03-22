@@ -10,6 +10,7 @@ import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
 import { getNetworkExplorer } from "lib/utils/networks"
+import { globalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -27,11 +28,6 @@ import { Activity } from "../../models/activity/types"
 import { RequestFrob } from "../../models/request/types"
 import { getStatus } from "../../models/request/utils"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
-
-const chainIdToChainName: Record<number, string> = {
-  1: "eth",
-  5: "gor",
-}
 
 export const ExecuteWrapper = ({
   title,
@@ -141,9 +137,10 @@ export const ExecuteWrapper = ({
       })
 
       router.push(
-        `/${chainIdToChainName[request.chainId]}:${
-          request.terminal.safeAddress
-        }/proposals?filter=closed`,
+        `/${globalId(
+          request.chainId,
+          request.terminal.safeAddress,
+        )}/proposals?filter=closed`,
         undefined,
         { shallow: true },
       )

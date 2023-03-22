@@ -1,4 +1,5 @@
 import { TabsContent } from "@ui/Tabs"
+import { chainNameToChainId } from "lib/constants"
 import { useRouter } from "next/router"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 import RequestListByFilterAndTab from "../core/RequestListByFilterAndTab"
@@ -6,11 +7,6 @@ import TerminalRequestStatusFilterBar, {
   TerminalRequestStatusFilter,
 } from "../core/TabBars/TerminalRequestStatusFilterBar"
 import { TerminalRequestTypeTab } from "../core/TabBars/TerminalRequestTypeTabBar"
-
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
 
 const RequestContentForFilterAndTab = ({
   filter,

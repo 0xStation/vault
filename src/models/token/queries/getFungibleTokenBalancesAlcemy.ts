@@ -1,11 +1,6 @@
 import axios from "axios"
 import { BigNumber } from "ethers"
-import { ZERO_ADDRESS } from "lib/constants"
-
-const chainIdToChainName: Record<number, string | undefined> = {
-  1: "eth-mainnet",
-  5: "eth-goerli",
-}
+import { alchemyChainIdToChainName, ZERO_ADDRESS } from "lib/constants"
 
 export const getFungibleTokenBalancesAlchemy = async (
   chainId: number,
@@ -15,7 +10,7 @@ export const getFungibleTokenBalancesAlchemy = async (
   address: string
   balances: { tokenAddress: string; value: string }[]
 }> => {
-  const alchemyEndpoint = `https://${chainIdToChainName[chainId]}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
+  const alchemyEndpoint = `https://${alchemyChainIdToChainName[chainId]}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
 
   try {
     const [ethBalance, tokenBalances] = await Promise.all([

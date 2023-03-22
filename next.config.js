@@ -10,6 +10,7 @@ const nextConfig = {
       "avatar.tobi.sh",
       "gateway.ipfs.io", // ENS avatars,
       "i.seadn.io", // ENS avatars
+      "assets.coingecko.com", // token logos from N
     ],
   },
 }

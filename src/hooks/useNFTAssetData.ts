@@ -1,10 +1,6 @@
 import axios from "axios"
+import { nChainIdToChainName } from "lib/constants"
 import useSWR from "swr"
-
-const chainNameToChainId: Record<number, string | undefined> = {
-  1: "ethereum",
-  5: "gor",
-}
 
 // todo: look into pagination
 const useNFTAssetData = (address: string, chainId: number) => {
@@ -14,7 +10,7 @@ const useNFTAssetData = (address: string, chainId: number) => {
     return response.data
   }
 
-  const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/nfts?chainID=${chainNameToChainId[chainId]}&filterSpam=true&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
+  const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/nfts?chainID=${nChainIdToChainName[chainId]}&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
 
   const { isLoading, data, mutate, error } = useSWR(endpoint, fetcher)
 

@@ -37,3 +37,34 @@ export const LINKS = {
   TERMS_AND_SERVICES:
     "https://www.notion.so/Terms-of-Service-f61ca68c69aa4c429f703cc69cde152e",
 }
+
+export const SAFE_PROXY_CREATION_TOPIC =
+  "0x4f51faf6c4561ff95f067657e43439f0f856d97c04d9ec9070a6199ad418e235"
+export const ETHEREUM_SPLITS_CREATE_SPLIT_TOPIC =
+  "0x8d5f9943c664a3edaf4d3eb18cc5e2c45a7d2dc5869be33d33bbc0fff9bc2590"
+export const POLYGON_SPLITS_CREATE_SPLIT_TOPIC =
+  "0xd2bcf51a5767c814cfe0266a99141f75a32103bbf8c400fbc1ac0c3b73ce25e8"
+
+export const chainNameToChainId: Record<string, number | undefined> = {
+  eth: 1,
+  gor: 5,
+  matic: 137,
+}
+
+export const chainIdToChainName: Record<number, string | undefined> = {
+  1: "eth",
+  5: "gor",
+  137: "matic",
+}
+
+export const alchemyChainIdToChainName: Record<number, string | undefined> = {
+  1: "eth-mainnet",
+  5: "eth-goerli",
+  137: "polygon-mainnet",
+}
+
+export const nChainIdToChainName: Record<number, string | undefined> = {
+  1: "ethereum",
+  5: "gor",
+  137: "polygon",
+}

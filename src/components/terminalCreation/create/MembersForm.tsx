@@ -2,6 +2,7 @@ import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
+import { SAFE_PROXY_CREATION_TOPIC } from "lib/constants"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
 import { getTransactionLink } from "lib/utils/getTransactionLink"
@@ -116,10 +117,14 @@ export const MembersView = ({
         console.error("Failed to create Terminal", error)
         return
       }
-      const logsLastIndex = transaction.logs?.length - 1
+
+      // event ordering of ProxyCreation inconsistent across chains, find by topics[0] comparison
+      const proxyCreationLog = transaction.logs.find(
+        ({ topics }) => topics[0] === SAFE_PROXY_CREATION_TOPIC,
+      )
       const decodedProxyEvent = decodeProxyEvent({
-        data: transaction.logs[logsLastIndex].data,
-        topics: transaction.logs[logsLastIndex].topics,
+        data: proxyCreationLog!.data,
+        topics: proxyCreationLog!.topics,
       })
       const proxyAddress = decodedProxyEvent?.[0]
       try {
