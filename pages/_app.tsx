@@ -104,10 +104,7 @@ function App({ Component, pageProps }: AppProps) {
         <DynamicWagmiConnector>
           <NextHead>
             <title>Station</title>
-            <meta
-              property="og:image"
-              content={`${window.location.origin}/api/v1/og?title=my post title`}
-            />
+            <meta property="og:image" content={"/api/v1/og?title=test post"} />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&
