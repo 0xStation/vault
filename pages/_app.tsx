@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { SWRConfig } from "swr"
 import "../styles/globals.css"
 
+import { LINKS } from "lib/constants"
 import { useRouter } from "next/router"
 import AppLayout from "../src/components/core/AppLayout"
 import { useIsRouterLoading } from "../src/hooks/useIsRouterLoading"
@@ -86,6 +87,8 @@ function App({ Component, pageProps }: AppProps) {
           environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "",
           appName: "Station",
           cssOverrides,
+          socialMediaUrl: LINKS.TYPE_FORM,
+          socialMediaLinkText: "Sign up for our waitlist here!",
           walletsFilter: FilterAndSortWallets([
             "metamask",
             "rainbow",
