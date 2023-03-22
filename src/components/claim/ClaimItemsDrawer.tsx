@@ -14,6 +14,7 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import useStore from "../../hooks/stores/useStore"
+import { useCorrectNetwork } from "../../hooks/useCorrectNetwork"
 import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
 import { useSetActionsPending } from "../../models/action/hooks"
@@ -172,8 +173,11 @@ export const ClaimItemsDrawer = ({
   const { completeRequestsExecution } = useCompleteRequestsExecution()
   const activeUser = useStore((state) => state.activeUser)
 
+  const chainId = items?.[0]?.transfers?.[0]?.token.chainId
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(chainId)
+
   const { ready, trigger, transactionHash } = usePreparedTransaction({
-    chainId: items?.[0]?.transfers?.[0]?.token.chainId,
+    chainId,
     txPayload: claimCall,
     onError: () => {
       setLoading(false)
@@ -359,11 +363,18 @@ export const ClaimItemsDrawer = ({
               <Button
                 fullWidth={true}
                 loading={loading || executionPending}
-                onClick={() => {
+                onClick={async () => {
                   setLoading(true)
-                  trigger()
+                  if (!correctNetworkSelected) {
+                    await switchNetwork()
+                    setLoading(false)
+                  } else {
+                    trigger()
+                  }
                 }}
-                disabled={!ready || executionPending}
+                disabled={
+                  correctNetworkSelected && (!ready || executionPending)
+                }
               >
                 Claim
               </Button>

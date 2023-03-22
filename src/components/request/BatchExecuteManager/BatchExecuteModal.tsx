@@ -11,6 +11,7 @@ import {
   useWaitForTransaction,
 } from "wagmi"
 import useStore from "../../../hooks/stores/useStore"
+import { useCorrectNetwork } from "../../../hooks/useCorrectNetwork"
 import { useToast } from "../../../hooks/useToast"
 import { batchCalls } from "../../../lib/transactions/batch"
 import { RawCall } from "../../../lib/transactions/call"
@@ -149,9 +150,18 @@ const BatchExecuteWrapper = ({
     }
   }, [isWaitForTransactionSuccess])
 
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(
+    requestsToApprove[0].chainId,
+  )
+
   const onSubmit = async () => {
     setLoading(true)
-    sendTransaction?.()
+    if (!correctNetworkSelected) {
+      await switchNetwork()
+      setLoading(false)
+    } else {
+      sendTransaction?.()
+    }
   }
 
   return (
@@ -189,7 +199,12 @@ const BatchExecuteWrapper = ({
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="absolute bottom-0 right-0 left-0 mx-auto w-full max-w-[580px] bg-black py-6 px-5 text-center">
-          <Button type="submit" fullWidth={true} loading={loading}>
+          <Button
+            type="submit"
+            fullWidth={true}
+            loading={loading}
+            disabled={correctNetworkSelected && !sendTransaction}
+          >
             Execute
           </Button>
           <p className={"mt-1 text-xs text-gray"}>
