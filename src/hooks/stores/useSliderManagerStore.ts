@@ -1,3 +1,4 @@
+import { deleteQueryParam, setQueryParam } from "lib/utils/updateQueryParam"
 import { create } from "zustand"
 
 export enum Sliders {
@@ -17,7 +18,6 @@ enum QueryValueTypes {
 type SliderConfig = {
   key: Sliders
   queryParam: string
-  queryValueType: QueryValueTypes
 }
 
 // should these have a "bootup" script that will run on initial page load?
@@ -26,56 +26,65 @@ const sliderOptions: Record<Sliders, SliderConfig> = {
   REQUEST_DETAILS: {
     key: Sliders.REQUEST_DETAILS,
     queryParam: "requestId",
-    queryValueType: QueryValueTypes.ID,
   },
   SEND_TOKENS: {
     key: Sliders.SEND_TOKENS,
     queryParam: "sendTokensOpen",
-    queryValueType: QueryValueTypes.BOOLEAN,
   },
   REQUEST_TOKENS: {
     key: Sliders.REQUEST_TOKENS,
     queryParam: "requestTokensOpen",
-    queryValueType: QueryValueTypes.BOOLEAN,
   },
   EDIT_MEMBERS: {
     key: Sliders.EDIT_MEMBERS,
     queryParam: "editMembersOpen",
-    queryValueType: QueryValueTypes.BOOLEAN,
   },
   CREATE_AUTOMATION: {
     key: Sliders.CREATE_AUTOMATION,
     queryParam: "createAutomationOpen",
-    queryValueType: QueryValueTypes.BOOLEAN,
   },
   AUTOMATION_DETAILS: {
     key: Sliders.AUTOMATION_DETAILS,
     queryParam: "automationId",
-    queryValueType: QueryValueTypes.ID,
   },
 }
 
 interface SliderManagerState {
   sliderOpen: boolean
   activeSlider: SliderConfig | undefined | null
-  setActiveSlider: (slider: Sliders) => void
+  setActiveSlider: (slider: Sliders, opts?: any) => void
   closeSlider: () => void
   openSlider: () => void
 }
 
-export const useSliderManagerStore = create<SliderManagerState>((set) => ({
+export const useSliderManagerStore = create<SliderManagerState>((set, get) => ({
   sliderOpen: false,
   activeSlider: undefined, // undefined on start
-  setActiveSlider: (slider: Sliders) =>
+  // maybe all this does is set query params
+  // then the manager picks up on the param change
+  // and calls open which sets the active open slider?
+  setActiveSlider: (slider: Sliders, opts?: any) =>
     set(() => {
-      // maybe part of this is setting the query param, and the useEffect hook
-      // in the slider manager is what actually opens the slider
-      // not sure if this will work with our existing url params though, since it relies on useRouter hook
-      // and this is not a component that can consume hooks
-      return { sliderOpen: true, activeSlider: sliderOptions[slider] }
+      const activeSlider = sliderOptions[slider]
+      // maybe it could be cool to split up the "setup" and "open" functions
+      // "setup" would set query params and "open" would just set the sliderOpen state
+      // this would allow us to simply open the slider without setting query params
+      // for example, when the page is already loaded with query params set
+      if (opts) {
+        if (opts.id) {
+          setQueryParam(activeSlider.queryParam, opts.id)
+        } else {
+          setQueryParam(activeSlider.queryParam, "true")
+        }
+      }
+      return { sliderOpen: true, activeSlider }
     }),
   closeSlider: () =>
     set(() => {
+      const activeSlider = get().activeSlider
+      if (activeSlider) {
+        deleteQueryParam(activeSlider.queryParam)
+      }
       return { sliderOpen: false }
     }),
   openSlider: () =>

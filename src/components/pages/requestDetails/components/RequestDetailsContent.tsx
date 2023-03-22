@@ -1,23 +1,23 @@
 import { RequestVariantType } from "@prisma/client"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import { timeSince } from "lib/utils"
+import { getQueryParam } from "lib/utils/updateQueryParam"
 import { ActivityMetadata } from "models/activity/types"
+import { useRouter } from "next/router"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
 import { AvatarAddress } from "../../../../components/core/AvatarAddress"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
-import { RequestFrob } from "../../../../models/request/types"
+import { useRequest } from "../../../../models/request/hooks"
 import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/RequestDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
 
 export const RequestDetailsContent = ({
-  request,
   mutateRequest,
 }: {
-  request: RequestFrob
   mutateRequest: ({
     fn,
     requestId,
@@ -28,7 +28,20 @@ export const RequestDetailsContent = ({
     payload: any
   }) => void
 }) => {
+  const router = useRouter()
+  let { requestId } = router.query
+
+  // if the query param is set "shallowly" next router doesn't pick up on it
+  // this happens on desktop, if the user clicks a request from the list
+  // we can still grab it from the url manually
+  if (!requestId) {
+    requestId = getQueryParam("requestId") as string
+  }
+
+  console.log(requestId)
+
   const { address } = useAccount()
+  const { request } = useRequest(requestId as string)
 
   if (!request) {
     return <></>

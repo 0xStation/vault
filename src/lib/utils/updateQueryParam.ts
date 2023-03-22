@@ -31,7 +31,7 @@ export const removeQueryParam = (router: NextRouter, paramName: string) => {
   )
 }
 
-function setQueryParam(key: string, value: string) {
+export function setQueryParam(key: string, value: string) {
   const url = new URL(window.location.href)
   url.searchParams.set(key, value)
 
@@ -39,10 +39,20 @@ function setQueryParam(key: string, value: string) {
   window.history.replaceState({}, "", url.toString())
 }
 
-function removeAQueryParam(key: string) {
+export function deleteQueryParam(key: string) {
   const url = new URL(window.location.href)
   url.searchParams.delete(key)
 
   // Update the browser's history without refreshing the page
   window.history.replaceState({}, "", url.toString())
+}
+
+export function getQueryParam(key: string) {
+  const url = new URL(window.location.href)
+  return url.searchParams.get(key)
+}
+
+export function isQueryParamSet(key: string) {
+  const url = new URL(window.location.href)
+  return url.searchParams.has(key)
 }

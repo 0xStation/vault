@@ -91,7 +91,6 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
           useInnerPadding={false}
         >
           <RequestDetailsContent
-            request={requestForDetails}
             mutateRequest={(args) => {
               // set state used by Request in slider
               setRequestForDetails(args.payload)

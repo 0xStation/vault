@@ -9,7 +9,6 @@ import { useRouter } from "next/router"
 import React, { useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
-import { useRequestStore } from "../../hooks/stores/useRequestStore"
 import {
   Sliders,
   useSliderManagerStore,
@@ -112,15 +111,8 @@ const RequestListForm = ({
     })
   }
 
-  const [requestForDetails, setRequestForDetails] = useState<
-    RequestFrob | undefined
-  >(undefined)
-
   const setActiveSlider = useSliderManagerStore(
     (state) => state.setActiveSlider,
-  )
-  const setSelectedRequest = useRequestStore(
-    (state) => state.setSelectedRequest,
   )
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
@@ -212,21 +204,6 @@ const RequestListForm = ({
   const setShowTabBottomBorder = useStore(
     (state) => state.setShowTabBottomBorder,
   )
-
-  // useEffect(() => {
-  //   if (router.query.requestId) {
-  //     const selectedRequest = requests.find(
-  //       (r) => r.id === router.query.requestId,
-  //     )
-
-  //     if (selectedRequest) {
-  //       setRequestForDetails(selectedRequest)
-  //       setDetailsSliderOpen(true)
-  //     }
-  //   } else {
-  //     setDetailsSliderOpen(false)
-  //   }
-  // }, [router.query])
 
   if (requests.length === 0) {
     setShowTabBottomBorder(false)
@@ -339,8 +316,9 @@ const RequestListForm = ({
                         request={request}
                         mutateRequest={mutateRequest}
                         triggerDetails={(request) => {
-                          setSelectedRequest(request)
-                          setActiveSlider(Sliders.REQUEST_DETAILS)
+                          setActiveSlider(Sliders.REQUEST_DETAILS, {
+                            id: request.id,
+                          })
                         }}
                         onCheckboxChange={onCheckboxChange}
                         checked={batchState.selectedRequests.includes(request)}

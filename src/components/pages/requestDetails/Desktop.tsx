@@ -5,7 +5,7 @@ import RequestDetailsContent from "./components/RequestDetailsContent"
 const RequestDetailsDesktop = () => {
   const router = useRouter()
 
-  const { request, mutate } = useRequest(router.query.requestId as string)
+  const { mutate } = useRequest(router.query.requestId as string)
 
   const mutateRequest = ({
     fn,
@@ -23,12 +23,9 @@ const RequestDetailsDesktop = () => {
     })
   }
 
-  if (!request) {
-    return <></>
-  }
   return (
     <div className="mx-auto w-full max-w-[580px]">
-      <RequestDetailsContent request={request} mutateRequest={mutateRequest} />
+      <RequestDetailsContent mutateRequest={mutateRequest} />
     </div>
   )
 }

@@ -1,30 +1,17 @@
 import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
 import Breakpoint from "@ui/Breakpoint"
 import QRCode from "components/core/QrCode"
-import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import { convertGlobalId } from "models/terminal/utils"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import { useSWRConfig } from "swr"
-import { useToast } from "../../hooks/useToast"
+import React, { useState } from "react"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../hooks/stores/useSliderManagerStore"
 import { ArrowUpRight } from "../icons"
 
-const RightSlider = dynamic(() =>
-  import("../ui/RightSlider").then((mod) => mod.RightSlider),
-)
-const SendTokensContent = dynamic(() =>
-  import("../pages/sendTokens/components/SendTokensContent").then(
-    (mod) => mod.SendTokensContent,
-  ),
-)
-
-const NewAutomationContent = dynamic(() =>
-  import("../pages/newAutomation/components/NewAutomationContent").then(
-    (mod) => mod.NewAutomationContent,
-  ),
-)
 const BottomDrawer = dynamic(() =>
   import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
 )
@@ -34,64 +21,18 @@ const CopyAddressButton = dynamic(() =>
 )
 
 const TerminalActionBar = () => {
-  const { mutate } = useSWRConfig()
   const router = useRouter()
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const { address, chainId } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { successToast } = useToast()
-  const [sendTokenSliderOpen, setSendTokenSliderOpen] = useState<boolean>(false)
-
-  const closeSendTokenSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "sendTokenSliderOpen")
-    }
-  }
-
-  const [newAutomationSliderOpen, setNewAutomationSliderOpen] =
-    useState<boolean>(false)
-
-  const closeNewAutomationSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "automationSliderOpen")
-    }
-  }
 
   const [qrCodeOpen, setQrCodeOpen] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (router.query.sendTokenSliderOpen) {
-      setSendTokenSliderOpen(true)
-      setNewAutomationSliderOpen(false)
-    } else if (router.query.automationSliderOpen) {
-      setNewAutomationSliderOpen(true)
-      setSendTokenSliderOpen(false)
-    } else {
-      setSendTokenSliderOpen(false)
-      setNewAutomationSliderOpen(false)
-    }
-  }, [router.query])
-
   return (
     <>
-      <RightSlider open={sendTokenSliderOpen} setOpen={closeSendTokenSlider}>
-        <SendTokensContent
-          successCallback={() => {
-            successToast({
-              message: "Created request",
-            })
-            const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}&tab=all`
-            mutate(key)
-          }}
-        />
-      </RightSlider>
-      <RightSlider
-        open={newAutomationSliderOpen}
-        setOpen={closeNewAutomationSlider}
-      >
-        <NewAutomationContent />
-      </RightSlider>
-
       <Breakpoint>
         {(isMobile) => {
           if (isMobile) {
@@ -159,7 +100,7 @@ const TerminalActionBar = () => {
               <div
                 className="flex cursor-pointer flex-col items-center space-y-2"
                 onClick={() => {
-                  addQueryParam(router, "sendTokenSliderOpen", "true")
+                  setActiveSlider(Sliders.SEND_TOKENS, { value: true })
                 }}
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
@@ -192,7 +133,7 @@ const TerminalActionBar = () => {
               <div
                 className="flex cursor-pointer flex-col items-center space-y-2"
                 onClick={() => {
-                  addQueryParam(router, "automationSliderOpen", "true")
+                  setActiveSlider(Sliders.CREATE_AUTOMATION, { value: true })
                 }}
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
