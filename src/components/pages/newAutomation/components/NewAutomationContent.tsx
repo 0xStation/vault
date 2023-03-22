@@ -9,6 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/Select"
+import {
+  ETHEREUM_SPLITS_CREATE_SPLIT_TOPIC,
+  POLYGON_SPLITS_CREATE_SPLIT_TOPIC,
+} from "lib/constants"
 import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
 import truncateString, { cn, isEns } from "lib/utils"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
@@ -55,7 +59,7 @@ export const NewAutomationContent = () => {
   )
 
   const { createAutomation } = useCreateAutomation(chainId, terminalAddress)
-  const { successToast } = useToast()
+  const { successToast, errorToast } = useToast()
 
   const { isMobile } = useBreakpoint()
 
@@ -73,9 +77,17 @@ export const NewAutomationContent = () => {
     enabled: !!txData?.hash,
     chainId,
     onSuccess: async (transaction) => {
-      const logsLastIndex = transaction.logs?.length - 1
-      const log = transaction.logs[logsLastIndex] // CreatedSplit(address indexed split)
-      const addressTopic = log.topics[1] // address is indexed so stored in topics, and first topic is for event name so grab second index
+      const creationLog = transaction.logs.find(({ topics }) =>
+        chainId === 137
+          ? topics[0] === POLYGON_SPLITS_CREATE_SPLIT_TOPIC
+          : topics[0] === ETHEREUM_SPLITS_CREATE_SPLIT_TOPIC,
+      )
+      if (!creationLog) {
+        console.error("Could not find CreateSplit log on transaction")
+        errorToast({ message: "Error parsing transaction" })
+        return
+      }
+      const addressTopic = creationLog.topics[1] // address is indexed so stored in topics, and first topic is for event name so grab second index
       const proxyAddress = toChecksumAddress("0x" + addressTopic.substring(26)) // 20-byte address is padded into a 32-byte slot so remove padding (24 char + '0x')
 
       await createAutomation({

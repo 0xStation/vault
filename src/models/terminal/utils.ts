@@ -1,12 +1,4 @@
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
-
-const chainIdToChainName: Record<number, string | undefined> = {
-  1: "eth",
-  5: "gor",
-}
+import { chainIdToChainName, chainNameToChainId } from "lib/constants"
 
 export const convertGlobalId = (chainNameAndSafeAddress: string) => {
   if (!chainNameAndSafeAddress) return {}

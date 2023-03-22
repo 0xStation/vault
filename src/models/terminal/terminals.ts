@@ -1,11 +1,7 @@
 import db from "db"
+import { chainNameToChainId } from "lib/constants"
 import toFrob from "./frob"
 import { Terminal } from "./types"
-
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
 
 export const getTerminalByChainIdAndAddress = async (
   chainId: number,

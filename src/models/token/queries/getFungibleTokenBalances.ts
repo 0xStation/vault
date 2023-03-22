@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ZERO_ADDRESS } from "lib/constants"
+import { nChainIdToChainName, ZERO_ADDRESS } from "lib/constants"
 import { Token, TokenType } from "../types"
 
 export type FungibleTokenBalance = Token & {
@@ -10,12 +10,7 @@ export const getFungibleTokenBalances = async (
   chainId: number,
   address: string,
 ): Promise<FungibleTokenBalance[]> => {
-  const chainNameToChainId: Record<number, string | undefined> = {
-    1: "ethereum",
-    5: "gor",
-  }
-
-  const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/fungibles?includeMetadata=true&chainID=${chainNameToChainId[chainId]}&filterDust=true&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
+  const endpoint = `https://api.n.xyz/api/v1/address/${address}/balances/fungibles?includeMetadata=true&chainID=${nChainIdToChainName[chainId]}&apikey=${process.env.NEXT_PUBLIC_N_XYZ_API_KEY}`
 
   const response = await axios.get<any[]>(endpoint)
 

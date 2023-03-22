@@ -1,12 +1,8 @@
 import axios from "axios"
+import { alchemyChainIdToChainName } from "lib/constants"
 import useSWR from "swr"
 import { getSplitWithdrawEvents } from "../models/automation/queries/getSplitWithdrawEvents"
 import { TokenType } from "../models/token/types"
-
-const chainIdToChainName: Record<number, string | undefined> = {
-  1: "eth-mainnet",
-  5: "eth-goerli",
-}
 
 export enum TransferDirection {
   INBOUND = "inbound",
@@ -43,7 +39,7 @@ const alchemyFetcher = async ([address, chainId, direction]: [
   number,
   TransferDirection,
 ]) => {
-  const alchemyEndpoint = `https://${chainIdToChainName[chainId]}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
+  const alchemyEndpoint = `https://${alchemyChainIdToChainName[chainId]}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
   try {
     const params: GetAssetTransfersParams = {
       fromBlock: "0x0",

@@ -3,6 +3,7 @@ import gql from "graphql-tag"
 import { getFungibleTokenDetails } from "../../token/queries/getFungibleTokenDetails"
 import { FungibleToken, TokenType } from "../../token/types"
 import { valueToAmount } from "../../token/utils"
+import { getSplitsSubgraphEndpoint } from "../utils"
 
 type GraphQLResponse = {
   split: {
@@ -51,13 +52,9 @@ export const getSplitWithdrawEvents = async ([address, chainId]: [
   string,
   number,
 ]): Promise<WithdrawEvent[]> => {
-  // TODO: add subgraphs for other chains
-  if (chainId !== 5) {
-    throw Error("only goerli rev shares are supported right now")
-  }
   try {
     const graphlQLClient = new GraphQLClient(
-      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
+      getSplitsSubgraphEndpoint(chainId),
       {
         method: "POST",
         headers: new Headers({

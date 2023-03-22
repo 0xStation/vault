@@ -10,6 +10,7 @@ import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import { BigNumber } from "ethers"
 import { getNetworkExplorer } from "lib/utils/networks"
+import { globalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -19,6 +20,7 @@ import { SignerQuorumRequestContent } from "../../../src/components/request/Sign
 import { TokenTransferRequestContent } from "../../../src/components/request/TokenTransferRequestContent"
 import { RawCall } from "../../../src/lib/transactions/call"
 import useStore from "../../hooks/stores/useStore"
+import { useCorrectNetwork } from "../../hooks/useCorrectNetwork"
 import { useToast } from "../../hooks/useToast"
 import { callAction } from "../../lib/transactions/parallelProcessor"
 import { useSetActionPending } from "../../models/action/hooks"
@@ -27,11 +29,6 @@ import { Activity } from "../../models/activity/types"
 import { RequestFrob } from "../../models/request/types"
 import { getStatus } from "../../models/request/utils"
 import { TextareaWithLabel } from "../form/TextareaWithLabel"
-
-const chainIdToChainName: Record<number, string> = {
-  1: "eth",
-  5: "gor",
-}
 
 export const ExecuteWrapper = ({
   title,
@@ -141,9 +138,10 @@ export const ExecuteWrapper = ({
       })
 
       router.push(
-        `/${chainIdToChainName[request.chainId]}:${
-          request.terminal.safeAddress
-        }/proposals?filter=closed`,
+        `/${globalId(
+          request.chainId,
+          request.terminal.safeAddress,
+        )}/proposals?filter=closed`,
         undefined,
         { shallow: true },
       )
@@ -157,14 +155,23 @@ export const ExecuteWrapper = ({
     formState: { errors },
   } = useForm()
 
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(
+    request.chainId,
+  )
+
   const onSubmit = async (data: any) => {
     setLoading(true)
-    setFormData({
-      address: activeUser?.address,
-      comment: data.comment,
-    })
-    sendTransaction?.()
-    resetField("comment")
+    if (!correctNetworkSelected) {
+      await switchNetwork()
+      setLoading(false)
+    } else {
+      setFormData({
+        address: activeUser?.address,
+        comment: data.comment,
+      })
+      sendTransaction?.()
+      resetField("comment")
+    }
   }
 
   const FormContent = () => {
@@ -193,7 +200,12 @@ export const ExecuteWrapper = ({
         </div>
 
         <div className="absolute bottom-0 right-0 left-0 mx-auto mb-6 w-full px-5 text-center">
-          <Button type="submit" fullWidth={true} loading={loading}>
+          <Button
+            type="submit"
+            fullWidth={true}
+            loading={loading}
+            disabled={correctNetworkSelected && !sendTransaction}
+          >
             Execute
           </Button>
           <p className={"mt-1 text-xs text-gray-50"}>

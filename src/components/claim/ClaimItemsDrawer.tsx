@@ -14,6 +14,7 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import useStore from "../../hooks/stores/useStore"
+import { useCorrectNetwork } from "../../hooks/useCorrectNetwork"
 import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
 import { useSetActionsPending } from "../../models/action/hooks"
@@ -172,8 +173,11 @@ export const ClaimItemsDrawer = ({
   const { completeRequestsExecution } = useCompleteRequestsExecution()
   const activeUser = useStore((state) => state.activeUser)
 
+  const chainId = items?.[0]?.transfers?.[0]?.token.chainId
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(chainId)
+
   const { ready, trigger, transactionHash } = usePreparedTransaction({
-    chainId: 5,
+    chainId,
     txPayload: claimCall,
     onError: () => {
       setLoading(false)
@@ -250,18 +254,19 @@ export const ClaimItemsDrawer = ({
                       chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                     />
                   </div>
-                  {/* TO DO: Add this once we get to aggregating the dollar amount */}
-                  {/* <TokenTransfersAccordion
-                    transfers={reduceTransfers(
-                      items.reduce(
-                        (acc: TokenTransfer[], item) => [
-                          ...acc,
-                          ...item.transfers,
-                        ],
-                        [],
-                      ),
-                    )}
-                  /> */}
+                  {items.length > 1 && (
+                    <TokenTransfersAccordion
+                      transfers={reduceTransfers(
+                        items.reduce(
+                          (acc: TokenTransfer[], item) => [
+                            ...acc,
+                            ...item.transfers,
+                          ],
+                          [],
+                        ),
+                      )}
+                    />
+                  )}
                 </div>
                 <div className="mt-6 space-y-2">
                   {items.map((item, index) => (
@@ -316,23 +321,24 @@ export const ClaimItemsDrawer = ({
             <div className="h-full overflow-y-auto pb-32">
               <div className="mt-4 space-y-2 border-b border-gray-90 pb-6">
                 <div className="flex flex-row space-x-2">
-                  <span className="text-sm text-gray">Network</span>
+                  <span className="text-sm text-gray">Chain</span>
                   <Network
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
                 </div>
-                {/* TO DO: Add this once we get to aggregating the dollar amount */}
-                {/* <TokenTransfersAccordion
-                  transfers={reduceTransfers(
-                    items.reduce(
-                      (acc: TokenTransfer[], item) => [
-                        ...acc,
-                        ...item.transfers,
-                      ],
-                      [],
-                    ),
-                  )}
-                /> */}
+                {items.length > 1 && (
+                  <TokenTransfersAccordion
+                    transfers={reduceTransfers(
+                      items.reduce(
+                        (acc: TokenTransfer[], item) => [
+                          ...acc,
+                          ...item.transfers,
+                        ],
+                        [],
+                      ),
+                    )}
+                  />
+                )}
               </div>
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (
@@ -357,11 +363,18 @@ export const ClaimItemsDrawer = ({
               <Button
                 fullWidth={true}
                 loading={loading || executionPending}
-                onClick={() => {
+                onClick={async () => {
                   setLoading(true)
-                  trigger()
+                  if (!correctNetworkSelected) {
+                    await switchNetwork()
+                    setLoading(false)
+                  } else {
+                    trigger()
+                  }
                 }}
-                disabled={!ready || executionPending}
+                disabled={
+                  correctNetworkSelected && (!ready || executionPending)
+                }
               >
                 Claim
               </Button>

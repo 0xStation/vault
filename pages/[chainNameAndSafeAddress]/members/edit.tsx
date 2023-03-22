@@ -1,4 +1,5 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
+import { chainNameToChainId } from "lib/constants"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -13,11 +14,6 @@ const TerminalActivationView = dynamic(() =>
     (mod) => mod.TerminalActivationView,
   ),
 )
-
-const chainNameToChainId: Record<string, number | undefined> = {
-  eth: 1,
-  gor: 5,
-}
 
 const MembersPage = () => {
   // router.query doesn't work during pre-rendering unless we are using ssr

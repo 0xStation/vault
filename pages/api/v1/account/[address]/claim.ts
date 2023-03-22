@@ -4,10 +4,12 @@ import {
   SubscriptionVariant,
 } from "@prisma/client"
 import { BigNumber } from "ethers"
-import { toChecksumAddress } from "lib/utils/toChecksumAddress"
+import { SUPPORTED_CHAIN_IDS } from "lib/constants"
+import { addressesAreEqual } from "lib/utils"
+import { convertGlobalId, globalId } from "models/terminal/utils"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getRecipientSplits } from "../../../../../src/models/automation/queries/getRecipientSplits"
-import { getRevSharesByAddress } from "../../../../../src/models/automation/queries/getRevSharesByAddress"
+import { getRevSharesByAddresses } from "../../../../../src/models/automation/queries/getRevSharesByAddresses"
 import { RevShareWithdraw } from "../../../../../src/models/automation/types"
 import { getProfileRequests } from "../../../../../src/models/request/queries/getProfileRequests"
 import { RequestFrob } from "../../../../../src/models/request/types"
@@ -35,13 +37,12 @@ export default async function handler(
   }
 
   const accountAddress = query.address as string
-  const chainId = 5 // setting to goerli rn
 
   // for now, only executable items are requests, to be changed after "Automations" added
   let requests: RequestFrob[] = []
   let revShareWithdraws: RevShareWithdraw[] = []
   try {
-    const [fetchRequests, fetchSplits] = await Promise.all([
+    const [fetchRequests, ...fetchSplits] = await Promise.all([
       getProfileRequests({
         where: {
           AND: [
@@ -70,21 +71,31 @@ export default async function handler(
           ],
         },
       }),
-      getRecipientSplits(chainId, accountAddress),
+      ...SUPPORTED_CHAIN_IDS.map((chainId) =>
+        getRecipientSplits(chainId, accountAddress),
+      ),
     ])
 
     requests = fetchRequests
 
-    const splitAddresses = fetchSplits.map((split) => split.address)
-    const revShares = await getRevSharesByAddress(splitAddresses)
+    const splitsFlattened = fetchSplits.reduce((acc, v) => [...acc, ...v], [])
 
-    const internalSplits = fetchSplits.filter((split) =>
-      revShares.some((rs) => rs.data.meta.address === split.address),
+    const splitGlobalIds = splitsFlattened.map((split) => ({
+      chainId: split.chainId,
+      address: split.address,
+    }))
+    const revShares = await getRevSharesByAddresses(splitGlobalIds)
+
+    const internalSplits = splitsFlattened.filter((split) =>
+      revShares.some((rs) =>
+        addressesAreEqual(rs.data.meta.address, split.address),
+      ),
     )
 
     const splitsClaimableAcc: Record<
       string,
       {
+        chainId: number
         address: string
         allocation: number
         distributorFee: string
@@ -104,8 +115,10 @@ export default async function handler(
     > = {}
 
     internalSplits.forEach((split) => {
-      if (!splitsClaimableAcc[split.address]) {
-        splitsClaimableAcc[split.address] = {
+      const splitId = globalId(split.chainId, split.address)
+      if (!splitsClaimableAcc[splitId]) {
+        splitsClaimableAcc[splitId] = {
+          chainId: split.chainId,
           address: split.address,
           allocation: split.allocation,
           distributorFee: split.distributorFee,
@@ -114,8 +127,8 @@ export default async function handler(
         }
       }
       split.tokens.forEach((token) => {
-        if (!splitsClaimableAcc[split.address].tokens[token.address]) {
-          splitsClaimableAcc[split.address].tokens[token.address] = {
+        if (!splitsClaimableAcc[splitId].tokens[token.address]) {
+          splitsClaimableAcc[splitId].tokens[token.address] = {
             tokenAddress: token.address,
             unclaimedValue: token.unclaimed,
             undistributedValue: "0", // to be filled in by loop of internal split balances
@@ -126,29 +139,30 @@ export default async function handler(
 
     const internalSplitBalances = await Promise.all(
       internalSplits.map((split) =>
-        getFungibleTokenBalancesAlchemy(chainId, split.address),
+        getFungibleTokenBalancesAlchemy(split.chainId, split.address),
       ),
     )
     internalSplitBalances.forEach((split) => {
+      const splitId = globalId(split.chainId, split.address)
       split.balances.forEach((balance) => {
-        if (!splitsClaimableAcc[split.address].tokens[balance.tokenAddress]) {
-          splitsClaimableAcc[split.address].tokens[balance.tokenAddress] = {
+        if (!splitsClaimableAcc[splitId].tokens[balance.tokenAddress]) {
+          splitsClaimableAcc[splitId].tokens[balance.tokenAddress] = {
             tokenAddress: balance.tokenAddress,
             unclaimedValue: "0",
             // assumes that split distributorFees are 0
             // would need to discount distribution cost before taking allocation otherwise
             undistributedValue: percentOfValue(
-              splitsClaimableAcc[split.address].allocation,
+              splitsClaimableAcc[splitId].allocation,
               balance.value,
             ),
           }
         } else {
           // assumes that split distributorFees are 0
           // would need to discount distribution cost before taking allocation otherwise
-          splitsClaimableAcc[split.address].tokens[
+          splitsClaimableAcc[splitId].tokens[
             balance.tokenAddress
           ].undistributedValue = percentOfValue(
-            splitsClaimableAcc[split.address].allocation,
+            splitsClaimableAcc[splitId].allocation,
             balance.value,
           )
         }
@@ -169,25 +183,51 @@ export default async function handler(
       .reduce(
         (acc: string[], split) => [
           ...acc,
-          ...split.tokens.map((token) => token.tokenAddress),
+          ...split.tokens.map((token) =>
+            globalId(split.chainId, token.tokenAddress),
+          ),
         ],
         [],
       )
-      .map((address) => toChecksumAddress(address))
-      .filter((v, i, values) => values.indexOf(v) === i) // unique addresses
+      .map((globalId) => globalId)
+      .filter((v, i, values) => values.indexOf(v) === i) // unique tokens
+      .map((chainNameAndTokenAddress) =>
+        convertGlobalId(chainNameAndTokenAddress),
+      )
+    const groupedUniqueTokens: Record<number, string[]> = {}
+    SUPPORTED_CHAIN_IDS.forEach((chainId) => {
+      const tokenAddresses = uniqueTokens
+        .filter((v) => v.chainId === chainId)
+        .map((v) => v.address as string)
 
-    const tokens = await getFungibleTokenDetails(chainId, uniqueTokens)
+      if (tokenAddresses.length > 0) {
+        groupedUniqueTokens[chainId] = tokenAddresses
+      }
+    })
+
+    const tokenMetadataCalls = await Promise.all(
+      Object.entries(groupedUniqueTokens).map(([chainId, tokenAddresses]) =>
+        getFungibleTokenDetails(parseInt(chainId), tokenAddresses),
+      ),
+    )
+
+    const tokens = tokenMetadataCalls.reduce((acc, v) => [...acc, ...v], [])
 
     let splitTokensAcc: Record<string, RevShareWithdraw> = {} // token address ->
     allIncludedSplits.forEach((split) => {
       split.tokens.forEach((token) => {
+        const tokenId = globalId(split.chainId, token.tokenAddress)
         if (token.unclaimedValue === "0" && token.undistributedValue === "0") {
           return
         }
 
-        if (!splitTokensAcc[token.tokenAddress]) {
-          splitTokensAcc[token.tokenAddress] = {
-            ...tokens.find((tkn) => token.tokenAddress === tkn.address)!,
+        if (!splitTokensAcc[tokenId]) {
+          splitTokensAcc[tokenId] = {
+            ...tokens.find(
+              (tkn) =>
+                tkn.chainId === split.chainId &&
+                addressesAreEqual(tkn.address, token.tokenAddress),
+            )!,
             totalValue: addValues(
               token.unclaimedValue,
               token.undistributedValue,
@@ -204,12 +244,12 @@ export default async function handler(
             ],
           }
         } else {
-          splitTokensAcc[token.tokenAddress].totalValue = addValues(
-            splitTokensAcc[token.tokenAddress].totalValue,
+          splitTokensAcc[tokenId].totalValue = addValues(
+            splitTokensAcc[tokenId].totalValue,
             token.unclaimedValue,
             token.undistributedValue,
           )
-          splitTokensAcc[token.tokenAddress].splits.push({
+          splitTokensAcc[tokenId].splits.push({
             address: split.address,
             unclaimedValue: token.unclaimedValue,
             undistributedValue: token.undistributedValue,
