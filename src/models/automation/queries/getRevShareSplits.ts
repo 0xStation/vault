@@ -52,13 +52,23 @@ export const getRevShareSplits = async (
   chainId: number,
   address: string,
 ): Promise<RevShareSplit[]> => {
-  // TODO: add subgraphs for other chains
-  if (chainId !== 5) {
-    throw Error("only goerli rev shares are supported right now")
+  const chainIdToName: Record<number, string> = {
+    1: "mainnet",
+    5: "goerli",
+    137: "polygon",
   }
+
+  const chainName = chainIdToName[chainId]
+
+  if (!chainName) {
+    throw Error(
+      `invalid chainId supported (${chainId}), only 1, 5, and 137 supported`,
+    )
+  }
+
   try {
     const graphlQLClient = new GraphQLClient(
-      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
+      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits-" + chainName,
       {
         method: "POST",
         headers: new Headers({
