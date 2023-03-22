@@ -106,7 +106,7 @@ function App({ Component, pageProps }: AppProps) {
             <title>Station</title>
             <meta
               property="og:image"
-              content="https://ahrefs.com/blog/wp-content/uploads/2019/12/fb-how-to-become-an-seo-expert.png"
+              content={`${window.location.origin}/api/v1/og?title=my post title`}
             />
           </NextHead>
           <QueryClientProvider client={queryClient}>
