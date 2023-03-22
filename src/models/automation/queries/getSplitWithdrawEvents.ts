@@ -3,6 +3,7 @@ import gql from "graphql-tag"
 import { getFungibleTokenDetails } from "../../token/queries/getFungibleTokenDetails"
 import { FungibleToken, TokenType } from "../../token/types"
 import { valueToAmount } from "../../token/utils"
+import { getSplitsSubgraphEndpoint } from "../utils"
 
 type GraphQLResponse = {
   split: {
@@ -51,23 +52,9 @@ export const getSplitWithdrawEvents = async ([address, chainId]: [
   string,
   number,
 ]): Promise<WithdrawEvent[]> => {
-  const chainIdToName: Record<number, string> = {
-    1: "mainnet",
-    5: "goerli",
-    137: "polygon",
-  }
-
-  const chainName = chainIdToName[chainId]
-
-  if (!chainName) {
-    throw Error(
-      `invalid chainId supported (${chainId}), only 1, 5, and 137 supported`,
-    )
-  }
-
   try {
     const graphlQLClient = new GraphQLClient(
-      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits-" + chainName,
+      getSplitsSubgraphEndpoint(chainId),
       {
         method: "POST",
         headers: new Headers({

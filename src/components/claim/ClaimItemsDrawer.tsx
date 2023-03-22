@@ -250,18 +250,19 @@ export const ClaimItemsDrawer = ({
                       chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                     />
                   </div>
-                  {/* TO DO: Add this once we get to aggregating the dollar amount */}
-                  {/* <TokenTransfersAccordion
-                    transfers={reduceTransfers(
-                      items.reduce(
-                        (acc: TokenTransfer[], item) => [
-                          ...acc,
-                          ...item.transfers,
-                        ],
-                        [],
-                      ),
-                    )}
-                  /> */}
+                  {items.length > 1 && (
+                    <TokenTransfersAccordion
+                      transfers={reduceTransfers(
+                        items.reduce(
+                          (acc: TokenTransfer[], item) => [
+                            ...acc,
+                            ...item.transfers,
+                          ],
+                          [],
+                        ),
+                      )}
+                    />
+                  )}
                 </div>
                 <div className="mt-6 space-y-2">
                   {items.map((item, index) => (
@@ -316,23 +317,24 @@ export const ClaimItemsDrawer = ({
             <div className="h-full overflow-y-auto pb-32">
               <div className="mt-4 space-y-2 border-b border-gray-90 pb-6">
                 <div className="flex flex-row space-x-2">
-                  <span className="text-sm text-gray">Network</span>
+                  <span className="text-sm text-gray">Chain</span>
                   <Network
                     chainId={items?.[0]?.transfers?.[0]?.token?.chainId}
                   />
                 </div>
-                {/* TO DO: Add this once we get to aggregating the dollar amount */}
-                {/* <TokenTransfersAccordion
-                  transfers={reduceTransfers(
-                    items.reduce(
-                      (acc: TokenTransfer[], item) => [
-                        ...acc,
-                        ...item.transfers,
-                      ],
-                      [],
-                    ),
-                  )}
-                /> */}
+                {items.length > 1 && (
+                  <TokenTransfersAccordion
+                    transfers={reduceTransfers(
+                      items.reduce(
+                        (acc: TokenTransfer[], item) => [
+                          ...acc,
+                          ...item.transfers,
+                        ],
+                        [],
+                      ),
+                    )}
+                  />
+                )}
               </div>
               <div className="mt-6 space-y-2">
                 {items.map((item, index) => (

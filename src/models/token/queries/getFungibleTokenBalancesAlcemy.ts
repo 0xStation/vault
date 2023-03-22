@@ -11,6 +11,7 @@ export const getFungibleTokenBalancesAlchemy = async (
   chainId: number,
   address: string,
 ): Promise<{
+  chainId: number
   address: string
   balances: { tokenAddress: string; value: string }[]
 }> => {
@@ -35,6 +36,7 @@ export const getFungibleTokenBalancesAlchemy = async (
     ])
 
     return {
+      chainId,
       address,
       balances: [
         {

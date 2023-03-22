@@ -1,15 +1,19 @@
 import { AutomationVariant } from "@prisma/client"
 import db from "db"
+import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { Automation } from "../types"
 
-export const getRevSharesByAddress = async (addresses: string[]) => {
+export const getRevSharesByAddresses = async (
+  globalIds: { chainId: number; address: string }[],
+) => {
   const revShares = (await db.automation.findMany({
     where: {
-      OR: addresses.map((address) => ({
+      OR: globalIds.map(({ chainId, address }) => ({
         variant: AutomationVariant.REV_SHARE,
+        chainId,
         data: {
           path: ["meta", "address"],
-          equals: address,
+          equals: toChecksumAddress(address),
         },
       })),
     },

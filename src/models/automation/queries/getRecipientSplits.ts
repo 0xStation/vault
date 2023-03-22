@@ -1,7 +1,9 @@
 import { GraphQLClient } from "graphql-request"
 import gql from "graphql-tag"
 import { SPLITS_PERCENTAGE_SCALE } from "lib/constants"
+import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { subtractValues } from "../../token/utils"
+import { getSplitsSubgraphEndpoint } from "../utils"
 
 type GraphQLResponse = {
   recipient: {
@@ -54,6 +56,7 @@ export const CLAIM_SPLITS_QUERY = gql`
 `
 
 type RecipientSplit = {
+  chainId: number
   address: string // split
   distributorFee: string
   allocation: number // [0, 1]
@@ -72,13 +75,9 @@ export const getRecipientSplits = async (
   chainId: number,
   address: string,
 ): Promise<RecipientSplit[]> => {
-  // TODO: add subgraphs for other chains
-  if (chainId !== 5) {
-    throw Error("only goerli rev shares are supported right now")
-  }
   try {
     const graphlQLClient = new GraphQLClient(
-      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits",
+      getSplitsSubgraphEndpoint(chainId),
       {
         method: "POST",
         headers: new Headers({
@@ -101,15 +100,16 @@ export const getRecipientSplits = async (
 
     const splits = response?.recipient?.splits.map((split) => {
       return {
-        address: split.split.id,
+        chainId,
+        address: toChecksumAddress(split.split.id),
         distributorFee: split.split.distributorFee,
         allocation: parseInt(split.allocation) / SPLITS_PERCENTAGE_SCALE,
         recipients: split.split.recipients.map((recipient) => ({
-          address: recipient.recipient.id,
+          address: toChecksumAddress(recipient.recipient.id),
           allocation: parseInt(recipient.allocation) / SPLITS_PERCENTAGE_SCALE,
         })),
         tokens: split.tokens.map((obj) => ({
-          address: obj.tokenAddress,
+          address: toChecksumAddress(obj.tokenAddress),
           totalClaimed: obj.totalClaimed,
           unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
         })),

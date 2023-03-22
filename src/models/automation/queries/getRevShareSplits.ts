@@ -1,6 +1,7 @@
 import { GraphQLClient } from "graphql-request"
 import gql from "graphql-tag"
 import { subtractValues } from "../../token/utils"
+import { getSplitsSubgraphEndpoint } from "../utils"
 
 type GraphQLResponse = {
   split: {
@@ -39,6 +40,7 @@ export const SPLIT_DETAILS_QUERY = gql`
 `
 
 type RevShareSplit = {
+  chainId: number
   address: string // recipient
   value: number // allocation
   tokens: {
@@ -52,23 +54,9 @@ export const getRevShareSplits = async (
   chainId: number,
   address: string,
 ): Promise<RevShareSplit[]> => {
-  const chainIdToName: Record<number, string> = {
-    1: "mainnet",
-    5: "goerli",
-    137: "polygon",
-  }
-
-  const chainName = chainIdToName[chainId]
-
-  if (!chainName) {
-    throw Error(
-      `invalid chainId supported (${chainId}), only 1, 5, and 137 supported`,
-    )
-  }
-
   try {
     const graphlQLClient = new GraphQLClient(
-      "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits-" + chainName,
+      getSplitsSubgraphEndpoint(chainId),
       {
         method: "POST",
         headers: new Headers({
@@ -90,6 +78,7 @@ export const getRevShareSplits = async (
 
     const splits = response?.split?.recipients.map((split) => {
       return {
+        chainId,
         address: split.recipient.id,
         value: (parseInt(split.allocation) * 100) / 1_000_000,
         tokens: split.tokens.map((obj) => ({

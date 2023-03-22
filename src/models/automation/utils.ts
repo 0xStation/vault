@@ -12,3 +12,23 @@ export const _scaleAmountByPercentage = (
     .div(SPLITS_PERCENTAGE_SCALE)
     .toString()
 }
+
+export const getSplitsSubgraphEndpoint = (chainId: number) => {
+  const chainIdToName: Record<number, string> = {
+    1: "mainnet",
+    5: "goerli",
+    137: "polygon",
+  }
+
+  const chainName = chainIdToName[chainId]
+
+  if (!chainName) {
+    throw Error(
+      `invalid chainId supported (${chainId}), only 1, 5, and 137 supported`,
+    )
+  }
+
+  return (
+    "https://api.thegraph.com/subgraphs/name/0xstation/0xsplits-" + chainName
+  )
+}
