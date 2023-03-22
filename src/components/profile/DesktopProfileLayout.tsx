@@ -1,5 +1,7 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Address } from "@ui/Address"
 import { Avatar } from "@ui/Avatar"
+import { ProfileReadyToClaim } from "components/claim/ProfileReadyToClaim"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import React from "react"
@@ -21,6 +23,11 @@ const DesktopProfileLayout = ({
     accountAddress as string,
     chain?.id as number,
   )
+  const { primaryWallet } = useDynamicContext()
+  const isUsersProfile =
+    primaryWallet?.address &&
+    accountAddress &&
+    accountAddress === primaryWallet?.address
 
   return (
     <>
@@ -45,6 +52,13 @@ const DesktopProfileLayout = ({
                 <span>{count}</span>
               </div>
             </section>
+            {isUsersProfile && (
+              <div className="mt-6 space-y-3 px-4">
+                <div>
+                  <ProfileReadyToClaim />
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div

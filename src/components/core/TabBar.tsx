@@ -52,7 +52,7 @@ export const TabBar = ({
     >
       {style === "tab" ? (
         <TabsList
-          className={cn("sticky top-0 z-10 bg-black px-4 pt-2 sm:top-[-16px]")}
+          className={cn("sticky top-0 z-10 bg-black px-4 pt-1 sm:top-[-16px]")}
         >
           {options.map((option) => (
             <TabsTrigger key={`tab-${option.value}`} value={option.value}>
