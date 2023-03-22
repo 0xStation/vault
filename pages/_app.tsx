@@ -105,6 +105,21 @@ function App({ Component, pageProps }: AppProps) {
           <NextHead>
             <title>Station</title>
             <meta property="og:image" content={"/api/v1/og?title=test post"} />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta
+              property="twitter:domain"
+              content="app-gozm25xwr-0xstation.vercel.app"
+            />
+            <meta
+              property="twitter:url"
+              content="https://app-gozm25xwr-0xstation.vercel.app/"
+            />
+            <meta name="twitter:title" content="Station" />
+            <meta
+              name="twitter:description"
+              content="Doing work with people who share your mission."
+            />
+            <meta name="twitter:image" content={"/api/v1/og?title=test post"} />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&
