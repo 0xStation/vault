@@ -1,6 +1,6 @@
 import { PARALLEL_PROCESSOR_ADDRESS } from "lib/constants"
 import { useContractRead } from "wagmi"
-import safeAbi from "../../lib/abis/safeAbi.json"
+import { safeAbi } from "../../lib/abis/safeAbi"
 
 export const useIsModuleEnabled = ({
   address,
