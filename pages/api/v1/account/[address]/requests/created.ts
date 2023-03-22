@@ -18,12 +18,16 @@ export default async function handler(
   }
 
   const accountAddress = query.address as string
+  const chainId = query.chainId as string
+
+  const whereChainId = chainId ? { chainId: parseInt(chainId as string) } : {}
 
   let requests
   try {
     requests = await getProfileRequests({
       where: {
         // find created field in nested data json
+        ...whereChainId,
         data: {
           path: ["createdBy"],
           equals: accountAddress,
