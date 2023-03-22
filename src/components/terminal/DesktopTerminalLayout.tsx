@@ -144,7 +144,7 @@ const DesktopTerminalLayout = ({
               </div>
               <div className="rounded-b-xl bg-gray-90 p-4">
                 <h4 className="mb-1 text-sm text-gray">Total balance</h4>
-                {totalAssetValue ? (
+                {totalAssetValue! >= 0 ? (
                   <span>{`$${totalAssetValue
                     ?.toFixed(2)
                     .toString()
