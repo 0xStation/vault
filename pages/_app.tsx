@@ -104,6 +104,10 @@ function App({ Component, pageProps }: AppProps) {
         <DynamicWagmiConnector>
           <NextHead>
             <title>Station</title>
+            <meta
+              property="og:image"
+              content="https://ahrefs.com/blog/wp-content/uploads/2019/12/fb-how-to-become-an-seo-expert.png"
+            />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&
