@@ -284,7 +284,7 @@ export const SendTokensContent = ({
               ) : !tokens.length ? (
                 <div className="w-full rounded bg-gray-90 p-4 text-center">
                   <p className="font-bold">No tokens found</p>
-                  <p className="pt-2 text-base">
+                  <p className="mx-auto max-w-[350px] pt-2 text-base">
                     Transfer tokens to the Project address or share the address
                     to receive tokens.
                   </p>
@@ -475,7 +475,7 @@ export const SendTokensContent = ({
             placeholder="Add a note"
           />
         </div>
-        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full max-w-[580px] px-4 text-center">
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full px-4 text-center">
           <Button
             type="submit"
             disabled={isSubmitting}

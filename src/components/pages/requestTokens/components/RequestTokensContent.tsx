@@ -256,7 +256,7 @@ export const RequestTokensContent = () => {
               ) : !tokens.length ? (
                 <div className="w-full justify-center rounded bg-gray-90 p-4 text-center">
                   <p className="font-bold">No tokens to send from Project</p>
-                  <p className="mb-6 pt-2 text-base">
+                  <p className="mx-auto mb-6 max-w-[350px] pt-2 text-base">
                     Transfer tokens to the Project address or share the address
                     to receive tokens.
                   </p>

@@ -248,9 +248,9 @@ const RequestListForm = ({
     }
 
     switch (router.query.filter) {
-      case TerminalRequestStatusFilter.OPEN:
-        title = "No proposals"
-        subtitle = "The members of this Project have no proposals to review. "
+      case TerminalRequestStatusFilter.NEEDS_ACTION:
+        title = "Hurray!"
+        subtitle = "You've reviewed all proposals."
         break
       case TerminalRequestStatusFilter.AWAITING_OTHERS:
         title = "No pending Proposals"
@@ -262,9 +262,9 @@ const RequestListForm = ({
           ? "Proposals enable collectives distribute tokens and manage members with more trust."
           : "The members of this Project have not created a proposal."
         break
-      default: // default filter is needs-action
-        title = "Hurray!"
-        subtitle = "You've reviewed all proposals."
+      default: // default filter is OPEN
+        title = "No proposals"
+        subtitle = "The members of this Project have no proposals to review."
         break
     }
     return (
