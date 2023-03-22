@@ -1,38 +1,40 @@
-import { toChecksumAddress } from "lib/utils/toChecksumAddress"
-import { safeEndpoint } from "./utils"
+import { safeAbi } from "../../abis/safeAbi"
+import { getClient } from "../../viem"
 
-export const getSafeDetails = async (
-  chainId: number,
-  address: string,
-  signal?: any,
-) => {
-  const url = `${safeEndpoint(chainId)}/safes/${toChecksumAddress(address)}`
+export const getSafeDetails = async (chainId: number, address: string) => {
+  const client = getClient(chainId)
 
-  let response
-  try {
-    response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+  const safeContract = {
+    address: address as `0x${string}`,
+    abi: safeAbi,
+  } as const
+
+  const [signers, quorum, version] = await client.multicall({
+    contracts: [
+      {
+        ...safeContract,
+        functionName: "getOwners",
       },
-      signal, // allows for the fetch api request to be aborted if triggered https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-    })
+      {
+        ...safeContract,
+        functionName: "getThreshold",
+      },
+      {
+        ...safeContract,
+        functionName: "VERSION",
+      },
+    ],
+  })
 
-    if (response.status !== 200) {
-      console.error(response)
-      throw Error("Could not retrieve Safe")
-    }
+  if (signers?.error) throw Error(signers.error.message)
+  if (quorum?.error) throw Error(quorum.error.message)
+  if (version?.error) throw Error(version.error.message)
 
-    const data = await response.json()
-    return {
-      chainId,
-      address,
-      quorum: data.threshold,
-      signers: data.owners,
-      version: data.version,
-    }
-  } catch (err) {
-    console.error(err)
-    throw Error("Could not retrieve Safe")
+  return {
+    chainId,
+    address,
+    quorum: (quorum?.result as any).toString(),
+    signers: signers?.result as string[],
+    version: version?.result,
   }
 }
