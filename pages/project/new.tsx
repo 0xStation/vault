@@ -1,8 +1,5 @@
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
-import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
-import { convertGlobalId } from "models/terminal/utils"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import TerminalCreationForm from "../../src/components/terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/TerminalCreationOptionsView"
@@ -18,14 +15,6 @@ export const TerminalCreationPage = () => {
     VIEW.CREATION_OPTIONS,
   )
   const activeUser = useStore((state) => state.activeUser)
-  const router = useRouter()
-  const { chainId, address } = convertGlobalId(
-    router.query.chainNameAndSafeAddress as string,
-  )
-  const { terminal } = useTerminalByChainIdAndSafeAddress(
-    address as string,
-    chainId as number,
-  )
   const { isMobile } = useBreakpoint()
 
   useEffect(() => {
@@ -37,7 +26,7 @@ export const TerminalCreationPage = () => {
   return (
     <>
       <Head>
-        <title>New Project | {terminal?.data.name}</title>
+        <title>New Project</title>
       </Head>
       {isMobile ? (
         <div className="px-4">
