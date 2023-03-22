@@ -1,5 +1,6 @@
 import { BigNumber } from "@ethersproject/bignumber"
 import { Button } from "@ui/Button"
+import { LoadingSpinner } from "components/core/LoadingSpinner"
 import { SAFE_URL } from "lib/constants"
 import { prepareExecuteSafeTransaction } from "lib/encodings/safe/exec-transaction"
 import { EIP712Message, getHash } from "lib/signatures/utils"
@@ -153,31 +154,37 @@ const AwaitingConfirmationsView = ({
         )
   return (
     <>
-      <h2 className="font-bold">A module needs to be activated</h2>
-      <p className="mt-1 text-center">
-        Requires {quorumDiff} more approval{quorumDiff > 1 && "s"} to activate
-        your the module and continue operating your Project.
-      </p>
-      <div className="mt-6 flex flex-row space-x-3">
-        {!hasApproved && (
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={handleApprove}
-            loading={approveLoading}
-            disabled={approveLoading}
-          >
-            Approve
-          </Button>
-        )}
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
-        >
-          Go to profile
-        </Button>
-      </div>
+      {!quorumDiff || quorumDiff === 0 ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <h2 className="font-bold">A module needs to be activated</h2>
+          <p className="mt-1 text-center">
+            Requires {quorumDiff} more approval{quorumDiff > 1 && "s"} to
+            activate your the module and continue operating your Project.
+          </p>
+          <div className="mt-6 flex flex-row space-x-3">
+            {!hasApproved && (
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleApprove}
+                loading={approveLoading}
+                disabled={approveLoading}
+              >
+                Approve
+              </Button>
+            )}
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
+            >
+              Go to profile
+            </Button>
+          </div>
+        </>
+      )}
       {error && <p className="mt-2 -mb-2 text-red">{error}</p>}
       <div className="mt-9 w-full text-left">
         <p className="text-gray-40">Hasn&apos;t approved</p>
@@ -381,7 +388,6 @@ export const TerminalActivationView = ({
           message,
           senderAddress: activeUser?.address as string,
         })
-        setApproveLoading(false)
       } catch (err) {
         console.error("Failed to create safe txn", err)
         setApproveLoading(false)

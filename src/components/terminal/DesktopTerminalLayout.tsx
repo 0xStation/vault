@@ -120,23 +120,44 @@ const DesktopTerminalLayout = ({
           <div className="h-[90%] overflow-auto border-r border-gray-90">
             <section className="rounded p-4">
               <div className="rounded-t-xl bg-gray-100 p-4">
-                <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+                {terminal?.data?.name ? (
+                  <h1 className="text-xl font-bold">{terminal?.data?.name}</h1>
+                ) : (
+                  <div className="h-7 w-48 animate-pulse rounded-full bg-gray" />
+                )}
                 <div className="mt-2 flex flex-row items-center space-x-1">
-                  <Network chainId={terminal?.chainId} />
-                  <span className="text-sm">
-                    · {truncateString(terminal?.safeAddress)}
-                  </span>
+                  {terminal?.chainId ? (
+                    <Network chainId={terminal?.chainId} />
+                  ) : (
+                    <div className="h-5 w-11 animate-pulse rounded-full bg-gray" />
+                  )}
+                  &nbsp;·
+                  {terminal?.safeAddress ? (
+                    <span className="text-sm">
+                      {truncateString(terminal?.safeAddress)}
+                    </span>
+                  ) : (
+                    <div className="h-5 w-20 animate-pulse rounded-full bg-gray" />
+                  )}
                   <CopyToClipboard text={terminal?.safeAddress} />
                 </div>
               </div>
               <div className="rounded-b-xl bg-gray-90 p-4">
                 <h4 className="mb-1 text-sm text-gray">Total balance</h4>
-                <span>{`$${totalAssetValue
-                  ?.toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
+                {totalAssetValue ? (
+                  <span>{`$${totalAssetValue
+                    ?.toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</span>
+                ) : (
+                  <div className="h-5 w-11 animate-pulse rounded-full bg-gray" />
+                )}
                 <h4 className="mb-1 mt-4 text-sm text-gray">Members</h4>
-                <span>{terminal?.signers?.length}</span>
+                {terminal?.signers?.length && terminal?.signers?.length > 0 ? (
+                  <span>{terminal?.signers?.length}</span>
+                ) : (
+                  <div className="h-5 w-10 animate-pulse rounded-full bg-gray" />
+                )}
               </div>
             </section>
             {isSigner && (
