@@ -1,5 +1,6 @@
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
-import { useEffect, useState } from "react"
+import Head from "next/head"
+import React, { useEffect, useState } from "react"
 import TerminalCreationForm from "../../src/components/terminalCreation/create"
 import { TerminalCreationOptionsView } from "../../src/components/terminalCreation/TerminalCreationOptionsView"
 import useStore from "../../src/hooks/stores/useStore"
@@ -24,6 +25,9 @@ export const TerminalCreationPage = () => {
 
   return (
     <>
+      <Head>
+        <title>New Project</title>
+      </Head>
       {isMobile ? (
         <div className="px-4">
           {view === VIEW.CREATION_OPTIONS && (

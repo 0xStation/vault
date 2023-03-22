@@ -2,7 +2,8 @@ import Breakpoint from "@ui/Breakpoint/Breakpoint"
 import { chainNameToChainId } from "lib/constants"
 import { Terminal } from "models/terminal/types"
 import dynamic from "next/dynamic"
-import { useState } from "react"
+import Head from "next/head"
+import React, { useState } from "react"
 import Desktop from "../../src/components/pages/assets/Desktop"
 import Mobile from "../../src/components/pages/assets/Mobile"
 import { useIsModuleEnabled } from "../../src/hooks/safe/useIsModuleEnabled"
@@ -31,6 +32,9 @@ const AssetsPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Assets | {terminal?.data.name}</title>
+      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}

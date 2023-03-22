@@ -6,6 +6,7 @@ import truncateString from "lib/utils"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { Terminal } from "models/terminal/types"
 import dynamic from "next/dynamic"
+import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
@@ -110,7 +111,9 @@ const MobileTerminalIndexPage = () => {
   return (
     <>
       <AccountNavBar />
-
+      <Head>
+        <title>{terminal?.data.name} | Home</title>
+      </Head>
       <section className="mt-6 px-4">
         <h1>{terminal?.data?.name}</h1>
         <div className="mt-2 mb-3 flex flex-row items-center space-x-1">

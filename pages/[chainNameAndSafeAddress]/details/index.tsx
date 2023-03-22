@@ -2,8 +2,9 @@ import Breakpoint from "@ui/Breakpoint"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
 import { convertGlobalId } from "models/terminal/utils"
 import dynamic from "next/dynamic"
+import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import React, { useState } from "react"
 import Desktop from "../../../src/components/pages/terminalDetails/Desktop"
 import Mobile from "../../../src/components/pages/terminalDetails/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
@@ -33,6 +34,9 @@ const TerminalDetailsPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
   return (
     <>
+      <Head>
+        <title>About | {terminal?.data.name}</title>
+      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}

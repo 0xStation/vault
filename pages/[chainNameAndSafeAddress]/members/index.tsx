@@ -1,6 +1,7 @@
 import Breakpoint from "@ui/Breakpoint/Breakpoint"
 import { chainNameToChainId } from "lib/constants"
 import dynamic from "next/dynamic"
+import Head from "next/head"
 import { useState } from "react"
 import Desktop from "../../../src/components/pages/members/Desktop"
 import Mobile from "../../../src/components/pages/members/Mobile"
@@ -39,6 +40,9 @@ const MembersPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Members | {terminal?.data.name}</title>
+      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}
