@@ -6,9 +6,12 @@ export const config = {
 }
 
 export default async function handler(req: NextRequest) {
+  const params = req.nextUrl.searchParams
+  const color = params.get("color")
+  console.log(color)
   await new Promise((resolve) => setTimeout(resolve, 3000))
   return NextResponse.json(
-    { name: "John Doe" },
+    { color },
     {
       status: 200,
       headers: {
