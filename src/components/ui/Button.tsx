@@ -11,8 +11,8 @@ export const buttonStyles = cva("relative rounded text-center", {
     },
     size: {
       sm: "px-4 py-2 text-sm font-bold",
-      base: "font-bold px-5 py-2 text-base",
-      lg: "font-bold px-5 py-2 text-base",
+      base: "px-5 py-2 text-sm sm:text-base font-bold",
+      lg: "px-5 py-2 text-base font-bold",
       xl: "px-16 py-3 font-bold text-xl",
     },
     fullWidth: {
