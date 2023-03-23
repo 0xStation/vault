@@ -110,12 +110,15 @@ const DesktopTerminalLayout = ({
       <div className="flex h-screen flex-row">
         <div className="relative h-full w-[300px]">
           <section className="flex flex-row items-center justify-between p-4">
-            <Image
-              src="/images/terminal-logo.webp"
-              alt=""
-              height={40}
-              width={40}
-            />
+            <Link href={`/u/${accountAddress}/profile`}>
+              <Image
+                src="/images/terminal-logo.webp"
+                alt=""
+                height={40}
+                width={40}
+                className="cursor-pointer transition-all hover:rotate-[15deg]"
+              />
+            </Link>
           </section>
           <div className="h-[90%] overflow-auto border-r border-gray-90">
             <section className="rounded p-4">
