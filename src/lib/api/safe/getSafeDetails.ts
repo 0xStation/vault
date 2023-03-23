@@ -33,7 +33,7 @@ export const getSafeDetails = async (chainId: number, address: string) => {
   return {
     chainId,
     address,
-    quorum: (quorum?.result as any).toString(),
+    quorum: parseInt(quorum?.result.toString()),
     signers: signers?.result as string[],
     version: version?.result,
   }
