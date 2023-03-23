@@ -132,7 +132,7 @@ export const RequestDetailsActions = ({
       <div className="fixed bottom-0 w-full border-t border-gray-80 bg-black px-4 pt-3 pb-6">
         <div className="flex flex-row items-center space-x-2">
           <Button
-            size="lg"
+            size="base"
             fullWidth={true}
             variant={buttonStatusProps[approveButtonStatus].variant}
             disabled={buttonStatusProps[approveButtonStatus].disabled}
@@ -151,7 +151,7 @@ export const RequestDetailsActions = ({
             {buttonStatusProps[approveButtonStatus].approveCopy}
           </Button>
           <Button
-            size="lg"
+            size="base"
             fullWidth={true}
             variant={buttonStatusProps[rejectButtonStatus].variant}
             disabled={buttonStatusProps[rejectButtonStatus].disabled}
