@@ -1,7 +1,8 @@
 import axios from "axios"
+import { getUrlHost } from "lib/utils/getUrlHost"
 
 export const notifyNewProposal = async (proposalId: string) => {
-  const url = "http://localhost:3000/api/v1/notify/newProposal"
+  const url = getUrlHost() + "/api/v1/notify/newProposal"
 
   try {
     await axios.post<any[]>(

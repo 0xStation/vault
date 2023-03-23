@@ -15,7 +15,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  console.log("received notification request")
   const { method, body, headers } = req
   const { proposalId } = body
 
@@ -42,17 +41,13 @@ export default async function handler(
     return res.status(404).end("Could not find proposal of id: " + proposalId)
   }
 
-  console.log("proposal found, ", request)
-
   try {
     const safeDetails = await getSafeDetails(
       request.chainId,
       request.terminalAddress,
     )
-    console.log("safeDetails", safeDetails)
     const { quorum, signers } = safeDetails
     const signerEmails = await getEmails(signers)
-    console.log("signerEmails", signerEmails)
     const projectName = request.terminal.data.name ?? "[Untitled]"
     await sendNewProposalEmail({
       recipients: signerEmails,
@@ -63,13 +58,10 @@ export default async function handler(
       safeAddress: request.terminalAddress,
       terminalName: projectName,
     })
-    console.log("sendNewPropsoalEmail")
     // edge case of a single quorum safe which auto sends the request to be ready to execute
     // this also means a token transfer request is immediately claimable by recipient
     if (quorum === 1) {
-      console.log("quorum is 1")
       if (request.variant === RequestVariantType.TOKEN_TRANSFER) {
-        console.log("quorum is 1 and token transfer")
         const meta = request.data.meta as TokenTransferVariant
         const recipientEmail = await getEmails([meta.recipient])
         await sendNewProposalReadyForClaimingEmail({
@@ -79,7 +71,6 @@ export default async function handler(
           safeAddress: request.terminalAddress,
           terminalName: projectName,
         })
-        console.log("sendNewProposalReadyForClaimingEmail")
       }
       await sendNewProposalReadyForExecutionEmail({
         recipients: signerEmails,
@@ -89,7 +80,6 @@ export default async function handler(
         safeAddress: request.terminalAddress,
         terminalName: projectName,
       })
-      console.log("sendNewProposalReadyForExecutionEmail")
     }
   } catch (e) {
     // silently fail

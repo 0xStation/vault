@@ -1,13 +1,12 @@
 import { ActivityVariant } from "@prisma/client"
 import db from "db"
 import { notifyNewProposal } from "lib/api/notify"
-
 import { verifyTree } from "lib/signatures/verify"
+import { createActivity } from "models/activity/mutations/createActivity"
+import { createProofWithSignature } from "models/proof/mutations/createProofWithSignature"
+import { createRequestWithAction } from "models/request/mutations/createRequestWithAction"
+import { Request } from "models/request/types"
 import { NextApiRequest, NextApiResponse } from "next"
-import { createActivity } from "../../../../../../../src/models/activity/mutations/createActivity"
-import { createProofWithSignature } from "../../../../../../../src/models/proof/mutations/createProofWithSignature"
-import { createRequestWithAction } from "../../../../../../../src/models/request/mutations/createRequestWithAction"
-import { Request } from "../../../../../../../src/models/request/types"
 
 export default async function handler(
   req: NextApiRequest,
