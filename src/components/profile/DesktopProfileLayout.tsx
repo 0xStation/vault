@@ -6,7 +6,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
-import { useNetwork } from "wagmi"
 import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { AccountNavBar } from "../core/AccountNavBar/AccountDropdown"
 
@@ -18,12 +17,8 @@ const DesktopProfileLayout = ({
   children?: React.ReactNode
 }) => {
   const router = useRouter()
-  const { chain } = useNetwork()
   const { address: accountAddress } = router.query
-  const { isLoading, count } = useTerminalsBySigner(
-    accountAddress as string,
-    chain?.id as number,
-  )
+  const { isLoading, count } = useTerminalsBySigner(accountAddress as string)
   const { primaryWallet } = useDynamicContext()
   const isUsersProfile =
     primaryWallet?.address &&

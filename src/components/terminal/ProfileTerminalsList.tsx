@@ -7,18 +7,13 @@ import { EmptyState } from "components/emptyStates/EmptyState"
 import { addQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import { useNetwork } from "wagmi"
 import useStore from "../../hooks/stores/useStore"
 import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 import TerminalListItem from "./TerminalListItem"
 
 export const ProfileTerminalsList = ({ address }: { address: string }) => {
-  const { chain } = useNetwork()
-  const { isLoading, terminals } = useTerminalsBySigner(
-    address,
-    chain?.id as number,
-  )
+  const { isLoading, terminals } = useTerminalsBySigner(address)
   const { primaryWallet } = useDynamicContext()
   const router = useRouter()
   const { isMobile } = useBreakpoint()
