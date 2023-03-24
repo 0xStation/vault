@@ -30,6 +30,10 @@ export default async function handler(
         tab: query.tab, // omit if null
       },
     })
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=600, stale-while-revalidate=3600",
+    )
     res.status(200).json(requests)
   } catch (e) {
     console.error(e)
