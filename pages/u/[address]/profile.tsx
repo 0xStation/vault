@@ -23,8 +23,14 @@ const ProfilePage = ({}: {}) => {
             (router?.query?.address &&
               truncateString(router.query?.address as string))}
         </title>
-        <meta property="og:image" content={"/api/v1/og?title=test post"} />
-        <meta name="twitter:image" content={"/api/v1/og?title=test post"} />
+        <meta
+          property="og:image"
+          content={`/api/v1/og?title=${ensName || "ens"}`}
+        />
+        <meta
+          name="twitter:image"
+          content={`/api/v1/og?title=${ensName || "ens"}`}
+        />
       </Head>
       <Breakpoint>
         {(isMobile) => {
