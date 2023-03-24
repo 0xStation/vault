@@ -104,6 +104,16 @@ function App({ Component, pageProps }: AppProps) {
         <DynamicWagmiConnector>
           <NextHead>
             <title key="title">Station</title>
+            <meta
+              property="og:image"
+              content="https://station-images.nyc3.digitaloceanspaces.com/og-image-full.png"
+              key="image"
+            />
+            <meta
+              name="twitter:image"
+              content="https://station-images.nyc3.digitaloceanspaces.com/og-image-full.png"
+              key="twitter-image"
+            />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&
