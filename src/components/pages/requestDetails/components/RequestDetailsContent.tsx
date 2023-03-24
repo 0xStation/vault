@@ -1,7 +1,6 @@
 import { RequestVariantType } from "@prisma/client"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import { timeSince } from "lib/utils"
-import Head from "next/head"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
@@ -39,12 +38,6 @@ export const RequestDetailsContent = ({
 
   return (
     <>
-      <Head>
-        <meta
-          property="og:image"
-          content={`${window.location.origin}/api/v1/og?title=${request?.data?.note}}`}
-        />
-      </Head>
       <WaitRequestExecution request={request} mutateRequest={mutateRequest} />
       <div className="divide-y divide-gray-90 pb-32">
         <section className="space-y-6 p-4">
