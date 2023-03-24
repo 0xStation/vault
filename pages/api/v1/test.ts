@@ -10,5 +10,5 @@ export default async function handler(
     "Cache-Control",
     "public, s-maxage=600, stale-while-revalidate=3600",
   )
-  res.status(200).json({ color })
+  res.status(200).json({ color: `the color is ${color}` })
 }
