@@ -17,7 +17,7 @@ const ProfilePage = ({}: {}) => {
   return (
     <>
       <Head>
-        <title>
+        <title key="title">
           Profile |{" "}
           {ensName ||
             (router?.query?.address &&
@@ -26,10 +26,12 @@ const ProfilePage = ({}: {}) => {
         <meta
           property="og:image"
           content={`/api/v1/og?title=${ensName || "ens"}`}
+          key="image"
         />
         <meta
           name="twitter:image"
           content={`/api/v1/og?title=${ensName || "ens"}`}
+          key="twitter-image"
         />
       </Head>
       <Breakpoint>

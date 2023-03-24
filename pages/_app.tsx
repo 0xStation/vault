@@ -103,8 +103,12 @@ function App({ Component, pageProps }: AppProps) {
       >
         <DynamicWagmiConnector>
           <NextHead>
-            <title>Station</title>
-            <meta property="og:image" content={"/api/v1/og?title=test post"} />
+            <title key="title">Station</title>
+            <meta
+              property="og:image"
+              content={"/api/v1/og?title=test post"}
+              key="image"
+            />
             <meta name="twitter:card" content="summary_large_image" />
             <meta
               property="twitter:domain"
@@ -119,7 +123,11 @@ function App({ Component, pageProps }: AppProps) {
               name="twitter:description"
               content="Doing work with people who share your mission."
             />
-            <meta name="twitter:image" content={"/api/v1/og?title=test post"} />
+            <meta
+              name="twitter:image"
+              content={"/api/v1/og?title=test post"}
+              key="twitter-image"
+            />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&
