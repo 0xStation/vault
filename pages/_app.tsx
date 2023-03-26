@@ -106,7 +106,40 @@ function App({ Component, pageProps }: AppProps) {
       >
         <DynamicWagmiConnector>
           <NextHead>
-            <title>Station</title>
+            <title key="title">Station</title>
+            <meta
+              property="og:url"
+              content="https://app-bzuz9upjj-0xstation.vercel.app"
+            />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="Station" />
+            <meta
+              property="og:description"
+              content="Doing work with people who share your mission."
+            />
+            <meta
+              property="og:image"
+              content="https://station-images.nyc3.digitaloceanspaces.com/og-image-full.png"
+            />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta
+              property="twitter:domain"
+              content="app-bzuz9upjj-0xstation.vercel.app"
+            />
+            <meta name="twitter:title" content="Station" />
+            <meta
+              name="twitter:description"
+              content="Doing work with people who share your mission."
+            />
+            <meta
+              name="twitter:image"
+              content="https://station-images.nyc3.digitaloceanspaces.com/og-image-full.png"
+            />
+            <meta
+              name="twitter:image"
+              content="https://station-images.nyc3.digitaloceanspaces.com/og-image-full.png"
+              key="twitter-image"
+            />
           </NextHead>
           <QueryClientProvider client={queryClient}>
             {mounted &&

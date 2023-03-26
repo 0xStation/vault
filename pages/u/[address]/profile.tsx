@@ -17,7 +17,7 @@ const ProfilePage = ({}: {}) => {
   return (
     <>
       <Head>
-        <title>
+        <title key="title">
           Profile |{" "}
           {ensName ||
             (router?.query?.address &&
