@@ -11,8 +11,12 @@ import {
   Sliders,
   useSliderManagerStore,
 } from "../../hooks/stores/useSliderManagerStore"
-import RequestDetailsContent from "../pages/requestDetails/components/RequestDetailsContent"
 
+const RequestDetailsContent = dynamic(() =>
+  import("../pages/requestDetails/components/RequestDetailsContent").then(
+    (mod) => mod.RequestDetailsContent,
+  ),
+)
 const RequestTokensContent = dynamic(() =>
   import("../pages/requestTokens/components/RequestTokensContent").then(
     (mod) => mod.RequestTokensContent,
@@ -35,6 +39,25 @@ const NewAutomationContent = dynamic(() =>
   import("../pages/newAutomation/components/NewAutomationContent").then(
     (mod) => mod.NewAutomationContent,
   ),
+)
+
+const EditTerminalContent = dynamic(
+  () => import("../pages/editTerminalDetails/components/EditTerminalContent"),
+)
+
+const ClaimListView = dynamic(() => import("components/claim/ClaimListView"))
+
+const CreateTerminalContent = dynamic(
+  () => import("../pages/createTerminal/components/CreateTerminalContent"),
+)
+const EmailNotificationForm = dynamic(
+  () => import("../email/EmailNotificationForm"),
+)
+
+const AutomationDetailsContent = dynamic(() =>
+  import(
+    "components/pages/automationDetails/components/AutomationDetailsContent"
+  ).then((mod) => mod.AutomationDetailsContent),
 )
 
 const SliderManager = () => {
@@ -62,8 +85,31 @@ const SliderManager = () => {
       case Sliders.EDIT_MEMBERS:
         return <EditMembersContent />
 
+      case Sliders.EDIT_TERMINAL_DETAILS:
+        return <EditTerminalContent />
+
       case Sliders.CREATE_AUTOMATION:
         return <NewAutomationContent />
+
+      case Sliders.CREATE_TERMINAL:
+        return <CreateTerminalContent />
+
+      case Sliders.AUTOMATION_DETAILS:
+        return <AutomationDetailsContent />
+
+      case Sliders.CLAIM_TOKENS:
+        return <ClaimListView recipientAddress={""} />
+
+      case Sliders.EMAIL_NOTIFICATIONS:
+        return (
+          <EmailNotificationForm
+            successCallback={() => {
+              successToast({
+                message: "Email notification settings updated",
+              })
+            }}
+          />
+        )
 
       case Sliders.SEND_TOKENS:
         return (

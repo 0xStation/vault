@@ -8,11 +8,10 @@ export enum Sliders {
   "EDIT_MEMBERS" = "EDIT_MEMBERS",
   "CREATE_AUTOMATION" = "CREATE_AUTOMATION",
   "AUTOMATION_DETAILS" = "AUTOMATION_DETAILS",
-}
-
-enum QueryValueTypes {
-  "ID" = "ID",
-  "BOOLEAN" = "BOOLEAN",
+  "EDIT_TERMINAL_DETAILS" = "EDIT_TERMINAL_DETAILS",
+  "CREATE_TERMINAL" = "CREATE_TERMINAL",
+  "EMAIL_NOTIFICATIONS" = "EMAIL_NOTIFICATIONS",
+  "CLAIM_TOKENS" = "CLAIM_TOKENS",
 }
 
 type SliderConfig = {
@@ -46,6 +45,22 @@ const sliderOptions: Record<Sliders, SliderConfig> = {
   AUTOMATION_DETAILS: {
     key: Sliders.AUTOMATION_DETAILS,
     queryParam: "automationId",
+  },
+  CREATE_TERMINAL: {
+    key: Sliders.CREATE_TERMINAL,
+    queryParam: "createTerminalOpen",
+  },
+  EDIT_TERMINAL_DETAILS: {
+    key: Sliders.EDIT_TERMINAL_DETAILS,
+    queryParam: "editTerminalId",
+  },
+  EMAIL_NOTIFICATIONS: {
+    key: Sliders.EMAIL_NOTIFICATIONS,
+    queryParam: "emailNotificationsOpen",
+  },
+  CLAIM_TOKENS: {
+    key: Sliders.CLAIM_TOKENS,
+    queryParam: "claimTokensOpen",
   },
 }
 

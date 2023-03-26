@@ -1,15 +1,18 @@
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import { cn } from "lib/utils"
-import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import NftRevShare2Image from "public/images/nft-rev-share-2.webp"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useAutomations } from "../../../../../src/models/automation/hooks"
 import { parseGlobalId } from "../../../../../src/models/terminal/utils"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../../../hooks/stores/useSliderManagerStore"
 import { AutomationListItem } from "../../../automation/AutomationListItem"
 import { useRevSharePrompt } from "./useRevSharePrompt"
 
@@ -19,14 +22,7 @@ const BottomDrawer = dynamic(() =>
 const Modal = dynamic(() =>
   import("../../../ui/Modal").then((mod) => mod.Modal),
 )
-const RightSlider = dynamic(() =>
-  import("../../../ui/RightSlider").then((mod) => mod.RightSlider),
-)
-const AutomationDetailsContent = dynamic(() =>
-  import(
-    "components/pages/automationDetails/components/AutomationDetailsContent"
-  ).then((mod) => mod.AutomationDetailsContent),
-)
+
 const EmptyState = dynamic(() =>
   import("components/emptyStates/EmptyState").then((mod) => mod.EmptyState),
 )
@@ -39,6 +35,9 @@ const CreateAutomationDropdown = dynamic(() =>
 
 const AutomationsPageContent = () => {
   const router = useRouter()
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const { chainId, address } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
@@ -48,22 +47,6 @@ const AutomationsPageContent = () => {
   const noAutomations = !isLoading && automations?.length === 0
 
   const { isMobile } = useBreakpoint()
-
-  const [automationDetailsOpen, setAutomationDetailsOpen] =
-    useState<boolean>(false)
-  const closeAutomationDetailsSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "automationId")
-    }
-  }
-
-  useEffect(() => {
-    if (router.query.automationId) {
-      setAutomationDetailsOpen(true)
-    } else {
-      setAutomationDetailsOpen(false)
-    }
-  }, [automations, router.query.automationId])
 
   const emptyStateTitle = isSigner ? "Set up Automations" : "No Automations"
   const emptyStateSubtitle = isSigner
@@ -83,13 +66,6 @@ const AutomationsPageContent = () => {
           <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
             {revSharePrompt}
           </Modal>
-          <RightSlider
-            open={automationDetailsOpen}
-            setOpen={closeAutomationDetailsSlider}
-            useInnerPadding={false}
-          >
-            <AutomationDetailsContent />
-          </RightSlider>
         </>
       )}
       <div className="mt-3 h-[calc(100%-84px)]">
@@ -118,11 +94,7 @@ const AutomationsPageContent = () => {
                             `/${router.query.chainNameAndSafeAddress}/automations/new`,
                           )
                         } else {
-                          addQueryParam(
-                            router,
-                            "createAutomationSliderOpen",
-                            "true",
-                          )
+                          setActiveSlider(Sliders.CREATE_AUTOMATION)
                         }
                       }}
                     >
@@ -154,8 +126,7 @@ const AutomationsPageContent = () => {
                 automation={automation}
                 key={`automation-${automation.id}`}
                 onClick={() => {
-                  addQueryParam(router, "automationId", automation.id)
-                  setAutomationDetailsOpen(true)
+                  setActiveSlider(Sliders.AUTOMATION_DETAILS)
                 }}
               />
             ))}
