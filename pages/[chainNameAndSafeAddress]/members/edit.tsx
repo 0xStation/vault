@@ -18,7 +18,7 @@ const TerminalActivationView = dynamic(() =>
 const MembersPage = () => {
   // router.query doesn't work during pre-rendering unless we are using ssr
   const chainNameAndSafeAddress = decodeURIComponent(
-    window.location.pathname.split("/")[1],
+    window?.location?.pathname?.split("/")?.[1],
   ) as string
 
   const [chainName, safeAddress] = chainNameAndSafeAddress.split(":")
