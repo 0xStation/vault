@@ -138,6 +138,18 @@ const SliderManager = () => {
       setActiveSlider(Sliders.EDIT_MEMBERS)
     } else if (isQueryParamSet("createAutomationOpen")) {
       setActiveSlider(Sliders.CREATE_AUTOMATION)
+    } else if (isQueryParamSet("createTerminalOpen")) {
+      setActiveSlider(Sliders.CREATE_TERMINAL)
+    } else if (isQueryParamSet("automationDetailsOpen")) {
+      setActiveSlider(Sliders.AUTOMATION_DETAILS)
+    } else if (isQueryParamSet("claimTokensOpen")) {
+      setActiveSlider(Sliders.CLAIM_TOKENS)
+    } else if (isQueryParamSet("emailNotificationsOpen")) {
+      setActiveSlider(Sliders.EMAIL_NOTIFICATIONS)
+    } else if (isQueryParamSet("sendTokensOpen")) {
+      setActiveSlider(Sliders.SEND_TOKENS)
+    } else if (isQueryParamSet("editTerminalDetailsOpen")) {
+      setActiveSlider(Sliders.EDIT_TERMINAL_DETAILS)
     }
   }, [])
 
