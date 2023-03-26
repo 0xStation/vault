@@ -38,8 +38,6 @@ export const RequestDetailsContent = ({
     requestId = getQueryParam("requestId") as string
   }
 
-  console.log(requestId)
-
   const { address } = useAccount()
   const { request } = useRequest(requestId as string)
 

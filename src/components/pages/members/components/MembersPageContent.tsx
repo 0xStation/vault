@@ -75,7 +75,7 @@ const MembersPageContent = () => {
                   <Button
                     size="base"
                     onClick={() => {
-                      setActiveSlider(Sliders.EDIT_MEMBERS)
+                      setActiveSlider(Sliders.EDIT_MEMBERS, { value: true })
                     }}
                   >
                     + Add
@@ -98,7 +98,9 @@ const MembersPageContent = () => {
                 }
                 return (
                   <EditButton
-                    onClick={() => setActiveSlider(Sliders.EDIT_MEMBERS)}
+                    onClick={() =>
+                      setActiveSlider(Sliders.EDIT_MEMBERS, { value: true })
+                    }
                     className="ml-2 rounded border border-gray-80"
                   />
                 )

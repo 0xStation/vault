@@ -1,5 +1,6 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
 import { ArrowLeft } from "@icons"
+import { getQueryParam } from "lib/utils/updateQueryParam"
 import { useAutomation } from "models/automation/hooks"
 import { RevShareFrob } from "models/automation/types"
 import Link from "next/link"
@@ -11,12 +12,20 @@ import { AutomationTabBar } from "../../../automation/AutomationTabBar"
 
 export const AutomationDetailsContent = () => {
   const router = useRouter()
-  const { automation } = useAutomation(router.query.automationId as string)
+  let { automationId } = router.query
+  // if the query param is set "shallowly" next router doesn't pick up on it
+  // this happens on desktop, if the user clicks a request from the list
+  // we can still grab it from the url manually
+  if (!automationId) {
+    automationId = getQueryParam("automationId") as string
+  }
+
+  const { automation } = useAutomation(automationId as string)
   const [revShare, setRevShare] = useState<RevShareFrob>()
 
   // prevents sliders from making content invisible as they disappear when query param is unset
   useEffect(() => {
-    if (automation && router.query.automationId) {
+    if (automation && automationId) {
       setRevShare(automation)
     }
   }, [automation, router.query.automationId])

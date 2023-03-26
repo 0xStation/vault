@@ -8,6 +8,7 @@ import { addressesAreEqual } from "lib/utils"
 import { useAccountItemsToClaim } from "models/account/hooks"
 import { RevShareWithdraw } from "models/automation/types"
 import { RequestFrob } from "models/request/types"
+import { useRouter } from "next/router"
 import { useReducer, useState } from "react"
 
 enum BatchEvent {
@@ -93,7 +94,15 @@ const batchReducer = (
 }
 
 const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
-  const { isLoading, items, mutate } = useAccountItemsToClaim(recipientAddress)
+  const router = useRouter()
+  // check if profile page vs terminal page
+  let recipientAddressParam = router.query.address as string
+  const { isLoading, items, mutate, error } = useAccountItemsToClaim(
+    recipientAddressParam,
+  )
+  console.log("error", error)
+  console.log("items", items)
+
   const [claimDrawerItemPending, setClaimDrawerItemPending] =
     useState<boolean>(false)
   const [claimDrawerOpen, setClaimDrawerOpen] = useState<boolean>(false)

@@ -29,7 +29,7 @@ export const ProfileReadyToClaim = () => {
           <span
             className="cursor-pointer"
             onClick={() => {
-              setActiveSlider(Sliders.CLAIM_TOKENS)
+              setActiveSlider(Sliders.CLAIM_TOKENS, { value: true })
             }}
           >
             <ReadyToClaim address={accountAddress} />

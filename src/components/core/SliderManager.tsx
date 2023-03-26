@@ -140,7 +140,7 @@ const SliderManager = () => {
       setActiveSlider(Sliders.CREATE_AUTOMATION)
     } else if (isQueryParamSet("createTerminalOpen")) {
       setActiveSlider(Sliders.CREATE_TERMINAL)
-    } else if (isQueryParamSet("automationDetailsOpen")) {
+    } else if (isQueryParamSet("automationId")) {
       setActiveSlider(Sliders.AUTOMATION_DETAILS)
     } else if (isQueryParamSet("claimTokensOpen")) {
       setActiveSlider(Sliders.CLAIM_TOKENS)

@@ -105,7 +105,10 @@ export const AccountNavBar = () => {
                             accountAddress: primaryWallet?.address,
                             userId: user?.userId,
                           })
-                          setActiveSlider(Sliders.CREATE_TERMINAL)
+
+                          setActiveSlider(Sliders.CREATE_TERMINAL, {
+                            value: true,
+                          })
                         }}
                       >
                         + New Project
@@ -117,8 +120,13 @@ export const AccountNavBar = () => {
             </div>
             <NetworkDropdown />
             <div
-              className="h-8 w-8 rounded bg-gray-90 p-1"
-              onClick={() => setNotificationOpen(true)}
+              className="h-8 w-8 cursor-pointer rounded bg-gray-90 p-1"
+              onClick={() => {
+                setNotificationOpen(true)
+                setActiveSlider(Sliders.EMAIL_NOTIFICATIONS, {
+                  value: true,
+                })
+              }}
             >
               <BellIcon />
             </div>

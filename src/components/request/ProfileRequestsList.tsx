@@ -112,7 +112,9 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
                                   key={`request-${idx}`}
                                   request={request}
                                   triggerDetails={(request) => {
-                                    setActiveSlider(Sliders.REQUEST_DETAILS)
+                                    setActiveSlider(Sliders.REQUEST_DETAILS, {
+                                      id: request.id,
+                                    })
                                   }}
                                 />
                               )

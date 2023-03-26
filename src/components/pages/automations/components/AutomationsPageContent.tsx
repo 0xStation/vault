@@ -94,7 +94,9 @@ const AutomationsPageContent = () => {
                             `/${router.query.chainNameAndSafeAddress}/automations/new`,
                           )
                         } else {
-                          setActiveSlider(Sliders.CREATE_AUTOMATION)
+                          setActiveSlider(Sliders.CREATE_AUTOMATION, {
+                            value: true,
+                          })
                         }
                       }}
                     >
@@ -126,7 +128,9 @@ const AutomationsPageContent = () => {
                 automation={automation}
                 key={`automation-${automation.id}`}
                 onClick={() => {
-                  setActiveSlider(Sliders.AUTOMATION_DETAILS)
+                  setActiveSlider(Sliders.AUTOMATION_DETAILS, {
+                    id: automation.id,
+                  })
                 }}
               />
             ))}

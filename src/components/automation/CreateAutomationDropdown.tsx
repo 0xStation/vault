@@ -51,7 +51,7 @@ export const CreateAutomationDropdown = () => {
               return (
                 <span
                   onClick={() => {
-                    setActiveSlider(Sliders.CREATE_AUTOMATION)
+                    setActiveSlider(Sliders.CREATE_AUTOMATION, { value: true })
                   }}
                 >
                   Revenue share
