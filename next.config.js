@@ -1,17 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "c.neevacdn.net", // nft previews
-      "pbs.twimg.com",
-      "user-images.githubusercontent.com",
-      "station-images.nyc3.digitaloceanspaces.com",
-      "cdn.discordapp.com",
-      "avatar.tobi.sh",
-      "gateway.ipfs.io", // ENS avatars,
-      "i.seadn.io", // ENS avatars
-      "assets.coingecko.com", // token logos from N
+    // support images from all domains, needed because user pfps can come from all URLs
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*",
+      },
+      {
+        protocol: "http",
+        hostname: "*",
+      },
     ],
+    // enable SVGs
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 }
 

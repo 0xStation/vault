@@ -83,14 +83,17 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                 <div key={`nft-${idx}`}>
                   <div className="relative h-[175px] w-[175px]">
                     <Image
-                      src={response.nft.previews[1].URI}
-                      alt={response.nft.description}
+                      src={
+                        response?.nft?.previews?.[1].URI ||
+                        response?.nft?.media?.URI
+                      }
+                      alt={response?.nft?.description}
                       fill={true}
                       className="rounded border border-gray-80 object-contain"
                     />
                   </div>
-                  <h3 className="mt-2">{response.nft.title}</h3>
-                  <h4 className="text-base text-gray">0.15 ETH · $305.38</h4>
+                  <h3 className="mt-2">{response?.nft?.title}</h3>
+                  {/* <h4 className="text-base text-gray">0.15 ETH · $305.38</h4> */}
                 </div>
               )
             })}
