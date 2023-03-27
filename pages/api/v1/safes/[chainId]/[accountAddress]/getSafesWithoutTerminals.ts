@@ -1,7 +1,7 @@
 import axios from "axios"
 import db from "db"
+import { isAddress } from "ethers/lib/utils.js"
 import { safeEndpoint } from "lib/api/safe/utils"
-import { sortAddressesIncreasing } from "lib/utils/sortAddressesIncreasing"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -38,7 +38,7 @@ export default async function handler(
       where: {
         chainId: chainId,
         safeAddress: {
-          in: [...(safesByOwner || [])],
+          in: safesByOwner,
         },
       },
       select: {
@@ -51,12 +51,12 @@ export default async function handler(
     return res.end(JSON.stringify(`Failed to fetch safes ${err}`))
   }
 
-  const terminalSafeSetDifference = safesByOwner.filter(
-    (address: string) =>
-      !terminalAddresses.includes(toChecksumAddress(address)),
-  )
+  const terminalSafeSetDifference = safesByOwner.filter((address: string) => {
+    return (
+      isAddress(address) &&
+      !terminalAddresses.includes(toChecksumAddress(address))
+    )
+  })
 
-  return res
-    .status(200)
-    .json(sortAddressesIncreasing(terminalSafeSetDifference))
+  return res.status(200).json(terminalSafeSetDifference)
 }
