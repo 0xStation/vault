@@ -1,11 +1,16 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import LoadingSpinner from "@ui/LoadingSpinner"
 import { Network } from "@ui/Network"
+import { TRACKING } from "lib/constants"
 import truncateString from "lib/utils"
+import { trackClick } from "lib/utils/amplitude"
 import { Dispatch, SetStateAction, useState } from "react"
 import { VIEW } from "../../../pages/project/new"
 import { useSafeMetadata } from "../../hooks/safe/useSafeMetadata"
 import { useTerminalCreationStore } from "../../hooks/stores/useTerminalCreationStore"
 import SelectorCard from "../core/SelectorCard"
+
+const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
 
 export const ExistingSafeCard = ({
   chainId,
@@ -24,6 +29,8 @@ export const ExistingSafeCard = ({
     chainId: chainId,
   })
 
+  const { primaryWallet, user } = useDynamicContext()
+
   const plural =
     safeMetadata?.signers?.length && safeMetadata?.signers?.length === 1
       ? ""
@@ -33,6 +40,14 @@ export const ExistingSafeCard = ({
     <SelectorCard
       className="mb-2"
       onClick={() => {
+        trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
+          pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+          accountAddress: primaryWallet?.address,
+          safeAddress: safeAddress,
+          userId: user?.userId,
+          flow: FLOW.IMPORT,
+          chainId,
+        })
         setFormData({ ...formData, address: safeAddress })
         setView(VIEW.CREATE_FORM)
       }}
@@ -52,6 +67,14 @@ export const ExistingSafeCard = ({
             className="w-fit text-sm text-violet"
             onClick={(e) => {
               e.stopPropagation()
+              trackClick(EVENT_NAME.VIEW_SAFE_DETAILS_CLICKED, {
+                pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+                accountAddress: primaryWallet?.address,
+                safeAddress: safeAddress,
+                userId: user?.userId,
+                flow: FLOW.IMPORT,
+                chainId,
+              })
               setSelectedAddress(safeAddress)
             }}
           >

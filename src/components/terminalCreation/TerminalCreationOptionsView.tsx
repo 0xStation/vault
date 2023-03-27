@@ -1,4 +1,6 @@
-import { SUPPORTED_CHAINS } from "lib/constants"
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
+import { SUPPORTED_CHAINS, TRACKING } from "lib/constants"
+import { trackClick } from "lib/utils/amplitude"
 import { useRouter } from "next/router"
 import React, { Dispatch, SetStateAction, useEffect } from "react"
 import { FieldValues, useForm } from "react-hook-form"
@@ -12,6 +14,8 @@ import { SelectorCard } from "../core/SelectorCard"
 import SelectWithLabel from "../form/SelectWithLabel"
 import { ExistingSafeCard } from "./ExistingSafeCard"
 import Layout from "./Layout"
+
+const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
 
 export const TerminalCreationOptionsView = ({
   setView,
@@ -29,6 +33,7 @@ export const TerminalCreationOptionsView = ({
 
   const setFormData = useTerminalCreationStore((state) => state.setFormData)
   const formData = useTerminalCreationStore((state) => state.formData)
+  const { primaryWallet, user } = useDynamicContext()
 
   const {
     register,
@@ -114,7 +119,16 @@ export const TerminalCreationOptionsView = ({
           <>
             <SelectorCard
               className="mt-7 mb-6"
-              onClick={() => setView(VIEW.CREATE_FORM)}
+              onClick={() => {
+                trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
+                  pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+                  accountAddress: primaryWallet?.address,
+                  userId: user?.userId,
+                  flow: FLOW.CREATE,
+                  chainId: chain?.id,
+                })
+                setView(VIEW.CREATE_FORM)
+              }}
             >
               <p className="font-bold">Create a Project with a new Safe</p>
               <p className="text-gray">

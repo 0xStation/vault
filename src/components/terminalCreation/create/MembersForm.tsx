@@ -1,10 +1,12 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { BytesLike } from "@ethersproject/bytes"
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import { Button } from "@ui/Button"
-import { SAFE_PROXY_CREATION_TOPIC } from "lib/constants"
+import { SAFE_PROXY_CREATION_TOPIC, TRACKING } from "lib/constants"
 import { decodeProxyEvent, encodeSafeSetup } from "lib/encodings/safe/setup"
 import { addressesAreEqual, isEns } from "lib/utils"
+import { trackClick, trackError } from "lib/utils/amplitude"
 import { getTransactionLink } from "lib/utils/getTransactionLink"
 import { networks } from "lib/utils/networks"
 import { useRouter } from "next/router"
@@ -27,6 +29,8 @@ import LoadingSpinner from "../../core/LoadingSpinner"
 import AddressInput from "../../form/AddressInput"
 import QuorumInput from "../../form/QuorumInput"
 import Layout from "../Layout"
+
+const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
 
 const LoadingScreen = ({
   setShowLoadingScreen,
@@ -106,6 +110,7 @@ export const MembersView = ({
   const [txnHash, setTxnHash] = useState<`0x${string}` | undefined>(undefined)
   const router = useRouter()
   const { createTerminal } = useCreateTerminal()
+  const { primaryWallet, user } = useDynamicContext()
 
   useWaitForTransaction({
     confirmations: 1,
@@ -209,6 +214,17 @@ export const MembersView = ({
       ),
     )
 
+    trackClick(EVENT_NAME.HANDLE_NEXT_CLICKED, {
+      pageName: PAGE_NAME.PROJECT_CREATION_DETAILS_FORM,
+      accountAddress: primaryWallet?.address,
+      userId: user?.userId,
+      flow: FLOW.CREATE,
+      chainId: formData?.chainId,
+      name: formData?.name,
+      quorum: data.quorum,
+      members: [...membersFieldValue],
+    })
+
     setFormData({
       ...formData,
       quorum: data.quorum,
@@ -246,6 +262,14 @@ export const MembersView = ({
         })
       }
       setTerminalCreationError("Failed to create transaction.")
+      trackError(EVENT_NAME.PROJECT_CREATION_ERROR, {
+        pageName: PAGE_NAME.MEMBERS_FORM,
+        accountAddress: primaryWallet?.address,
+        userId: user?.userId,
+        flow: FLOW.CREATE,
+        chainId: formData?.chainId,
+        msg: err as string,
+      })
     }
   }
   const onError = (errors: any) => {
