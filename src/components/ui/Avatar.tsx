@@ -1,6 +1,6 @@
+import { PFP_MAP } from "lib/constants"
 import Image from "next/image"
 import { useEnsAvatar } from "wagmi"
-import { DefaultPfp } from "../core/DefaultPfp"
 
 interface AvatarProps {
   size?: "xs" | "sm" | "base" | "lg"
@@ -34,7 +34,15 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
           className={`rounded-full object-cover ${className}`}
         />
       ) : (
-        <DefaultPfp size={size} />
+        <Image
+          src={
+            // convert hexadecimal to its number value and modulo by the num of pfps
+            PFP_MAP[(parseInt(Number(address)?.toString(), 10) % 4) as number]
+          }
+          alt="Account profile picture. If no profile picture is set, there is a linear gradient."
+          fill={true}
+          className={`rounded-full object-cover ${className}`}
+        />
       )}
     </div>
   )
