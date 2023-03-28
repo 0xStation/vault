@@ -1,10 +1,17 @@
 import { useState } from "react"
 import useSWR from "swr"
+import LoadingSpinner from "../src/components/core/LoadingSpinner"
 import { useToast } from "../src/hooks/useToast"
+
+enum TodoStatus {
+  PENDING = "pending",
+  COMPLETED = "completed",
+}
 
 type Todo = {
   id: number
   text: string
+  status: TodoStatus
 }
 
 let todos = [] as Todo[]
@@ -17,7 +24,7 @@ const addTodo = async (todo: Todo, isError: boolean) => {
     throw new Error("Failed to add new item!")
   }
 
-  todos = [...todos, todo]
+  todos = [...todos, { ...todo, status: TodoStatus.COMPLETED }]
   return todos
 }
 
@@ -33,11 +40,16 @@ const TodoPage = () => {
 
   const onSubmit = async (type: string) => {
     const isError = type === "error"
-    const todo = { id: Date.now(), text }
+
+    const newTodo = {
+      id: Date.now(),
+      text,
+      status: TodoStatus.PENDING,
+    }
 
     try {
-      await mutate(addTodo(todo, isError), {
-        optimisticData: [...(data as Todo[]), todo],
+      await mutate(addTodo(newTodo, isError), {
+        optimisticData: [...(data as Todo[]), newTodo],
         rollbackOnError: true,
         populateCache: false,
         revalidate: false,
@@ -82,8 +94,14 @@ const TodoPage = () => {
         {data
           ? data.map((todo) => {
               return (
-                <li className="bg-gray-90 p-2" key={todo.id}>
-                  {todo.text}
+                <li
+                  className="flex w-full flex-row justify-between rounded bg-gray-90 p-2 text-white"
+                  key={todo.id}
+                >
+                  <span className="flex flex-row items-center space-x-2">
+                    {todo.status === TodoStatus.PENDING && <LoadingSpinner />}
+                    <span>{todo.text}</span>
+                  </span>
                 </li>
               )
             })
