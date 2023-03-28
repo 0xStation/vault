@@ -4,7 +4,6 @@ import { Button } from "@ui/Button"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
-import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
@@ -23,16 +22,6 @@ import RequestTableRow from "../core/RequestTableRow"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
-
-const RightSlider = dynamic(() =>
-  import("../ui/RightSlider").then((mod) => mod.RightSlider),
-)
-
-const RequestDetailsContent = dynamic(() =>
-  import("../pages/requestDetails/components/RequestDetailsContent").then(
-    (mod) => mod.RequestDetailsContent,
-  ),
-)
 
 type BatchState = {
   selectedRequests: RequestFrob[]

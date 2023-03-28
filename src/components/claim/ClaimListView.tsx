@@ -95,13 +95,22 @@ const batchReducer = (
 
 const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
   const router = useRouter()
+  console.log(router)
   // check if profile page vs terminal page
-  let recipientAddressParam = router.query.address as string
+  let recipientAddressParam
+  const { address, chainNameAndSafeAddress } = router.query as {
+    address: string | undefined
+    chainNameAndSafeAddress: string | undefined
+  }
+  if (address) {
+    recipientAddressParam = address as string
+  } else if (chainNameAndSafeAddress) {
+    const safeAddress = chainNameAndSafeAddress.split(":")[1]
+    recipientAddressParam = safeAddress as string
+  }
   const { isLoading, items, mutate, error } = useAccountItemsToClaim(
     recipientAddressParam,
   )
-  console.log("error", error)
-  console.log("items", items)
 
   const [claimDrawerItemPending, setClaimDrawerItemPending] =
     useState<boolean>(false)
