@@ -93,9 +93,8 @@ const batchReducer = (
   }
 }
 
-const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
+const ClaimListView = () => {
   const router = useRouter()
-  console.log(router)
   // check if profile page vs terminal page
   let recipientAddressParam
   const { address, chainNameAndSafeAddress } = router.query as {
@@ -221,7 +220,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       <ClaimItemsDrawer
         isOpen={claimDrawerOpen}
         setIsOpen={setClaimDrawerOpen}
-        recipientAddress={recipientAddress}
+        recipientAddress={recipientAddressParam as string}
         revShareWithdraws={selectedRevShareWithdraws}
         requests={selectedRequests}
         optimisticallyShow={optimisticallyShow}
@@ -232,7 +231,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       <ClaimItemsDrawer
         isOpen={claimBatchOpen}
         setIsOpen={setClaimBatchOpen}
-        recipientAddress={recipientAddress}
+        recipientAddress={recipientAddressParam as string}
         revShareWithdraws={batchState.selectedRevShareWithdraws}
         requests={batchState.selectedRequests}
         optimisticallyShow={optimisticallyShow}

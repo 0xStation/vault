@@ -14,7 +14,7 @@ const ProfileClaimListView = () => {
       <Link href={`/u/${accountAddress}/profile`} className="block w-fit px-4">
         <ArrowLeft />
       </Link>
-      <ClaimListView recipientAddress={accountAddress} />
+      <ClaimListView />
     </div>
   )
 }

@@ -8,7 +8,7 @@ export const AccountNavBar = () => {
   const { address: accountAddress } = useAccount()
   return (
     <nav className="flex w-full flex-row items-center justify-between px-4 pt-12 pb-3">
-      <div className="hover:rotate-12 hover:animate-bounce">
+      <div className="hover:rotate-12">
         <Link href={`/u/${accountAddress}/profile`}>
           <Image
             src="/images/terminal-logo.webp"

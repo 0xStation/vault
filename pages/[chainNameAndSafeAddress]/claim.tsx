@@ -1,15 +1,11 @@
 import { ArrowLeft } from "@icons"
 import ClaimListView from "components/claim/ClaimListView"
 import AccountNavBar from "components/core/AccountNavBar"
-import { convertGlobalId } from "models/terminal/utils"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
 const TerminalClaimListView = ({}: {}) => {
   const router = useRouter()
-  const { address } = convertGlobalId(
-    router.query.chainNameAndSafeAddress as string,
-  )
 
   return (
     <div className="flex h-screen grow flex-col pb-4">
@@ -20,7 +16,7 @@ const TerminalClaimListView = ({}: {}) => {
       >
         <ArrowLeft />
       </Link>
-      <ClaimListView recipientAddress={address!} />
+      <ClaimListView />
     </div>
   )
 }

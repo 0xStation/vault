@@ -98,7 +98,7 @@ const SliderManager = () => {
         return <AutomationDetailsContent />
 
       case Sliders.CLAIM_TOKENS:
-        return <ClaimListView recipientAddress={""} />
+        return <ClaimListView />
 
       case Sliders.EMAIL_NOTIFICATIONS:
         return (
