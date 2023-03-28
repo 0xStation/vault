@@ -1,5 +1,6 @@
 import { useState } from "react"
 import useSWR from "swr"
+import { useToast } from "../src/hooks/useToast"
 
 type Todo = {
   id: number
@@ -9,8 +10,13 @@ type Todo = {
 let todos = [] as Todo[]
 const delay = () => new Promise((resolve) => setTimeout(resolve, 1000))
 
-const addTodo = async (todo: Todo) => {
+const addTodo = async (todo: Todo, isError: boolean) => {
   await delay()
+
+  if (isError) {
+    throw new Error("Failed to add new item!")
+  }
+
   todos = [...todos, todo]
   return todos
 }
@@ -21,16 +27,27 @@ const getTodos = async () => {
 }
 
 const TodoPage = () => {
+  const { successToast, errorToast } = useToast()
   const [text, setText] = useState<string>("")
   const { data, mutate } = useSWR("/api/todos", getTodos)
-  const onSubmit = () => {
+
+  const onSubmit = async (type: string) => {
+    const isError = type === "error"
     const todo = { id: Date.now(), text }
-    mutate(addTodo(todo), {
-      optimisticData: [...(data as Todo[]), todo],
-      populateCache: false,
-      revalidate: false,
-    })
-    setText("")
+
+    try {
+      await mutate(addTodo(todo, isError), {
+        optimisticData: [...(data as Todo[]), todo],
+        rollbackOnError: true,
+        populateCache: false,
+        revalidate: false,
+      })
+      setText("")
+      successToast({ message: "success!" })
+    } catch (error) {
+      errorToast({ message: "Error adding todo!" })
+      console.error(error)
+    }
   }
 
   return (
@@ -48,10 +65,17 @@ const TodoPage = () => {
         />
         <button
           type="submit"
-          onClick={() => onSubmit()}
+          onClick={() => onSubmit("success")}
           className="border border-violet-80 bg-violet px-2"
         >
           Add
+        </button>
+        <button
+          type="submit"
+          onClick={() => onSubmit("error")}
+          className="border border-violet-80 bg-violet px-2"
+        >
+          Add (with error)
         </button>
       </form>
       <ul className="mt-6 space-y-2">
