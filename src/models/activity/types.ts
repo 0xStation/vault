@@ -1,6 +1,6 @@
 import { Activity as PrismaActivity } from "@prisma/client"
 
-type ActivityMetadata = {
+export type ActivityMetadata = {
   comment?: string
   edited?: boolean
   transactionHash?: string
