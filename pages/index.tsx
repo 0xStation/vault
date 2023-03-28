@@ -18,7 +18,7 @@ type FooterNavOption = {
 }
 
 const { ABOUT, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
-const { EVENT_NAME, PAGE_NAME } = TRACKING
+const { EVENT_NAME, LOCATION } = TRACKING
 
 const options = (router: any) =>
   [
@@ -80,7 +80,7 @@ function Page() {
               fullWidth={isMobile}
               onClick={() => {
                 trackClick(EVENT_NAME.LOG_IN_CLICKED, {
-                  pageName: PAGE_NAME.LANDING,
+                  location: LOCATION.LANDING,
                 })
                 setShowAuthFlow(true)
               }}
@@ -92,6 +92,9 @@ function Page() {
               variant="unemphasized"
               fullWidth={isMobile}
               onClick={() => {
+                trackClick(EVENT_NAME.GET_EARLY_ACCESS_CLICKED, {
+                  location: LOCATION.LANDING,
+                })
                 router.push(TYPE_FORM)
               }}
             >

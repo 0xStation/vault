@@ -83,7 +83,7 @@ export const EVENT_TYPE = {
 }
 
 export const TRACKING = {
-  PAGE_NAME: {
+  LOCATION: {
     LANDING: "landing",
     NAVIGATION: "navigation",
     PROFILE: "profile",
@@ -96,17 +96,11 @@ export const TRACKING = {
     IMPORT: "import",
     CREATE: "create",
   },
-  VIEW: {
-    MOBILE: "mobile",
-    DESKTOP: "desktop",
-  },
   EVENT_NAME: {
     GET_EARLY_ACCESS_CLICKED: "get_early_access_clicked",
     LOG_IN_CLICKED: "log_in_clicked",
     LOG_OUT_CLICKED: "log_out_clicked",
-    CONNECT_WALLET_CLICKED: "connect_wallet_clicked",
     USER_LOGGED_IN: "user_logged_in",
-    USER_LOGGED_OUT: "user_logged_out",
     CREATE_PROJECT_CLICKED: "create_project_clicked",
     VIEW_SAFE_DETAILS_CLICKED: "view_safe_details_clicked",
     HANDLE_NEXT_CLICKED: "handle_next_clicked",

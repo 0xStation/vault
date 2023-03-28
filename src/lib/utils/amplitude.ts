@@ -11,11 +11,10 @@ import { isDev, isStaging } from "./isEnv"
 const { CLICK, IMPRESSION, EVENT, ERROR } = EVENT_TYPE
 
 type BaseProperties = {
-  pageName: string
+  location: string
   userId: string
   accountAddress: string
   safeAddress: string
-  mobile: boolean
   flow: string
   chainId: number
   msg: string
@@ -51,10 +50,9 @@ export const trackClick = (
   }
 
   const {
-    pageName,
+    location,
     userId,
     accountAddress,
-    mobile,
     flow,
     safeAddress,
     chainId,
@@ -64,11 +62,10 @@ export const trackClick = (
   } = metadata
   track(eventName, {
     event_category: CLICK,
-    page: pageName,
+    location,
     account_address: accountAddress,
     safe_address: safeAddress,
     user_id: userId,
-    mobile,
     flow,
     chainId,
     name,
@@ -85,15 +82,14 @@ export const trackImpression = (
     return
   }
 
-  const { pageName, userId, accountAddress, mobile, flow, chainId } = metadata
+  const { location, userId, accountAddress, flow, chainId } = metadata
 
   track(eventName, {
     event_category: IMPRESSION,
-    page: pageName,
+    location,
     account_address: accountAddress,
     user_id: userId,
     flow,
-    mobile,
     chainId,
   })
 }
@@ -106,15 +102,14 @@ export const trackEvent = (
     return
   }
 
-  const { pageName, userId, accountAddress, mobile, flow, chainId } = metadata
+  const { location, userId, accountAddress, flow, chainId } = metadata
 
   track(eventName, {
     event_category: EVENT,
-    page: pageName,
+    location,
     account_address: accountAddress,
     user_id: userId,
     flow,
-    mobile,
     chainId,
   })
 }
@@ -127,25 +122,16 @@ export const trackError = (
     return
   }
 
-  const {
-    pageName,
-    userId,
-    accountAddress,
-    safeAddress,
-    mobile,
-    flow,
-    chainId,
-    msg,
-  } = metadata
+  const { location, userId, accountAddress, safeAddress, flow, chainId, msg } =
+    metadata
 
   track(eventName, {
     event_category: ERROR,
-    page: pageName,
+    location,
     account_address: accountAddress,
     safe_address: safeAddress,
     user_id: userId,
     flow,
-    mobile,
     chainId,
     msg,
   })

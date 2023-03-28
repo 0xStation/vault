@@ -15,7 +15,7 @@ import SelectWithLabel from "../form/SelectWithLabel"
 import { ExistingSafeCard } from "./ExistingSafeCard"
 import Layout from "./Layout"
 
-const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
+const { EVENT_NAME, LOCATION, FLOW } = TRACKING
 
 export const TerminalCreationOptionsView = ({
   setView,
@@ -121,7 +121,7 @@ export const TerminalCreationOptionsView = ({
               className="mt-7 mb-6"
               onClick={() => {
                 trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
-                  pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+                  location: LOCATION.PROJECT_CREATION_OPTIONS_FORM,
                   accountAddress: primaryWallet?.address,
                   userId: user?.userId,
                   flow: FLOW.CREATE,

@@ -15,7 +15,7 @@ import { globalId } from "../../../models/terminal/utils"
 import { InputWithLabel } from "../../form"
 import TextareaWithLabel from "../../form/TextareaWithLabel"
 
-const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
+const { EVENT_NAME, LOCATION, FLOW } = TRACKING
 
 export const TerminalDetailsForm = ({
   setCreateTerminalView,
@@ -53,7 +53,7 @@ export const TerminalDetailsForm = ({
     // is import flow if the safe address already exists
     const isImportFlow = formData.address && fieldValues.name
     trackClick(EVENT_NAME.HANDLE_NEXT_CLICKED, {
-      pageName: PAGE_NAME.PROJECT_CREATION_DETAILS_FORM,
+      location: LOCATION.PROJECT_CREATION_DETAILS_FORM,
       accountAddress: primaryWallet?.address,
       userId: user?.userId,
       flow: isImportFlow ? FLOW.IMPORT : FLOW.CREATE,
@@ -90,7 +90,7 @@ export const TerminalDetailsForm = ({
           })
         }
         trackError(EVENT_NAME.PROJECT_CREATION_ERROR, {
-          pageName: PAGE_NAME.PROJECT_CREATION_DETAILS_FORM,
+          location: LOCATION.PROJECT_CREATION_DETAILS_FORM,
           accountAddress: primaryWallet?.address,
           userId: user?.userId,
           flow: isImportFlow ? FLOW.IMPORT : FLOW.CREATE,
@@ -137,7 +137,7 @@ export const TerminalDetailsForm = ({
           message: "Something went wrong.",
         })
         trackError(EVENT_NAME.PROJECT_CREATION_ERROR, {
-          pageName: PAGE_NAME.PROJECT_CREATION_DETAILS_FORM,
+          location: LOCATION.PROJECT_CREATION_DETAILS_FORM,
           accountAddress: primaryWallet?.address,
           userId: user?.userId,
           flow: isImportFlow ? FLOW.IMPORT : FLOW.CREATE,

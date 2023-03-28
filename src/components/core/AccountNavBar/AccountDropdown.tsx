@@ -27,7 +27,7 @@ import CreateTerminalContent from "../../pages/createTerminal/components/CreateT
 import { AvatarAddress } from "../AvatarAddress"
 import NetworkDropdown from "../NetworkDropdown"
 
-const { PAGE_NAME, EVENT_NAME } = TRACKING
+const { LOCATION, EVENT_NAME } = TRACKING
 
 const RightSlider = dynamic(() =>
   import("../../ui/RightSlider").then((mod) => mod.RightSlider),
@@ -119,8 +119,7 @@ export const AccountNavBar = () => {
                         size="sm"
                         onClick={() => {
                           trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
-                            mobile: true,
-                            pageName: PAGE_NAME.NAVIGATION,
+                            location: LOCATION.NAVIGATION,
                             accountAddress: primaryWallet?.address,
                             userId: user?.userId,
                           })
@@ -137,8 +136,7 @@ export const AccountNavBar = () => {
                         size="base"
                         onClick={() => {
                           trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
-                            mobile: false,
-                            pageName: PAGE_NAME.NAVIGATION,
+                            location: LOCATION.NAVIGATION,
                             accountAddress: primaryWallet?.address,
                             userId: user?.userId,
                           })
@@ -190,7 +188,7 @@ export const AccountNavBar = () => {
                 <button
                   onClick={() => {
                     trackClick(EVENT_NAME.LOG_OUT_CLICKED, {
-                      pageName: PAGE_NAME.NAVIGATION,
+                      location: LOCATION.NAVIGATION,
                       accountAddress: primaryWallet?.address,
                       userId: user?.userId,
                     })
@@ -211,15 +209,15 @@ export const AccountNavBar = () => {
               variant="primary"
               size="base"
               onClick={() => {
-                trackClick(EVENT_NAME.CONNECT_WALLET_CLICKED, {
-                  pageName: PAGE_NAME.NAVIGATION,
+                trackClick(EVENT_NAME.LOG_IN_CLICKED, {
+                  location: LOCATION.NAVIGATION,
                   accountAddress: primaryWallet?.address,
                   userId: user?.userId as string,
                 })
                 setShowAuthFlow(true)
               }}
             >
-              Connect wallet
+              Log in
             </Button>
           </div>
         )}

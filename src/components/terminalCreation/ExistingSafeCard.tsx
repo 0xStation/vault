@@ -10,7 +10,7 @@ import { useSafeMetadata } from "../../hooks/safe/useSafeMetadata"
 import { useTerminalCreationStore } from "../../hooks/stores/useTerminalCreationStore"
 import SelectorCard from "../core/SelectorCard"
 
-const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
+const { EVENT_NAME, LOCATION, FLOW } = TRACKING
 
 export const ExistingSafeCard = ({
   chainId,
@@ -41,7 +41,7 @@ export const ExistingSafeCard = ({
       className="mb-2"
       onClick={() => {
         trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
-          pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+          location: LOCATION.PROJECT_CREATION_OPTIONS_FORM,
           accountAddress: primaryWallet?.address,
           safeAddress: safeAddress,
           userId: user?.userId,
@@ -68,7 +68,7 @@ export const ExistingSafeCard = ({
             onClick={(e) => {
               e.stopPropagation()
               trackClick(EVENT_NAME.VIEW_SAFE_DETAILS_CLICKED, {
-                pageName: PAGE_NAME.PROJECT_CREATION_OPTIONS_FORM,
+                location: LOCATION.PROJECT_CREATION_OPTIONS_FORM,
                 accountAddress: primaryWallet?.address,
                 safeAddress: safeAddress,
                 userId: user?.userId,

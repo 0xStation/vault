@@ -30,7 +30,7 @@ import AddressInput from "../../form/AddressInput"
 import QuorumInput from "../../form/QuorumInput"
 import Layout from "../Layout"
 
-const { EVENT_NAME, PAGE_NAME, FLOW } = TRACKING
+const { EVENT_NAME, LOCATION, FLOW } = TRACKING
 
 const LoadingScreen = ({
   setShowLoadingScreen,
@@ -215,7 +215,7 @@ export const MembersView = ({
     )
 
     trackClick(EVENT_NAME.HANDLE_NEXT_CLICKED, {
-      pageName: PAGE_NAME.PROJECT_CREATION_DETAILS_FORM,
+      location: LOCATION.MEMBERS_FORM,
       accountAddress: primaryWallet?.address,
       userId: user?.userId,
       flow: FLOW.CREATE,
@@ -263,7 +263,7 @@ export const MembersView = ({
       }
       setTerminalCreationError("Failed to create transaction.")
       trackError(EVENT_NAME.PROJECT_CREATION_ERROR, {
-        pageName: PAGE_NAME.MEMBERS_FORM,
+        location: LOCATION.MEMBERS_FORM,
         accountAddress: primaryWallet?.address,
         userId: user?.userId,
         flow: FLOW.CREATE,
