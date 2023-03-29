@@ -19,8 +19,6 @@ type SliderConfig = {
   queryParam: string
 }
 
-// should these have a "bootup" script that will run on initial page load?
-// thinking for cases where the user has a slider open and refreshes the page
 const sliderOptions: Record<Sliders, SliderConfig> = {
   REQUEST_DETAILS: {
     key: Sliders.REQUEST_DETAILS,
