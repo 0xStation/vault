@@ -113,6 +113,7 @@ export const TRACKING = {
     EXECUTE: "execute",
   },
   EVENT_NAME: {
+    LANDING_PAGE_SEEN: "landing_page_seen",
     GET_EARLY_ACCESS_CLICKED: "get_early_access_clicked",
     LOG_IN_CLICKED: "log_in_clicked",
     LOG_OUT_CLICKED: "log_out_clicked",
