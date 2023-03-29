@@ -41,10 +41,12 @@ export function setQueryParam(key: string, value: string) {
 
 export function deleteQueryParam(key: string) {
   const url = new URL(window.location.href)
+  const previousUrl = window.location.href // store the current URL before modifying it
   url.searchParams.delete(key)
+  const newUrl = url.toString()
 
-  // Update the browser's history without refreshing the page
-  window.history.replaceState({}, "", url.toString())
+  // Update the browser's history with the new URL and the previous URL as state
+  window.history.replaceState({ previousUrl }, "", newUrl)
 }
 
 export function getQueryParam(key: string) {

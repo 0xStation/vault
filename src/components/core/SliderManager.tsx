@@ -73,6 +73,12 @@ const SliderManager = () => {
   )
   const closeSlider = useSliderManagerStore((state) => state.closeSlider)
   const sliderOpen = useSliderManagerStore((state) => state.sliderOpen)
+  const setNextRouter = useSliderManagerStore((state) => state.setNextRouter)
+
+  // initialize the next router
+  useEffect(() => {
+    setNextRouter(router)
+  }, [router])
 
   const sliderContent = () => {
     switch (activeSlider?.key) {
