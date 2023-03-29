@@ -203,6 +203,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       <ClaimItemsDrawer
         isOpen={claimDrawerOpen}
         setIsOpen={setClaimDrawerOpen}
+        recipientAddress={recipientAddress}
         revShareWithdraws={selectedRevShareWithdraws}
         requests={selectedRequests}
         optimisticallyShow={optimisticallyShow}
@@ -213,6 +214,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       <ClaimItemsDrawer
         isOpen={claimBatchOpen}
         setIsOpen={setClaimBatchOpen}
+        recipientAddress={recipientAddress}
         revShareWithdraws={batchState.selectedRevShareWithdraws}
         requests={batchState.selectedRequests}
         optimisticallyShow={optimisticallyShow}

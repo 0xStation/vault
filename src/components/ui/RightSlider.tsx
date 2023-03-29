@@ -16,7 +16,17 @@ export const RightSlider = ({
   return (
     <Transition.Root show={open} as={Fragment} appear={true}>
       <Dialog as="div" className="relative z-10" onClose={() => {}}>
-        <div className="fixed inset-0" />
+        <Transition.Child
+          as={Fragment}
+          enter="ease-in-out duration-500"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in-out duration-500"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" />
+        </Transition.Child>
 
         <div
           className="fixed inset-0 overflow-hidden"

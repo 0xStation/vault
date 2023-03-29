@@ -1,6 +1,7 @@
 import { RequestVariantType } from "@prisma/client"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import { timeSince } from "lib/utils"
+import { ActivityMetadata } from "models/activity/types"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
@@ -142,6 +143,7 @@ export const RequestDetailsContent = ({
                           return {
                             ...a,
                             data: {
+                              ...(a.data as ActivityMetadata),
                               comment: update.comment,
                               edited: true,
                             },

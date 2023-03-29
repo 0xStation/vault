@@ -1,6 +1,6 @@
+import { PFP_MAP } from "lib/constants"
 import Image from "next/image"
 import { useEnsAvatar } from "wagmi"
-import { DefaultPfp } from "../core/DefaultPfp"
 
 interface AvatarProps {
   size?: "xs" | "sm" | "base" | "lg"
@@ -9,10 +9,10 @@ interface AvatarProps {
 }
 
 const sizeMap: { [key: string]: string } = {
-  ["xs"]: "min-h-[16px] min-w-[16px]",
-  ["sm"]: "min-h-[24px] min-w-[24px]",
-  ["base"]: "min-h-[32px] min-w-[32px]",
-  ["lg"]: "min-h-[45px] min-w-[45px]",
+  ["xs"]: "min-h-[16px] min-w-[16px] max-h-[16px] max-w-[16px]",
+  ["sm"]: "min-h-[24px] min-w-[24px] max-h-[24px] max-w-[24px]",
+  ["base"]: "min-h-[32px] min-w-[32px] max-h-[32px] max-w-[32px]",
+  ["lg"]: "min-h-[45px] min-w-[45px] max-h-[45px] max-w-[45px]",
 }
 
 export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
@@ -29,12 +29,20 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
       {ensAvatar ? (
         <Image
           src={ensAvatar}
-          alt="Account profile picture. If no profile picture is set, there is a linear gradient."
+          alt="Account profile picture."
           fill={true}
           className={`rounded-full object-cover ${className}`}
         />
       ) : (
-        <DefaultPfp size={size} />
+        <Image
+          src={
+            // convert hexadecimal to its number value and modulo by the num of pfps
+            PFP_MAP[(parseInt(Number(address)?.toString(), 10) % 4) as number]
+          }
+          alt="Account profile picture. If no profile picture is set, there is a picture of a Terminal."
+          fill={true}
+          className={`rounded-full object-cover ${className}`}
+        />
       )}
     </div>
   )

@@ -374,8 +374,10 @@ export const RequestTokensContent = () => {
                                       const decimals =
                                         getErc20FieldTokenData(index)
                                           ?.decimals || 0
+                                      const decimalValue = v.split(".")[1]
                                       return (
-                                        v.split(".")[1]?.length < decimals ||
+                                        !decimalValue ||
+                                        decimalValue.length < decimals ||
                                         `${decimals} decimal places maximum.`
                                       )
                                       return

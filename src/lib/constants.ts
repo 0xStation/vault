@@ -1,5 +1,17 @@
+import { StaticImageData } from "next/image"
 import { goerli, mainnet, polygon } from "wagmi/chains"
+import pfp1 from "../../public/images/pfps/group-1.png"
+import pfp2 from "../../public/images/pfps/group-2.png"
+import pfp3 from "../../public/images/pfps/group-3.png"
+import pfp4 from "../../public/images/pfps/group-4.png"
 import { RawCall } from "./transactions/call"
+
+export const PFP_MAP = {
+  0: pfp1,
+  1: pfp2,
+  2: pfp3,
+  3: pfp4,
+} as { [key: number]: StaticImageData }
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 export const ZERO_BYTES = "0x"

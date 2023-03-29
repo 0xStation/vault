@@ -133,6 +133,7 @@ const genClaimCall = (
 export const ClaimItemsDrawer = ({
   isOpen,
   setIsOpen,
+  recipientAddress,
   revShareWithdraws,
   requests,
   optimisticallyShow,
@@ -141,6 +142,7 @@ export const ClaimItemsDrawer = ({
 }: {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
+  recipientAddress: string
   revShareWithdraws: RevShareWithdraw[]
   requests: RequestFrob[]
   optimisticallyShow: (
@@ -159,14 +161,12 @@ export const ClaimItemsDrawer = ({
   )
   const router = useRouter()
   const [claimCall, setClaimCall] = useState<RawCall>(
-    genClaimCall(requests, revShareWithdraws, router.query.address as string),
+    genClaimCall(requests, revShareWithdraws, recipientAddress),
   )
 
   useEffect(() => {
     setItems(reduceItems(requests, revShareWithdraws))
-    setClaimCall(
-      genClaimCall(requests, revShareWithdraws, router.query.address as string),
-    )
+    setClaimCall(genClaimCall(requests, revShareWithdraws, recipientAddress))
   }, [requests, revShareWithdraws, router.query.address])
 
   const { setActionsPending } = useSetActionsPending()
