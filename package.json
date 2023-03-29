@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "track": "NEXT_PUBLIC_TRACK=true npm run dev",
     "build": "npx prisma generate && next lint --fix && next build",
     "start": "next start",
     "prisma-dev": "npx prisma migrate dev",
@@ -19,6 +20,7 @@
   "dependencies": {
     "@dynamic-labs/sdk-react": "^0.15.16",
     "@dynamic-labs/wagmi-connector": "^0.15.16",
+    "@amplitude/analytics-browser": "^1.9.1",
     "@ethersproject/hash": "^5.7.0",
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.14",

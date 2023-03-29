@@ -86,3 +86,47 @@ export const subgraphChainIdToChainName: Record<number, string> = {
   5: "goerli",
   137: "polygon",
 }
+
+export const EVENT_TYPE = {
+  CLICK: "click",
+  IMPRESSION: "impression",
+  EVENT: "event",
+  ERROR: "error",
+}
+
+export const TRACKING = {
+  LOCATION: {
+    LANDING: "landing",
+    NAVIGATION: "navigation",
+    PROFILE: "profile",
+    ACTIVATE_PROJECT_OVERLAY: "activate_project_overlay",
+    PROJECT_CREATION_OPTIONS_FORM: "project_creation_options",
+    PROJECT_CREATION_DETAILS_FORM: "project_creation_details_form",
+    MEMBERS_FORM: "members_form",
+  },
+  FLOW: {
+    IMPORT: "import",
+    CREATE: "create",
+  },
+  ACTION: {
+    APPROVE: "approve",
+    EXECUTE: "execute",
+  },
+  EVENT_NAME: {
+    GET_EARLY_ACCESS_CLICKED: "get_early_access_clicked",
+    LOG_IN_CLICKED: "log_in_clicked",
+    LOG_OUT_CLICKED: "log_out_clicked",
+    USER_LOGGED_IN: "user_logged_in",
+    CREATE_PROJECT_CLICKED: "create_project_clicked",
+    VIEW_SAFE_DETAILS_CLICKED: "view_safe_details_clicked",
+    HANDLE_NEXT_CLICKED: "handle_next_clicked",
+    PROJECT_ACTIVATION_OVERLAY_SHOWN: "project_activation_overlay_shown",
+    PROJECT_ACTIVATION_APPROVE_CLICKED: "project_activation_approve_clicked",
+    PROJECT_ACTIVATION_EXECUTE_CLICKED: "project_activation_execute_clicked",
+    GO_TO_PROFILE_CLICKED: "go_to_profile_clicked",
+    BACK_CLICKED: "back_clicked",
+    CLOSE_CLICKED: "close_clicked",
+    PROJECT_CREATION_ERROR: "project_creation_error",
+    PROJECT_ACTIVATION_ERROR: "project_activation_error",
+  },
+}

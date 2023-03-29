@@ -10,7 +10,8 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { SWRConfig } from "swr"
 import "../styles/globals.css"
 
-import { LINKS } from "lib/constants"
+import { LINKS, TRACKING } from "lib/constants"
+import trackerInit, { initializeUser, trackEvent } from "lib/utils/amplitude"
 import { useRouter } from "next/router"
 import AppLayout from "../src/components/core/AppLayout"
 import { useIsRouterLoading } from "../src/hooks/useIsRouterLoading"
@@ -22,6 +23,8 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+const { EVENT_NAME } = TRACKING
 
 const Spinner = () => {
   return (
@@ -75,6 +78,8 @@ const cssOverrides = `
   }
 `
 
+trackerInit()
+
 function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -98,6 +103,12 @@ function App({ Component, pageProps }: AppProps) {
             "zengo",
           ]),
           eventsCallbacks: {
+            onAuthSuccess: (args) => {
+              initializeUser(args?.user?.userId as string)
+              trackEvent(EVENT_NAME.USER_LOGGED_IN, {
+                userId: args?.user?.userId,
+              })
+            },
             onLogout: (args) => {
               router.push("/")
             },

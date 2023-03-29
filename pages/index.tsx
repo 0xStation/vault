@@ -2,7 +2,8 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { StationLogo } from "@icons"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
-import { LINKS } from "lib/constants"
+import { LINKS, TRACKING } from "lib/constants"
+import { trackClick } from "lib/utils/amplitude"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -17,6 +18,7 @@ type FooterNavOption = {
 }
 
 const { ABOUT, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
+const { EVENT_NAME, LOCATION } = TRACKING
 
 const options = (router: any) =>
   [
@@ -76,7 +78,12 @@ function Page() {
               size={isMobile ? "base" : "xl"}
               variant="primary"
               fullWidth={isMobile}
-              onClick={() => setShowAuthFlow(true)}
+              onClick={() => {
+                trackClick(EVENT_NAME.LOG_IN_CLICKED, {
+                  location: LOCATION.LANDING,
+                })
+                setShowAuthFlow(true)
+              }}
             >
               Log in
             </Button>
@@ -85,6 +92,9 @@ function Page() {
               variant="unemphasized"
               fullWidth={isMobile}
               onClick={() => {
+                trackClick(EVENT_NAME.GET_EARLY_ACCESS_CLICKED, {
+                  location: LOCATION.LANDING,
+                })
                 router.push(TYPE_FORM)
               }}
             >

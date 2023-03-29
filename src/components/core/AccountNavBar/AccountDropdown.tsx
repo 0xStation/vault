@@ -10,6 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ui/Dropdown"
+import { TRACKING } from "lib/constants"
+import { trackClick } from "lib/utils/amplitude"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -24,6 +26,8 @@ import EmailNotificationForm from "../../email/EmailNotificationForm"
 import CreateTerminalContent from "../../pages/createTerminal/components/CreateTerminalContent"
 import { AvatarAddress } from "../AvatarAddress"
 import NetworkDropdown from "../NetworkDropdown"
+
+const { LOCATION, EVENT_NAME } = TRACKING
 
 const RightSlider = dynamic(() =>
   import("../../ui/RightSlider").then((mod) => mod.RightSlider),
@@ -47,6 +51,7 @@ export const AccountNavBar = () => {
     isAuthenticated,
     setShowAuthFlow,
     primaryWallet,
+    user,
   } = useDynamicContext()
 
   useEffect(() => {
@@ -113,6 +118,11 @@ export const AccountNavBar = () => {
                         variant="unemphasized"
                         size="sm"
                         onClick={() => {
+                          trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
+                            location: LOCATION.NAVIGATION,
+                            accountAddress: primaryWallet?.address,
+                            userId: user?.userId,
+                          })
                           router.push("/project/new")
                         }}
                       >
@@ -125,6 +135,11 @@ export const AccountNavBar = () => {
                         variant="unemphasized"
                         size="base"
                         onClick={() => {
+                          trackClick(EVENT_NAME.CREATE_PROJECT_CLICKED, {
+                            location: LOCATION.NAVIGATION,
+                            accountAddress: primaryWallet?.address,
+                            userId: user?.userId,
+                          })
                           addQueryParam(
                             router,
                             "createTerminalSliderOpen",
@@ -172,6 +187,11 @@ export const AccountNavBar = () => {
               <DropdownMenuItem>
                 <button
                   onClick={() => {
+                    trackClick(EVENT_NAME.LOG_OUT_CLICKED, {
+                      location: LOCATION.NAVIGATION,
+                      accountAddress: primaryWallet?.address,
+                      userId: user?.userId,
+                    })
                     handleLogOut()
                     setActiveUser(null)
                   }}
@@ -188,9 +208,16 @@ export const AccountNavBar = () => {
             <Button
               variant="primary"
               size="base"
-              onClick={() => setShowAuthFlow(true)}
+              onClick={() => {
+                trackClick(EVENT_NAME.LOG_IN_CLICKED, {
+                  location: LOCATION.NAVIGATION,
+                  accountAddress: primaryWallet?.address,
+                  userId: user?.userId as string,
+                })
+                setShowAuthFlow(true)
+              }}
             >
-              Connect wallet
+              Log in
             </Button>
           </div>
         )}
