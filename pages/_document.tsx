@@ -19,6 +19,12 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/favicons/terminal-logo.ico" />
       </Head>
       <body>
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MGWXHVV"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+          }}
+        />
         <Main />
         <NextScript />
       </body>
