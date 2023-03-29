@@ -10,6 +10,8 @@ import { RevShareWithdraw } from "models/automation/types"
 import { RequestFrob } from "models/request/types"
 import { useRouter } from "next/router"
 import { useReducer, useState } from "react"
+import { useAccount } from "wagmi"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 
 enum BatchEvent {
   ADD_ITEM,
@@ -95,7 +97,18 @@ const batchReducer = (
 
 const ClaimListView = () => {
   const router = useRouter()
-  // check if profile page vs terminal page
+  const isSigner = usePermissionsStore((state) => state.isSigner)
+  const { address: userAddress } = useAccount()
+
+  let pageType = "" as "terminal" | "profile"
+  const path = router.pathname.split("/")[1]
+  if (path === "[chainNameAndSafeAddress]") {
+    pageType = "terminal"
+  }
+  if (path === "u") {
+    pageType = "profile"
+  }
+
   let recipientAddressParam
   const { address, chainNameAndSafeAddress } = router.query as {
     address: string | undefined
@@ -110,6 +123,10 @@ const ClaimListView = () => {
   const { isLoading, items, mutate, error } = useAccountItemsToClaim(
     recipientAddressParam,
   )
+
+  const canView =
+    (isSigner && pageType === "terminal") ||
+    (recipientAddressParam === userAddress && pageType === "profile")
 
   const [claimDrawerItemPending, setClaimDrawerItemPending] =
     useState<boolean>(false)
@@ -213,6 +230,17 @@ const ClaimListView = () => {
       populateCache: false,
       revalidate: false,
     })
+  }
+
+  if (!canView) {
+    return (
+      <div className="flex h-[calc(100%+18px)] flex-col px-4 pt-4">
+        <EmptyState
+          title="You cannot claim these tokens"
+          subtitle="These tokens can only be claimed by the recipient of the request."
+        />
+      </div>
+    )
   }
 
   return (

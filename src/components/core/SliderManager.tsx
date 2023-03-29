@@ -188,7 +188,7 @@ const SliderManager = () => {
     } else if (sliderOpen) {
       closeSlider()
     }
-  }, [router])
+  }, [router.asPath])
 
   return (
     <RightSlider open={sliderOpen} setOpen={() => closeSlider()}>

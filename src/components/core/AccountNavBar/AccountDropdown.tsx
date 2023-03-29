@@ -3,6 +3,7 @@ import { BellIcon } from "@heroicons/react/24/solid"
 import { Avatar } from "@ui/Avatar"
 import BottomDrawer from "@ui/BottomDrawer"
 import Breakpoint from "@ui/Breakpoint"
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ const { LOCATION, EVENT_NAME } = TRACKING
 
 export const AccountNavBar = () => {
   const router = useRouter()
+  const { isMobile } = useBreakpoint()
   const setActiveSlider = useSliderManagerStore(
     (state) => state.setActiveSlider,
   )
@@ -122,10 +124,13 @@ export const AccountNavBar = () => {
             <div
               className="h-8 w-8 cursor-pointer rounded bg-gray-90 p-1"
               onClick={() => {
-                setNotificationOpen(true)
-                setActiveSlider(Sliders.EMAIL_NOTIFICATIONS, {
-                  value: true,
-                })
+                if (isMobile) {
+                  setNotificationOpen(true)
+                } else {
+                  setActiveSlider(Sliders.EMAIL_NOTIFICATIONS, {
+                    value: true,
+                  })
+                }
               }}
             >
               <BellIcon />
