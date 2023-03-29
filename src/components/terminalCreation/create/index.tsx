@@ -1,3 +1,5 @@
+import { TRACKING } from "lib/constants"
+import { trackClick } from "lib/utils/amplitude"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNetwork } from "wagmi"
 import { VIEW } from "../../../../pages/project/new"
@@ -5,6 +7,8 @@ import { useTerminalCreationStore } from "../../../hooks/stores/useTerminalCreat
 import Layout from "../Layout"
 import { MembersView } from "./MembersForm"
 import { TerminalDetailsForm } from "./TerminalDetailsForm"
+
+const { EVENT_NAME, LOCATION } = TRACKING
 
 export enum CREATE_TERMINAL_VIEW {
   DETAILS = "details",
@@ -34,6 +38,9 @@ export const TerminalCreationForm = ({
         <Layout
           backFunc={() => {
             setView(VIEW.CREATION_OPTIONS)
+            trackClick(EVENT_NAME.BACK_CLICKED, {
+              location: LOCATION.PROJECT_CREATION_DETAILS_FORM,
+            })
           }}
         >
           <TerminalDetailsForm setCreateTerminalView={setCreateTerminalView} />

@@ -87,7 +87,15 @@ export const TerminalCreationOptionsView = ({
 
   return (
     <>
-      <Layout backFunc={() => router.back()} isCloseIcon={true}>
+      <Layout
+        backFunc={() => {
+          trackClick(EVENT_NAME.CLOSE_CLICKED, {
+            location: LOCATION.PROJECT_CREATION_OPTIONS_FORM,
+          })
+          router.back()
+        }}
+        isCloseIcon={true}
+      >
         <h2 className="font-bold">New Project</h2>
         <p className="mb-7 mt-3 text-white">
           Use an existing Safe, or create a Project with a new Safe.

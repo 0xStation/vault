@@ -124,6 +124,8 @@ export const TRACKING = {
     PROJECT_ACTIVATION_APPROVE_CLICKED: "project_activation_approve_clicked",
     PROJECT_ACTIVATION_EXECUTE_CLICKED: "project_activation_execute_clicked",
     GO_TO_PROFILE_CLICKED: "go_to_profile_clicked",
+    BACK_CLICKED: "back_clicked",
+    CLOSE_CLICKED: "close_clicked",
     PROJECT_CREATION_ERROR: "project_creation_error",
     PROJECT_ACTIVATION_ERROR: "project_activation_error",
   },

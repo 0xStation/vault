@@ -329,6 +329,9 @@ export const MembersView = ({
   ) : (
     <Layout
       backFunc={() => {
+        trackClick(EVENT_NAME.BACK_CLICKED, {
+          location: LOCATION.MEMBERS_FORM,
+        })
         setCreateTerminalView(CREATE_TERMINAL_VIEW.DETAILS)
       }}
     >
