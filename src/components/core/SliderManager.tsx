@@ -76,17 +76,21 @@ const SliderManager = () => {
 
   const sliderContent = () => {
     switch (activeSlider?.key) {
+      // expected case:
       case Sliders.REQUEST_DETAILS:
         return <RequestDetailsContent mutateRequest={() => {}} />
 
       // expected case:
-      // you submit a request for tokens, when the request completes, the slider should close
+      // the user submits a request for tokens, when the request completes, the slider should close
       // the new request should show up in the list of proposals
       // a toast should show for success
       case Sliders.REQUEST_TOKENS:
         return <RequestTokensContent />
 
       // expected case:
+      // the user submits a request to edit members, when the request completes the slider should close
+      // the new member request should show up in the list of proposals (if on proposal page)
+      // a toast should show for success
       case Sliders.EDIT_MEMBERS:
         return <EditMembersContent />
 
@@ -101,6 +105,8 @@ const SliderManager = () => {
         return <NewAutomationContent />
 
       // expected case:
+      // redirect to the created wallet's page
+      // no need to close the slider
       case Sliders.CREATE_TERMINAL:
         return <CreateTerminalContent />
 
@@ -140,6 +146,7 @@ const SliderManager = () => {
               successToast({
                 message: "Created request",
               })
+              closeSlider()
               const key = `/api/v1/requests?safeChainId=${chainId}&safeAddress=${address}&tab=all`
               mutate(key)
             }}
