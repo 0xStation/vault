@@ -21,6 +21,7 @@ type BaseProperties = {
   name: string // Project name
   quorum: number
   members: string[]
+  action: string
 }
 
 const inactiveTracking =
@@ -59,6 +60,7 @@ export const trackClick = (
     name,
     quorum,
     members,
+    action,
   } = metadata
   track(eventName, {
     event_category: CLICK,
@@ -71,6 +73,7 @@ export const trackClick = (
     name,
     quorum,
     members,
+    action,
   })
 }
 
@@ -82,7 +85,7 @@ export const trackImpression = (
     return
   }
 
-  const { location, userId, accountAddress, flow, chainId } = metadata
+  const { location, userId, accountAddress, flow, chainId, action } = metadata
 
   track(eventName, {
     event_category: IMPRESSION,
@@ -91,6 +94,7 @@ export const trackImpression = (
     user_id: userId,
     flow,
     chainId,
+    action,
   })
 }
 
@@ -102,7 +106,7 @@ export const trackEvent = (
     return
   }
 
-  const { location, userId, accountAddress, flow, chainId } = metadata
+  const { location, userId, accountAddress, flow, chainId, action } = metadata
 
   track(eventName, {
     event_category: EVENT,
@@ -111,6 +115,7 @@ export const trackEvent = (
     user_id: userId,
     flow,
     chainId,
+    action,
   })
 }
 
@@ -122,8 +127,16 @@ export const trackError = (
     return
   }
 
-  const { location, userId, accountAddress, safeAddress, flow, chainId, msg } =
-    metadata
+  const {
+    location,
+    userId,
+    accountAddress,
+    safeAddress,
+    flow,
+    chainId,
+    msg,
+    action,
+  } = metadata
 
   track(eventName, {
     event_category: ERROR,
@@ -134,6 +147,7 @@ export const trackError = (
     flow,
     chainId,
     msg,
+    action,
   })
 }
 

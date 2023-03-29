@@ -1,11 +1,12 @@
 import { BigNumber } from "@ethersproject/bignumber"
 import { Button } from "@ui/Button"
 import { LoadingSpinner } from "components/core/LoadingSpinner"
-import { SAFE_URL } from "lib/constants"
+import { SAFE_URL, TRACKING } from "lib/constants"
 import { prepareExecuteSafeTransaction } from "lib/encodings/safe/exec-transaction"
 import { EIP712Message, getHash } from "lib/signatures/utils"
+import { trackClick, trackError, trackImpression } from "lib/utils/amplitude"
 import { NextRouter, useRouter } from "next/router"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { useGetSafeNonce } from "../../../hooks/safe/useGetSafeNonce"
 import useGetSafeTransaction from "../../../hooks/safe/useGetSafeTransaction"
@@ -19,6 +20,8 @@ import { useUpdateTerminal } from "../../../models/terminal/hooks"
 import { Terminal } from "../../../models/terminal/types"
 import { AvatarAddress } from "../../core/AvatarAddress"
 import Overlay from "../../core/Overlay"
+
+const { EVENT_NAME, LOCATION, ACTION } = TRACKING
 
 const ENABLE_MODULE_STATUS = {
   CREATE_TRANSACTION: "CREATE_TRANSACTION",
@@ -101,7 +104,13 @@ const AwaitingExecutionview = ({
         <Button
           variant="secondary"
           size="lg"
-          onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
+          onClick={() => {
+            trackClick(EVENT_NAME.GO_TO_PROFILE_CLICKED, {
+              location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+              action: ACTION.EXECUTE,
+            })
+            router.push(`/u/${activeUserAddress}/profile`)
+          }}
         >
           Go to profile
         </Button>
@@ -178,7 +187,13 @@ const AwaitingConfirmationsView = ({
             <Button
               variant="secondary"
               size="lg"
-              onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
+              onClick={() => {
+                trackClick(EVENT_NAME.GO_TO_PROFILE_CLICKED, {
+                  location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+                  action: ACTION.APPROVE,
+                })
+                router.push(`/u/${activeUserAddress}/profile`)
+              }}
             >
               Go to profile
             </Button>
@@ -210,7 +225,12 @@ const UnAuthedView = ({
         <Button
           variant="primary"
           size="lg"
-          onClick={() => router.push(`/u/${activeUserAddress}/profile`)}
+          onClick={() => {
+            trackClick(EVENT_NAME.GO_TO_PROFILE_CLICKED, {
+              location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+            })
+            router.push(`/u/${activeUserAddress}/profile`)
+          }}
         >
           Go to profile
         </Button>
@@ -247,6 +267,12 @@ export const TerminalActivationView = ({
   const [error, setError] = useState<string>("")
   const [approveLoading, setApproveLoading] = useState<boolean>(false)
   const [executeLoading, setExecuteLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    trackImpression(EVENT_NAME.PROJECT_ACTIVATION_OVERLAY_SHOWN, {
+      location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+    })
+  }, [])
 
   const { signToEnableModule } = useSignToEnableModule({
     address: terminal?.safeAddress as string,
@@ -316,6 +342,10 @@ export const TerminalActivationView = ({
   })
 
   const handleExecute = async () => {
+    trackClick(EVENT_NAME.PROJECT_ACTIVATION_EXECUTE_CLICKED, {
+      location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+      action: ACTION.EXECUTE,
+    })
     setExecuteLoading(true)
     setError("")
     const signatures = queuedTransaction.confirmations
@@ -346,11 +376,19 @@ export const TerminalActivationView = ({
       console.error("error executing transaction")
       setError("Failed to execute transaction.")
       setExecuteLoading(false)
+      trackError(EVENT_NAME.PROJECT_ACTIVATION_ERROR, {
+        location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+        action: ACTION.EXECUTE,
+      })
       // TODO: toasty toast
     }
   }
 
   const handleApprove = async () => {
+    trackClick(EVENT_NAME.PROJECT_ACTIVATION_APPROVE_CLICKED, {
+      location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+      action: ACTION.APPROVE,
+    })
     setApproveLoading(true)
     setError("")
     let signature, message, signedNonce
@@ -363,6 +401,11 @@ export const TerminalActivationView = ({
       // TODO: add toast
       console.error(err)
       setApproveLoading(false)
+      trackError(EVENT_NAME.PROJECT_ACTIVATION_ERROR, {
+        location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+        action: ACTION.APPROVE,
+        msg: err,
+      })
       if (
         err.code === 4001 ||
         (err?.name && err?.name === "UserRejectedRequestError")
@@ -388,7 +431,12 @@ export const TerminalActivationView = ({
           message,
           senderAddress: activeUser?.address as string,
         })
-      } catch (err) {
+      } catch (err: any) {
+        trackError(EVENT_NAME.PROJECT_ACTIVATION_ERROR, {
+          location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+          action: ACTION.APPROVE,
+          msg: err,
+        })
         console.error("Failed to create safe txn", err)
         setApproveLoading(false)
         setError("Failed to create transaction on Safe.")
@@ -412,7 +460,12 @@ export const TerminalActivationView = ({
         mutateGetSafeTransaction()
         mutateGetTerminal()
         setApproveLoading(false)
-      } catch (err) {
+      } catch (err: any) {
+        trackError(EVENT_NAME.PROJECT_ACTIVATION_ERROR, {
+          location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+          action: ACTION.APPROVE,
+          msg: err,
+        })
         console.error("Failed to update Project: ", err)
         setApproveLoading(false)
         setError("Failed to update Project.")
@@ -437,8 +490,13 @@ export const TerminalActivationView = ({
         mutateGetSafeTransaction()
         setApproveLoading(false)
         return
-      } catch (err) {
+      } catch (err: any) {
         // TODO: add toast
+        trackError(EVENT_NAME.PROJECT_ACTIVATION_ERROR, {
+          location: LOCATION.ACTIVATE_PROJECT_OVERLAY,
+          action: ACTION.APPROVE,
+          msg: err,
+        })
         console.error(err)
         setApproveLoading(false)
         setError("Failed to add confirmation to Safe.")
