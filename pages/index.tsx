@@ -3,7 +3,7 @@ import { StationLogo } from "@icons"
 import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import { LINKS, TRACKING } from "lib/constants"
-import { trackClick } from "lib/utils/amplitude"
+import { trackClick, trackImpression } from "lib/utils/amplitude"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -48,6 +48,12 @@ function Page() {
   const router = useRouter()
   const { isMobile } = useBreakpoint()
   const { user, setShowAuthFlow } = useDynamicContext()
+
+  useEffect(() => {
+    trackImpression(EVENT_NAME.LANDING_PAGE_SEEN, {
+      location: LOCATION.LANDING,
+    })
+  }, [])
 
   useEffect(() => {
     if (user?.blockchainAccounts?.[0]?.address) {
