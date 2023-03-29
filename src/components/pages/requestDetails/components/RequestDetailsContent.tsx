@@ -47,7 +47,6 @@ export const RequestDetailsContent = ({
 
   useEffect(() => {
     if (requestData && requestId) {
-      console.log("nah")
       setRequest(requestData)
     }
   }, [requestData, requestId])
