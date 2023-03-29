@@ -79,31 +79,50 @@ const SliderManager = () => {
       case Sliders.REQUEST_DETAILS:
         return <RequestDetailsContent mutateRequest={() => {}} />
 
+      // expected case:
+      // you submit a request for tokens, when the request completes, the slider should close
+      // the new request should show up in the list of proposals
+      // a toast should show for success
       case Sliders.REQUEST_TOKENS:
         return <RequestTokensContent />
 
+      // expected case:
       case Sliders.EDIT_MEMBERS:
         return <EditMembersContent />
 
+      // expected case:
+      // the user should submit the form with new terminal details,
+      // when the request completes, the slider should close and we should show a toast
       case Sliders.EDIT_TERMINAL_DETAILS:
         return <EditTerminalContent />
 
+      // expected case:
       case Sliders.CREATE_AUTOMATION:
         return <NewAutomationContent />
 
+      // expected case:
       case Sliders.CREATE_TERMINAL:
         return <CreateTerminalContent />
 
+      // expected case:
       case Sliders.AUTOMATION_DETAILS:
         return <AutomationDetailsContent />
 
+      // expected case:
+      // the claim list opens, you can click a claim to open a modal
+      // when the modal closes, the claim list should still be open in case you want to claim more
+      // behind the scenes, the list of proposals should update (although I don't think you can claim with those in view)
       case Sliders.CLAIM_TOKENS:
         return <ClaimListView />
 
+      // expected case:
+      // submit form to update email notifications, when request completes, the slider should close
+      // display a success toast
       case Sliders.EMAIL_NOTIFICATIONS:
         return (
           <EmailNotificationForm
             successCallback={() => {
+              closeSlider()
               successToast({
                 message: "Email notification settings updated",
               })
@@ -111,6 +130,9 @@ const SliderManager = () => {
           />
         )
 
+      // expected case:
+      // submit form to send tokens, when request completes, the slider should close
+      // the list of proposals should update
       case Sliders.SEND_TOKENS:
         return (
           <SendTokensContent

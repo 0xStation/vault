@@ -1,5 +1,6 @@
 import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { RequestVariantType } from "@prisma/client"
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import {
   Select,
@@ -34,6 +35,8 @@ import {
 } from "../../../../../src/models/request/types"
 import { convertGlobalId } from "../../../../../src/models/terminal/utils"
 import { Token, TokenType } from "../../../../../src/models/token/types"
+import { useSliderManagerStore } from "../../../../hooks/stores/useSliderManagerStore"
+import { useToast } from "../../../../hooks/useToast"
 import TextareaWithLabel from "../../../form/TextareaWithLabel"
 
 interface nTokenInfoType {
@@ -48,6 +51,9 @@ interface nTokenInfoType {
 }
 
 export const RequestTokensContent = () => {
+  const { isMobile } = useBreakpoint()
+  const closeSlider = useSliderManagerStore((state) => state.closeSlider)
+  const { successToast } = useToast()
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
@@ -60,7 +66,6 @@ export const RequestTokensContent = () => {
 
   const windowSize = useWindowSize()
   const activeUser = useStore((state) => state.activeUser)
-  const [addressCopied, setAddressCopied] = useState<boolean>(false)
 
   const [formMessage, setFormMessage] = useState<{
     isError: boolean
@@ -175,7 +180,12 @@ export const RequestTokensContent = () => {
         },
       )
       // TODO: show toast
-      router.push(`/${chainNameAndSafeAddress}/proposals`)
+      if (isMobile) {
+        router.push(`/${chainNameAndSafeAddress}/proposals`)
+      } else {
+        closeSlider()
+        successToast({ message: "Proposal created successfully!" })
+      }
     } catch (err: any) {
       console.error(err)
       if (
