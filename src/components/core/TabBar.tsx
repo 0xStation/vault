@@ -6,6 +6,7 @@ import {
   TabsTrigger,
 } from "@ui/Tabs"
 import { cn } from "lib/utils"
+import { addQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
 
 export const TabBar = ({
@@ -25,19 +26,6 @@ export const TabBar = ({
 }) => {
   const router = useRouter()
 
-  const updateQueryParam = (paramName: string, paramValue: string) => {
-    const query = { ...router.query }
-    query[paramName] = paramValue
-    router.push(
-      {
-        pathname: router.pathname,
-        query,
-      },
-      undefined,
-      { shallow: true },
-    )
-  }
-
   return (
     <Tabs
       className={`h-full w-full ${className}`}
@@ -47,7 +35,7 @@ export const TabBar = ({
           : (router.query.filter as string)) ?? defaultValue
       }
       onValueChange={(value) => {
-        updateQueryParam(style, value)
+        addQueryParam(router, style, value)
       }}
     >
       {style === "tab" ? (

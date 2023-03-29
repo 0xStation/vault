@@ -214,6 +214,7 @@ const ClaimListView = () => {
       revalidate: false,
     })
   }
+
   return (
     <div className="flex h-full flex-col">
       {/* single view & execute */}

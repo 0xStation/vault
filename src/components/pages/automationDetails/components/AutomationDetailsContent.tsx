@@ -1,6 +1,6 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
 import { ArrowLeft } from "@icons"
-import { getQueryParam } from "lib/utils/updateQueryParam"
+import { deleteQueryParam, getQueryParam } from "lib/utils/updateQueryParam"
 import { useAutomation } from "models/automation/hooks"
 import { RevShareFrob } from "models/automation/types"
 import Link from "next/link"
@@ -29,6 +29,14 @@ export const AutomationDetailsContent = () => {
       setRevShare(automation)
     }
   }, [automation, router.query.automationId])
+
+  useEffect(() => {
+    const unmount = () => {
+      deleteQueryParam("tab")
+      deleteQueryParam("filter")
+    }
+    return () => unmount()
+  })
 
   return (
     <div className="flex h-full flex-col">

@@ -23,7 +23,7 @@ export const useRequestsCreatedByAccount = (address: string) => {
   return { isLoading, requests, mutate }
 }
 
-export const useRequest = (requestId: string) => {
+export const useRequest = (requestId: string | undefined) => {
   const fetcher = async (url: string) => {
     try {
       const response = await axios.get<RequestFrob>(url)

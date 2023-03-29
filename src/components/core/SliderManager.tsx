@@ -150,8 +150,10 @@ const SliderManager = () => {
       setActiveSlider(Sliders.SEND_TOKENS)
     } else if (isQueryParamSet("editTerminalDetailsOpen")) {
       setActiveSlider(Sliders.EDIT_TERMINAL_DETAILS)
+    } else {
+      closeSlider()
     }
-  }, [])
+  }, [router])
 
   return (
     <RightSlider open={sliderOpen} setOpen={() => closeSlider()}>

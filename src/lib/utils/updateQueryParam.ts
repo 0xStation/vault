@@ -6,6 +6,7 @@ export const addQueryParam = (
   paramValue: string,
 ) => {
   const query = { ...router.query }
+  console.log("query:", query)
   query[paramName] = paramValue
   router.push(
     {
