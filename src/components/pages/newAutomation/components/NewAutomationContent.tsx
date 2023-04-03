@@ -19,7 +19,13 @@ import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
-import { useSendTransaction, useWaitForTransaction } from "wagmi"
+import {
+  Chain,
+  useNetwork,
+  useSendTransaction,
+  useSwitchNetwork,
+  useWaitForTransaction,
+} from "wagmi"
 import { useResolveEnsAddress } from "../../../../hooks/ens/useResolveEns"
 import { useToast } from "../../../../hooks/useToast"
 import { useCreateAutomation } from "../../../../models/automation/hooks"
@@ -42,6 +48,8 @@ const sumSplits = (splits: { value: number }[]) => {
 }
 
 export const NewAutomationContent = () => {
+  const { chain, chains } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork()
   const router = useRouter()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -53,6 +61,7 @@ export const NewAutomationContent = () => {
   const { chainId, address: terminalAddress } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const terminalChain = chains.find((chain) => chain.id === chainId) as Chain
   const { terminal } = useTerminalByChainIdAndSafeAddress(
     terminalAddress,
     chainId,
@@ -268,7 +277,23 @@ export const NewAutomationContent = () => {
     />
   ) : (
     <div className="mb-24 grow sm:mt-6">
+      {chain?.id !== chainId && (
+        <div className="mb-[30px] flex flex-col space-y-2 rounded border border-red-100 bg-gray-90 p-3">
+          <span>
+            You must be connected to {terminalChain.name} to create an
+            automation within this terminal.
+          </span>
+          <Button
+            onClick={() => {
+              switchNetwork?.(terminalChain.id)
+            }}
+          >
+            Switch network
+          </Button>
+        </div>
+      )}
       <h2 className="mb-[30px] sm:mt-0">New Revenue Share</h2>
+
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="flex-col space-y-6">
           <InputWithLabel
