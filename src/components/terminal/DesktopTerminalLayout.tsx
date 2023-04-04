@@ -44,6 +44,12 @@ const options = (router: any) =>
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
+      label: "Invoices",
+      description: "Request tokens and split stuff.",
+      active: true,
+      href: `/${router.query.chainNameAndSafeAddress}/invoices`,
+    },
+    {
       label: "Automations",
       description: "Automate NFT sales and sponsorship revenue-sharing",
       active: true,

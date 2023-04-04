@@ -41,7 +41,7 @@ const MembersPage = () => {
   return (
     <>
       <Head>
-        <title>Members | {terminal?.data.name}</title>
+        <title>Members | {terminal?.data?.name}</title>
       </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView

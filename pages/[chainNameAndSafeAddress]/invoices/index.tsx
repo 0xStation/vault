@@ -1,10 +1,11 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import Breakpoint from "@ui/Breakpoint"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Desktop from "../../../src/components/pages/automations/Desktop"
-import Mobile from "../../../src/components/pages/automations/Mobile"
+import Desktop from "../../../src/components/pages/invoices/Desktop"
+import Mobile from "../../../src/components/pages/invoices/Mobile"
 import { useIsSigner } from "../../../src/hooks/useIsSigner"
 
 const AutomationsPage = () => {
@@ -17,11 +18,20 @@ const AutomationsPage = () => {
     address as string,
     chainId as number,
   )
+  const { primaryWallet } = useDynamicContext()
+
+  if (!terminal) {
+    if (primaryWallet?.address) {
+      router.push(`/u/${primaryWallet?.address}`)
+    } else {
+      router.push("/")
+    }
+  }
 
   return (
     <>
       <Head>
-        <title>Automation | {terminal?.data?.name}</title>
+        <title>Invoices | {terminal?.data?.name}</title>
       </Head>
       <Breakpoint>
         {(isMobile) => {

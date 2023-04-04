@@ -20,6 +20,7 @@ model Terminal {
 
   requests    Request[]
   automations Automation[]
+  invoices    Invoice[]
 
   @@unique([chainId, safeAddress])
 }
@@ -119,6 +120,20 @@ model Automation {
   updatedAt       DateTime          @updatedAt
 
   terminal Terminal @relation(fields: [chainId, terminalAddress], references: [chainId, safeAddress])
+}
+
+model Invoice {
+  id              String   @id @default(uuid())
+  chainId         Int
+  terminalAddress String
+  number          Int
+  data            Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  terminal Terminal @relation(fields: [chainId, terminalAddress], references: [chainId, safeAddress])
+
+  @@unique([terminalAddress, chainId, number(sort: Desc)])
 }
 
 enum ActivityVariant {
