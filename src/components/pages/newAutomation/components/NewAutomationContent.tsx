@@ -19,14 +19,9 @@ import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
-import {
-  Chain,
-  useNetwork,
-  useSendTransaction,
-  useSwitchNetwork,
-  useWaitForTransaction,
-} from "wagmi"
+import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { useResolveEnsAddress } from "../../../../hooks/ens/useResolveEns"
+import { useCorrectNetwork } from "../../../../hooks/useCorrectNetwork"
 import { useToast } from "../../../../hooks/useToast"
 import { useCreateAutomation } from "../../../../models/automation/hooks"
 import { useTerminalByChainIdAndSafeAddress } from "../../../../models/terminal/hooks"
@@ -48,8 +43,6 @@ const sumSplits = (splits: { value: number }[]) => {
 }
 
 export const NewAutomationContent = () => {
-  const { chain, chains } = useNetwork()
-  const { switchNetwork } = useSwitchNetwork()
   const router = useRouter()
   const { resolveEnsAddress } = useResolveEnsAddress()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -61,11 +54,12 @@ export const NewAutomationContent = () => {
   const { chainId, address: terminalAddress } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const terminalChain = chains.find((chain) => chain.id === chainId) as Chain
   const { terminal } = useTerminalByChainIdAndSafeAddress(
     terminalAddress,
     chainId,
   )
+
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(chainId)
 
   const { createAutomation } = useCreateAutomation(chainId, terminalAddress)
   const { successToast, errorToast } = useToast()
@@ -117,59 +111,64 @@ export const NewAutomationContent = () => {
   const onSubmit = async (formValues: any) => {
     setIsLoading(true)
 
-    const addressSplits = await Promise.all(
-      formValues.splits.map(
-        async ({
-          recipient,
-          address,
-          value,
-        }: {
-          recipient: string
-          value: string
-          address?: string
-        }) => ({
-          address:
-            recipient !== "other"
-              ? recipient
-              : isEns(address!)
-              ? await resolveEnsAddress(address!)
-              : address!,
-          value,
-        }),
-      ),
-    )
-    // @ts-ignore
-    setFormData({ name: formValues.name, splits: addressSplits })
-
-    const { to, value, data } = prepareCreateSplitCall(
-      terminalAddress,
-      // @ts-ignore
-      addressSplits,
-    )
-    try {
-      await sendTransactionAsync({
-        recklesslySetUnpreparedRequest: {
-          chainId,
-          to,
-          value,
-          data,
-        },
-      })
-
-      setFormMessage({ isError: false, message: "" })
-    } catch (err: any) {
-      if (err?.name && err?.name === "UserRejectedRequestError") {
-        setFormMessage({
-          isError: true,
-          message: "Transaction was rejected.",
-        })
-      } else {
-        setFormMessage({
-          isError: true,
-          message: "Something went wrong.",
-        })
-      }
+    if (!correctNetworkSelected) {
+      await switchNetwork()
       setIsLoading(false)
+    } else {
+      const addressSplits = await Promise.all(
+        formValues.splits.map(
+          async ({
+            recipient,
+            address,
+            value,
+          }: {
+            recipient: string
+            value: string
+            address?: string
+          }) => ({
+            address:
+              recipient !== "other"
+                ? recipient
+                : isEns(address!)
+                ? await resolveEnsAddress(address!)
+                : address!,
+            value,
+          }),
+        ),
+      )
+      // @ts-ignore
+      setFormData({ name: formValues.name, splits: addressSplits })
+
+      const { to, value, data } = prepareCreateSplitCall(
+        terminalAddress,
+        // @ts-ignore
+        addressSplits,
+      )
+      try {
+        await sendTransactionAsync({
+          recklesslySetUnpreparedRequest: {
+            chainId,
+            to,
+            value,
+            data,
+          },
+        })
+
+        setFormMessage({ isError: false, message: "" })
+      } catch (err: any) {
+        if (err?.name && err?.name === "UserRejectedRequestError") {
+          setFormMessage({
+            isError: true,
+            message: "Transaction was rejected.",
+          })
+        } else {
+          setFormMessage({
+            isError: true,
+            message: "Something went wrong.",
+          })
+        }
+        setIsLoading(false)
+      }
     }
 
     // will update data from useSendTransaction, which triggers useWaitForTransaction
@@ -277,21 +276,6 @@ export const NewAutomationContent = () => {
     />
   ) : (
     <div className="mb-24 grow sm:mt-6">
-      {chain?.id !== chainId && (
-        <div className="mb-[30px] flex flex-col space-y-2 rounded border border-red-100 bg-gray-90 p-3">
-          <span>
-            You must be connected to {terminalChain.name} to create an
-            automation within this terminal.
-          </span>
-          <Button
-            onClick={() => {
-              switchNetwork?.(terminalChain.id)
-            }}
-          >
-            Switch network
-          </Button>
-        </div>
-      )}
       <h2 className="mb-[30px] sm:mt-0">New Revenue Share</h2>
 
       <form onSubmit={handleSubmit(onSubmit, onError)}>
