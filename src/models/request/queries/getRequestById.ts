@@ -107,19 +107,22 @@ export const getRequestById = async (
     validActions.push("EXECUTE-REJECT")
   }
 
+  const isPreSnapshot = !request.data.settingsAtExecution
   return {
     ...request,
     activities: request.activities.reverse(),
     approveActivities,
     rejectActivities,
     commentActivities,
-    quorum,
+    quorum: isPreSnapshot ? quorum : request.data.settingsAtExecution.quorum,
     signers,
     status,
     stage,
     validActions,
-    addressesThatHaveNotSigned: signers.filter(
-      (address: string) => !signatureAccounted[address],
-    ),
+    addressesThatHaveNotSigned: isPreSnapshot
+      ? signers.filter((address: string) => !signatureAccounted[address])
+      : request.data.settingsAtExecution.signers.filter(
+          (address: string) => !signatureAccounted[address],
+        ),
   }
 }

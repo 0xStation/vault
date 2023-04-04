@@ -14,6 +14,7 @@ import {
 } from "lib/zod"
 import { ActionMetadata } from "models/action/types"
 import { z } from "zod"
+import { getSafeDetails } from "../../../lib/api/safe/getSafeDetails"
 import { TokenTransferVariant } from "../types"
 
 const RequestWithActionArgs = z.object({
@@ -92,6 +93,8 @@ export const createRequestWithAction = async (
     }
     const rejectionCall = bundleCalls(rejectionMetadata.calls)
 
+    const safeDetails = await getSafeDetails(chainId, address as string)
+
     request = await db.request.create({
       data: {
         terminalAddress: address,
@@ -102,6 +105,10 @@ export const createRequestWithAction = async (
           note: note,
           createdBy: createdBy,
           meta: JSON.parse(JSON.stringify(meta)),
+          settingsAtExecution: {
+            quorum: safeDetails.quorum,
+            signers: safeDetails.signers,
+          },
         },
         actions: {
           create: [

@@ -52,6 +52,10 @@ export type RequestMetadata = {
   note: string
   createdBy: string // address
   meta: TokenTransferVariant | SignerQuorumVariant | SplitTokenTransferVariant
+  settingsAtExecution: {
+    quorum: number
+    signers: string[]
+  }
 }
 
 export type SignerQuorumVariant = {

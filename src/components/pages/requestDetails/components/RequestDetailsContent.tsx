@@ -71,7 +71,8 @@ export const RequestDetailsContent = ({
           <div className="mb-6 flex items-center justify-between">
             <h2 className="font-regular">Votes</h2>
             <span className="text-sm text-gray-50">
-              <span className="font-bold">Quorum:</span> {request?.quorum}
+              <span className="font-bold">Quorum:</span>
+              {request.quorum}
             </span>
           </div>
           <h4 className="mt-2 mb-1 text-sm text-gray-50">
