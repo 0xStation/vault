@@ -51,7 +51,7 @@ export const NewInvoicesContent = () => {
   const [splitsFieldError, setSplitsFieldError] = useState<string>()
   const [formData, setFormData] = useState<{
     clientName: string
-    clientAddress: string
+    clientEmail: string
     totalAmount: string
     note: string
     splits: { address: string; value: string }[]
@@ -74,7 +74,7 @@ export const NewInvoicesContent = () => {
   const { data: txData, sendTransactionAsync } = useSendTransaction({
     mode: "recklesslyUnprepared",
   })
-  const { createInvoice } = useCreateInvoice(chainId, terminalAddress)
+  const { createInvoice, error } = useCreateInvoice(chainId, terminalAddress)
 
   const {
     register,
@@ -215,16 +215,20 @@ export const NewInvoicesContent = () => {
       const addressTopic = creationLog.topics[1] // address is indexed so stored in topics, and first topic is for event name so grab second index
       const proxyAddress = toChecksumAddress("0x" + addressTopic.substring(26)) // 20-byte address is padded into a 32-byte slot so remove padding (24 char + '0x')
 
-      await createInvoice({
+      const invoice = await createInvoice({
         clientName: formData?.clientName,
-        clientAddress: formData?.clientAddress,
+        clientEmail: formData?.clientEmail,
         note: formData?.note,
         paymentAddress: proxyAddress,
         splits: formData?.splits,
         token: formData?.token,
         totalAmount: formData?.totalAmount,
       })
-      successToast({ message: "Revenue Share Automation created" })
+      if (error || !invoice) {
+        errorToast({ message: "Failed to create invoice" })
+        return
+      }
+      successToast({ message: "New invoice created" })
       router.push(
         `/${router.query.chainNameAndSafeAddress}/invoices?showToast=${proxyAddress}`,
       )
@@ -258,10 +262,10 @@ export const NewInvoicesContent = () => {
         }),
       ),
     )
-    const { clientName, clientAddress, note, totalAmount, token } = formValues
+    const { clientName, clientEmail, note, totalAmount, token } = formValues
     setFormData({
       clientName,
-      clientAddress,
+      clientEmail,
       note,
       totalAmount,
       splits: addressSplits,
@@ -287,6 +291,7 @@ export const NewInvoicesContent = () => {
 
       setFormMessage({ isError: false, message: "" })
     } catch (err: any) {
+      console.error(err)
       if (err?.name && err?.name === "UserRejectedRequestError") {
         setFormMessage({
           isError: true,
@@ -333,13 +338,19 @@ export const NewInvoicesContent = () => {
               },
             }}
           />
-          <AddressInput
-            label="Client wallet addresss or ENS name*"
-            name="clientAddress"
+          <InputWithLabel
+            label="Client email*"
             register={register}
-            placeholder="Enter a wallet or ENS address"
-            errors={errors}
+            name="clientEmail"
+            placeholder="e.g. makerDAO@gmail.com"
             required
+            errors={errors}
+            registerOptions={{
+              maxLength: {
+                value: 60,
+                message: "Exceeded max length of 60 characters.",
+              },
+            }}
           />
           <div>
             <label className="text-base font-bold">Token*</label>
@@ -531,10 +542,9 @@ export const NewInvoicesContent = () => {
             </p>
           </div>
           <InputWithLabel
-            label="Note*"
+            label="Note"
             register={register}
             name="note"
-            required
             placeholder="e.g. Branding + product advance payment"
             errors={errors}
             registerOptions={{

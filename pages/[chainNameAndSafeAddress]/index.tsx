@@ -61,7 +61,7 @@ const options = (router: any) =>
     },
     {
       label: "Invoices",
-      description: "Request an invoice and split stuff.",
+      description: "Generate an invoice and split revenue",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/invoices`,
     },

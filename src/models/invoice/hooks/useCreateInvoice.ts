@@ -7,12 +7,16 @@ export const useCreateInvoice = (chainId: number, terminalAddress: string) => {
     return (await axios.post<Invoice>(url, arg)).data
   }
 
-  const { isMutating, trigger: createInvoice } = useSWRMutation(
+  const {
+    isMutating,
+    trigger: createInvoice,
+    error,
+  } = useSWRMutation(
     chainId && terminalAddress
       ? `/api/v1/terminal/${chainId}/${terminalAddress}/invoices/new`
       : null,
     fetcher,
   )
 
-  return { isMutating, createInvoice }
+  return { isMutating, createInvoice, error }
 }

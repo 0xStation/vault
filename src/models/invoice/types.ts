@@ -12,8 +12,8 @@ export type InvoiceMetadata = {
     value: number
   }[]
   clientName: string
-  clientAddress: string
+  clientEmail: string
   totalAmount: string
   token: Token
-  note: string
+  note?: string
 }

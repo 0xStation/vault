@@ -8,6 +8,7 @@ import React, { useState } from "react"
 import Desktop from "../../../src/components/pages/invoiceDetails/Desktop"
 import Mobile from "../../../src/components/pages/invoiceDetails/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
+import { useIsSigner } from "../../../src/hooks/useIsSigner"
 
 const TerminalActivationView = dynamic(() =>
   import("components/terminalCreation/import/TerminalActivationView").then(
@@ -28,6 +29,7 @@ const InvoiceIdPage = () => {
     chainId: terminal?.chainId as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+  useIsSigner({ address: address as string, chainId: chainId as number })
   return (
     <>
       {isSuccess && !isModuleEnabled && (

@@ -1,7 +1,7 @@
 import { Terminal as PrismaTerminal } from "@prisma/client"
 import { Token } from "../token/types"
 
-type TerminalMetadata = {
+export type TerminalMetadata = {
   name: string
   description: string
   url: string

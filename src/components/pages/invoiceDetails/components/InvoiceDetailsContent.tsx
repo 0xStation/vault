@@ -4,10 +4,13 @@ import { Hyperlink } from "@ui/Hyperlink"
 import { AvatarAddress } from "components/core/AvatarAddress"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
+import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
 import { Invoice } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
+import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
+import { useToast } from "../../../../hooks/useToast"
 
 export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   const router = useRouter()
@@ -20,6 +23,11 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   )
   const blockExplorer = (networks as Record<string, any>)?.[String(chainId)]
     ?.explorer
+  const isSigner = usePermissionsStore((state) => state.isSigner)
+  const { sendCreateInvoiceEmail } = useSendCreateInvoiceEmail(
+    invoice?.id as string,
+  )
+  const { successToast } = useToast()
 
   return (
     <div className="divide-y divide-gray-90 pb-32">
@@ -70,9 +78,19 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
             </tbody>
           </table>
           <div className="my-6">
-            <Button variant="secondary" fullWidth={true}>
-              Remind
-            </Button>
+            {isSigner && (
+              // TODO: rate-limit the amount of emails sent
+              <Button
+                variant="secondary"
+                fullWidth={true}
+                onClick={() => {
+                  sendCreateInvoiceEmail()
+                  successToast({ message: "Sent!" })
+                }}
+              >
+                Remind
+              </Button>
+            )}
           </div>
         </div>
       </section>

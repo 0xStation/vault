@@ -1,5 +1,8 @@
 import db from "db"
+import { sendNewInvoiceEmail } from "lib/sendgrid"
+import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import { InvoiceMetadata } from "models/invoice/types"
+import { TerminalMetadata } from "models/terminal/types"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(
@@ -15,7 +18,7 @@ export default async function handler(
 
   const {
     clientName,
-    clientAddress,
+    clientEmail,
     note,
     totalAmount,
     paymentAddress,
@@ -29,7 +32,7 @@ export default async function handler(
     paymentAddress,
     splits,
     clientName,
-    clientAddress,
+    clientEmail,
     note,
     totalAmount,
     token,
@@ -60,6 +63,29 @@ export default async function handler(
         number: (latestInvoice?.number || 0) + 1,
         data: invoiceMetadata,
       },
+      include: {
+        terminal: true,
+      },
+    })
+
+    if (!invoice) {
+      throw Error("Failure creating invoice")
+    }
+
+    sendNewInvoiceEmail({
+      recipients: [clientEmail as string],
+      clientName: clientName as string,
+      invoiceAmount: totalAmount as string,
+      tokenSymbol: token?.symbol as string,
+      localDate: getLocalDateFromDateString(
+        invoice?.createdAt as unknown as string,
+      ),
+      paymentAddress: paymentAddress as string,
+      terminalName: (invoice?.terminal?.data as TerminalMetadata)
+        ?.name as string,
+      chainId: invoice?.terminal?.chainId,
+      terminalAddress: invoice?.terminal?.safeAddress,
+      invoiceId: invoice?.id,
     })
     return res.status(200).json(invoice)
   } catch (err) {
