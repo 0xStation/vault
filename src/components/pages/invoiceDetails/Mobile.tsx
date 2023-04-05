@@ -7,9 +7,14 @@ import InvoiceDetailsContent from "./components/InvoiceDetailsContent"
 
 const InvoiceDetailsMobile = () => {
   const router = useRouter()
-  const { data: invoice } = useInvoice(router.query.invoiceId as string)
+  const { data: invoice, isLoading } = useInvoice(
+    router.query.invoiceId as string,
+  )
 
-  console.log("invoice!", invoice)
+  if (!isLoading && !invoice && router?.query?.chainNameAndSafeAddress) {
+    router.push(`/${router?.query?.chainNameAndSafeAddress}/invoices`)
+  }
+
   return (
     <>
       <div className="h-screen w-full max-w-[580px]">
@@ -17,7 +22,7 @@ const InvoiceDetailsMobile = () => {
         <div className="flex w-full items-center justify-between space-x-3 border-b border-b-gray-80 py-2 px-4">
           <button
             onClick={() =>
-              router.push(`/${router.query.chainNameAndSafeAddress}/proposals`)
+              router.push(`/${router.query.chainNameAndSafeAddress}/invoices`)
             }
           >
             <ArrowLeft />

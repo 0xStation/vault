@@ -20,7 +20,7 @@ export default async function handler(
 
   if (!query.invoiceId || typeof query.invoiceId !== typeof "") {
     res.statusCode = 404
-    return res.end(JSON.stringify("No automation id provided"))
+    return res.end(JSON.stringify("No invoice id provided"))
   }
 
   let invoice
@@ -32,7 +32,12 @@ export default async function handler(
     })) as Invoice
   } catch (e) {
     res.statusCode = 500
-    return res.end(JSON.stringify("Failure fetching automation"))
+    return res.end(JSON.stringify("Failure fetching invoice"))
+  }
+
+  if (!invoice) {
+    res.statusCode = 500
+    return res.end(JSON.stringify("Invoice not found"))
   }
 
   const chainId = invoice.chainId

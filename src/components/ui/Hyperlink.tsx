@@ -4,6 +4,7 @@ import { cva, VariantProps } from "class-variance-authority"
 const link = cva(null, {
   variants: {
     size: {
+      base: "text-base",
       sm: "text-sm",
       xs: "text-xs",
     },

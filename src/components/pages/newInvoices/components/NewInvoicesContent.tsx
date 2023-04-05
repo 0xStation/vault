@@ -226,7 +226,7 @@ export const NewInvoicesContent = () => {
       })
       successToast({ message: "Revenue Share Automation created" })
       router.push(
-        `/${router.query.chainNameAndSafeAddress}/automations?showPrompt=${proxyAddress}`,
+        `/${router.query.chainNameAndSafeAddress}/invoices?showToast=${proxyAddress}`,
       )
     },
     onSettled: () => {
@@ -315,7 +315,7 @@ export const NewInvoicesContent = () => {
     <div className="mb-24 grow sm:mt-6">
       <h2 className="mb-[30px] sm:mt-0">New Invoice</h2>
       <form
-        onSubmit={handleSubmit(onSubmit, onError)} // TODO: add onError func
+        onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
       >
         <div className="flex-col space-y-6">
@@ -340,20 +340,6 @@ export const NewInvoicesContent = () => {
             placeholder="Enter a wallet or ENS address"
             errors={errors}
             required
-          />
-          <InputWithLabel
-            label="Client email address*"
-            register={register}
-            name="clientEmail"
-            placeholder="e.g. makerdao@gmail.com"
-            required
-            errors={errors}
-            registerOptions={{
-              maxLength: {
-                value: 60,
-                message: "Exceeded max length of 60 characters.",
-              },
-            }}
           />
           <div>
             <label className="text-base font-bold">Token*</label>

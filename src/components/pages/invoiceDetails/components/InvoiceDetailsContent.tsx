@@ -18,8 +18,8 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     address as string,
     chainId as number,
   )
-  const blockExplorer = (networks as Record<string, any>)[String(chainId)]
-    .explorer
+  const blockExplorer = (networks as Record<string, any>)?.[String(chainId)]
+    ?.explorer
 
   return (
     <div className="divide-y divide-gray-90 pb-32">
