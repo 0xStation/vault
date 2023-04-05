@@ -90,8 +90,9 @@ const DesktopInvoicesPage = () => {
         </div>
         <InvoiceStatusBar>
           <InvoiceTabContent filter={InvoiceTypeTab.ALL} />
-          <InvoiceTabContent filter={InvoiceTypeTab.PENDING} />
-          <InvoiceTabContent filter={InvoiceTypeTab.PAID} />
+          <InvoiceTabContent filter={InvoiceTypeTab.PAYMENT_PENDING} />
+          <InvoiceTabContent filter={InvoiceTypeTab.CLAIM_PENDING} />
+          <InvoiceTabContent filter={InvoiceTypeTab.COMPLETED} />
         </InvoiceStatusBar>
       </DesktopTerminalLayout>
     </>
@@ -133,8 +134,9 @@ const MobileInvoicesPage = () => {
         </div>
         <InvoiceStatusBar>
           <InvoiceTabContent filter={InvoiceTypeTab.ALL} />
-          <InvoiceTabContent filter={InvoiceTypeTab.PENDING} />
-          <InvoiceTabContent filter={InvoiceTypeTab.PAID} />
+          <InvoiceTabContent filter={InvoiceTypeTab.PAYMENT_PENDING} />
+          <InvoiceTabContent filter={InvoiceTypeTab.CLAIM_PENDING} />
+          <InvoiceTabContent filter={InvoiceTypeTab.COMPLETED} />
         </InvoiceStatusBar>
       </div>
     </>

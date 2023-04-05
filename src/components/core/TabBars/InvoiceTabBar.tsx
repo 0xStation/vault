@@ -2,8 +2,9 @@ import { TabBar } from "../TabBar"
 
 export enum InvoiceTypeTab {
   ALL = "all",
-  PENDING = "pending",
-  PAID = "paid",
+  PAYMENT_PENDING = "payment_pending",
+  CLAIM_PENDING = "claim_pending",
+  COMPLETED = "completed",
 }
 
 type InvoiceNavOption = {
@@ -21,12 +22,16 @@ export const InvoiceStatusBar = ({
   const options = [
     { value: InvoiceTypeTab.ALL, label: "All" },
     {
-      value: InvoiceTypeTab.PENDING,
-      label: "Pending",
+      value: InvoiceTypeTab.PAYMENT_PENDING,
+      label: "Payment pending",
     },
     {
-      value: InvoiceTypeTab.PAID,
-      label: "Paid",
+      value: InvoiceTypeTab.CLAIM_PENDING,
+      label: "Claim pending",
+    },
+    {
+      value: InvoiceTypeTab.COMPLETED,
+      label: "Completed",
     },
   ] as InvoiceNavOption[]
 

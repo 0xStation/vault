@@ -19,6 +19,7 @@ export type InvoiceMetadata = {
 }
 
 export enum InvoiceStatus {
-  PENDING = "PENDING",
-  PAID = "PAID",
+  PAYMENT_PENDING = "PAYMENT_PENDING",
+  CLAIM_PENDING = "CLAIM_PENDING",
+  COMPLETED = "COMPLETED",
 }

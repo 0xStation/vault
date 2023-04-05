@@ -1,3 +1,4 @@
+import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
 import { Hyperlink } from "@ui/Hyperlink"
 import { AvatarAddress } from "components/core/AvatarAddress"
@@ -5,7 +6,7 @@ import { InvoiceStatusWithIcon } from "components/invoices/InvoiceStatusWithIcon
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
-import { Invoice } from "models/invoice/types"
+import { Invoice, InvoiceStatus } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
@@ -30,6 +31,17 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   )
   const { successToast } = useToast()
   const { invoiceStatus } = useInvoiceStatus({ invoice })
+  const { primaryWallet } = useDynamicContext()
+
+  const isInvoiceRecipient = invoice?.data?.splits?.some(
+    (split) => split?.address === primaryWallet?.address,
+  )
+
+  // hide ability to claim if there are no funds to collect for the connect wallet address
+  const showClaimPayButton =
+    isInvoiceRecipient === false ||
+    (isInvoiceRecipient === true &&
+      invoiceStatus !== InvoiceStatus.PAYMENT_PENDING)
 
   return (
     <div className="divide-y divide-gray-90 pb-32">
@@ -110,6 +122,21 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           </div>
         </div>
       </section>
+      <div
+        className={`${
+          showClaimPayButton ? "block" : "hidden"
+        } fixed bottom-0 w-full max-w-[580px] border-t border-gray-80 bg-black px-4 pt-3 pb-6`}
+      >
+        {isInvoiceRecipient ? (
+          <Button fullWidth>Claim payment</Button>
+        ) : (
+          <Button fullWidth>Pay this invoice</Button>
+        )}
+        <p className="mt-2 text-left text-xs text-gray-50">
+          This action will be recorded on-chain. You&apos;ll be directed to
+          exxecute.
+        </p>
+      </div>
     </div>
   )
 }

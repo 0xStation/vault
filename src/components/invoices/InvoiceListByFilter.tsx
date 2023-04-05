@@ -25,6 +25,7 @@ const InvoiceCard = ({ invoice }: { invoice: Invoice }) => {
     String(invoice?.chainId)
   ]?.explorer
   const { show, invoiceStatus } = useHideInvoiceWithFilter({ invoice })
+
   return (
     <li
       className={`${
