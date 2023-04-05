@@ -3,6 +3,8 @@ import { Button } from "@ui/Button"
 import { Hyperlink } from "@ui/Hyperlink"
 import { AvatarAddress } from "components/core/AvatarAddress"
 import { InvoiceStatusWithIcon } from "components/invoices/InvoiceStatusWithIcon"
+import { encodeTokenTransfer } from "lib/encodings/token"
+import decimalToBigNumber from "lib/utils/decimalToBigNumber"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
@@ -10,6 +12,8 @@ import { Invoice, InvoiceStatus } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
+import { useState } from "react"
+import { useSendTransaction } from "wagmi"
 import { useInvoiceStatus } from "../../../../hooks/invoice/useInvoiceStatus"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
 import { useToast } from "../../../../hooks/useToast"
@@ -31,17 +35,73 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   )
   const { successToast } = useToast()
   const { invoiceStatus } = useInvoiceStatus({ invoice })
-  const { primaryWallet } = useDynamicContext()
+  const { primaryWallet, setShowAuthFlow } = useDynamicContext()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const isInvoiceRecipient = invoice?.data?.splits?.some(
     (split) => split?.address === primaryWallet?.address,
   )
 
+  const { sendTransactionAsync } = useSendTransaction({
+    mode: "recklesslyUnprepared",
+  })
+  const { errorToast } = useToast()
+
   // hide ability to claim if there are no funds to collect for the connect wallet address
   const showClaimPayButton =
-    isInvoiceRecipient === false ||
+    (isInvoiceRecipient === false &&
+      invoiceStatus === InvoiceStatus.PAYMENT_PENDING) ||
     (isInvoiceRecipient === true &&
       invoiceStatus !== InvoiceStatus.PAYMENT_PENDING)
+
+  // prepareSplitsDistributeCall
+
+  const handleClaimPayment = async () => {}
+
+  const handlePayInvoice = async () => {
+    setIsLoading(true)
+    if (!primaryWallet?.address) {
+      setShowAuthFlow(true)
+      return
+    }
+
+    try {
+      const prepareTokenTransferCall = encodeTokenTransfer({
+        sender: primaryWallet?.address as string,
+        recipient: invoice?.data?.paymentAddress,
+        token: invoice?.data?.token,
+        value: decimalToBigNumber(
+          parseFloat(invoice?.data?.totalAmount),
+          invoice?.data?.token?.decimals as number,
+        ).toString(),
+      })
+      const { to, value, data } = prepareTokenTransferCall
+
+      const transaction = await sendTransactionAsync({
+        recklesslySetUnpreparedRequest: {
+          chainId: chainId,
+          to,
+          value,
+          data,
+        },
+      })
+      setIsLoading(false)
+    } catch (err) {
+      setIsLoading(false)
+      console.error(err)
+
+      if (
+        // @ts-ignore
+        err.code === 4001 ||
+        // @ts-ignore
+        (err?.name && err?.name === "UserRejectedRequestError")
+      ) {
+        errorToast({ message: "Signature was rejected" })
+      } else {
+        errorToast({ message: "Something went wrong!" })
+      }
+    }
+  }
 
   return (
     <div className="divide-y divide-gray-90 pb-32">
@@ -89,7 +149,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           </table>
           <div className="my-6">
             {isSigner && (
-              // TODO: rate-limit the amount of emails sent
+              // TODO: rate-limit the amount of emails sent with a set timeout
               <Button
                 variant="secondary"
                 fullWidth={true}
@@ -128,9 +188,13 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
         } fixed bottom-0 w-full max-w-[580px] border-t border-gray-80 bg-black px-4 pt-3 pb-6`}
       >
         {isInvoiceRecipient ? (
-          <Button fullWidth>Claim payment</Button>
+          <Button fullWidth onClick={handleClaimPayment} loading={isLoading}>
+            Claim payment
+          </Button>
         ) : (
-          <Button fullWidth>Pay this invoice</Button>
+          <Button fullWidth onClick={handlePayInvoice} loading={isLoading}>
+            Pay this invoice
+          </Button>
         )}
         <p className="mt-2 text-left text-xs text-gray-50">
           This action will be recorded on-chain. You&apos;ll be directed to

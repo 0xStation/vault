@@ -185,7 +185,7 @@ export const InvoiceListByFilter = ({ filter }: { filter: InvoiceTypeTab }) => {
           </EmptyState>
         </div>
       ) : isMobile ? (
-        <ul className="border-t border-gray-90 px-0 sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-4">
+        <ul className="border-t border-gray-90">
           {invoices?.map((invoice) => (
             <InvoiceCard invoice={invoice} key={invoice?.id} />
           ))}

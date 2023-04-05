@@ -23,6 +23,7 @@ type GraphQLResponse = {
 export const SPLIT_DETAILS_QUERY = gql`
   query split($id: ID!) {
     split(id: $id) {
+      distributorFee
       id
       recipients {
         recipient {
