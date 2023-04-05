@@ -17,3 +17,8 @@ export type InvoiceMetadata = {
   token: Token
   note?: string
 }
+
+export enum InvoiceStatus {
+  PENDING = "PENDING",
+  PAID = "PAID",
+}

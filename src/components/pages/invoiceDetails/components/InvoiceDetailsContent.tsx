@@ -1,7 +1,7 @@
-import { QuorumNotMet } from "@icons/status/QuorumNotMet"
 import { Button } from "@ui/Button"
 import { Hyperlink } from "@ui/Hyperlink"
 import { AvatarAddress } from "components/core/AvatarAddress"
+import { InvoiceStatusWithIcon } from "components/invoices/InvoiceStatusWithIcon"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
@@ -9,6 +9,7 @@ import { Invoice } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
+import { useInvoiceStatus } from "../../../../hooks/invoice/useInvoiceStatus"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
 import { useToast } from "../../../../hooks/useToast"
 
@@ -28,15 +29,12 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     invoice?.id as string,
   )
   const { successToast } = useToast()
+  const { invoiceStatus } = useInvoiceStatus({ invoice })
 
   return (
     <div className="divide-y divide-gray-90 pb-32">
       <section className="p-4">
-        <div className="mt-6 flex flex-row items-center space-x-3">
-          {/* TODO: Change the status to not be hardcoded */}
-          <QuorumNotMet />
-          <span>Payment pending</span>
-        </div>
+        <InvoiceStatusWithIcon status={invoiceStatus} className="mt-6" />
         <div className="mt-6">
           <h1 className="mb-2">
             {invoice?.data?.totalAmount} {invoice?.data?.token?.symbol}
