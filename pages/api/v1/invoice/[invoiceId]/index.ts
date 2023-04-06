@@ -82,7 +82,13 @@ export default async function handler(
       ...balanceTokenAddresses,
     ].filter((v, i, values) => values.indexOf(v) === i)
 
-    const tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
+    let tokens
+    try {
+      tokens = await getFungibleTokenDetails(chainId, allTokenAddresses)
+    } catch (err) {
+      res.statusCode = 500
+      return res.end(JSON.stringify(err))
+    }
 
     // Sum unclaimed split values and current balance to form total unclaimed accumulator
 

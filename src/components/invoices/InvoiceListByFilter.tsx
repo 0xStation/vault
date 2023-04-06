@@ -109,6 +109,7 @@ const InvoiceTableRow = ({
         <Hyperlink
           href={`${blockExplorer}/address/${invoice?.data?.paymentAddress}`}
           label={invoice?.data?.paymentAddress?.substring(0, 8)}
+          size="base"
         />
       </td>
       <td>
