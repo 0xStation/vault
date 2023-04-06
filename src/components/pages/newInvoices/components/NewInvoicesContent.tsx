@@ -187,8 +187,8 @@ export const NewInvoicesContent = () => {
 
         // validate number of recipients
         if (addresses.length < 2) {
-          if (isDirty) setSplitsFieldError("Must have more than 2 recipients")
-          return "Must have more than 2 recipients"
+          if (isDirty) setSplitsFieldError("Must have at least 2 recipients")
+          return "Must have at least 2 recipients"
         }
 
         const uniqueAddresses = addresses.filter(
@@ -348,7 +348,7 @@ export const NewInvoicesContent = () => {
   }
   return txData?.hash ? (
     <TransactionLoadingPage
-      title="Deploying your invoice"
+      title="Sending your Invoice and recording on-chain"
       subtitle="Please do not leave or refresh the page."
       chainId={chainId}
       txnHash={txData?.hash}
@@ -539,7 +539,6 @@ export const NewInvoicesContent = () => {
                       required
                       validations={{
                         noDuplicates: async (v: string) => {
-                          const address = await resolveEnsAddress(v)
                           const recipients: string[] = watchSplits.map(
                             (split: { recipient: string; address: string }) =>
                               split.recipient === "other"

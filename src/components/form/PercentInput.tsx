@@ -34,10 +34,10 @@ export const PercentInput = ({
       </label>
       <div className="flex flex-row space-x-2 border-b border-b-gray-80">
         <input
-          type="number"
-          min={min}
-          step={10 ** (-1 * decimals)}
-          max={max}
+          // type="number"
+          // min={min}
+          // step={10 ** (-1 * decimals)}
+          // max={max}
           defaultValue={0}
           className="w-full bg-gray-90 placeholder:text-gray"
           placeholder={placeholder}
