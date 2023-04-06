@@ -21,6 +21,7 @@ import { useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { useResolveEnsAddress } from "../../../../hooks/ens/useResolveEns"
+import { useCorrectNetwork } from "../../../../hooks/useCorrectNetwork"
 import { useToast } from "../../../../hooks/useToast"
 import { useCreateAutomation } from "../../../../models/automation/hooks"
 import { useTerminalByChainIdAndSafeAddress } from "../../../../models/terminal/hooks"
@@ -57,6 +58,8 @@ export const NewAutomationContent = () => {
     terminalAddress,
     chainId,
   )
+
+  const { switchNetwork, correctNetworkSelected } = useCorrectNetwork(chainId)
 
   const { createAutomation } = useCreateAutomation(chainId, terminalAddress)
   const { successToast, errorToast } = useToast()
@@ -108,59 +111,64 @@ export const NewAutomationContent = () => {
   const onSubmit = async (formValues: any) => {
     setIsLoading(true)
 
-    const addressSplits = await Promise.all(
-      formValues.splits.map(
-        async ({
-          recipient,
-          address,
-          value,
-        }: {
-          recipient: string
-          value: string
-          address?: string
-        }) => ({
-          address:
-            recipient !== "other"
-              ? recipient
-              : isEns(address!)
-              ? await resolveEnsAddress(address!)
-              : address!,
-          value,
-        }),
-      ),
-    )
-    // @ts-ignore
-    setFormData({ name: formValues.name, splits: addressSplits })
-
-    const { to, value, data } = prepareCreateSplitCall(
-      terminalAddress,
-      // @ts-ignore
-      addressSplits,
-    )
-    try {
-      await sendTransactionAsync({
-        recklesslySetUnpreparedRequest: {
-          chainId,
-          to,
-          value,
-          data,
-        },
-      })
-
-      setFormMessage({ isError: false, message: "" })
-    } catch (err: any) {
-      if (err?.name && err?.name === "UserRejectedRequestError") {
-        setFormMessage({
-          isError: true,
-          message: "Transaction was rejected.",
-        })
-      } else {
-        setFormMessage({
-          isError: true,
-          message: "Something went wrong.",
-        })
-      }
+    if (!correctNetworkSelected) {
+      await switchNetwork()
       setIsLoading(false)
+    } else {
+      const addressSplits = await Promise.all(
+        formValues.splits.map(
+          async ({
+            recipient,
+            address,
+            value,
+          }: {
+            recipient: string
+            value: string
+            address?: string
+          }) => ({
+            address:
+              recipient !== "other"
+                ? recipient
+                : isEns(address!)
+                ? await resolveEnsAddress(address!)
+                : address!,
+            value,
+          }),
+        ),
+      )
+      // @ts-ignore
+      setFormData({ name: formValues.name, splits: addressSplits })
+
+      const { to, value, data } = prepareCreateSplitCall(
+        terminalAddress,
+        // @ts-ignore
+        addressSplits,
+      )
+      try {
+        await sendTransactionAsync({
+          recklesslySetUnpreparedRequest: {
+            chainId,
+            to,
+            value,
+            data,
+          },
+        })
+
+        setFormMessage({ isError: false, message: "" })
+      } catch (err: any) {
+        if (err?.name && err?.name === "UserRejectedRequestError") {
+          setFormMessage({
+            isError: true,
+            message: "Transaction was rejected.",
+          })
+        } else {
+          setFormMessage({
+            isError: true,
+            message: "Something went wrong.",
+          })
+        }
+        setIsLoading(false)
+      }
     }
 
     // will update data from useSendTransaction, which triggers useWaitForTransaction
@@ -269,6 +277,7 @@ export const NewAutomationContent = () => {
   ) : (
     <div className="mb-24 grow sm:mt-6">
       <h2 className="mb-[30px] sm:mt-0">New Revenue Share</h2>
+
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="flex-col space-y-6">
           <InputWithLabel
