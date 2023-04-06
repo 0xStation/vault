@@ -14,6 +14,7 @@ import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, FieldValues, useForm } from "react-hook-form"
+import { useIsSigner } from "../../../src/hooks/useIsSigner"
 import { useUpsertTokenTransfer } from "../../hooks/tokenTransfer/useUpsertTokenTransfer"
 import {
   TransferDirection,
@@ -54,6 +55,7 @@ const TransactionItem = ({
   note,
   category,
 }: TransactionProps) => {
+  const isSigner = useIsSigner({ address: terminalAddress, chainId })
   const [sliderOpen, setSliderOpen] = useState(false)
   const blockExplorer = (networks as Record<string, any>)[String(chainId)]
     .explorer
@@ -68,7 +70,6 @@ const TransactionItem = ({
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
-    watch,
   } = useForm({
     mode: "all",
     defaultValues: {
@@ -83,6 +84,7 @@ const TransactionItem = ({
       note: data.description,
       category: data.category,
     })
+    setSliderOpen(false)
   }
 
   const onError = (errors: any) => {
@@ -131,7 +133,7 @@ const TransactionItem = ({
               name="category"
               render={({ field: { onChange, ref } }) => (
                 <Select onValueChange={onChange} defaultValue={category}>
-                  <SelectTrigger ref={ref}>
+                  <SelectTrigger ref={ref} className="bg-black">
                     <SelectValue placeholder="Select one" />
                   </SelectTrigger>
                   <SelectContent>
@@ -149,8 +151,8 @@ const TransactionItem = ({
         </section>
         <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full px-4 text-center">
           <Button
+            disabled={!isSigner || isSubmitting}
             type="submit"
-            disabled={isSubmitting}
             loading={isSubmitting}
             fullWidth={true}
           >
@@ -267,7 +269,6 @@ export const AssetTransfersTab = ({
   const { address: safeAddress } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-
   const { data } = useAssetTransfers(address, chainId, direction)
 
   const {

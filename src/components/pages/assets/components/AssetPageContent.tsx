@@ -5,6 +5,7 @@ import axios from "axios"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
 import { TransferDirection } from "../../../../../src/hooks/useAssetTransfers"
+import { useIsSigner } from "../../../../../src/hooks/useIsSigner"
 import { Terminal } from "../../../../../src/models/terminal/types"
 import { AssetTransfersTab } from "../../../assets/AssetTransfersTab"
 import { CurrentAssetsTab } from "../../../assets/CurrentAssetsTab"
@@ -19,12 +20,17 @@ import {
 
 const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
   const { authToken } = useDynamicContext()
+
   const router = useRouter()
   const { address, chainId } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
-  )
+  ) as { address: string; chainId: number }
+
+  const isSigner = useIsSigner({ address, chainId })
+
   const ExportButton = (
     <Button
+      disabled={!isSigner}
       variant="secondary"
       onClick={async () => {
         const { filter } = router.query

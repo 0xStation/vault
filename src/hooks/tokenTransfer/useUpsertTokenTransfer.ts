@@ -10,9 +10,9 @@ export const useUpsertTokenTransfer = (
 
   const fetcher = async (url: string, { arg }: { arg: any }) => {
     const { note, category, txHash } = arg
-    if (!note || !category || !txHash) {
+    if (!txHash) {
       throw Error(
-        `Missing args in "upsertTokenTransfer". Args specified - note: ${note}, category: ${category}, txHash: ${txHash}`,
+        `Missing args in "upsertTokenTransfer". Args specified - txHash: ${txHash}`,
       )
     }
 
