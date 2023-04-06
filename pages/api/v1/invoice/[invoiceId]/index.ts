@@ -23,7 +23,7 @@ export default async function handler(
     return res.end(JSON.stringify("No invoice id provided"))
   }
 
-  let invoice
+  let invoice: Invoice
   try {
     invoice = (await db.invoice.findUnique({
       where: {
@@ -48,6 +48,23 @@ export default async function handler(
       getFungibleTokenBalances(chainId, address),
       getRevShareSplits(chainId, address),
     ])
+
+    const recipientsClaimedMetadata = {} as any
+
+    splits.forEach((split) => {
+      // split address is the recipient address
+      recipientsClaimedMetadata[split.address] = {
+        token: invoice?.data?.token,
+        totalClaimed: split.tokens
+          .filter((token) => token?.address === invoice?.data?.token?.address)
+          ?.reduce((acc, token) => acc + parseFloat(token.totalClaimed), 0)
+          ?.toString(),
+        unclaimed: split.tokens
+          .filter((token) => token?.address === invoice?.data?.token?.address)
+          ?.reduce((acc, token) => acc + parseFloat(token.unclaimed), 0)
+          ?.toString(),
+      }
+    })
 
     // Get metadata for all tokens by merging splits and balance
 
@@ -107,10 +124,7 @@ export default async function handler(
 
     invoice = {
       ...invoice,
-      splits: splits.map((split) => ({
-        address: split.address,
-        value: split.value,
-      })),
+      recipientsClaimedMetadata,
       distributorFee: splits?.[0]?.distributorFee || "0",
       unclaimedBalances: unclaimedBalances,
     }

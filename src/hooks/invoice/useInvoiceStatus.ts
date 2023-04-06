@@ -7,6 +7,12 @@ export const useInvoiceStatus = ({ invoice }: { invoice: Invoice }) => {
     invoice?.chainId,
   )
 
+  const unclaimedBalanceFromDistributedContract =
+    invoice?.unclaimedBalances?.filter(
+      (unclaimedBalance: any) =>
+        unclaimedBalance?.address === invoice?.data?.token?.address,
+    )?.[0] // there should only be one token for us to rely on the 0th index
+
   const { data: withdrawnAssets } = useAssetTransfers(
     invoice?.data?.paymentAddress,
     invoice?.chainId,
@@ -35,7 +41,9 @@ export const useInvoiceStatus = ({ invoice }: { invoice: Invoice }) => {
 
   const invoiceStatus =
     totalAmountTransferredToSplit >= parseFloat(invoice?.data?.totalAmount)
-      ? totalAmountWithdrawnFromSplit >= parseFloat(invoice?.data?.totalAmount)
+      ? totalAmountWithdrawnFromSplit >=
+          parseFloat(invoice?.data?.totalAmount) &&
+        unclaimedBalanceFromDistributedContract?.value === "0"
         ? InvoiceStatus?.COMPLETED
         : InvoiceStatus?.CLAIM_PENDING
       : InvoiceStatus?.PAYMENT_PENDING

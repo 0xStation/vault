@@ -2,16 +2,23 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react"
 import { Button } from "@ui/Button"
 import { Hyperlink } from "@ui/Hyperlink"
 import { AvatarAddress } from "components/core/AvatarAddress"
+import { ClaimInvoiceStatusIcon } from "components/invoices/ClaimInvoiceStatusIcon"
 import { InvoiceStatusWithIcon } from "components/invoices/InvoiceStatusWithIcon"
 import { encodeTokenTransfer } from "lib/encodings/token"
 import decimalToBigNumber from "lib/utils/decimalToBigNumber"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
 import { useGenInvoiceClaimCall } from "models/invoice/hooks/useGenInvoiceClaimCall"
+import { useInvoice } from "models/invoice/hooks/useInvoice"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
-import { Invoice, InvoiceStatus } from "models/invoice/types"
+import {
+  ClaimedInvoiceStatus,
+  Invoice,
+  InvoiceStatus,
+} from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
+import { valueToAmount } from "models/token/utils"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useSendTransaction } from "wagmi"
@@ -24,7 +31,11 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  const { genInvoiceClaimCall } = useGenInvoiceClaimCall(invoice)
+  // fetch invoice to retrieve subgraph data
+  const { data: fetchedInvoice } = useInvoice(invoice?.id)
+  const { genInvoiceClaimCall } = useGenInvoiceClaimCall(
+    fetchedInvoice as Invoice,
+  )
 
   const { terminal } = useTerminalByChainIdAndSafeAddress(
     address as string,
@@ -37,7 +48,9 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     invoice?.id as string,
   )
   const { successToast } = useToast()
-  const { invoiceStatus } = useInvoiceStatus({ invoice })
+  const { invoiceStatus } = useInvoiceStatus({
+    invoice: fetchedInvoice as Invoice,
+  })
   const { primaryWallet, setShowAuthFlow } = useDynamicContext()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -50,14 +63,39 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   })
   const { errorToast } = useToast()
 
+  const activeUserClaimedMetadata =
+    fetchedInvoice?.recipientsClaimedMetadata?.[
+      // @ts-ignore
+      primaryWallet?.address?.toLowerCase()
+    ]
+
+  const activeUserSplit = isInvoiceRecipient
+    ? fetchedInvoice?.data?.splits?.find(
+        (split) => split?.address === primaryWallet?.address,
+      )
+    : { value: 0 }
+
+  const activeUserClaimStatus =
+    parseFloat(
+      valueToAmount(
+        activeUserClaimedMetadata?.totalClaimed || 0,
+        activeUserClaimedMetadata?.token?.decimals || 0,
+      ),
+    ) >=
+    parseFloat(invoice?.data?.totalAmount) *
+      (activeUserSplit?.value || 0) *
+      0.01
+      ? ClaimedInvoiceStatus?.CLAIMED
+      : ClaimedInvoiceStatus?.UNCLAIMED
+
   // hide ability to claim if there are no funds to collect for the connect wallet address
   const showClaimPayButton =
     (isInvoiceRecipient === false &&
       invoiceStatus === InvoiceStatus.PAYMENT_PENDING) ||
     (isInvoiceRecipient === true &&
-      invoiceStatus !== InvoiceStatus.PAYMENT_PENDING)
-
-  // prepareSplitsDistributeCall
+      activeUserClaimStatus === ClaimedInvoiceStatus?.UNCLAIMED &&
+      invoiceStatus !== InvoiceStatus.PAYMENT_PENDING &&
+      invoiceStatus !== InvoiceStatus.COMPLETED)
 
   const handleClaimPayment = async () => {
     setIsLoading(true)
@@ -82,7 +120,10 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           data,
         },
       })
+      successToast({ message: "Claiming initiated" })
+      setIsLoading(false)
     } catch (err) {
+      setIsLoading(false)
       console.error(err)
       if (
         // @ts-ignore
@@ -95,12 +136,12 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
         errorToast({ message: "Something went wrong!" })
       }
     }
-    setIsLoading(false)
   }
 
   const handlePayInvoice = async () => {
     setIsLoading(true)
     if (!primaryWallet?.address) {
+      setIsLoading(false)
       setShowAuthFlow(true)
       return
     }
@@ -117,7 +158,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
       })
       const { to, value, data } = prepareTokenTransferCall
 
-      const transaction = await sendTransactionAsync({
+      await sendTransactionAsync({
         recklesslySetUnpreparedRequest: {
           chainId: chainId,
           to,
@@ -125,6 +166,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           data,
         },
       })
+      successToast({ message: "Transaction initiated" })
       setIsLoading(false)
     } catch (err) {
       setIsLoading(false)
@@ -188,33 +230,61 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
             </tbody>
           </table>
           <div className="my-6">
-            {isSigner && (
-              // TODO: rate-limit the amount of emails sent with a set timeout
-              <Button
-                variant="secondary"
-                fullWidth={true}
-                onClick={() => {
-                  sendCreateInvoiceEmail()
-                  successToast({ message: "Sent!" })
-                }}
-              >
-                Remind
-              </Button>
-            )}
+            {(isSigner || isInvoiceRecipient) &&
+              invoiceStatus === InvoiceStatus.PAYMENT_PENDING && (
+                // TODO: rate-limit the amount of emails sent with a set timeout
+                <Button
+                  variant="secondary"
+                  fullWidth={true}
+                  onClick={() => {
+                    sendCreateInvoiceEmail()
+                    successToast({ message: "Sent!" })
+                  }}
+                >
+                  Remind
+                </Button>
+              )}
           </div>
         </div>
       </section>
+      {invoice?.data?.note && (
+        <section className="py-6 px-4">
+          <h3 className="font-regular mb-4">Note</h3>
+          <p className="">{invoice?.data?.note}</p>
+        </section>
+      )}
       <section className="p-4">
         <div className="mb-6 flex flex-col">
           <h3 className="font-regular mt-6 mb-4">Recipients</h3>
           <div className="space-y-2">
             {invoice?.data?.splits.map((split) => {
+              const claimedMetadata =
+                fetchedInvoice?.recipientsClaimedMetadata?.[
+                  // @ts-ignore
+                  split?.address?.toLowerCase()
+                ]
+
+              const claimStatus =
+                claimedMetadata?.totalClaimed >=
+                decimalToBigNumber(
+                  parseFloat(invoice?.data?.totalAmount) *
+                    (split?.value * 1e-2),
+                  claimedMetadata?.token?.decimals,
+                ).toString()
+                  ? ClaimedInvoiceStatus?.CLAIMED
+                  : ClaimedInvoiceStatus?.UNCLAIMED
+
               return (
                 <div
                   className="flex flex-row items-center justify-between"
                   key={split?.address}
                 >
-                  <AvatarAddress address={split?.address} />
+                  <div className="flex flex-row items-center space-x-2">
+                    {claimStatus && (
+                      <ClaimInvoiceStatusIcon status={claimStatus} />
+                    )}
+                    <AvatarAddress address={split?.address} />
+                  </div>
                   <p className="text-gray-50">{split?.value}%</p>
                 </div>
               )
@@ -227,18 +297,20 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           showClaimPayButton ? "block" : "hidden"
         } fixed bottom-0 w-full max-w-[580px] border-t border-gray-80 bg-black px-4 pt-3 pb-6`}
       >
-        {isInvoiceRecipient ? (
+        {isInvoiceRecipient &&
+        invoiceStatus !== InvoiceStatus.PAYMENT_PENDING &&
+        invoiceStatus !== InvoiceStatus.COMPLETED ? (
           <Button fullWidth onClick={handleClaimPayment} loading={isLoading}>
             Claim payment
           </Button>
-        ) : (
+        ) : !isInvoiceRecipient ? (
           <Button fullWidth onClick={handlePayInvoice} loading={isLoading}>
             Pay this invoice
           </Button>
-        )}
+        ) : null}
         <p className="mt-2 text-left text-xs text-gray-50">
           This action will be recorded on-chain. You&apos;ll be directed to
-          exxecute.
+          execute.
         </p>
       </div>
     </div>

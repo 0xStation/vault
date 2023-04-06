@@ -92,7 +92,12 @@ export const NewInvoicesContent = () => {
       splits: [
         {
           recipient: "",
-          value: 100,
+          value: 0,
+          address: "",
+        },
+        {
+          recipient: "",
+          value: 0,
           address: "",
         },
       ],
@@ -165,12 +170,17 @@ export const NewInvoicesContent = () => {
           ),
         )
 
-        // TODO: validate the recipients addresses are not the same as the client address
         const addresses = recipients.filter((address) => isAddress(address))
 
         if (splits.length > 1 && splits.some((split) => !split.value)) {
           if (isDirty) setSplitsFieldError("Split percentage cannot be zero")
           return "Split percentage cannot be zero"
+        }
+
+        // validate number of recipients
+        if (addresses.length < 2) {
+          if (isDirty) setSplitsFieldError("Must have more than 2 recipients")
+          return "Must have more than 2 recipients"
         }
 
         const uniqueAddresses = addresses.filter(

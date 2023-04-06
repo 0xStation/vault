@@ -3,6 +3,14 @@ import { Token } from "models/token/types"
 
 export type Invoice = PrismaInvoice & {
   distributorFee?: string
+  recipientsClaimedMetadata?: {
+    [address: string]: {
+      token: Token
+      totalClaimed: string
+      unclaimed: string
+    }
+  }[]
+  unclaimedBalances: any
   data: InvoiceMetadata
 }
 
@@ -23,4 +31,9 @@ export enum InvoiceStatus {
   PAYMENT_PENDING = "PAYMENT_PENDING",
   CLAIM_PENDING = "CLAIM_PENDING",
   COMPLETED = "COMPLETED",
+}
+
+export enum ClaimedInvoiceStatus {
+  CLAIMED = "CLAIMED",
+  UNCLAIMED = "UNCLAIMED",
 }

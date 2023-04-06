@@ -9,6 +9,7 @@ import InvoiceDetailsContent from "components/pages/invoiceDetails/components/In
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
+import { useInvoice } from "models/invoice/hooks/useInvoice"
 import { useInvoices } from "models/invoice/hooks/useInvoices"
 import { Invoice } from "models/invoice/types"
 import { parseGlobalId } from "models/terminal/utils"
@@ -21,10 +22,13 @@ import { InvoiceStatusIcon } from "./InvoiceStatusIcon"
 
 const InvoiceCard = ({ invoice }: { invoice: Invoice }) => {
   const router = useRouter()
+  const { data: fetchedInvoice } = useInvoice(invoice?.id)
   const blockExplorer = (networks as Record<string, any>)?.[
     String(invoice?.chainId)
   ]?.explorer
-  const { show, invoiceStatus } = useHideInvoiceWithFilter({ invoice })
+  const { show, invoiceStatus } = useHideInvoiceWithFilter({
+    invoice: fetchedInvoice as Invoice,
+  })
 
   return (
     <li
@@ -78,10 +82,13 @@ const InvoiceTableRow = ({
   setInvoiceDetailsSliderOpen: Dispatch<SetStateAction<boolean>>
 }) => {
   const router = useRouter()
+  const { data: fetchedInvoice } = useInvoice(invoice?.id)
   const blockExplorer = (networks as Record<string, any>)?.[
     String(invoice?.chainId)
   ]?.explorer
-  const { show, invoiceStatus } = useHideInvoiceWithFilter({ invoice })
+  const { show, invoiceStatus } = useHideInvoiceWithFilter({
+    invoice: fetchedInvoice as Invoice,
+  })
   return (
     <tr
       key={invoice?.id}
