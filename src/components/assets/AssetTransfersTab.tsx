@@ -1,3 +1,5 @@
+import BottomDrawer from "@ui/BottomDrawer"
+import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import RightSlider from "@ui/RightSlider"
 import {
@@ -87,77 +89,98 @@ const TransactionItem = ({
     console.log(errors)
   }
 
+  const TxContent = () => {
+    return (
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <section className="border-b border-gray-90 py-6 px-2">
+          <div className="text-xl font-bold">{value}</div>
+          <div className="mt-2 flex flex-row space-x-2">
+            <div className="text-sm text-gray-80">{date}</div>
+            <Hyperlink
+              href={`${blockExplorer}/tx/${hash}`}
+              label="View on Etherscan"
+              size="xs"
+            />
+          </div>
+        </section>
+        <section className="py-6 px-2">
+          <div className="flex flex-row">
+            <div className="w-1/2">
+              <div className=" text-sm text-gray-80">From</div>
+              <Address address={from} interactive={false} />
+            </div>
+            <div className="w-1/2">
+              <div className="text-sm text-gray-80">To</div>
+              <Address address={to} interactive={false} />
+            </div>
+          </div>
+          <div className="mt-6">
+            <TextareaWithLabel
+              label={"Description"}
+              register={register}
+              name="description"
+              errors={errors}
+              placeholder="Add a note"
+            />
+          </div>
+
+          <div className="mt-6">
+            <div className="mb-2 text-base font-bold">Category</div>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field: { onChange, ref } }) => (
+                <Select onValueChange={onChange} defaultValue={category}>
+                  <SelectTrigger ref={ref}>
+                    <SelectValue placeholder="Select one" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(TokenTransferVariant).map((key, i) => (
+                      <SelectItem key={key} ref={ref} value={key}>
+                        {key.charAt(0).toUpperCase() +
+                          key.slice(1).toLocaleLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </section>
+        <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full px-4 text-center">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            fullWidth={true}
+          >
+            Save changes
+          </Button>
+        </div>
+      </form>
+    )
+  }
+
   return (
     <>
-      <RightSlider open={sliderOpen} setOpen={setSliderOpen}>
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <section className="border-b border-gray-90 py-6 px-2">
-            <div className="text-xl font-bold">{value}</div>
-            <div className="mt-2 flex flex-row space-x-2">
-              <div className="text-sm text-gray-80">{date}</div>
-              <Hyperlink
-                href={`${blockExplorer}/tx/${hash}`}
-                label="View on Etherscan"
-                size="xs"
-              />
-            </div>
-          </section>
-          <section className="py-6 px-2">
-            <div className="flex flex-row">
-              <div className="w-1/2">
-                <div className=" text-sm text-gray-80">From</div>
-                <Address address={from} interactive={false} />
-              </div>
-              <div className="w-1/2">
-                <div className="text-sm text-gray-80">To</div>
-                <Address address={to} interactive={false} />
-              </div>
-            </div>
-            <div className="mt-6">
-              <TextareaWithLabel
-                label={"Description"}
-                register={register}
-                name="description"
-                errors={errors}
-                placeholder="Add a note"
-              />
-            </div>
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return (
+              <BottomDrawer isOpen={sliderOpen} setIsOpen={setSliderOpen}>
+                <TxContent />
+              </BottomDrawer>
+            )
+          } else {
+            return (
+              <RightSlider open={sliderOpen} setOpen={setSliderOpen}>
+                <TxContent />
+              </RightSlider>
+            )
+          }
+        }}
+      </Breakpoint>
 
-            <div className="mt-6">
-              <div className="mb-2 text-base font-bold">Category</div>
-              <Controller
-                control={control}
-                name="category"
-                render={({ field: { onChange, ref } }) => (
-                  <Select onValueChange={onChange} defaultValue={category}>
-                    <SelectTrigger ref={ref}>
-                      <SelectValue placeholder="Select one" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(TokenTransferVariant).map((key, i) => (
-                        <SelectItem key={key} ref={ref} value={key}>
-                          {key.charAt(0).toUpperCase() +
-                            key.slice(1).toLocaleLowerCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-          </section>
-          <div className="fixed bottom-0 right-0 left-0 mx-auto mb-3 w-full px-4 text-center">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
-              fullWidth={true}
-            >
-              Save changes
-            </Button>
-          </div>
-        </form>
-      </RightSlider>
       <div
         className="grid cursor-pointer grid-cols-12"
         onClick={() => {
@@ -217,7 +240,6 @@ export const AssetTransfersTab = ({
   )
 
   const { data } = useAssetTransfers(address, chainId, direction)
-  console.log(data)
 
   const {
     register,

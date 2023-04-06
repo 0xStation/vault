@@ -16,6 +16,13 @@ const TerminalAssetsHistoryTab = ({ terminal }: { terminal: Terminal }) => {
   return (
     <TabsContent value={TerminalAssetsTab.HISTORY}>
       <TerminalAssetsHistoryFilterBar>
+        <TabsContent value={TerminalAssetsHistoryFilter.ALL}>
+          <AssetTransfersTab
+            address={terminal?.safeAddress}
+            chainId={terminal?.chainId}
+            direction={TransferDirection.ALL}
+          />
+        </TabsContent>
         <TabsContent value={TerminalAssetsHistoryFilter.SENT}>
           <AssetTransfersTab
             address={terminal?.safeAddress}

@@ -1,10 +1,12 @@
 import axios from "axios"
 import { alchemyChainIdToChainName } from "lib/constants"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { getSplitWithdrawEvents } from "../models/automation/queries/getSplitWithdrawEvents"
 import { TokenType } from "../models/token/types"
 
 export enum TransferDirection {
+  ALL = "all",
   INBOUND = "inbound",
   OUTBOUND = "outbound",
   WITHDRAW_EVENT = "withdraw-event",
@@ -121,34 +123,60 @@ export const useAssetTransfers = (
     direction === TransferDirection.WITHDRAW_EVENT
       ? getSplitWithdrawEvents
       : alchemyFetcher
-  const {
-    isLoading,
-    data: alchemyData,
-    error,
-  } = useSWR([address, chainId, direction], fetcher)
+
+  const { data: toData } = useSWR(
+    [address, chainId, TransferDirection.OUTBOUND],
+    fetcher,
+  )
+  const { data: fromData } = useSWR(
+    [address, chainId, TransferDirection.INBOUND],
+    fetcher,
+  )
 
   const { data: databaseData } = useSWR(
     `/api/v1/tokenTransfer?safeAddress=${address}&chainId=${chainId}`,
     databaseFetcher,
   )
 
-  const data = [] as any[]
+  const [alchemyData, setAlchemyData] = useState([] as any[])
+  useEffect(() => {
+    if (!toData || !fromData) return
+    switch (direction) {
+      case TransferDirection.ALL:
+        if (toData && fromData) {
+          setAlchemyData([...toData, ...fromData])
+        }
+        break
+      case TransferDirection.INBOUND:
+        setAlchemyData(fromData)
+        break
 
-  if (alchemyData && databaseData) {
+      case TransferDirection.OUTBOUND:
+        setAlchemyData(toData)
+        break
+    }
+  }, [toData, fromData])
+
+  const [data, setData] = useState([] as any[])
+
+  useEffect(() => {
+    if (!alchemyData || !databaseData) return
+    const joinedData = [] as any[]
     alchemyData.forEach((alchemyItem: any) => {
       const databaseItem = databaseData.find(
         (item: any) => item.txHash === alchemyItem.hash,
       )
       if (databaseItem) {
-        data.push({
+        joinedData.push({
           ...alchemyItem,
           ...databaseItem,
         })
       } else {
-        data.push(alchemyItem)
+        joinedData.push(alchemyItem)
       }
     })
-  }
+    setData(joinedData)
+  }, [alchemyData, databaseData])
 
-  return { isLoading, data, error }
+  return { data }
 }
