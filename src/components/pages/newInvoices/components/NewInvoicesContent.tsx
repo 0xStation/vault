@@ -22,6 +22,7 @@ import { prepareCreateSplitCall } from "lib/encodings/0xsplits"
 import truncateString, { cn, isEns } from "lib/utils"
 import { getNetworkTokens } from "lib/utils/networks/getNetworkTokens"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
+import { isValidEmail } from "lib/validations"
 import { useCreateInvoice } from "models/invoice/hooks/useCreateInvoice"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { Token } from "models/token/types"
@@ -29,7 +30,12 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { isAddress } from "viem"
-import { useSendTransaction, useWaitForTransaction } from "wagmi"
+import {
+  useNetwork,
+  useSendTransaction,
+  useSwitchNetwork,
+  useWaitForTransaction,
+} from "wagmi"
 import { useResolveEnsAddress } from "../../../../hooks/ens/useResolveEns"
 import { useToast } from "../../../../hooks/useToast"
 
@@ -75,6 +81,8 @@ export const NewInvoicesContent = () => {
     mode: "recklesslyUnprepared",
   })
   const { createInvoice, error } = useCreateInvoice(chainId, terminalAddress)
+  const { switchNetwork, error: networkError } = useSwitchNetwork()
+  const { chain } = useNetwork()
 
   const {
     register,
@@ -250,6 +258,25 @@ export const NewInvoicesContent = () => {
 
   const onSubmit = async (formValues: any) => {
     setIsLoading(true)
+    setFormMessage({
+      isError: false,
+      message: "",
+    })
+
+    if (chain?.id !== chainId) {
+      setFormMessage({
+        isError: true,
+        message: "Please switch network and try again.",
+      })
+
+      await switchNetwork?.(chainId as number)
+      setIsLoading(false)
+      if (networkError) {
+        errorToast({ message: networkError?.message })
+        return
+      }
+      return
+    }
 
     const addressSplits = await Promise.all(
       formValues.splits.map(
@@ -359,6 +386,11 @@ export const NewInvoicesContent = () => {
               maxLength: {
                 value: 60,
                 message: "Exceeded max length of 60 characters.",
+              },
+              validate: {
+                validEmail: (v: any) => {
+                  return isValidEmail(v) || "Please enter a valid email"
+                },
               },
             }}
           />
