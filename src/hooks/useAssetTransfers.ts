@@ -40,7 +40,7 @@ export type TransferItem = {
   }
 }
 
-const alchemyFetcher = async ([address, chainId, direction]: [
+export const alchemyFetcher = async ([address, chainId, direction]: [
   string,
   number,
   TransferDirection,

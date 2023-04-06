@@ -7,8 +7,10 @@ export enum TerminalAssetsHistoryFilter {
 }
 
 export const TerminalAssetsHistoryFilterBar = ({
+  actionElement,
   children,
 }: {
+  actionElement?: React.ReactNode
   children: React.ReactNode
 }) => {
   const options = [
@@ -31,6 +33,7 @@ export const TerminalAssetsHistoryFilterBar = ({
       style="filter"
       defaultValue={TerminalAssetsHistoryFilter.SENT}
       options={options}
+      actionElement={actionElement}
     >
       {children}
     </TabBar>
