@@ -32,6 +32,10 @@ export type TransferItem = {
   metadata: {
     blockTimestamp: string
   }
+  data?: {
+    note: string
+    category: string
+  }
 }
 
 const alchemyFetcher = async ([address, chainId, direction]: [
@@ -97,6 +101,17 @@ const alchemyFetcher = async ([address, chainId, direction]: [
   }
 }
 
+const databaseFetcher = async (url: string) => {
+  try {
+    const response = await axios.get(url)
+
+    return response.data
+  } catch (err) {
+    console.error("err:", err)
+    return null
+  }
+}
+
 export const useAssetTransfers = (
   address: string,
   chainId: number,
@@ -106,10 +121,34 @@ export const useAssetTransfers = (
     direction === TransferDirection.WITHDRAW_EVENT
       ? getSplitWithdrawEvents
       : alchemyFetcher
-  const { isLoading, data, error } = useSWR(
-    [address, chainId, direction],
-    fetcher,
+  const {
+    isLoading,
+    data: alchemyData,
+    error,
+  } = useSWR([address, chainId, direction], fetcher)
+
+  const { data: databaseData } = useSWR(
+    `/api/v1/tokenTransfer?safeAddress=${address}&chainId=${chainId}`,
+    databaseFetcher,
   )
+
+  const data = [] as any[]
+
+  if (alchemyData && databaseData) {
+    alchemyData.forEach((alchemyItem: any) => {
+      const databaseItem = databaseData.find(
+        (item: any) => item.txHash === alchemyItem.hash,
+      )
+      if (databaseItem) {
+        data.push({
+          ...alchemyItem,
+          ...databaseItem,
+        })
+      } else {
+        data.push(alchemyItem)
+      }
+    })
+  }
 
   return { isLoading, data, error }
 }
