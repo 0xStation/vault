@@ -2,6 +2,7 @@ import { Invoice as PrismaInvoice } from "@prisma/client"
 import { Token } from "models/token/types"
 
 export type Invoice = PrismaInvoice & {
+  distributorFee?: string
   data: InvoiceMetadata
 }
 

@@ -111,6 +111,7 @@ export default async function handler(
         address: split.address,
         value: split.value,
       })),
+      distributorFee: splits?.[0]?.distributorFee || "0",
       unclaimedBalances: unclaimedBalances,
     }
   } catch (e) {

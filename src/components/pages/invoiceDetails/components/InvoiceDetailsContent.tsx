@@ -7,6 +7,7 @@ import { encodeTokenTransfer } from "lib/encodings/token"
 import decimalToBigNumber from "lib/utils/decimalToBigNumber"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
 import networks from "lib/utils/networks"
+import { useGenInvoiceClaimCall } from "models/invoice/hooks/useGenInvoiceClaimCall"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
 import { Invoice, InvoiceStatus } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
@@ -23,6 +24,8 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
+  const { genInvoiceClaimCall } = useGenInvoiceClaimCall(invoice)
+
   const { terminal } = useTerminalByChainIdAndSafeAddress(
     address as string,
     chainId as number,
@@ -56,7 +59,44 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
 
   // prepareSplitsDistributeCall
 
-  const handleClaimPayment = async () => {}
+  const handleClaimPayment = async () => {
+    setIsLoading(true)
+
+    if (!isInvoiceRecipient) {
+      errorToast({ message: "Not eligible to claim" })
+      return
+    }
+
+    const transactionData = genInvoiceClaimCall({
+      recipientAddress: primaryWallet?.address as string,
+    })
+
+    const { to, value, data } = transactionData
+
+    try {
+      await sendTransactionAsync({
+        recklesslySetUnpreparedRequest: {
+          chainId: chainId,
+          to,
+          value,
+          data,
+        },
+      })
+    } catch (err) {
+      console.error(err)
+      if (
+        // @ts-ignore
+        err.code === 4001 ||
+        // @ts-ignore
+        (err?.name && err?.name === "UserRejectedRequestError")
+      ) {
+        errorToast({ message: "Signature was rejected" })
+      } else {
+        errorToast({ message: "Something went wrong!" })
+      }
+    }
+    setIsLoading(false)
+  }
 
   const handlePayInvoice = async () => {
     setIsLoading(true)
