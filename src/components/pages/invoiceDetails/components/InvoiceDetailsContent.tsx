@@ -257,7 +257,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
         <div className="mb-6 flex flex-col">
           <h3 className="font-regular mt-6 mb-4">Recipients</h3>
           <div className="space-y-2">
-            {invoice?.data?.splits.map((split) => {
+            {fetchedInvoice?.data?.splits.map((split) => {
               const claimedMetadata =
                 fetchedInvoice?.recipientsClaimedMetadata?.[
                   // @ts-ignore
