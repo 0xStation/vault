@@ -181,25 +181,50 @@ const TransactionItem = ({
         }}
       </Breakpoint>
 
-      <div
-        className="grid cursor-pointer grid-cols-12"
-        onClick={() => {
-          setSliderOpen(true)
-        }}
-      >
-        <div className="col-span-6">
-          <div className="flex flex-row space-x-2">
-            <div className="relative h-6 w-6 rounded-full">
-              <Avatar address={address} size="sm" />
-            </div>
-            <span>{note ?? "Sent | Received"}</span>
-          </div>
-        </div>
-        <div className="col-span-2">{value}</div>
-        <div className="col-span-2 text-gray-50">{date}</div>
-        <div className="col-span-2">
-          {category ?? "Uncategorized"}
-          {/* <select className="w-full border-b border-gray-90 bg-black pb-1">
+      <Breakpoint>
+        {(isMobile) => {
+          if (isMobile) {
+            return (
+              <div
+                className="flex cursor-pointer flex-row items-center justify-between border-b border-gray-90 pb-4"
+                onClick={() => {
+                  setSliderOpen(true)
+                }}
+              >
+                <div className="flex flex-row items-center space-x-2">
+                  <div className="relative h-6 w-6 rounded-full">
+                    <Avatar address={address} size="sm" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span>{note ?? "Sent | Received"}</span>
+                    <div className="col-span-2 text-gray-50">{date}</div>
+                  </div>
+                </div>
+
+                <div className="col-span-2 text-gray-50">{value}</div>
+              </div>
+            )
+          } else {
+            return (
+              <div
+                className="grid cursor-pointer grid-cols-12"
+                onClick={() => {
+                  setSliderOpen(true)
+                }}
+              >
+                <div className="col-span-6">
+                  <div className="flex flex-row space-x-2">
+                    <div className="relative h-6 w-6 rounded-full">
+                      <Avatar address={address} size="sm" />
+                    </div>
+                    <span>{note ?? "Sent | Received"}</span>
+                  </div>
+                </div>
+                <div className="col-span-2">{value}</div>
+                <div className="col-span-2 text-gray-50">{date}</div>
+                <div className="col-span-2">
+                  {category ?? "Uncategorized"}
+                  {/* <select className="w-full border-b border-gray-90 bg-black pb-1">
             <option>Select one</option>
             {Object.keys(TokenTransferVariant).map((key) => (
               <option value={key}>
@@ -207,8 +232,12 @@ const TransactionItem = ({
               </option>
             ))}
           </select> */}
-        </div>
-      </div>
+                </div>
+              </div>
+            )
+          }
+        }}
+      </Breakpoint>
     </>
   )
 }
@@ -278,7 +307,7 @@ export const AssetTransfersTab = ({
 
   return (
     <section className="space-y-4 px-4">
-      <div className="grid grid-cols-12">
+      <div className="hidden grid-cols-12 sm:grid">
         <div className="col-span-6 text-xs text-gray-80">Description</div>
         <div className="col-span-2 text-xs text-gray-80">Amount</div>
         <div className="col-span-2 text-xs text-gray-80">Date</div>

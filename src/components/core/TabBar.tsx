@@ -64,7 +64,7 @@ export const TabBar = ({
         </TabsList>
       ) : (
         // style = "filter"
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between pr-4">
           <FilterTabsList
             className={cn(
               // top-[33px] assumes that filter is used within tab to get sticky lined up right
