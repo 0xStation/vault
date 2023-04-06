@@ -6,6 +6,7 @@ import { getSplitsSubgraphEndpoint } from "../utils"
 type GraphQLResponse = {
   split: {
     id: string
+    distributorFee: string
     recipients: {
       recipient: {
         id: string
@@ -24,6 +25,7 @@ export const SPLIT_DETAILS_QUERY = gql`
   query split($id: ID!) {
     split(id: $id) {
       id
+      distributorFee
       recipients {
         recipient {
           id
@@ -43,6 +45,7 @@ type RevShareSplit = {
   chainId: number
   address: string // recipient
   value: number // allocation
+  distributorFee: string
   tokens: {
     address: string
     totalClaimed: string
@@ -80,10 +83,12 @@ export const getRevShareSplits = async (
       return {
         chainId,
         address: split.recipient.id,
+        distributorFee: response?.split?.distributorFee as string,
         value: (parseInt(split.allocation) * 100) / 1_000_000,
         tokens: split.tokens.map((obj) => ({
           address: obj.tokenAddress,
           totalClaimed: obj.totalClaimed,
+          // unclaimed = unclaimed per recipient's allocation from distributed contract
           unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
         })),
       }

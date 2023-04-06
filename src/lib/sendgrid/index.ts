@@ -5,6 +5,7 @@ import { getUrlHost } from "../utils/getUrlHost"
 import { requireEnv } from "../utils/requireEnv"
 
 export const SENDGRID_TEMPLATES = {
+  NEW_INVOICE: "d-342f11fd3cec48988a04950e639c2674",
   NEW_PROPOSAL: "d-4aa7e8bf1a2145f99e3f90d65e37251a",
   NEW_COMMENT: "d-2eb70172e6e04d63a454088b4ed010c4",
   NEW_PROPOSAL_EXECUTION: "d-03866801d8cd4d54b898ccf742ebd562",
@@ -192,4 +193,43 @@ export const sendNewProposalEmail = async ({
   }
 
   await email(recipients, SENDGRID_TEMPLATES.NEW_PROPOSAL, dynamicTemplateData)
+}
+
+export const sendNewInvoiceEmail = async ({
+  recipients,
+  clientName,
+  invoiceAmount,
+  tokenSymbol,
+  localDate,
+  paymentAddress,
+  terminalName,
+  chainId,
+  terminalAddress,
+  invoiceId,
+}: {
+  recipients: string[]
+  clientName: string
+  invoiceAmount: string
+  tokenSymbol: string
+  localDate: string
+  paymentAddress: string
+  terminalName: string
+  chainId: number
+  terminalAddress: string
+  invoiceId: string
+}) => {
+  const dynamicTemplateData = {
+    clientName,
+    invoiceAmount,
+    tokenSymbol,
+    localDate,
+    paymentAddress: paymentAddress?.substring(0, 8),
+    terminalName,
+    buttonLink: `${hostname}/${globalId(
+      chainId,
+      terminalAddress,
+    )}/invoices/${invoiceId}`,
+  }
+
+  await email(recipients, SENDGRID_TEMPLATES.NEW_INVOICE, dynamicTemplateData)
 }

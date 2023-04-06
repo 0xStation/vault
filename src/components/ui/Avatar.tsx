@@ -31,7 +31,7 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
           src={ensAvatar}
           alt="Account profile picture."
           fill={true}
-          className={`rounded-full object-cover ${className}`}
+          className={`rounded-full border border-gray-90 object-cover ${className}`}
         />
       ) : (
         <Image
@@ -41,7 +41,7 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
           }
           alt="Account profile picture. If no profile picture is set, there is a picture of a Terminal."
           fill={true}
-          className={`rounded-full object-cover ${className}`}
+          className={`rounded-full border border-gray-90 object-cover ${className}`}
         />
       )}
     </div>

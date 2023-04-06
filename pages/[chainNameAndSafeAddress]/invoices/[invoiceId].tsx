@@ -1,15 +1,14 @@
 import Breakpoint from "@ui/Breakpoint"
-import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks/useTerminalByChainIdAndSafeAddress"
+import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
+import { Terminal } from "models/terminal/types"
 import { convertGlobalId } from "models/terminal/utils"
 import dynamic from "next/dynamic"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
-import Desktop from "../../../src/components/pages/terminalDetails/Desktop"
-import Mobile from "../../../src/components/pages/terminalDetails/Mobile"
+import Desktop from "../../../src/components/pages/invoiceDetails/Desktop"
+import Mobile from "../../../src/components/pages/invoiceDetails/Mobile"
 import { useIsModuleEnabled } from "../../../src/hooks/safe/useIsModuleEnabled"
 import { useIsSigner } from "../../../src/hooks/useIsSigner"
-import { Terminal } from "../../../src/models/terminal/types"
 
 const TerminalActivationView = dynamic(() =>
   import("components/terminalCreation/import/TerminalActivationView").then(
@@ -17,13 +16,11 @@ const TerminalActivationView = dynamic(() =>
   ),
 )
 
-const TerminalDetailsPage = () => {
+const InvoiceIdPage = () => {
   const router = useRouter()
   const { chainId, address } = convertGlobalId(
     router.query.chainNameAndSafeAddress as string,
   )
-  useIsSigner({ address: address as string, chainId: chainId as number })
-
   const { terminal, mutate: mutateGetTerminal } =
     useTerminalByChainIdAndSafeAddress(address as string, chainId as number)
 
@@ -32,11 +29,9 @@ const TerminalDetailsPage = () => {
     chainId: terminal?.chainId as number,
   })
   const [isOpen, setIsOpen] = useState<boolean>(Boolean(!isModuleEnabled))
+  useIsSigner({ address: address as string, chainId: chainId as number })
   return (
     <>
-      <Head>
-        <title>About | {terminal?.data?.name}</title>
-      </Head>
       {isSuccess && !isModuleEnabled && (
         <TerminalActivationView
           mutateGetTerminal={mutateGetTerminal}
@@ -48,13 +43,13 @@ const TerminalDetailsPage = () => {
       <Breakpoint>
         {(isMobile) => {
           if (isMobile) {
-            return <Mobile terminal={terminal as Terminal} />
+            return <Mobile />
           }
-          return <Desktop terminal={terminal as Terminal} />
+          return <Desktop />
         }}
       </Breakpoint>
     </>
   )
 }
 
-export default TerminalDetailsPage
+export default InvoiceIdPage

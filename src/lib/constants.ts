@@ -94,6 +94,11 @@ export const EVENT_TYPE = {
   ERROR: "error",
 }
 
+export const TOKEN_SYMBOLS = {
+  ETH: "ETH",
+  USDC: "USDC",
+}
+
 export const TRACKING = {
   LOCATION: {
     LANDING: "landing",

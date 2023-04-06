@@ -21,7 +21,7 @@ const AutomationsPage = () => {
   return (
     <>
       <Head>
-        <title>Automation | {terminal?.data.name}</title>
+        <title>Automation | {terminal?.data?.name}</title>
       </Head>
       <Breakpoint>
         {(isMobile) => {

@@ -60,6 +60,12 @@ const options = (router: any) =>
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
+      label: "Invoices",
+      description: "Generate an invoice and split revenue",
+      active: true,
+      href: `/${router.query.chainNameAndSafeAddress}/invoices`,
+    },
+    {
       label: "Automations",
       description: "Automate NFT sales and sponsorship revenue-sharing",
       active: true,
@@ -112,7 +118,7 @@ const MobileTerminalIndexPage = () => {
     <>
       <AccountNavBar />
       <Head>
-        <title>{terminal?.data.name} | Home</title>
+        <title>{terminal?.data?.name} | Home</title>
       </Head>
       <section className="mt-6 px-4">
         <h1>{terminal?.data?.name}</h1>

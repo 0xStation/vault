@@ -4,6 +4,7 @@ import { cva, VariantProps } from "class-variance-authority"
 const link = cva(null, {
   variants: {
     size: {
+      base: "text-base",
       sm: "text-sm",
       xs: "text-xs",
     },
@@ -26,7 +27,10 @@ export const Hyperlink = ({ href, label, size = "sm" }: HyperlinkProps) => {
       >
         {label}
       </a>
-      <ArrowUpRight size={size} />
+      <ArrowUpRight
+        size={size}
+        className={`${size === "base" ? "h-4 w-4" : ""}`}
+      />
     </div>
   )
 }
