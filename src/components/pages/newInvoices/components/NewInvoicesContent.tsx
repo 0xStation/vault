@@ -321,7 +321,7 @@ export const NewInvoicesContent = () => {
   }
   return txData?.hash ? (
     <TransactionLoadingPage
-      title="Deploying your Invoice"
+      title="Deploying your invoice"
       subtitle="Please do not leave or refresh the page."
       chainId={chainId}
       txnHash={txData?.hash}
