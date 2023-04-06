@@ -68,10 +68,10 @@ const TransactionItem = ({
     control,
     watch,
   } = useForm({
-    mode: "all", // validate on all event handlers (onBlur, onChange, onSubmit)
+    mode: "all",
     defaultValues: {
       description: note,
-      category,
+      category: category,
     } as FieldValues,
   })
 
@@ -129,7 +129,7 @@ const TransactionItem = ({
                 control={control}
                 name="category"
                 render={({ field: { onChange, ref } }) => (
-                  <Select onValueChange={onChange}>
+                  <Select onValueChange={onChange} defaultValue={category}>
                     <SelectTrigger ref={ref}>
                       <SelectValue placeholder="Select one" />
                     </SelectTrigger>
