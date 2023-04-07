@@ -52,6 +52,7 @@ export default async function handler(
     chainId: invoice?.terminal?.chainId,
     terminalAddress: invoice?.terminal?.safeAddress,
     invoiceId: invoice?.id,
+    reminder: body?.reminder || undefined,
   })
     .then((data) => res.status(200))
     // silently fail
