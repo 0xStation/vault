@@ -136,14 +136,15 @@ export const getProfileRequests = async ({
       approveActivities,
       rejectActivities,
       commentActivities,
-      quorum,
+      quorum: request.data.settingsAtExecution.quorum,
       signers,
       status,
       stage,
       validActions,
-      addressesThatHaveNotSigned: signers.filter(
-        (address: string) => !signatureAccounted[address],
-      ),
+      addressesThatHaveNotSigned:
+        request.data.settingsAtExecution.signers.filter(
+          (address: string) => !signatureAccounted[address],
+        ),
     }
   })
 

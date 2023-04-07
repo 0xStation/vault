@@ -149,11 +149,12 @@ export const getTerminalRequests = async ({
       approveActivities,
       rejectActivities,
       commentActivities,
-      quorum: quorum,
+      quorum: request.data.settingsAtExecution.quorum,
       signers: signers,
-      addressesThatHaveNotSigned: signers.filter(
-        (address: string) => !signatureAccounted[address],
-      ),
+      addressesThatHaveNotSigned:
+        request.data.settingsAtExecution.signers.filter(
+          (address: string) => !signatureAccounted[address],
+        ),
     }
   })
 
