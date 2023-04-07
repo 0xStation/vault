@@ -1,7 +1,7 @@
 export const getUrlHost = () => {
-  const hostname = process.env.APP_HOSTNAME
+  const hostname = process.env.NEXT_PUBLIC_VERCEL_URL
   if (!hostname) {
     return "http://localhost:3000"
   }
-  return hostname
+  return `https://${hostname}`
 }
