@@ -238,7 +238,8 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
                   variant="secondary"
                   fullWidth={true}
                   onClick={() => {
-                    sendCreateInvoiceEmail()
+                    const reminder = `Reminder: Pay ${terminal?.data?.name}`
+                    sendCreateInvoiceEmail(reminder)
                     successToast({ message: "Sent!" })
                   }}
                 >

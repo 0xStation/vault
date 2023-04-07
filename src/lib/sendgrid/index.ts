@@ -206,6 +206,7 @@ export const sendNewInvoiceEmail = async ({
   chainId,
   terminalAddress,
   invoiceId,
+  reminder,
 }: {
   recipients: string[]
   clientName: string
@@ -217,6 +218,7 @@ export const sendNewInvoiceEmail = async ({
   chainId: number
   terminalAddress: string
   invoiceId: string
+  reminder?: string
 }) => {
   const dynamicTemplateData = {
     clientName,
@@ -225,6 +227,7 @@ export const sendNewInvoiceEmail = async ({
     localDate,
     paymentAddress: paymentAddress?.substring(0, 8),
     terminalName,
+    reminder,
     buttonLink: `${hostname}/${globalId(
       chainId,
       terminalAddress,

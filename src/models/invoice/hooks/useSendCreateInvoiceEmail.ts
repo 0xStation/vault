@@ -13,10 +13,14 @@ export const useSendCreateInvoiceEmail = (invoiceId: string) => {
     }
   }
 
-  const { trigger: sendCreateInvoiceEmail, isMutating } = useSWRMutation(
+  const { trigger, isMutating } = useSWRMutation(
     invoiceId ? `/api/v1/invoice/${invoiceId}/sendEmail` : null,
     fetcher,
   )
+
+  const sendCreateInvoiceEmail = (reminder?: string) => {
+    trigger({ reminder: reminder })
+  }
 
   return { isMutating, sendCreateInvoiceEmail }
 }
