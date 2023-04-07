@@ -75,12 +75,13 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     : { value: 0 }
 
   const activeUserClaimStatus =
+    invoice &&
     activeUserClaimedMetadata?.totalClaimed >=
-    decimalToBigNumber(
-      parseFloat(invoice?.data?.totalAmount || "0") *
-        ((activeUserSplit?.value || 1) * 1e-2),
-      activeUserClaimedMetadata?.token?.decimals,
-    ).toString()
+      decimalToBigNumber(
+        parseFloat(invoice?.data?.totalAmount || "0") *
+          ((activeUserSplit?.value || 1) * 1e-2),
+        activeUserClaimedMetadata?.token?.decimals || 0,
+      ).toString()
       ? ClaimedInvoiceStatus?.CLAIMED
       : ClaimedInvoiceStatus?.UNCLAIMED
 
