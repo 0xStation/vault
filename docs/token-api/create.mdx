@@ -1,0 +1,94 @@
+---
+title: "Create Token"
+api: "POST https://api.station.express/api/token/create"
+description: "This endpoint creates a new token"
+---
+
+### Body
+
+<ParamField body="type" type="string">
+  The type of token you would like to create. Must be one of `ERC20`, `ERC721`,
+  or `ERC1155`
+</ParamField>
+
+<ParamField body="name" type="string">
+  The name of the token. This cannot be changed after creation.
+</ParamField>
+
+<ParamField body="symbol" type="string">
+  The symbol of the token. This cannot be changed after creation.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Transaction hash for the newly created token.
+</ResponseField>
+
+<ResponseField name="transactionLink" type="string">
+  Transaction link for the newly created token, wraps `transactionHash` with the
+  appropriate URL for convenience.
+</ResponseField>
+
+<ResponseField name="token" type="object">
+
+The newly created token smart contract.
+
+<Expandable title="Token">
+
+<ResponseField name="address" type="string">
+  The Ethereum address this token contract is deployed at.
+</ResponseField>
+
+<ParamField body="type" type="string">
+  The type of token, one of `ERC20`, `ERC721`, or `ERC1155`.
+</ParamField>
+
+<ResponseField name="name" type="string">
+  The name of the token. This cannot be changed after creation.
+</ResponseField>
+
+<ResponseField name="symbol" type="string">
+  The symbol of the token. This cannot be changed after creation.
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.mintlify.com/api/user' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Token <token>' \
+--data-raw '{
+    "type": "ERC721",
+    "name": "Zed Horse",
+    "symbol": "ZED"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "token": {
+    "address": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "type": "ERC721",
+    "name": "Zed Horse",
+    "symbol": "ZED"
+  }
+}
+```
+
+</ResponseExample>

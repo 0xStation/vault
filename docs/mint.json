@@ -25,15 +25,10 @@
   "hideFeedbackButtons": true,
   "topbarLinks": [],
   "topbarCtaButton": {
-    "name": "Launch App",
-    "url": "https://app.station.express"
+    "name": "Get Started",
+    "url": "https://calendly.com/symmtry/token-api"
   },
   "anchors": [
-    {
-      "name": "Changelog",
-      "icon": "list",
-      "url": "https://station.express/changelog"
-    },
     {
       "name": "Contact Us",
       "icon": "twitter",
@@ -42,11 +37,16 @@
   ],
   "navigation": [
     {
-      "group": "Documentation",
-      "pages": ["under-construction"]
+      "group": "Token API",
+      "pages": ["token-api/create"]
     }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/0xstation"
+  },
+  "api": {
+    "playground": {
+      "mode": "simple"
+    }
   }
 }
