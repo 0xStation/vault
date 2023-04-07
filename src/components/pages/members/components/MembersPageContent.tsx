@@ -1,16 +1,16 @@
 import { PencilIcon } from "@heroicons/react/24/solid"
 import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
-import RightSlider from "@ui/RightSlider"
-import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import { useGetSignerQuorumRequestChanges } from "../../../..//hooks/useGetSignerQuorumRequestChanges"
 import { convertGlobalId } from "../../../..//models/terminal/utils"
 import { useSafeMetadata } from "../../../../hooks/safe/useSafeMetadata"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../../../hooks/stores/useSliderManagerStore"
 import { AvatarAddress } from "../../../core/AvatarAddress"
-import EditMembersContent from "../../editMembers/components/EditMembersContent"
 
 const EditButton = ({
   onClick,
@@ -31,6 +31,9 @@ const EditButton = ({
 
 const MembersPageContent = () => {
   const router = useRouter()
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
     chainNameAndSafeAddress as string,
@@ -48,175 +51,149 @@ const MembersPageContent = () => {
     currentQuorum: safeMetadata?.quorum as number,
   })
 
-  const [editMembersOpen, setEditMembersOpen] = useState<boolean>(false)
-  const closeEditMembersSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "editMembers")
-    }
-  }
-
-  useEffect(() => {
-    if (router.query.editMembers && isSigner) {
-      setEditMembersOpen(true)
-    } else {
-      setEditMembersOpen(false)
-    }
-  }, [router.query, isSigner])
-
   return (
-    <>
-      <RightSlider open={editMembersOpen} setOpen={closeEditMembersSlider}>
-        <EditMembersContent />
-      </RightSlider>
-      <div className="mt-4 w-full px-4">
-        <div className="mb-6 flex flex-row items-center justify-between">
-          <h1>Members</h1>
-          {isSigner && (
-            <div className="flex flex-row">
-              <Breakpoint>
-                {(isMobile) => {
-                  if (isMobile) {
-                    return (
-                      <Button
-                        size="base"
-                        onClick={() =>
-                          router.push(
-                            `/${chainNameAndSafeAddress}/members/edit`,
-                          )
-                        }
-                      >
-                        + Add
-                      </Button>
-                    )
-                  }
+    <div className="mt-4 w-full px-3">
+      <div className="mb-6 flex flex-row items-center justify-between">
+        <h1>Members</h1>
+        {isSigner && (
+          <div className="flex flex-row">
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
                   return (
                     <Button
                       size="base"
-                      onClick={() => {
-                        addQueryParam(router, "editMembers", "true")
-                      }}
+                      onClick={() =>
+                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
+                      }
                     >
                       + Add
                     </Button>
                   )
-                }}
-              </Breakpoint>
+                }
+                return (
+                  <Button
+                    size="base"
+                    onClick={() => {
+                      setActiveSlider(Sliders.EDIT_MEMBERS, { value: true })
+                    }}
+                  >
+                    + Add
+                  </Button>
+                )
+              }}
+            </Breakpoint>
 
-              <Breakpoint>
-                {(isMobile) => {
-                  if (isMobile) {
-                    return (
-                      <EditButton
-                        onClick={() =>
-                          router.push(
-                            `/${chainNameAndSafeAddress}/members/edit`,
-                          )
-                        }
-                        className="ml-2 rounded border border-gray-80"
-                      />
-                    )
-                  }
+            <Breakpoint>
+              {(isMobile) => {
+                if (isMobile) {
                   return (
                     <EditButton
                       onClick={() =>
-                        addQueryParam(router, "editMembers", "true")
+                        router.push(`/${chainNameAndSafeAddress}/members/edit`)
                       }
                       className="ml-2 rounded border border-gray-80"
                     />
                   )
-                }}
-              </Breakpoint>
+                }
+                return (
+                  <EditButton
+                    onClick={() =>
+                      setActiveSlider(Sliders.EDIT_MEMBERS, { value: true })
+                    }
+                    className="ml-2 rounded border border-gray-80"
+                  />
+                )
+              }}
+            </Breakpoint>
+          </div>
+        )}
+      </div>
+      <div className="mt-10 mb-8">
+        {safeMetadata?.signers?.map((signerAddress) => {
+          const activeRequest =
+            data?.modifiedChangesToRequests?.modifiedAddresses?.[signerAddress]
+          return (
+            <div
+              key={signerAddress}
+              className="mb-2 flex flex-row justify-between"
+            >
+              <AvatarAddress
+                size="sm"
+                address={signerAddress}
+                className={`${
+                  activeRequest?.length ? "opacity-70" : "opacity-100"
+                }`}
+              />
+
+              {activeRequest?.length ? (
+                <p className="flex items-center text-sm text-gray">
+                  Pending removal ·&nbsp;
+                  <a
+                    className="text-sm text-violet hover:text-violet-80"
+                    href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
+                  >
+                    View proposal
+                  </a>
+                </p>
+              ) : null}
             </div>
-          )}
-        </div>
-        <div className="mt-10 mb-8">
-          {safeMetadata?.signers?.map((signerAddress) => {
-            const activeRequest =
-              data?.modifiedChangesToRequests?.modifiedAddresses?.[
-                signerAddress
-              ]
-            return (
-              <div
-                key={signerAddress}
-                className="mb-2 flex flex-row justify-between"
-              >
+          )
+        })}
+        {/* Pending new members */}
+        {data?.modifiedChangesToRequests?.modifiedAddresses &&
+          Object.entries(
+            data?.modifiedChangesToRequests?.modifiedAddresses,
+          ).map(([key, requestIds]) => {
+            return !safeMetadata?.signers?.includes(key) ? (
+              <div key={key} className="mb-2 flex flex-row justify-between">
                 <AvatarAddress
                   size="sm"
-                  address={signerAddress}
+                  address={key}
                   className={`${
-                    activeRequest?.length ? "opacity-70" : "opacity-100"
+                    (requestIds as string[])?.length
+                      ? "opacity-70"
+                      : "opacity-100"
                   }`}
                 />
 
-                {activeRequest?.length ? (
+                {(requestIds as string[])?.length ? (
                   <p className="flex items-center text-sm text-gray">
-                    Pending removal ·&nbsp;
+                    Pending entry ·&nbsp;
                     <a
-                      className="text-sm text-violet hover:text-violet-80"
-                      href={`/${chainNameAndSafeAddress}/proposals/${activeRequest[0]}`}
+                      className="cursor-pointer text-sm text-violet hover:text-violet-80"
+                      href={`/${chainNameAndSafeAddress}/proposals/${
+                        (requestIds as string[])?.[0]
+                      }`}
                     >
                       View proposal
                     </a>
                   </p>
                 ) : null}
               </div>
-            )
+            ) : null
           })}
-          {/* Pending new members */}
-          {data?.modifiedChangesToRequests?.modifiedAddresses &&
-            Object.entries(
-              data?.modifiedChangesToRequests?.modifiedAddresses,
-            ).map(([key, requestIds]) => {
-              return !safeMetadata?.signers?.includes(key) ? (
-                <div key={key} className="mb-2 flex flex-row justify-between">
-                  <AvatarAddress
-                    size="sm"
-                    address={key}
-                    className={`${
-                      (requestIds as string[])?.length
-                        ? "opacity-70"
-                        : "opacity-100"
-                    }`}
-                  />
-
-                  {(requestIds as string[])?.length ? (
-                    <p className="flex items-center text-sm text-gray">
-                      Pending entry ·&nbsp;
-                      <a
-                        className="cursor-pointer text-sm text-violet hover:text-violet-80"
-                        href={`/${chainNameAndSafeAddress}/proposals/${
-                          (requestIds as string[])?.[0]
-                        }`}
-                      >
-                        View proposal
-                      </a>
-                    </p>
-                  ) : null}
-                </div>
-              ) : null
-            })}
-        </div>
-        <div className="mt-4">
-          <p className="text-base font-bold">Quorum</p>
-          <div className="flex flex-row justify-between">
-            <p className="mt-2">
-              {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
+      </div>
+      <div className="mt-4">
+        <p className="text-base font-bold">Quorum</p>
+        <div className="flex flex-row justify-between">
+          <p className="mt-2">
+            {safeMetadata?.quorum}/{safeMetadata?.signers?.length}
+          </p>
+          {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
+            <p className="text-sm text-gray">
+              Pending update ·&nbsp;
+              <a
+                className="cursor-pointer text-sm text-violet hover:text-violet-80"
+                href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
+              >
+                View proposal
+              </a>
             </p>
-            {data?.modifiedChangesToRequests?.modifiedQuorum?.length ? (
-              <p className="text-sm text-gray">
-                Pending update ·&nbsp;
-                <a
-                  className="cursor-pointer text-sm text-violet hover:text-violet-80"
-                  href={`/${chainNameAndSafeAddress}/proposals/${data?.modifiedChangesToRequests?.modifiedQuorum?.[0]}`}
-                >
-                  View proposal
-                </a>
-              </p>
-            ) : null}
-          </div>
+          ) : null}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

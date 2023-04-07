@@ -1,6 +1,8 @@
 import Modal from "@ui/Modal"
-import { addQueryParam } from "lib/utils/updateQueryParam"
-import { useRouter } from "next/router"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../../hooks/stores/useSliderManagerStore"
 import { OptionsCopy } from "./constants"
 
 export const RequestActionsModal = ({
@@ -10,13 +12,15 @@ export const RequestActionsModal = ({
   isOpen: boolean
   setIsOpen: any
 }) => {
-  const router = useRouter()
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const options = [
     {
       label: OptionsCopy.SEND_TOKENS,
       subtitle: OptionsCopy.SEND_TOKENS_SUBTITLE,
       onClick: () => {
-        addQueryParam(router, "sendTokenSliderOpen", "true")
+        setActiveSlider(Sliders.SEND_TOKENS)
         setIsOpen(false)
       },
     },
@@ -24,7 +28,7 @@ export const RequestActionsModal = ({
       label: OptionsCopy.REQUEST_TOKENS,
       subtitle: OptionsCopy.REQUEST_TOKENS_SUBTITLE,
       onClick: () => {
-        addQueryParam(router, "requestTokenSliderOpen", "true")
+        setActiveSlider(Sliders.REQUEST_TOKENS)
         setIsOpen(false)
       },
     },
@@ -32,7 +36,7 @@ export const RequestActionsModal = ({
       label: OptionsCopy.EDIT_MEMBERS,
       subtitle: OptionsCopy.EDIT_MEMBERS_SUBTITLE,
       onClick: () => {
-        addQueryParam(router, "editMembersSliderOpen", "true")
+        setActiveSlider(Sliders.EDIT_MEMBERS)
         setIsOpen(false)
       },
     },

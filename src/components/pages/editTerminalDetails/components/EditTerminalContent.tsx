@@ -1,9 +1,12 @@
+import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import { isValidUrl } from "lib/validations"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useSliderManagerStore } from "../../../../hooks/stores/useSliderManagerStore"
 import useSignature from "../../../../hooks/useSignature"
+import { useToast } from "../../../../hooks/useToast"
 import { formatUpdateTerminalValues } from "../../../../lib/signatures/terminal"
 import {
   useTerminalByChainIdAndSafeAddress,
@@ -14,6 +17,9 @@ import { InputWithLabel } from "../../../form"
 
 const EditTerminalContent = () => {
   const router = useRouter()
+  const { isMobile } = useBreakpoint()
+  const closeSlider = useSliderManagerStore((state) => state.closeSlider)
+  const { successToast } = useToast()
   const { signMessage } = useSignature()
   const { chainId, address } = parseGlobalId(
     router.query.chainNameAndSafeAddress as string,
@@ -59,8 +65,14 @@ const EditTerminalContent = () => {
       safeTxnHash: terminal?.data.safeTxnHash,
     })
     mutate()
-    router.back()
+
     setIsLoading(false)
+    if (isMobile) {
+      router.push(`/terminal/${router.query.chainNameAndSafeAddress}/details`)
+    } else {
+      closeSlider()
+      successToast({ message: "Terminal details updated." })
+    }
   }
 
   const onError = () => {

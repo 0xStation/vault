@@ -4,17 +4,16 @@ import { Button } from "@ui/Button"
 import { TerminalRequestStatusFilter } from "components/core/TabBars/TerminalRequestStatusFilterBar"
 import { EmptyState } from "components/emptyStates/EmptyState"
 import { NuxEmptyState } from "components/emptyStates/NuxEmptyState"
-import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useEffect, useReducer, useState } from "react"
+import React, { useReducer, useState } from "react"
 import { KeyedMutator } from "swr"
 import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../hooks/stores/useSliderManagerStore"
 import useStore from "../../hooks/stores/useStore"
 import { listIntersection } from "../../lib/utils/listIntersection"
-import {
-  addQueryParam,
-  removeQueryParam,
-} from "../../lib/utils/updateQueryParam"
 import { Action } from "../../models/action/types"
 import { RequestFrob } from "../../models/request/types"
 import { BatchStatusBar } from "../core/BatchStatusBar"
@@ -23,16 +22,6 @@ import RequestTableRow from "../core/RequestTableRow"
 import BatchExecuteManager from "./BatchExecuteManager"
 import BatchVoteManager from "./BatchVoteManager"
 const DEFAULT_EXECUTION_ACTIONS = ["EXECUTE-APPROVE", "EXECUTE-REJECT"]
-
-const RightSlider = dynamic(() =>
-  import("../ui/RightSlider").then((mod) => mod.RightSlider),
-)
-
-const RequestDetailsContent = dynamic(() =>
-  import("../pages/requestDetails/components/RequestDetailsContent").then(
-    (mod) => mod.RequestDetailsContent,
-  ),
-)
 
 type BatchState = {
   selectedRequests: RequestFrob[]
@@ -111,16 +100,9 @@ const RequestListForm = ({
     })
   }
 
-  const [requestForDetails, setRequestForDetails] = useState<
-    RequestFrob | undefined
-  >(undefined)
-
-  const [detailsSliderOpen, setDetailsSliderOpen] = useState<boolean>(false)
-  const closeDetailsSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "requestId")
-    }
-  }
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const [batchState, dispatch] = useReducer(batchReducer, initialBatchState)
   const [isVotingApproval, setIsVotingApproval] = useState<boolean>(false)
   const [isExecutingApproval, setIsExecutingApproval] = useState<boolean>(false)
@@ -212,21 +194,6 @@ const RequestListForm = ({
     (state) => state.setShowTabBottomBorder,
   )
 
-  useEffect(() => {
-    if (router.query.requestId) {
-      const selectedRequest = requests.find(
-        (r) => r.id === router.query.requestId,
-      )
-
-      if (selectedRequest) {
-        setRequestForDetails(selectedRequest)
-        setDetailsSliderOpen(true)
-      }
-    } else {
-      setDetailsSliderOpen(false)
-    }
-  }, [router.query])
-
   if (requests.length === 0) {
     setShowTabBottomBorder(false)
 
@@ -286,23 +253,6 @@ const RequestListForm = ({
 
   return (
     <>
-      {requestForDetails && (
-        <RightSlider
-          open={detailsSliderOpen}
-          setOpen={closeDetailsSlider}
-          useInnerPadding={false}
-        >
-          <RequestDetailsContent
-            request={requestForDetails}
-            mutateRequest={(args) => {
-              // set state used by Request in slider
-              setRequestForDetails(args.payload)
-              mutateRequest(args)
-            }}
-          />
-        </RightSlider>
-      )}
-
       <form>
         <Breakpoint>
           {(isMobile: boolean) =>
@@ -355,9 +305,9 @@ const RequestListForm = ({
                         request={request}
                         mutateRequest={mutateRequest}
                         triggerDetails={(request) => {
-                          addQueryParam(router, "requestId", request.id)
-                          setRequestForDetails(request)
-                          setDetailsSliderOpen(true)
+                          setActiveSlider(Sliders.REQUEST_DETAILS, {
+                            id: request.id,
+                          })
                         }}
                         onCheckboxChange={onCheckboxChange}
                         checked={batchState.selectedRequests.includes(request)}

@@ -1,23 +1,26 @@
 import { RequestVariantType } from "@prisma/client"
 import { WaitRequestExecution } from "components/request/WaitRequestExecution"
 import { timeSince } from "lib/utils"
+import { getQueryParam } from "lib/utils/updateQueryParam"
 import { ActivityMetadata } from "models/activity/types"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import { NewCommentForm } from "../../../../components/comment/NewCommentForm"
 import ActivityItem from "../../../../components/core/ActivityItem"
 import { AvatarAddress } from "../../../../components/core/AvatarAddress"
 import { SignerQuorumRequestContent } from "../../../../components/request/SignerQuorumRequestContent"
 import { TokenTransferRequestContent } from "../../../../components/request/TokenTransferRequestContent"
+import { useRequest } from "../../../../models/request/hooks"
 import { RequestFrob } from "../../../../models/request/types"
 import { isExecuted } from "../../../../models/request/utils"
 import { RequestDetailsActions } from "../../../request/RequestDetailsActions"
 import { RequestStatusIcon } from "../../../request/RequestStatusIcon"
+import LoadingSpinner from "../../../ui/LoadingSpinner"
 
 export const RequestDetailsContent = ({
-  request,
   mutateRequest,
 }: {
-  request: RequestFrob
   mutateRequest: ({
     fn,
     requestId,
@@ -28,10 +31,33 @@ export const RequestDetailsContent = ({
     payload: any
   }) => void
 }) => {
+  const [request, setRequest] = useState<RequestFrob | null>(null)
+  const router = useRouter()
+  let { requestId } = router.query as { requestId: string | undefined }
+
+  // if the query param is set "shallowly" next router doesn't pick up on it
+  // this happens on desktop, if the user clicks a request from the list
+  // we can still grab it from the url manually
+  if (!requestId) {
+    requestId = getQueryParam("requestId") as string | undefined
+  }
+
   const { address } = useAccount()
+  const { request: requestData } = useRequest(requestId)
+
+  useEffect(() => {
+    if (requestData && requestId) {
+      setRequest(requestData)
+    }
+  }, [requestData, requestId])
 
   if (!request) {
-    return <></>
+    return (
+      <div className="mx-auto flex h-screen w-full max-w-[580px] flex-col items-center justify-center text-center align-middle">
+        <LoadingSpinner />
+        <p className="mt-2 animate-pulse">Loading proposal</p>
+      </div>
+    )
   }
 
   const showVoteExecuteButtons =

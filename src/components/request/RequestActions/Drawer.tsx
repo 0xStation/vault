@@ -10,6 +10,7 @@ export const RequestActionsDrawer = ({
   setIsOpen: any
 }) => {
   const router = useRouter()
+
   const options = [
     {
       label: OptionsCopy.SEND_TOKENS,

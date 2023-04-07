@@ -8,7 +8,10 @@ import { addressesAreEqual } from "lib/utils"
 import { useAccountItemsToClaim } from "models/account/hooks"
 import { RevShareWithdraw } from "models/automation/types"
 import { RequestFrob } from "models/request/types"
+import { useRouter } from "next/router"
 import { useReducer, useState } from "react"
+import { useAccount } from "wagmi"
+import { usePermissionsStore } from "../../hooks/stores/usePermissionsStore"
 
 enum BatchEvent {
   ADD_ITEM,
@@ -92,8 +95,39 @@ const batchReducer = (
   }
 }
 
-const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
-  const { isLoading, items, mutate } = useAccountItemsToClaim(recipientAddress)
+const ClaimListView = () => {
+  const router = useRouter()
+  const isSigner = usePermissionsStore((state) => state.isSigner)
+  const { address: userAddress } = useAccount()
+
+  let pageType = "" as "terminal" | "profile"
+  const path = router.pathname.split("/")[1]
+  if (path === "[chainNameAndSafeAddress]") {
+    pageType = "terminal"
+  }
+  if (path === "u") {
+    pageType = "profile"
+  }
+
+  let recipientAddressParam
+  const { address, chainNameAndSafeAddress } = router.query as {
+    address: string | undefined
+    chainNameAndSafeAddress: string | undefined
+  }
+  if (address) {
+    recipientAddressParam = address as string
+  } else if (chainNameAndSafeAddress) {
+    const safeAddress = chainNameAndSafeAddress.split(":")[1]
+    recipientAddressParam = safeAddress as string
+  }
+  const { isLoading, items, mutate, error } = useAccountItemsToClaim(
+    recipientAddressParam,
+  )
+
+  const canView =
+    (isSigner && pageType === "terminal") ||
+    (recipientAddressParam === userAddress && pageType === "profile")
+
   const [claimDrawerItemPending, setClaimDrawerItemPending] =
     useState<boolean>(false)
   const [claimDrawerOpen, setClaimDrawerOpen] = useState<boolean>(false)
@@ -197,13 +231,25 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       revalidate: false,
     })
   }
+
+  if (!canView) {
+    return (
+      <div className="flex h-[calc(100%+18px)] flex-col px-4 pt-4">
+        <EmptyState
+          title="You cannot claim these tokens"
+          subtitle="These tokens can only be claimed by the recipient of the request."
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="flex h-full flex-col">
       {/* single view & execute */}
       <ClaimItemsDrawer
         isOpen={claimDrawerOpen}
         setIsOpen={setClaimDrawerOpen}
-        recipientAddress={recipientAddress}
+        recipientAddress={recipientAddressParam as string}
         revShareWithdraws={selectedRevShareWithdraws}
         requests={selectedRequests}
         optimisticallyShow={optimisticallyShow}
@@ -214,7 +260,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
       <ClaimItemsDrawer
         isOpen={claimBatchOpen}
         setIsOpen={setClaimBatchOpen}
-        recipientAddress={recipientAddress}
+        recipientAddress={recipientAddressParam as string}
         revShareWithdraws={batchState.selectedRevShareWithdraws}
         requests={batchState.selectedRequests}
         optimisticallyShow={optimisticallyShow}

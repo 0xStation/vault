@@ -4,15 +4,21 @@ import { Button } from "@ui/Button"
 import { TabsContent } from "@ui/Tabs"
 import LoadingTerminalList from "components/core/LoadingTerminalList"
 import { EmptyState } from "components/emptyStates/EmptyState"
-import { addQueryParam } from "lib/utils/updateQueryParam"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
+import {
+  Sliders,
+  useSliderManagerStore,
+} from "../../hooks/stores/useSliderManagerStore"
 import useStore from "../../hooks/stores/useStore"
 import { useTerminalsBySigner } from "../../models/terminal/hooks"
 import { ProfileTab } from "../core/TabBars/ProfileTabBar"
 import TerminalListItem from "./TerminalListItem"
 
 export const ProfileTerminalsList = ({ address }: { address: string }) => {
+  const setActiveSlider = useSliderManagerStore(
+    (state) => state.setActiveSlider,
+  )
   const { isLoading, terminals } = useTerminalsBySigner(address)
   const { primaryWallet } = useDynamicContext()
   const router = useRouter()
@@ -55,7 +61,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
                     if (isMobile) {
                       router.push("/project/new")
                     } else {
-                      addQueryParam(router, "createTerminalSliderOpen", "true")
+                      setActiveSlider(Sliders.CREATE_TERMINAL, { value: true })
                     }
                   }}
                 >

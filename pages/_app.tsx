@@ -15,6 +15,7 @@ import trackerInit, { initializeUser, trackEvent } from "lib/utils/amplitude"
 import { useRouter } from "next/router"
 import Script from "next/script"
 import AppLayout from "../src/components/core/AppLayout"
+import SliderManager from "../src/components/core/SliderManager"
 import { useIsRouterLoading } from "../src/hooks/useIsRouterLoading"
 
 const queryClient = new QueryClient({
@@ -182,6 +183,7 @@ function App({ Component, pageProps }: AppProps) {
                 <Spinner />
               ) : (
                 <AppLayout>
+                  <SliderManager />
                   <Component {...pageProps} />
                 </AppLayout>
               ))}

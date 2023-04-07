@@ -25,6 +25,7 @@ import useSignature from "../../../../../src/hooks/useSignature"
 import useWindowSize from "../../../../../src/hooks/useWindowSize"
 import { SignerQuorumVariant } from "../../../../../src/models/request/types"
 import { convertGlobalId } from "../../../../../src/models/terminal/utils"
+import { useToast } from "../../../../hooks/useToast"
 import { AvatarAddress } from "../../../core/AvatarAddress"
 import AddressInput from "../../../form/AddressInput"
 import QuorumInput from "../../../form/QuorumInput"
@@ -32,6 +33,7 @@ import TextareaWithLabel from "../../../form/TextareaWithLabel"
 import RemoveSignerConfirmationDrawer from "../../../memberEditing/RemoveSignerConfirmationDrawer"
 
 export const EditMembersContent = () => {
+  const { successToast } = useToast()
   const router = useRouter()
   const { chainNameAndSafeAddress } = router.query
   const { chainId, address } = convertGlobalId(
@@ -240,6 +242,7 @@ export const EditMembersContent = () => {
         },
       )
 
+      successToast({ message: "Signers updated" })
       router.push(`/${chainNameAndSafeAddress}/members`)
     } catch (err: any) {
       console.error(err)

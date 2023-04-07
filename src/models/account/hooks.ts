@@ -3,7 +3,7 @@ import useSWR from "swr"
 import { RevShareWithdraw } from "../automation/types"
 import { RequestFrob } from "../request/types"
 
-export const useAccountItemsToClaim = (address: string) => {
+export const useAccountItemsToClaim = (address: string | undefined) => {
   const fetcher = async (url: string) => {
     const response = await axios.get<{
       requests: RequestFrob[]
