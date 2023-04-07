@@ -7,7 +7,7 @@ import { InvoiceStatusWithIcon } from "components/invoices/InvoiceStatusWithIcon
 import { encodeTokenTransfer } from "lib/encodings/token"
 import decimalToBigNumber from "lib/utils/decimalToBigNumber"
 import { getLocalDateFromDateString } from "lib/utils/getLocalDate"
-import networks from "lib/utils/networks"
+import networks, { getNetworkExplorer } from "lib/utils/networks"
 import { useGenInvoiceClaimCall } from "models/invoice/hooks/useGenInvoiceClaimCall"
 import { useInvoice } from "models/invoice/hooks/useInvoice"
 import { useSendCreateInvoiceEmail } from "models/invoice/hooks/useSendCreateInvoiceEmail"
@@ -18,10 +18,9 @@ import {
 } from "models/invoice/types"
 import { useTerminalByChainIdAndSafeAddress } from "models/terminal/hooks"
 import { convertGlobalId } from "models/terminal/utils"
-import { valueToAmount } from "models/token/utils"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { useSendTransaction } from "wagmi"
+import { useSendTransaction, useWaitForTransaction } from "wagmi"
 import { useInvoiceStatus } from "../../../../hooks/invoice/useInvoiceStatus"
 import { usePermissionsStore } from "../../../../hooks/stores/usePermissionsStore"
 import { useToast } from "../../../../hooks/useToast"
@@ -76,15 +75,12 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     : { value: 0 }
 
   const activeUserClaimStatus =
-    parseFloat(
-      valueToAmount(
-        activeUserClaimedMetadata?.totalClaimed || 0,
-        activeUserClaimedMetadata?.token?.decimals || 0,
-      ),
-    ) >=
-    parseFloat(invoice?.data?.totalAmount) *
-      (activeUserSplit?.value || 0) *
-      0.01
+    activeUserClaimedMetadata?.totalClaimed >=
+    decimalToBigNumber(
+      parseFloat(invoice?.data?.totalAmount || "0") *
+        ((activeUserSplit?.value || 1) * 1e-2),
+      activeUserClaimedMetadata?.token?.decimals,
+    ).toString()
       ? ClaimedInvoiceStatus?.CLAIMED
       : ClaimedInvoiceStatus?.UNCLAIMED
 
@@ -96,6 +92,25 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
       activeUserClaimStatus === ClaimedInvoiceStatus?.UNCLAIMED &&
       invoiceStatus !== InvoiceStatus.PAYMENT_PENDING &&
       invoiceStatus !== InvoiceStatus.COMPLETED)
+
+  const [claimTxHash, setClaimTxHash] = useState<string>()
+
+  const { isSuccess: isClaimSuccess } = useWaitForTransaction({
+    chainId,
+    hash: claimTxHash as `0x${string}`,
+    enabled: !!chainId && !!claimTxHash,
+    onSuccess: () => {
+      setIsLoading(false)
+      successToast({
+        message: "Successful claim!",
+        action: {
+          href: `${getNetworkExplorer(chainId || 0)}/tx/${claimTxHash}`,
+          label: "View on Etherscan",
+        },
+        timeout: 5000,
+      })
+    },
+  })
 
   const handleClaimPayment = async () => {
     setIsLoading(true)
@@ -112,7 +127,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
     const { to, value, data } = transactionData
 
     try {
-      await sendTransactionAsync({
+      const transaction = await sendTransactionAsync({
         recklesslySetUnpreparedRequest: {
           chainId: chainId,
           to,
@@ -120,8 +135,8 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           data,
         },
       })
+      setClaimTxHash(transaction?.hash)
       successToast({ message: "Claiming initiated" })
-      setIsLoading(false)
     } catch (err) {
       setIsLoading(false)
       console.error(err)
@@ -137,6 +152,25 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
       }
     }
   }
+
+  const [paymentTxHash, setPaymentTxHash] = useState<string>()
+
+  const { isSuccess: isPaymentSuccess } = useWaitForTransaction({
+    chainId,
+    hash: paymentTxHash as `0x${string}`,
+    enabled: !!chainId && !!paymentTxHash,
+    onSuccess: () => {
+      setIsLoading(false)
+      successToast({
+        message: "Successful payment!",
+        action: {
+          href: `${getNetworkExplorer(chainId || 0)}/tx/${paymentTxHash}`,
+          label: "View on Etherscan",
+        },
+        timeout: 5000,
+      })
+    },
+  })
 
   const handlePayInvoice = async () => {
     setIsLoading(true)
@@ -158,7 +192,7 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
       })
       const { to, value, data } = prepareTokenTransferCall
 
-      await sendTransactionAsync({
+      const transaction = await sendTransactionAsync({
         recklesslySetUnpreparedRequest: {
           chainId: chainId,
           to,
@@ -166,8 +200,8 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
           data,
         },
       })
+      setPaymentTxHash(transaction?.hash)
       successToast({ message: "Transaction initiated" })
-      setIsLoading(false)
     } catch (err) {
       setIsLoading(false)
       console.error(err)
@@ -301,11 +335,21 @@ export const InvoiceDetailsContent = ({ invoice }: { invoice: Invoice }) => {
         {isInvoiceRecipient &&
         invoiceStatus !== InvoiceStatus.PAYMENT_PENDING &&
         invoiceStatus !== InvoiceStatus.COMPLETED ? (
-          <Button fullWidth onClick={handleClaimPayment} loading={isLoading}>
+          <Button
+            fullWidth
+            onClick={handleClaimPayment}
+            loading={isLoading}
+            disabled={isClaimSuccess}
+          >
             Claim payment
           </Button>
         ) : !isInvoiceRecipient ? (
-          <Button fullWidth onClick={handlePayInvoice} loading={isLoading}>
+          <Button
+            fullWidth
+            onClick={handlePayInvoice}
+            loading={isLoading}
+            disabled={isPaymentSuccess}
+          >
             Pay this invoice
           </Button>
         ) : null}
