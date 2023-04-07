@@ -198,7 +198,10 @@ const TransactionItem = ({
                     <Avatar address={address} size="sm" />
                   </div>
                   <div className="flex flex-col">
-                    <span>{note ?? "Sent | Received"}</span>
+                    <span>
+                      {(note ?? "Sent | Received").substring(0, 40)}
+                      {note && note.length > 40 && "..."}
+                    </span>
                     <div className="col-span-2 text-gray-50">{date}</div>
                   </div>
                 </div>
@@ -219,7 +222,10 @@ const TransactionItem = ({
                     <div className="relative h-6 w-6 rounded-full">
                       <Avatar address={address} size="sm" />
                     </div>
-                    <span>{note ?? "Sent | Received"}</span>
+                    <span>
+                      {(note ?? "Sent | Received").substring(0, 40)}
+                      {note && note.length > 40 && "..."}
+                    </span>
                   </div>
                 </div>
                 <div className="col-span-2">{value}</div>
