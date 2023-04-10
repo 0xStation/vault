@@ -1,8 +1,8 @@
 ---
-title: "Update an NFT's Unique Metadata"
-sidebarTitle: "Update Unique Metadata"
-api: "POST https://api.station.express/api/erc721/uniqueMetadata"
-description: "Update unique metadata for a specific NFT."
+title: "Update an NFT's Individual Metadata"
+sidebarTitle: "Update Individual Metadata"
+api: "POST https://api.station.express/api/erc721/individualMetadata"
+description: "Update individual metadata for a specific NFT."
 ---
 
 ### Body
@@ -15,8 +15,8 @@ description: "Update unique metadata for a specific NFT."
   The NFT smart contract address to edit.
 </ParamField>
 
-<ParamField body="uniqueMetadata" type="object" required>
-    Unique metadata to associate with this NFT, which overrides any defaults set at the collection-level.
+<ParamField body="individualMetadata" type="object" required>
+    Individual metadata to associate with this NFT, which overrides any defaults set at the collection-level.
 
     <Expandable title="NFT Metadata">
 
@@ -78,7 +78,7 @@ curl --location --request POST 'https://api.station.express/api/erc721/defaultMe
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
   "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-  "uniqueMetadata": {
+  "individualMetadata": {
     "name": "Zed Run",
     "description": "Horses run free in the metaverse.",
     "mediaUrl": "https://hosted.station.express/abc123",
