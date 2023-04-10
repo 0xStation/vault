@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@ui/Select"
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
+import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { convertGlobalId } from "models/terminal/utils"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -26,6 +27,7 @@ import networks from "../../lib/utils/networks"
 import { TokenType } from "../../models/token/types"
 import { TokenTransferVariant } from "../../models/tokenTransfer/types"
 import TextareaWithLabel from "../form/TextareaWithLabel"
+import { ArrowDownRight, ArrowUpRight } from "../icons"
 import { Address } from "../ui/Address"
 import { Avatar } from "../ui/Avatar"
 import { Hyperlink } from "../ui/Hyperlink"
@@ -139,8 +141,9 @@ const TransactionItem = ({
                   <SelectContent>
                     {Object.keys(TokenTransferVariant).map((key, i) => (
                       <SelectItem key={key} ref={ref} value={key}>
-                        {key.charAt(0).toUpperCase() +
-                          key.slice(1).toLocaleLowerCase()}
+                        {key.slice(0, 3) === "NFT"
+                          ? key.slice(0, 3) + key.slice(3).toLocaleLowerCase()
+                          : key.charAt(0) + key.slice(1).toLocaleLowerCase()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -206,7 +209,15 @@ const TransactionItem = ({
                   </div>
                 </div>
 
-                <div className="col-span-2 text-gray-50">{value}</div>
+                <div className="col-span-2 flex flex-row items-center space-x-2 text-gray-50">
+                  {toChecksumAddress(from) ===
+                  toChecksumAddress(terminalAddress) ? (
+                    <ArrowUpRight size={"sm"} />
+                  ) : (
+                    <ArrowDownRight size={"sm"} />
+                  )}
+                  <span>{value}</span>
+                </div>
               </div>
             )
           } else {
@@ -223,24 +234,28 @@ const TransactionItem = ({
                       <Avatar address={address} size="sm" />
                     </div>
                     <span>
-                      {(note ?? "Sent | Received").substring(0, 40)}
+                      {(
+                        note ??
+                        (toChecksumAddress(from) ===
+                        toChecksumAddress(terminalAddress)
+                          ? "Sent"
+                          : "Received")
+                      ).substring(0, 40)}
                       {note && note.length > 40 && "..."}
                     </span>
                   </div>
                 </div>
-                <div className="col-span-2">{value}</div>
-                <div className="col-span-2 text-gray-50">{date}</div>
-                <div className="col-span-2">
-                  {category ?? "Uncategorized"}
-                  {/* <select className="w-full border-b border-gray-90 bg-black pb-1">
-            <option>Select one</option>
-            {Object.keys(TokenTransferVariant).map((key) => (
-              <option value={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1).toLocaleLowerCase()}
-              </option>
-            ))}
-          </select> */}
+                <div className="col-span-2 flex flex-row items-center space-x-2">
+                  {toChecksumAddress(from) ===
+                  toChecksumAddress(terminalAddress) ? (
+                    <ArrowUpRight size={"sm"} />
+                  ) : (
+                    <ArrowDownRight size={"sm"} />
+                  )}
+                  <span>{value}</span>
                 </div>
+                <div className="col-span-2 text-gray-50">{date}</div>
+                <div className="col-span-2">{category ?? "Uncategorized"}</div>
               </div>
             )
           }
@@ -251,10 +266,17 @@ const TransactionItem = ({
 }
 
 const formatAssetValue = (tx: TransferItem): string => {
+  const minVal = 0.00001
   switch (tx.category) {
     case TokenType.ERC20:
+      if (tx.amount && tx.amount < minVal) {
+        return `< ${minVal} ` + tx.symbol
+      }
       return tx.amount + " " + tx.symbol
     case TokenType.COIN:
+      if (tx.amount && tx.amount < minVal) {
+        return `< ${minVal} ETH`
+      }
       return tx.amount + " ETH"
     case TokenType.ERC721:
     case TokenType.ERC1155:
@@ -277,17 +299,6 @@ export const AssetTransfersTab = ({
   )
   const { data } = useAssetTransfers(address, chainId, direction)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    control,
-    watch,
-  } = useForm({
-    mode: "all", // validate on all event handlers (onBlur, onChange, onSubmit)
-    defaultValues: {} as FieldValues,
-  })
-
   if (!data?.length) {
     const title = "Deposit tokens"
     const subtitle =
@@ -304,14 +315,6 @@ export const AssetTransfersTab = ({
     )
   }
 
-  const onSubmit = (data: any) => {
-    console.log(data)
-  }
-
-  const onError = (errors: any) => {
-    console.log(errors)
-  }
-
   return (
     <section className="space-y-4 px-4">
       <div className="hidden grid-cols-12 sm:grid">
@@ -320,7 +323,7 @@ export const AssetTransfersTab = ({
         <div className="col-span-2 text-xs text-gray-80">Date</div>
         <div className="col-span-2 text-xs text-gray-80">Category</div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
+      <div className="space-y-4">
         {data?.map((tx: TransferItem) => (
           <TransactionItem
             key={tx.hash}
@@ -336,7 +339,7 @@ export const AssetTransfersTab = ({
             address={direction === TransferDirection.INBOUND ? tx.from : tx.to}
           />
         ))}
-      </form>
+      </div>
     </section>
   )
 }

@@ -1,3 +1,4 @@
+export { ArrowDownRight } from "./ArrowDownRight"
 export { ArrowLeft } from "./ArrowLeft"
 export { ArrowSplit } from "./ArrowSplit"
 export { ArrowUpRight } from "./ArrowUpRight"
