@@ -32,7 +32,11 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["token-api/getting-started", "token-api/automations"]
+      "pages": [
+        "token-api/getting-started",
+        "token-api/automations",
+        "token-api/auth"
+      ]
     },
     {
       "group": "Badges (ERC-721)",
@@ -51,10 +55,10 @@
     },
     {
       "group": "Points (ERC-20)",
-      "pages": ["token-api/points/overview", "token-api/points/create"]
+      "pages": ["token-api/points/overview"]
     },
     {
-      "group": "Holders",
+      "group": "Token Holders",
       "pages": ["token-api/holders/holders"]
     }
   ],

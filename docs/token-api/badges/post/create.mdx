@@ -5,6 +5,15 @@ api: "POST https://api.station.express/api/erc721/create"
 description: "Create a new Badge NFT collection."
 ---
 
+### How NFT creation works
+
+NFTs are represented on the blockchain through a smart contract that manages the accounting of who owns which NFT.
+To create a new NFT collection, we create a new smart contract designed to manage it and then are able to populate it with the actual tokens.
+The smart contract is analogous to a spreadsheet, it is the home that defines the structure and content of the records.
+
+This API route will take in parameters for creating a new NFT collection and return an address where this new smart contract is deployed.
+This contract address uniquely identifies your NFT collection and will be used in other API routes.
+
 ### Body
 
 <ParamField body="name" type="string" required>
@@ -15,8 +24,16 @@ description: "Create a new Badge NFT collection."
   The symbol of the collection. This cannot be changed after creation.
 </ParamField>
 
+<ParamField body="transferable" type="boolean" default="true">
+  `true` if tokens are freely transferable by recipients, `false` if tokens
+  cannot be transfered by owners to other addresses. This does not impact the
+  ability to mint tokens to an address or burn tokens from an address. This can
+  be changed after creation.
+</ParamField>
+
 <ParamField body="defaultMetadata" type="object" optional>
-    Default metadata to apply to every NFT in the collection, which can be overriden with token-specific metadata.
+    Default metadata to apply to every NFT in the collection, which can be overriden with token-specific metadata. 
+    This can be changed after creation.
 
     <Expandable title="NFT Metadata">
 
@@ -82,6 +99,12 @@ The newly created token smart contract.
 
 <ResponseField name="symbol" type="string">
   The symbol of the token collection. This cannot be changed after creation.
+</ResponseField>
+
+<ResponseField name="transferable" type="boolean">
+  `true` if tokens are freely transferable by recipients, `false` if tokens
+  cannot be transfered by owners to other addresses. This does not impact the
+  ability to mint tokens to an address or burn tokens from an address.
 </ResponseField>
 
 <ResponseField name="defaultMetadata" type="object">
@@ -151,7 +174,8 @@ curl --location --request POST 'https://api.station.express/api/erc721/create' \
   "token": {
     "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
     "name": "Zed Horse",
-    "symbol": "ZED"
+    "symbol": "ZED",
+    "transferable": true
   }
 }
 ```
