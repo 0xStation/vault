@@ -31,34 +31,31 @@
   "anchors": [],
   "navigation": [
     {
-      "group": "Token API",
+      "group": "Getting Started",
+      "pages": ["token-api/getting-started", "token-api/automations"]
+    },
+    {
+      "group": "Badges (ERC-721)",
       "pages": [
-        "token-api/getting-started",
-        {
-          "group": "Badges (ERC-721)",
-          "pages": [
-            "token-api/badges/overview",
-            "token-api/badges/post/create",
-            "token-api/badges/post/defaultMetadata",
-            "token-api/badges/post/mint",
-            "token-api/badges/post/individualMetadata",
-            "token-api/badges/get/tokens"
-          ]
-        },
-        {
-          "group": "Stamps (ERC-1155)",
-          "pages": ["token-api/stamps/overview"]
-        },
-        {
-          "group": "Points (ERC-20)",
-          "pages": ["token-api/points/overview", "token-api/points/create"]
-        },
-        {
-          "group": "Holders",
-          "pages": ["token-api/holders/holders"]
-        },
-        "token-api/automations"
+        "token-api/badges/overview",
+        "token-api/badges/post/create",
+        "token-api/badges/post/defaultMetadata",
+        "token-api/badges/post/mint",
+        "token-api/badges/post/individualMetadata",
+        "token-api/badges/get/tokens"
       ]
+    },
+    {
+      "group": "Stamps (ERC-1155)",
+      "pages": ["token-api/stamps/overview"]
+    },
+    {
+      "group": "Points (ERC-20)",
+      "pages": ["token-api/points/overview", "token-api/points/create"]
+    },
+    {
+      "group": "Holders",
+      "pages": ["token-api/holders/holders"]
     }
   ],
   "footerSocials": {
