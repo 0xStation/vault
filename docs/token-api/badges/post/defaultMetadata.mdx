@@ -5,6 +5,16 @@ api: "POST https://api.station.express/api/erc721/defaultMetadata"
 description: "Update default metadata for an Badge NFT collection."
 ---
 
+### How NFT default metadata works
+
+For NFT collections that have one standard set of metadata (name, image, etc.) or support evolving metadata
+schemes, a single set of metadata can be defined at the collection-level to provide this default.
+These defaults can be set when [creating a collection](/token-api/badges/post/create) or edited retroactively through this route.
+Individual metadata can be set when [minting new NFTs](/token-api/badges/post/mint) or [editing their metadata](/token-api/badges/post/individualMetadata) directly, which will override the defaults set here.
+
+When edits are made to the collection's default metadata, a blockchain transaction is made and returned to inform
+all apps consuming your NFT's metadata to refresh their caches.
+
 ### Body
 
 <ParamField body="contractAddress" type="string" required>
