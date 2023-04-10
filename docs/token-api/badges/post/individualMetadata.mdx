@@ -1,0 +1,113 @@
+---
+title: "Update an NFT's Individual Metadata"
+sidebarTitle: "Update Individual Metadata"
+api: "POST https://api.station.express/api/erc721/individualMetadata"
+description: "Update individual metadata for a specific NFT."
+---
+
+### Body
+
+<ParamField body="contractAddress" type="string" required>
+  The NFT smart contract address to edit.
+</ParamField>
+
+<ParamField body="tokenId" type="string" required>
+  The NFT smart contract address to edit.
+</ParamField>
+
+<ParamField body="individualMetadata" type="object" required>
+    Individual metadata to associate with this NFT, which overrides any defaults set at the collection-level.
+
+    <Expandable title="NFT Metadata">
+
+      <ParamField body="name" type="string" optional>
+        Name for the NFT.
+      </ParamField>
+
+      <ParamField body="description" type="string" optional>
+        Description for the NFT.
+      </ParamField>
+
+      <ParamField body="mediaUrl" type="string" optional>
+        Url for the media content associated with the NFT.
+      </ParamField>
+
+      <ParamField body="externalUrl" type="string" optional>
+        Url for the external link associated with the NFT.
+      </ParamField>
+
+      <ParamField body="traits" type="Trait[]" optional>
+        Array of trait objects.
+
+        <Expandable title="Trait">
+          <ParamField body="name" type="string" required>
+            Name for the trait.
+          </ParamField>
+
+          <ParamField body="value" type="string" required>
+            Value for the trait.
+          </ParamField>
+        </Expandable>
+
+      </ParamField>
+
+    </Expandable>
+
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Transaction hash for the newly created token.
+</ResponseField>
+
+<ResponseField name="transactionLink" type="string">
+  Transaction link for the newly created token, wraps `transactionHash` with the
+  appropriate URL for convenience.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/erc721/defaultMetadata' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+  "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+  "individualMetadata": {
+    "name": "Zed Run",
+    "description": "Horses run free in the metaverse.",
+    "mediaUrl": "https://hosted.station.express/abc123",
+    "externalUrl": "https://zed.run/racehorse/94979",
+    "traits": [
+      {
+        "name": "Breed type",
+        "value": "Elite"
+      },
+      {
+        "name": "Starting level",
+        "value": "22"
+      },
+      ...
+    ]
+  },
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+}
+```
+
+</ResponseExample>

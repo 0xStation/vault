@@ -1,0 +1,20 @@
+---
+title: "Badges Overview"
+sidebarTitle: "Overview"
+description: "Badges enable unique value attribution through NFTs (ERC-721)."
+---
+
+To get started with a Badge system, [create a new collection](/token-api/badges/post/create).
+Creating a collection will deploy a new token contract for you and return an address of this contract, which you should save.
+
+For basic use cases, you may want to [set default metadata to apply to all NFTs](/token-api/badges/post/defaultMetadata).
+This operation can also take place in the original creation API call.
+
+Using the NFT contract address, you can [mint tokens to your network](/token-api/badges/post/mint).
+Minted tokens will automatically be picked up by our indexing systems and organize the token into your network topology.
+
+For dynamic use cases, you may want to [set individual metadata per-NFT](/token-api/badges/post/individualMetadata).
+This operation can also take place in the original NFT mint API call.
+
+After distributing tokens to your network, you can [fetch all tokens](/token-api/badges/get/tokens) including their holders.
+Additionally, you can [fetch all token holders of your token collections](/token-api/holders/holders) for multi-token analysis.

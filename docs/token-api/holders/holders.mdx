@@ -1,0 +1,155 @@
+---
+title: "Fetch Token Holders across multiple Collections"
+sidebarTitle: "Fetch by Collections"
+api: "GET https://api.station.express/api/holders"
+description: "Fetch all token holders of multiple collections, grouped by holder."
+---
+
+### Query Params
+
+<ParamField query="contractAddresses" type="string[]" required>
+  The NFT smart contract addresses.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="holders" type="Holder[]">
+  Array of Holder objects.
+
+  <Expandable title="Holder">
+
+      <ResponseField name="holderAddress" type="string">
+        Address of the current owner.
+      </ResponseField>
+
+      <ResponseField name="collections" type="Collection[]">
+        Array of Collection objects.
+
+        <Expandable title="Collection">
+            <ResponseField name="type" type="string">
+                Type of the token collection, one of `erc20`, `erc721`, or `erc1155`.
+            </ResponseField>
+
+            <ResponseField name="name" type="string">
+                Name of the token collection.
+            </ResponseField>
+
+            <ResponseField name="symbol" type="string">
+                Symbol of the token collection.
+            </ResponseField>
+
+            <ResponseField name="ownerSince" type="number">
+                UNIX Timestamp when the current owner became this token's owner.
+            </ResponseField>
+
+            <ResponseField name="balance" type="string">
+                Amount of tokens held from this collection.
+            </ResponseField>
+
+            <ResponseField name="nfts" type="Nft[]" optional>
+                Array of NFT objects.
+
+                <Expandable title="NFT">
+                    <ResponseField name="ownerSince" type="number">
+                        UNIX Timestamp when the current owner became this token's owner.
+                    </ResponseField>
+
+                    <ResponseField name="name" type="string">
+                        Name of the NFT.
+                    </ResponseField>
+
+                    <ResponseField name="tokenId" type="string">
+                        Token id of the NFT.
+                    </ResponseField>
+
+                    <ResponseField name="description" type="string">
+                        Description of the NFT.
+                    </ResponseField>
+
+                    <ResponseField name="mediaUrl" type="string">
+                        Url of the media content associated with the NFT.
+                    </ResponseField>
+
+                    <ResponseField name="externalUrl" type="string">
+                        Url of the external link associated with the NFT.
+                    </ResponseField>
+
+                    <ResponseField name="traits" type="Trait[]">
+                        Array of trait objects.
+
+                        <Expandable title="Trait">
+                        <ResponseField name="name" type="string">
+                            Name for the trait.
+                        </ResponseField>
+
+                        <ResponseField name="value" type="string">
+                            Value for the trait.
+                        </ResponseField>
+                        </Expandable>
+                    </ResponseField>
+                </Expandable>
+            </ResponseField>
+
+        </Expandable>
+      </ResponseField>
+
+    </Expandable>
+
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/holders?contractAddresses=[0xba767d65a7164e151783e42994bd475509f256dd]' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "holders": [
+    {
+      "holderAddress": "0x016562aA41A8697720ce0943F003141f5dEAe006",
+      "collections": [
+        {
+          "type": "erc721",
+          "name": "Station Contributor Passport",
+          "symbol": "STATION",
+          "ownerSince": 1650449340,
+          "balance": "1",
+          "nfts": [
+            {
+              "ownerSince": 1650449340,
+              "tokenId": "69",
+              "name": "",
+              "description": "",
+              "mediaUrl": "",
+              "externalUrl": "",
+              "traits": []
+            }
+          ]
+        },
+        {
+          "type": "erc20",
+          "name": "Station Reputation",
+          "symbol": "STATIONⓇ",
+          "ownerSince": 1650449340,
+          "balance": "420.69",
+          "nfts": []
+        }
+      ]
+    }
+  ]
+}
+```
+
+</ResponseExample>

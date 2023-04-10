@@ -35,21 +35,29 @@
       "pages": [
         "token-api/getting-started",
         {
-          "group": "Points",
-          "pages": ["token-api/points/create"]
+          "group": "Points (ERC-20)",
+          "pages": ["token-api/points/overview", "token-api/points/create"]
         },
         {
-          "group": "Badges",
+          "group": "Badges (ERC-721)",
           "pages": [
-            "token-api/badges/create",
-            "token-api/badges/mint",
-            "token-api/badges/metadata"
+            "token-api/badges/overview",
+            "token-api/badges/post/create",
+            "token-api/badges/post/defaultMetadata",
+            "token-api/badges/post/mint",
+            "token-api/badges/post/individualMetadata",
+            "token-api/badges/get/tokens"
           ]
         },
         {
-          "group": "Stamps",
-          "pages": ["token-api/stamps/create"]
-        }
+          "group": "Stamps (ERC-1155)",
+          "pages": ["token-api/stamps/overview"]
+        },
+        {
+          "group": "Holders",
+          "pages": ["token-api/holders/holders"]
+        },
+        "token-api/automations"
       ]
     }
   ],
