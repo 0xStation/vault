@@ -1,14 +1,14 @@
 ---
-title: "Mint ERC721 Tokens"
-sidebarTitle: "ERC721"
-api: "POST https://api.station.express/api/token/erc721/mint"
-description: "Mint tokens to your users"
+title: "Mint Badge Tokens"
+sidebarTitle: "Mint Tokens"
+api: "POST https://api.station.express/api/badges/token/mint"
+description: "Mint tokens from an Badge NFT collection to your users."
 ---
 
 ### Body
 
-<ParamField body="tokenAddress" type="string" required>
-  The token address to mint with.
+<ParamField body="contractAddress" type="string" required>
+  The token smart contract address to mint with.
 </ParamField>
 
 <ParamField body="to" type="string" required>
@@ -73,12 +73,12 @@ description: "Mint tokens to your users"
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/token/erc721/mint' \
+curl --location --request POST 'https://api.station.express/api/badges/token/mint' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
-    "tokenAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "to": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "tosmart contract ": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
 }'
 ```
 

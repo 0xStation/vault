@@ -33,10 +33,22 @@
     {
       "group": "Token API",
       "pages": [
-        "token-api/create",
+        "token-api/getting-started",
         {
-          "group": "Mint Tokens",
-          "pages": ["token-api/erc721/mint"]
+          "group": "Points",
+          "pages": ["token-api/points/create"]
+        },
+        {
+          "group": "Badges",
+          "pages": [
+            "token-api/badges/create",
+            "token-api/badges/mint",
+            "token-api/badges/metadata"
+          ]
+        },
+        {
+          "group": "Stamps",
+          "pages": ["token-api/stamps/create"]
         }
       ]
     }

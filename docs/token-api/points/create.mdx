@@ -1,0 +1,83 @@
+---
+title: "Create a new Points Collection"
+sidebarTitle: "Create a Collection"
+api: "POST https://api.station.express/api/points/collection/create"
+description: "Create a new Points collection."
+---
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The name of the collection. This cannot be changed after creation.
+</ParamField>
+
+<ParamField body="symbol" type="string" required>
+  The symbol of the collection. This cannot be changed after creation.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Transaction hash for the newly created token collection.
+</ResponseField>
+
+<ResponseField name="transactionLink" type="string">
+  Transaction link for the newly created token collection, wraps
+  `transactionHash` with the appropriate URL for convenience.
+</ResponseField>
+
+<ResponseField name="token" type="object">
+
+The newly created token smart contract.
+
+<Expandable title="Token">
+
+<ResponseField name="contractAddress" type="string">
+  The Ethereum address this token collection contract was deployed to.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The name of the token collection. This cannot be changed after creation.
+</ResponseField>
+
+<ResponseField name="symbol" type="string">
+  The symbol of the token collection. This cannot be changed after creation.
+</ResponseField>
+
+</Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/points/collection/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "name": "Racing XP",
+    "symbol": "ZED.XP"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "transactionHash": "0x...",
+  "transactionLink": "https://polygonscan.com/tx/0x...",
+  "token": {
+    "contractAddress": "0x...",
+    "name": "Racing XP",
+    "symbol": "ZED.XP"
+  }
+}
+```
+
+</ResponseExample>

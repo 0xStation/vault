@@ -1,41 +1,36 @@
 ---
-title: "Create Token"
-api: "POST https://api.station.express/api/token/create"
-description: "This endpoint creates a new token"
+title: "Create a new Badge NFT Collection"
+sidebarTitle: "Create a Collection"
+api: "POST https://api.station.express/api/badges/collection/create"
+description: "Create a new Badge NFT collection."
 ---
 
 ### Body
 
-<ParamField body="type" type="string" required>
-  The type of token you would like to create. Must be one of `ERC20`, `ERC721`,
-  or `ERC1155`
-</ParamField>
-
 <ParamField body="name" type="string" required>
-  The name of the token. This cannot be changed after creation.
+  The name of the collection. This cannot be changed after creation.
 </ParamField>
 
 <ParamField body="symbol" type="string" required>
-  The symbol of the token. This cannot be changed after creation.
+  The symbol of the collection. This cannot be changed after creation.
 </ParamField>
 
-<ParamField body="nftMetadataPerToken" type="boolean" optional>
-  If this token is an NFT, `true` if metadata will be unique per token or
-  `false` if the same metadata applies to all tokens in this collection.
-  Defaults to `true`.
+<ParamField body="metadataPerToken" type="boolean" optional>
+  `true` if metadata will be unique per token or `false` if the same metadata
+  applies to all tokens in this collection. Defaults to `true`.
 </ParamField>
 
-<ParamField body="nftMetadata" type="object" optional>
-    Metadata details if token is an NFT and `nftMetadataPerToken` is `false`.
+<ParamField body="metadata" type="object" optional>
+    Metadata details if `metadataPerToken` is `false`.
 
     <Expandable title="NFT Metadata">
 
 <ParamField body="name" type="string" required>
-  Name for the token.
+  Name for the token collection.
 </ParamField>
 
 <ParamField body="description" type="string" optional>
-  Description for the token.
+  Description for the token collection.
 </ParamField>
 
 <ParamField body="mediaUrl" type="string" required>
@@ -72,12 +67,12 @@ description: "This endpoint creates a new token"
 </ResponseField>
 
 <ResponseField name="transactionHash" type="string">
-  Transaction hash for the newly created token.
+  Transaction hash for the newly created token collection.
 </ResponseField>
 
 <ResponseField name="transactionLink" type="string">
-  Transaction link for the newly created token, wraps `transactionHash` with the
-  appropriate URL for convenience.
+  Transaction link for the newly created token collection, wraps
+  `transactionHash` with the appropriate URL for convenience.
 </ResponseField>
 
 <ResponseField name="token" type="object">
@@ -86,41 +81,37 @@ The newly created token smart contract.
 
 <Expandable title="Token">
 
-<ResponseField name="address" type="string">
-  The Ethereum address this token contract is deployed at.
+<ResponseField name="contractAddress" type="string">
+  The Ethereum address this token collection contract was deployed to.
 </ResponseField>
 
-<ParamField body="type" type="string">
-  The type of token, one of `ERC20`, `ERC721`, or `ERC1155`.
-</ParamField>
-
 <ResponseField name="name" type="string">
-  The name of the token. This cannot be changed after creation.
+  The name of the token collection. This cannot be changed after creation.
 </ResponseField>
 
 <ResponseField name="symbol" type="string">
-  The symbol of the token. This cannot be changed after creation.
+  The symbol of the token collection. This cannot be changed after creation.
 </ResponseField>
 
-<ResponseField name="nftMetadata" type="object">
-  Metadata details if token is an NFT and `nftMetadataPerToken` is `false`.
+<ResponseField name="metadata" type="object">
+  Metadata details if token collection is an NFT and `metadataPerToken` is `false`.
 
     <Expandable title="NFT Metadata">
 
     <ResponseField name="name" type="string">
-        Name for the token.
+        Name for the token collection.
     </ResponseField>
 
     <ResponseField name="description" type="string">
-        Description for the token.
+        Description for the token collection.
     </ResponseField>
 
     <ResponseField name="mediaUrl" type="string">
-        Url for the media content associated with the NFT
+        Url for the media content associated with the collection
     </ResponseField>
 
     <ResponseField name="externalUrl" type="string">
-        Url for the external link associated with the NFT.
+        Url for the external link associated with the collection.
     </ResponseField>
 
     <ResponseField name="traits" type="Trait[]">
@@ -148,11 +139,10 @@ The newly created token smart contract.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/token/create' \
+curl --location --request POST 'https://api.station.express/api/badges/collection/create' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
-    "type": "ERC721",
     "name": "Zed Horse",
     "symbol": "ZED"
 }'
@@ -168,8 +158,7 @@ curl --location --request POST 'https://api.station.express/api/token/create' \
   "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
   "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
   "token": {
-    "address": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "type": "ERC721",
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
     "name": "Zed Horse",
     "symbol": "ZED"
   }
