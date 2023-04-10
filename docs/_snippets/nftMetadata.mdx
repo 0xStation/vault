@@ -1,0 +1,34 @@
+<Expandable title="NFT Metadata">
+
+<ParamField body="name" type="string" required>
+  Name for the token.
+</ParamField>
+
+<ParamField body="description" type="string" optional>
+  Description for the token.
+</ParamField>
+
+<ParamField body="mediaUrl" type="string" required>
+  Url for the media content associated with the NFT
+</ParamField>
+
+<ParamField body="externalUrl" type="string" optional>
+  Url for the external link associated with the NFT.
+</ParamField>
+
+<ParamField body="traits" type="Trait[]" optional>
+    Array of trait objects.
+
+    <Expandable title="Trait">
+        <ParamField body="name" type="string" required>
+            Name for the trait.
+        </ParamField>
+
+        <ParamField body="value" type="string" required>
+            Value for the trait.
+        </ParamField>
+    </Expandable>
+
+</ParamField>
+
+</Expandable>
