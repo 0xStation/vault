@@ -35,10 +35,6 @@
       "pages": [
         "token-api/getting-started",
         {
-          "group": "Points (ERC-20)",
-          "pages": ["token-api/points/overview", "token-api/points/create"]
-        },
-        {
           "group": "Badges (ERC-721)",
           "pages": [
             "token-api/badges/overview",
@@ -52,6 +48,10 @@
         {
           "group": "Stamps (ERC-1155)",
           "pages": ["token-api/stamps/overview"]
+        },
+        {
+          "group": "Points (ERC-20)",
+          "pages": ["token-api/points/overview", "token-api/points/create"]
         },
         {
           "group": "Holders",
