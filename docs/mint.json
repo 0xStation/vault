@@ -28,17 +28,17 @@
     "name": "Get Started",
     "url": "https://calendly.com/symmtry/token-api"
   },
-  "anchors": [
-    {
-      "name": "Contact Us",
-      "icon": "twitter",
-      "url": "https://twitter.com/0xstation"
-    }
-  ],
+  "anchors": [],
   "navigation": [
     {
       "group": "Token API",
-      "pages": ["token-api/create"]
+      "pages": [
+        "token-api/create",
+        {
+          "group": "Mint Tokens",
+          "pages": ["token-api/erc721/mint"]
+        }
+      ]
     }
   ],
   "footerSocials": {

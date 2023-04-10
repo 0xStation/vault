@@ -6,17 +6,63 @@ description: "This endpoint creates a new token"
 
 ### Body
 
-<ParamField body="type" type="string">
+<ParamField body="type" type="string" required>
   The type of token you would like to create. Must be one of `ERC20`, `ERC721`,
   or `ERC1155`
 </ParamField>
 
-<ParamField body="name" type="string">
+<ParamField body="name" type="string" required>
   The name of the token. This cannot be changed after creation.
 </ParamField>
 
-<ParamField body="symbol" type="string">
+<ParamField body="symbol" type="string" required>
   The symbol of the token. This cannot be changed after creation.
+</ParamField>
+
+<ParamField body="nftMetadataPerToken" type="boolean" optional>
+  If this token is an NFT, `true` if metadata will be unique per token or
+  `false` if the same metadata applies to all tokens in this collection.
+  Defaults to `true`.
+</ParamField>
+
+<ParamField body="nftMetadata" type="object" optional>
+    Metadata details if token is an NFT and `nftMetadataPerToken` is `false`.
+
+    <Expandable title="NFT Metadata">
+
+<ParamField body="name" type="string" required>
+  Name for the token.
+</ParamField>
+
+<ParamField body="description" type="string" optional>
+  Description for the token.
+</ParamField>
+
+<ParamField body="mediaUrl" type="string" required>
+  Url for the media content associated with the NFT
+</ParamField>
+
+<ParamField body="externalUrl" type="string" optional>
+  Url for the external link associated with the NFT.
+</ParamField>
+
+<ParamField body="traits" type="Trait[]" optional>
+    Array of trait objects.
+
+    <Expandable title="Trait">
+        <ParamField body="name" type="string" required>
+            Name for the trait.
+        </ParamField>
+
+        <ParamField body="value" type="string" required>
+            Value for the trait.
+        </ParamField>
+    </Expandable>
+
+</ParamField>
+
+</Expandable>
+
 </ParamField>
 
 ### Response
@@ -56,6 +102,45 @@ The newly created token smart contract.
   The symbol of the token. This cannot be changed after creation.
 </ResponseField>
 
+<ResponseField name="nftMetadata" type="object">
+  Metadata details if token is an NFT and `nftMetadataPerToken` is `false`.
+
+    <Expandable title="NFT Metadata">
+
+    <ResponseField name="name" type="string">
+        Name for the token.
+    </ResponseField>
+
+    <ResponseField name="description" type="string">
+        Description for the token.
+    </ResponseField>
+
+    <ResponseField name="mediaUrl" type="string">
+        Url for the media content associated with the NFT
+    </ResponseField>
+
+    <ResponseField name="externalUrl" type="string">
+        Url for the external link associated with the NFT.
+    </ResponseField>
+
+    <ResponseField name="traits" type="Trait[]">
+        Array of trait objects.
+
+        <Expandable title="Trait">
+            <ResponseField name="name" type="string">
+                Name for the trait.
+            </ResponseField>
+
+            <ResponseField name="value" type="string">
+                Value for the trait.
+            </ResponseField>
+        </Expandable>
+    </ResponseField>
+
+    </Expandable>
+
+</ResponseField>
+
 </Expandable>
 
 </ResponseField>
@@ -63,9 +148,9 @@ The newly created token smart contract.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.mintlify.com/api/user' \
+curl --location --request POST 'https://api.station.express/api/token/create' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Token <token>' \
+--header 'Authorization: Bearer <token>' \
 --data-raw '{
     "type": "ERC721",
     "name": "Zed Horse",
