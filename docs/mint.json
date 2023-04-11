@@ -33,7 +33,8 @@
     {
       "group": "Getting Started",
       "pages": [
-        "token-api/getting-started",
+        "token-api/intro",
+        "token-api/token-api",
         "token-api/automations",
         "token-api/auth"
       ]
