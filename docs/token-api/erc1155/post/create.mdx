@@ -13,8 +13,6 @@ The smart contract is analogous to a spreadsheet, it is the home that defines th
 This API route will take in parameters for creating a new NFT collection and return an address where this new smart contract is deployed.
 This contract address uniquely identifies your NFT collection and will be used in other API routes.
 
-<Note>All tokens are created on [Polygon](https://polygon.technology/).</Note>
-
 ### Differences with Memberships (ERC-721)
 
 In a Membership NFT collection, there only exists one of each specific NFT, making it unique. In a Badge NFT
@@ -29,6 +27,10 @@ Signals that your use case may be better fit with a Badge versus a Membership NF
 - **The NFT resembles categorical more than unique information.**
 
 ### Body
+
+<ParamField body="network" type="string" default="polygon">
+  The name of the network for this token. This cannot be changed after creation.
+</ParamField>
 
 <ParamField body="name" type="string" required>
   The name of the collection. This cannot be changed after creation.

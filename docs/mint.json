@@ -36,7 +36,8 @@
         "getting-started/intro",
         "getting-started/token-api",
         "getting-started/automations",
-        "getting-started/auth"
+        "getting-started/auth",
+        "getting-started/networks"
       ]
     },
     {
