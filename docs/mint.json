@@ -40,27 +40,32 @@
       ]
     },
     {
-      "group": "Memberships (ERC-721)",
+      "group": "API-Controlled Tokens",
       "pages": [
-        "token-api/erc721/overview",
-        "token-api/erc721/post/create",
-        "token-api/erc721/post/defaultMetadata",
-        "token-api/erc721/post/mint",
-        "token-api/erc721/post/individualMetadata",
-        "token-api/erc721/get/tokens"
+        {
+          "group": "Memberships (ERC-721)",
+          "pages": [
+            "token-api/erc721/overview",
+            "token-api/erc721/post/create",
+            "token-api/erc721/post/defaultMetadata",
+            "token-api/erc721/post/mint",
+            "token-api/erc721/post/individualMetadata",
+            "token-api/erc721/get/tokens"
+          ]
+        },
+        {
+          "group": "Badges (ERC-1155)",
+          "pages": ["token-api/erc1155/overview"]
+        },
+        {
+          "group": "Points (ERC-20)",
+          "pages": ["token-api/erc20/overview"]
+        },
+        {
+          "group": "Token Holders",
+          "pages": ["token-api/holders/holders"]
+        }
       ]
-    },
-    {
-      "group": "Badges (ERC-1155)",
-      "pages": ["token-api/erc1155/overview"]
-    },
-    {
-      "group": "Points (ERC-20)",
-      "pages": ["token-api/erc20/overview"]
-    },
-    {
-      "group": "Token Holders",
-      "pages": ["token-api/holders/holders"]
     }
   ],
   "footerSocials": {
