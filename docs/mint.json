@@ -33,10 +33,10 @@
     {
       "group": "Getting Started",
       "pages": [
-        "token-api/intro",
-        "token-api/token-api",
-        "token-api/automations",
-        "token-api/auth"
+        "getting-started/intro",
+        "getting-started/token-api",
+        "getting-started/automations",
+        "getting-started/auth"
       ]
     },
     {
