@@ -31,14 +31,12 @@
   "anchors": [],
   "navigation": [
     {
+      "group": "Overview",
+      "pages": ["overview/intro", "overview/token-api", "overview/automations"]
+    },
+    {
       "group": "Getting Started",
-      "pages": [
-        "getting-started/intro",
-        "getting-started/token-api",
-        "getting-started/automations",
-        "getting-started/auth",
-        "getting-started/networks"
-      ]
+      "pages": ["getting-started/auth", "getting-started/networks"]
     },
     {
       "group": "API-Controlled Tokens",
