@@ -47,15 +47,20 @@
           "pages": [
             "token-api/erc721/overview",
             "token-api/erc721/post/create",
-            "token-api/erc721/post/defaultMetadata",
+            "token-api/erc721/put/defaultMetadata",
             "token-api/erc721/post/mint",
-            "token-api/erc721/post/individualMetadata",
+            "token-api/erc721/put/individualMetadata",
             "token-api/erc721/get/tokens"
           ]
         },
         {
           "group": "Badges (ERC-1155)",
-          "pages": ["token-api/erc1155/overview"]
+          "pages": [
+            "token-api/erc1155/overview",
+            "token-api/erc1155/post/create",
+            "token-api/erc1155/put/metadata",
+            "token-api/erc1155/post/mint"
+          ]
         },
         {
           "group": "Points (ERC-20)",

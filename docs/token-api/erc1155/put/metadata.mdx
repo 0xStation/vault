@@ -1,16 +1,16 @@
 ---
-title: "Update an NFT's Individual Metadata"
-sidebarTitle: "Update Individual Metadata"
-api: "POST https://api.station.express/api/erc721/individualMetadata"
+title: "Update a Badge NFT's Metadata"
+sidebarTitle: "Update Metadata"
+api: "PUT https://api.station.express/api/erc1155/metadata"
 ---
 
-### How NFT individual metadata works
+### How Badge NFT metadata works
 
-To support differentiated NFTs within a collection and dynamic or evolving use cases, set metadata on a per-token basis.
-This metadata can be set when [minting an NFT](/token-api/erc721/post/mint) or edited retroactively through this route.
+Each Badge will have its own unique metadata associated with its `tokenId` which should be set before minting
+any to your network. This metadata can be changed at any time with this route.
 
-When edits are made to the NFT's metadata, a blockchain transaction is made and returned to inform all apps consuming
-your NFT's metadata to refresh their caches.
+When edits are made to the NFT's metadata, a blockchain transaction is made and returned to inform all apps
+consuming your NFT's metadata to refresh their caches.
 
 ### Body
 
@@ -22,8 +22,8 @@ your NFT's metadata to refresh their caches.
   The NFT smart contract address to edit.
 </ParamField>
 
-<ParamField body="individualMetadata" type="object" required>
-    Individual metadata to associate with this NFT, which overrides any defaults set at the collection-level.
+<ParamField body="metadata" type="object" required>
+    Metadata to associate with this NFT.
 
     <Expandable title="NFT Metadata">
 
@@ -80,24 +80,20 @@ your NFT's metadata to refresh their caches.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/erc721/defaultMetadata' \
+curl --location --request PUT 'https://api.station.express/api/erc1155/metadata' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
   "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-  "individualMetadata": {
-    "name": "Zed Run",
-    "description": "Horses run free in the metaverse.",
+  "metadata": {
+    "name": "King Toad, ruler of Lilypod Pond",
+    "description": "Holders of Kind Toad are able to vote on high-importance decisions in the community.",
     "mediaUrl": "https://hosted.station.express/abc123",
-    "externalUrl": "https://zed.run/racehorse/94979",
+    "externalUrl": "https://frog.mafia/badge/king-toad",
     "traits": [
       {
-        "name": "Breed type",
-        "value": "Elite"
-      },
-      {
-        "name": "Starting level",
-        "value": "22"
+        "name": "Power",
+        "value": "Governance"
       },
       ...
     ]

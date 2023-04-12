@@ -1,7 +1,7 @@
 ---
 title: "Update an NFT Collection's Default Metadata"
 sidebarTitle: "Update Default Metadata"
-api: "POST https://api.station.express/api/erc721/defaultMetadata"
+api: "PUT https://api.station.express/api/erc721/defaultMetadata"
 ---
 
 ### How NFT default metadata works
@@ -9,7 +9,7 @@ api: "POST https://api.station.express/api/erc721/defaultMetadata"
 For NFT collections that have one standard set of metadata (name, image, etc.) or support evolving metadata
 schemes, a single set of metadata can be defined at the collection-level to provide this default.
 These defaults can be set when [creating a collection](/token-api/erc721/post/create) or edited retroactively through this route.
-Individual metadata can be set when [minting new NFTs](/token-api/erc721/post/mint) or [editing their metadata](/token-api/erc721/post/individualMetadata) directly, which will override the defaults set here.
+Individual metadata can be set when [minting new NFTs](/token-api/erc721/post/mint) or [editing their metadata](/token-api/erc721/put/individualMetadata) directly, which will override the defaults set here.
 
 When edits are made to the collection's default metadata, a blockchain transaction is made and returned to inform
 all apps consuming your NFT's metadata to refresh their caches.
@@ -78,7 +78,7 @@ all apps consuming your NFT's metadata to refresh their caches.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/erc721/defaultMetadata' \
+curl --location --request PUT 'https://api.station.express/api/erc721/defaultMetadata' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{

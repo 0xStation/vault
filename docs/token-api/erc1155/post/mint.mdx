@@ -1,0 +1,91 @@
+---
+title: "Mint Badge NFTs"
+sidebarTitle: "Mint NFTs"
+api: "POST https://api.station.express/api/erc1155/mint"
+---
+
+{/* <Snippet file="nftCreation.mdx"> */}
+
+### How to mint Badge NFTs
+
+Once you have a Badge NFT smart contract, you can mint any number of tokens to any address. Each Badge NFT
+has a unique `tokenId` to identify it within the collection and all items of this `tokenId` share the same
+metadata.
+
+You can also pair this operation with one of our [Automations](/token-api/automations) to create an automatic
+distribution policy or by writing custom logic in your own systems prior to calling this API.
+
+### Differences with Memberships (ERC-721)
+
+While minting Memberships, the unique `tokenId` associated with each NFT will auto-increment for you, but
+minting Badges requires an explicit argument for `tokenId` to indicate which Badge should be minted. For
+example, one may define badge `1` as marking a donor, `2` for participating in last season, and `3` for
+being a attendee at the most recent event.
+
+### Body
+
+<ParamField body="contractAddress" type="string" required>
+  The NFT smart contract address to mint with.
+</ParamField>
+
+<ParamField body="tokenId" type="string" required>
+  The unique id for the NFT within the collection. Type `string` is used to
+  natively support large numbers.
+</ParamField>
+
+<ParamField body="toAddress" type="string" required>
+  The address to mint an NFT to.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Transaction hash for the newly created token.
+</ResponseField>
+
+<ResponseField name="transactionLink" type="string">
+  Transaction link for the newly created token, wraps `transactionHash` with the
+  appropriate URL for convenience.
+</ResponseField>
+
+<ParamField body="tokenId" type="string" required>
+  The unique id for the NFT within the collection. Type `string` is used to
+  natively support large numbers.
+</ParamField>
+
+<ParamField body="toAddress" type="string" required>
+  The address the NFT was minted to.
+</ParamField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/erc1155/mint' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "tokenId": "69",
+    "toAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "tokenId": "69",
+  "toAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531"
+}
+```
+
+</ResponseExample>

@@ -4,14 +4,15 @@ sidebarTitle: "Mint NFTs"
 api: "POST https://api.station.express/api/erc721/mint"
 ---
 
-### How to mint NFTs
+### How to mint Membership NFTs
 
-Once you have an NFT smart contract, you can mint any number of tokens to any address.
-Each NFT has a unique `tokenId` which is an auto-incrementing number like a typical numeric identifier in a database.
-You can also optionally provide metadata specific to this newly minted NFT that will override any defaults set in the previous step.
+Once you have a Membership NFT smart contract, you can mint any number of tokens to any address. Each NFT
+has a unique `tokenId` which is an auto-incrementing number like a typical numeric identifier in a database.
+You can also optionally provide metadata specific to this newly minted NFT that will override any defaults
+set in the previous step.
 
-This route is best paired with one of our [Automations](/token-api/automations) to create an automatic distribution policy
-or by writing custom logic in your own systems prior to calling this API.
+You can also pair this operation with one of our [Automations](/token-api/automations) to create an automatic
+distribution policy or by writing custom logic in your own systems prior to calling this API.
 
 ### Body
 
@@ -19,48 +20,38 @@ or by writing custom logic in your own systems prior to calling this API.
   The NFT smart contract address to mint with.
 </ParamField>
 
-<ParamField body="to" type="string" required>
+<ParamField body="toAddress" type="string" required>
   The address to mint an NFT to.
 </ParamField>
 
 <ParamField body="individualMetadata" type="object" optional>
-    Individual metadata to associate with this NFT, which overrides any defaults set at the collection-level.
-
-    <Expandable title="NFT Metadata">
-
-      <ParamField body="name" type="string" required>
-        Name for the NFT.
-      </ParamField>
-
-      <ParamField body="description" type="string" optional>
-        Description for the NFT.
-      </ParamField>
-
-      <ParamField body="mediaUrl" type="string" required>
-        Url for the media content associated with the NFT.
-      </ParamField>
-
-      <ParamField body="externalUrl" type="string" optional>
-        Url for the external link associated with the NFT.
-      </ParamField>
-
-      <ParamField body="traits" type="Trait[]" optional>
-        Array of trait objects.
-
-        <Expandable title="Trait">
-          <ParamField body="name" type="string" required>
-            Name for the trait.
-          </ParamField>
-
-          <ParamField body="value" type="string" required>
-            Value for the trait.
-          </ParamField>
-        </Expandable>
-
-      </ParamField>
-
-    </Expandable>
-
+  Individual metadata to associate with this NFT, which overrides any defaults
+  set at the collection-level.
+  <Expandable title="NFT Metadata">
+    <ParamField body="name" type="string" required>
+      Name for the NFT.
+    </ParamField>
+    <ParamField body="description" type="string" optional>
+      Description for the NFT.
+    </ParamField>
+    <ParamField body="mediaUrl" type="string" required>
+      Url for the media content associated with the NFT.
+    </ParamField>
+    <ParamField body="externalUrl" type="string" optional>
+      Url for the external link associated with the NFT.
+    </ParamField>
+    <ParamField body="traits" type="Trait[]" optional>
+      Array of trait objects.
+      <Expandable title="Trait">
+        <ParamField body="name" type="string" required>
+          Name for the trait.
+        </ParamField>
+        <ParamField body="value" type="string" required>
+          Value for the trait.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
 </ParamField>
 
 ### Response
@@ -90,7 +81,7 @@ curl --location --request POST 'https://api.station.express/api/erc721/mint' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
     "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "to": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+    "toAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
 }'
 ```
 
