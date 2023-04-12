@@ -1,0 +1,103 @@
+---
+title: "Create a new Badge NFT Collection"
+sidebarTitle: "Create a Collection"
+api: "POST https://api.station.express/api/erc1155/create"
+---
+
+### How NFT creation works
+
+NFTs are represented on the blockchain through a smart contract that manages the accounting of who owns which NFT.
+To create a new NFT collection, we create a new smart contract designed to manage it and then are able to populate it with the actual tokens.
+The smart contract is analogous to a spreadsheet, it is the home that defines the structure and content of the records.
+
+This API route will take in parameters for creating a new NFT collection and return an address where this new smart contract is deployed.
+This contract address uniquely identifies your NFT collection and will be used in other API routes.
+
+### Differences with Memberships (ERC-721)
+
+In a Membership NFT collection, there only exists one of each specific NFT, making it unique. In a Badge NFT
+collection, there can be many of each specific NFT, enabling multiple people to own the same item simultaneously.
+This also enables people to own more than one copy of a Badge, supporting use cases like split ownership of
+an NFT where the number of copies someone holds corresponds to capital contribution to purchase the NFT.
+
+Signals that your use case may be better fit with a Badge versus a Membership NFT:
+
+- **You expect many people to own NFTs with the same metadata.**
+- **You want onchain differentiation of NFTs by their metadata.**
+- **The NFT resembles categorical more than unique information.**
+
+### Body
+
+<ParamField body="network" type="string" default="polygon">
+  The name of the network for this token. This cannot be changed after creation.
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  The name of the collection. This cannot be changed after creation.
+</ParamField>
+
+<ParamField body="symbol" type="string" required>
+  The symbol of the collection. This cannot be changed after creation.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Transaction hash for the newly created token collection.
+</ResponseField>
+
+<ResponseField name="transactionLink" type="string">
+  Transaction link for the newly created token collection, wraps
+  `transactionHash` with the appropriate URL for convenience.
+</ResponseField>
+
+<ResponseField name="contractAddress" type="string">
+  The Ethereum address this token collection contract was deployed to.
+</ResponseField>
+
+<ResponseField name="token" type="object">
+  The newly created token smart contract.
+  <Expandable title="Token">
+    <ResponseField name="name" type="string">
+      The name of the token collection. This cannot be changed after creation.
+    </ResponseField>
+    <ResponseField name="symbol" type="string">
+      The symbol of the token collection. This cannot be changed after creation.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/erc1155/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "name": "Frog Mafia Badge",
+    "symbol": "RIBBIT.badge"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+  "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+  "token": {
+    "name": "Frog Mafia Badge",
+    "symbol": "RIBBIT.badge"
+  }
+}
+```
+
+</ResponseExample>
