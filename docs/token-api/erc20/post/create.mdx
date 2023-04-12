@@ -1,8 +1,21 @@
 ---
 title: "Create a new Points Collection"
 sidebarTitle: "Create a Collection"
-api: "POST https://api.station.express/api/points/collection/create"
+api: "POST https://api.station.express/api/erc20/create"
 ---
+
+### How token creation works
+
+Tokens are represented on the blockchain through a smart contract that manages the accounting of how many
+tokens each person owns. To create a new token collection, we create a new smart contract designed to manage
+it and then are able to distribute tokens. The smart contract is analogous to a spreadsheet, it is the home
+that defines the structure and content of the records.
+
+This API route will take in parameters for creating a new token collection and return an address where this
+new smart contract is deployed. This contract address uniquely identifies your token collection and will be
+used in other API routes.
+
+<Note>All tokens are created on [Polygon](https://polygon.technology/).</Note>
 
 ### Body
 
@@ -29,25 +42,20 @@ api: "POST https://api.station.express/api/points/collection/create"
   `transactionHash` with the appropriate URL for convenience.
 </ResponseField>
 
-<ResponseField name="token" type="object">
-
-The newly created token smart contract.
-
-<Expandable title="Token">
-
 <ResponseField name="contractAddress" type="string">
   The Ethereum address this token collection contract was deployed to.
 </ResponseField>
 
-<ResponseField name="name" type="string">
-  The name of the token collection. This cannot be changed after creation.
-</ResponseField>
-
-<ResponseField name="symbol" type="string">
-  The symbol of the token collection. This cannot be changed after creation.
-</ResponseField>
-
-</Expandable>
+<ResponseField name="token" type="object">
+  The newly created token smart contract.
+  <Expandable title="Token">
+    <ResponseField name="name" type="string">
+      The name of the token collection. This cannot be changed after creation.
+    </ResponseField>
+    <ResponseField name="symbol" type="string">
+      The symbol of the token collection. This cannot be changed after creation.
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 <RequestExample>

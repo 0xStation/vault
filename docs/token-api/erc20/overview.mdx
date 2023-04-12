@@ -1,7 +1,21 @@
 ---
 title: "Points Overview"
-sidebarTitle: "Coming Soon"
+sidebarTitle: "Overview"
 description: "Points enable quantitative value attribution through a new currency (ERC-20)."
 ---
 
-<Warning>API support for ERC-20s coming in Q2 2023.</Warning>
+<Info>
+  To learn more about a given token operation, open the provided link for
+  further details.
+</Info>
+
+To get started with a Points system, [create a new collection](/token-api/erc20/post/create).
+Creating a collection will deploy a new token contract for you and return an address of this contract.
+
+Using the NFT contract address, you can [mint tokens to your network](/token-api/erc20/post/mint).
+Our blockchain indexing systems will automatically pick up these operations and organize the activity.
+
+After distributing tokens to your network, you can [fetch all token holders of your token collections](/token-api/holders/holders)
+for multi-token analysis.
+
+<Note>All tokens are created on [Polygon](https://polygon.technology/).</Note>

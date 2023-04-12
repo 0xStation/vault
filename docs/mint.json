@@ -64,7 +64,11 @@
         },
         {
           "group": "Points (ERC-20)",
-          "pages": ["token-api/erc20/overview"]
+          "pages": [
+            "token-api/erc20/overview",
+            "token-api/erc20/post/create",
+            "token-api/erc20/post/mint"
+          ]
         },
         {
           "group": "Token Holders",
