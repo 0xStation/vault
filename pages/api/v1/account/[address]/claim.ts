@@ -42,7 +42,7 @@ export default async function handler(
   let requests: RequestFrob[] = []
   let revShareWithdraws: RevShareWithdraw[] = []
   try {
-    const [fetchRequests, ...fetchSplits] = await Promise.all([
+    const [fetchRequests, fetchSplits] = await Promise.all([
       getProfileRequests({
         where: {
           AND: [
@@ -71,22 +71,18 @@ export default async function handler(
           ],
         },
       }),
-      ...SUPPORTED_CHAIN_IDS.map((chainId) =>
-        getRecipientSplits(chainId, accountAddress),
-      ),
+      getRecipientSplits(accountAddress),
     ])
 
     requests = fetchRequests
 
-    const splitsFlattened = fetchSplits.reduce((acc, v) => [...acc, ...v], [])
-
-    const splitGlobalIds = splitsFlattened.map((split) => ({
+    const splitGlobalIds = fetchSplits.map((split) => ({
       chainId: split.chainId,
       address: split.address,
     }))
     const revShares = await getRevSharesByAddresses(splitGlobalIds)
 
-    const internalSplits = splitsFlattened.filter((split) =>
+    const internalSplits = fetchSplits.filter((split) =>
       revShares.some((rs) =>
         addressesAreEqual(rs.data.meta.address, split.address),
       ),

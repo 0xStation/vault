@@ -16,6 +16,9 @@ export const _scaleAmountByPercentage = (
     .toString()
 }
 
+export const splitsSpecEndpoint =
+  "https://jmycadsdgzijoeaqzbqw.spec.dev/graphql"
+
 export const getSplitsSubgraphEndpoint = (chainId: number) => {
   const chainName = subgraphChainIdToChainName[chainId]
 
