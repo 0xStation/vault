@@ -116,17 +116,16 @@ export const getProfileRequests = async ({
     )
 
     const stage = (
-      approveActivities.length >= safeDetails.quorum ||
-      rejectActivities.length >= safeDetails.quorum
+      approveActivities.length >= quorum || rejectActivities.length >= quorum
         ? "EXECUTE"
         : "VOTE"
     ) as "EXECUTE" | "VOTE"
 
     let validActions = [] as ("EXECUTE-REJECT" | "EXECUTE-APPROVE")[]
-    if (approveActivities.length >= safeDetails.quorum) {
+    if (approveActivities.length >= quorum) {
       validActions.push("EXECUTE-APPROVE")
     }
-    if (rejectActivities.length >= safeDetails.quorum) {
+    if (rejectActivities.length >= quorum) {
       validActions.push("EXECUTE-REJECT")
     }
 
@@ -136,15 +135,14 @@ export const getProfileRequests = async ({
       approveActivities,
       rejectActivities,
       commentActivities,
-      quorum: request.data.settingsAtExecution.quorum,
+      quorum: request.data.settingsAtExecution?.quorum || quorum,
       signers,
       status,
       stage,
       validActions,
-      addressesThatHaveNotSigned:
-        request.data.settingsAtExecution.signers.filter(
-          (address: string) => !signatureAccounted[address],
-        ),
+      addressesThatHaveNotSigned: (
+        request.data.settingsAtExecution?.signers || signers
+      ).filter((address: string) => !signatureAccounted[address]),
     }
   })
 
