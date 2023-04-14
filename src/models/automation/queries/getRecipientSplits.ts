@@ -3,53 +3,45 @@ import gql from "graphql-tag"
 import { SPLITS_PERCENTAGE_SCALE } from "lib/constants"
 import { toChecksumAddress } from "lib/utils/toChecksumAddress"
 import { subtractValues } from "../../token/utils"
-import { getSplitsSubgraphEndpoint } from "../utils"
+import { splitsSpecEndpoint } from "../utils"
 
 type GraphQLResponse = {
-  recipient: {
-    id: string
-    splits: {
-      allocation: string
-      split: {
-        id: string
-        distributorFee: string
-        recipients: {
-          recipient: {
-            id: string
-          }
-          allocation: string
-        }[]
-      }
-      tokens: {
-        tokenAddress: string
-        totalDistributed: string
-        totalClaimed: string
+  splitRecipients: {
+    chainId: string
+    splitAddress: string
+    allocation: string
+    split: {
+      distributorFee: string
+      splitRecipients: {
+        recipientAddress: string
+        allocation: string
       }[]
+    }
+    splitRecipientTokens: {
+      tokenAddress: string
+      totalDistributed: string
+      totalClaimed: string
     }[]
-  } | null
+  }[]
 }
 
 export const CLAIM_SPLITS_QUERY = gql`
-  query recipient($id: ID!) {
-    recipient(id: $id) {
-      id
-      splits {
-        allocation
-        split {
-          id
-          distributorFee
-          recipients {
-            recipient {
-              id
-            }
-            allocation
-          }
+  query splitRecipients($address: String!) {
+    splitRecipients(condition: { recipientAddress: $address }) {
+      chainId
+      splitAddress
+      allocation
+      split {
+        distributorFee
+        splitRecipients {
+          recipientAddress
+          allocation
         }
-        tokens {
-          tokenAddress
-          totalDistributed
-          totalClaimed
-        }
+      }
+      splitRecipientTokens {
+        tokenAddress
+        totalClaimed
+        totalDistributed
       }
     }
   }
@@ -72,43 +64,40 @@ type RecipientSplit = {
 }
 
 export const getRecipientSplits = async (
-  chainId: number,
   address: string,
 ): Promise<RecipientSplit[]> => {
   try {
-    const graphlQLClient = new GraphQLClient(
-      getSplitsSubgraphEndpoint(chainId),
-      {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-      },
-    )
+    const graphlQLClient = new GraphQLClient(splitsSpecEndpoint, {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    })
 
     const response: GraphQLResponse = await graphlQLClient.request(
       CLAIM_SPLITS_QUERY,
       {
-        id: address.toLowerCase(), // The Graph lower cases all addresses
+        address: address.toLowerCase(), // Spec lower cases all addresses
       },
     )
 
-    if (!response?.recipient) {
+    if (!response?.splitRecipients) {
       console.warn("no recipient found")
       return []
     }
 
-    const splits = response?.recipient?.splits.map((split) => {
+    const splits = response?.splitRecipients.map((splitRecipient) => {
       return {
-        chainId,
-        address: toChecksumAddress(split.split.id),
-        distributorFee: split.split.distributorFee,
-        allocation: parseInt(split.allocation) / SPLITS_PERCENTAGE_SCALE,
-        recipients: split.split.recipients.map((recipient) => ({
-          address: toChecksumAddress(recipient.recipient.id),
+        chainId: parseInt(splitRecipient.chainId),
+        address: toChecksumAddress(splitRecipient.splitAddress),
+        distributorFee: splitRecipient.split.distributorFee,
+        allocation:
+          parseInt(splitRecipient.allocation) / SPLITS_PERCENTAGE_SCALE,
+        recipients: splitRecipient.split.splitRecipients.map((recipient) => ({
+          address: toChecksumAddress(recipient.recipientAddress),
           allocation: parseInt(recipient.allocation) / SPLITS_PERCENTAGE_SCALE,
         })),
-        tokens: split.tokens.map((obj) => ({
+        tokens: splitRecipient.splitRecipientTokens.map((obj) => ({
           address: toChecksumAddress(obj.tokenAddress),
           totalClaimed: obj.totalClaimed,
           unclaimed: subtractValues(obj.totalDistributed, obj.totalClaimed),
