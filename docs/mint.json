@@ -83,5 +83,10 @@
     "playground": {
       "mode": "simple"
     }
+  },
+  "analytics": {
+    "mixpanel": {
+      "projectToken": "6fb3f02c104d573cbe7d8245168cb7d4"
+    }
   }
 }
