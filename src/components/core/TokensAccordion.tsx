@@ -18,8 +18,8 @@ export const TokenTransfersAccordion = ({
     <div>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row space-x-2">
-          <span className="text-sm text-gray">Tokens</span>
-          <span className="text-sm">{transfers?.length}</span>
+          <span className="text-gray">Tokens</span>
+          <span>{transfers?.length}</span>
         </div>
         <div
           className="flex cursor-pointer flex-row items-center space-x-2"
