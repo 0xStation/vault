@@ -18,20 +18,15 @@ const useNFTAssetData = (address: string, chainId: number) => {
     fetcher,
   )
 
-  let returnData: any[]
-
   if (
     typeof data === "object" &&
     data !== null &&
     !Array.isArray(data) &&
     data.error
   ) {
-    returnData = []
-  } else {
-    returnData = data as any[]
+    return { data: [], isLoading, error: data.error, mutate }
   }
-
-  return { data: returnData, isLoading, error, mutate }
+  return { data: data as any[], isLoading, error, mutate }
 }
 
 export default useNFTAssetData
