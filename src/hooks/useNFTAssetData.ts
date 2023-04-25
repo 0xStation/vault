@@ -6,7 +6,7 @@ import useSWR from "swr"
 const useNFTAssetData = (address: string, chainId: number) => {
   // don't wrap in try catch to swr can return an error
   const fetcher = async (url: string) => {
-    const response = await axios.get<any[]>(url)
+    const response = await axios.get<any[] | { error: string }>(url)
     return response.data
   }
 
@@ -18,7 +18,15 @@ const useNFTAssetData = (address: string, chainId: number) => {
     fetcher,
   )
 
-  return { data, isLoading, error, mutate }
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    !Array.isArray(data) &&
+    data.error
+  ) {
+    return { data: [], isLoading, error: data.error, mutate }
+  }
+  return { data: data as any[], isLoading, error, mutate }
 }
 
 export default useNFTAssetData

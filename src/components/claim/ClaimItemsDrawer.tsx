@@ -275,6 +275,7 @@ export const ClaimItemsDrawer = ({
                       key={`item-${index}`}
                     >
                       <div>
+                        <p className="text-gray">Note</p>
                         <p className="mt-1">{item.note}</p>
                       </div>
                       <TokenTransfersAccordion
@@ -347,7 +348,7 @@ export const ClaimItemsDrawer = ({
                     key={`item-${index}`}
                   >
                     <div>
-                      <p className="text-sm text-gray">Note</p>
+                      <p className="text-gray">Note</p>
                       <p className="mt-1">{item.note}</p>
                     </div>
                     <TokenTransfersAccordion
