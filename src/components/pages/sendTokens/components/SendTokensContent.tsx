@@ -47,6 +47,22 @@ interface nTokenInfoType {
   symbol: string
   decimals: number
   tokenValue: number
+  contractMetadata?: {
+    // alchemy
+    name: string
+    tokenType: string
+    symbol: string
+  }
+  id: { tokenId: string } // alchemy
+  tokenUri: {
+    // alchemy
+    gateway: string
+    raw: string
+  }
+  contract: {
+    // alchemy
+    address: string
+  }
 }
 
 export const SendTokensContent = ({
@@ -115,16 +131,23 @@ export const SendTokensContent = ({
           const nTokenInfo = tokens[
             parseInt(nTokenIndex as string)
           ] as nTokenInfoType
+
           const token = {
-            chainId: parseInt(nTokenInfo?.blockchain?.shortChainID),
+            chainId: nTokenInfo?.blockchain?.shortChainID
+              ? parseInt(nTokenInfo?.blockchain?.shortChainID)
+              : (chainId as number),
             address: reFormattedTokenAddress,
-            type: (nTokenInfo as {}).hasOwnProperty("nft")
-              ? TokenType.ERC721
+            type: (nTokenInfo as {}).hasOwnProperty("contractMetadata")
+              ? (nTokenInfo?.contractMetadata?.tokenType as TokenType)
               : reFormattedTokenAddress === ZERO_ADDRESS
               ? TokenType.COIN
               : TokenType.ERC20,
-            name: nTokenInfo?.blockchain?.name,
-            symbol: nTokenInfo?.symbol,
+            name:
+              nTokenInfo?.blockchain?.name ||
+              (nTokenInfo.contractMetadata?.name as string),
+            symbol:
+              (nTokenInfo.contractMetadata?.symbol as string) ||
+              nTokenInfo?.symbol,
             decimals: nTokenInfo?.decimals,
           }
 
@@ -141,13 +164,13 @@ export const SendTokensContent = ({
             recipient: resolvedRecipientAddress as string, // recipient
             token,
             value: amount.toString(),
-            tokenId: nTokenInfo?.nft?.tokenID,
+            tokenId: nTokenInfo?.id?.tokenId,
           })
 
           tokenTransferVariantMeta.transfers.push({
             token,
             value: amount.toString(),
-            tokenId: nTokenInfo?.nft?.tokenID,
+            tokenId: nTokenInfo?.id?.tokenId,
           })
 
           preparedCalls.push(preparedTokenTransferCall)
@@ -243,7 +266,7 @@ export const SendTokensContent = ({
     if (
       tokensIndex &&
       typeof tokens[tokensIndex] === "object" &&
-      !(tokens[tokensIndex] as {})?.hasOwnProperty("nft")
+      !(tokens[tokensIndex] as {})?.hasOwnProperty("contractMetadata")
     ) {
       return tokens[tokensIndex] as nTokenInfoType
     }
@@ -341,21 +364,26 @@ export const SendTokensContent = ({
                               </SelectTrigger>
                               <SelectContent>
                                 {tokens.map((token: nTokenInfoType, i) => {
-                                  const tokenUri = token?.hasOwnProperty("nft")
-                                    ? token.nft.previews?.[1]?.URI
+                                  const tokenUri = token?.hasOwnProperty(
+                                    "tokenUri",
+                                  )
+                                    ? token.tokenUri?.gateway
                                     : token?.symbolLogos?.[0]?.URI || ""
 
                                   const fieldTitle = token?.hasOwnProperty(
-                                    "nft",
+                                    "contractMetadata",
                                   )
-                                    ? `${token?.nft?.contractTitle} #${token?.nft?.tokenID}`
+                                    ? `${token?.contractMetadata?.name} #${token?.id?.tokenId}`
                                     : token?.name
 
                                   return (
                                     <SelectItem
                                       key={token.name + i}
                                       ref={ref}
-                                      value={`${token?.contractAddress}.${i}`}
+                                      value={`${
+                                        token?.contractAddress ||
+                                        token?.contract?.address
+                                      }.${i}`}
                                       url={tokenUri}
                                     >
                                       {fieldTitle}
