@@ -3,7 +3,6 @@ import useGetNftsForOwner from "./useGetNftsForOwner"
 
 // todo: look into pagination
 const useAlchemyGetNftAssetData = (address: string, chainId: number) => {
-  console.log("alchemy chainID", chainId)
   const { data: ownersNftData } = useGetNftsForOwner(address, chainId)
 
   const { nftBatchMetadata, error } = useGetNftsMetadataBatch(

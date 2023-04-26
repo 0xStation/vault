@@ -8,11 +8,6 @@ export const useGetTokens = ({
   address: string
   chainId: number
 }) => {
-  // const { data: nftData = [], error: nftError } = useNFTAssetData(
-  //   address,
-  //   chainId,
-  // )
-
   const { nftBatchMetadata = [], error: nftError } = useAlchemyGetNftAssetData(
     address as string,
     chainId as number,
