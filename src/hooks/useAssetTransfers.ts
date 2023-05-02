@@ -1,10 +1,12 @@
 import axios from "axios"
 import { alchemyChainIdToChainName } from "lib/constants"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { getSplitWithdrawEvents } from "../models/automation/queries/getSplitWithdrawEvents"
 import { TokenType } from "../models/token/types"
 
 export enum TransferDirection {
+  ALL = "all",
   INBOUND = "inbound",
   OUTBOUND = "outbound",
   WITHDRAW_EVENT = "withdraw-event",
@@ -32,9 +34,13 @@ export type TransferItem = {
   metadata: {
     blockTimestamp: string
   }
+  data?: {
+    note: string
+    category: string
+  }
 }
 
-const alchemyFetcher = async ([address, chainId, direction]: [
+export const alchemyFetcher = async ([address, chainId, direction]: [
   string,
   number,
   TransferDirection,
@@ -97,6 +103,17 @@ const alchemyFetcher = async ([address, chainId, direction]: [
   }
 }
 
+const databaseFetcher = async (url: string) => {
+  try {
+    const response = await axios.get(url)
+
+    return response.data
+  } catch (err) {
+    console.error("err:", err)
+    return null
+  }
+}
+
 export const useAssetTransfers = (
   address: string,
   chainId: number,
@@ -106,10 +123,60 @@ export const useAssetTransfers = (
     direction === TransferDirection.WITHDRAW_EVENT
       ? getSplitWithdrawEvents
       : alchemyFetcher
-  const { isLoading, data, error } = useSWR(
-    [address, chainId, direction],
+
+  const { data: toData } = useSWR(
+    [address, chainId, TransferDirection.OUTBOUND],
+    fetcher,
+  )
+  const { data: fromData } = useSWR(
+    [address, chainId, TransferDirection.INBOUND],
     fetcher,
   )
 
-  return { isLoading, data, error }
+  const { data: databaseData } = useSWR(
+    `/api/v1/tokenTransfer?safeAddress=${address}&chainId=${chainId}`,
+    databaseFetcher,
+  )
+
+  const [alchemyData, setAlchemyData] = useState([] as any[])
+  useEffect(() => {
+    if (!toData || !fromData) return
+    switch (direction) {
+      case TransferDirection.ALL:
+        if (toData && fromData) {
+          setAlchemyData([...toData, ...fromData])
+        }
+        break
+      case TransferDirection.INBOUND:
+        setAlchemyData(fromData)
+        break
+
+      case TransferDirection.OUTBOUND:
+        setAlchemyData(toData)
+        break
+    }
+  }, [toData, fromData])
+
+  const [data, setData] = useState([] as any[])
+
+  useEffect(() => {
+    if (!alchemyData || !databaseData) return
+    const joinedData = [] as any[]
+    alchemyData.forEach((alchemyItem: any) => {
+      const databaseItem = databaseData.find(
+        (item: any) => item.txHash === alchemyItem.hash,
+      )
+      if (databaseItem) {
+        joinedData.push({
+          ...alchemyItem,
+          ...databaseItem,
+        })
+      } else {
+        joinedData.push(alchemyItem)
+      }
+    })
+    setData(joinedData)
+  }, [alchemyData, databaseData])
+
+  return { data }
 }

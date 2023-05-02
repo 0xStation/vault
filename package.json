@@ -18,9 +18,9 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^1.9.1",
     "@dynamic-labs/sdk-react": "^0.15.16",
     "@dynamic-labs/wagmi-connector": "^0.15.16",
-    "@amplitude/analytics-browser": "^1.9.1",
     "@ethersproject/hash": "^5.7.0",
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.14",
@@ -41,6 +41,7 @@
     "graphql": "^16.6.0",
     "graphql-request": "^5.2.0",
     "graphql-tag": "^2.12.6",
+    "json2csv": "^6.0.0-alpha.2",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
@@ -74,6 +75,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
+    "@types/json2csv": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.get": "^4.4.7",

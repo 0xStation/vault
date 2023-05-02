@@ -14,6 +14,7 @@ export const useIsSigner = ({
     address,
     chainId,
   })
+
   const isSigner = usePermissionsStore((state) => state.isSigner)
   const setIsSigner = usePermissionsStore((state) => state.setIsSigner)
   const { primaryWallet } = useDynamicContext()
