@@ -54,7 +54,7 @@ const DesktopTerminalRequestsPage = () => {
   return (
     <>
       <Head>
-        <title>Proposals | {terminal?.data.name}</title>
+        <title>Proposals | {terminal?.data?.name}</title>
       </Head>
       <RequestActionsModal
         isOpen={isRequestActionsOpen}
