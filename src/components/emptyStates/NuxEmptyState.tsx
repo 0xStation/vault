@@ -1,5 +1,5 @@
 import { Button } from "@ui/Button"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import RequestImage from "public/images/request.png"
 import { EmptyState } from "./EmptyState"
 

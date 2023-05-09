@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { cn } from "lib/utils"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import * as React from "react"
 
 const Select = SelectPrimitive.Root

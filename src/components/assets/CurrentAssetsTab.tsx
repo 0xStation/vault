@@ -1,5 +1,5 @@
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import useNFTAssetData from "../../hooks/useNFTAssetData"
 import { Terminal } from "../../models/terminal/types"
@@ -101,5 +101,5 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
         </>
       )}
     </TabsContent>
-  )
+  );
 }
