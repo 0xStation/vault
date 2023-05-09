@@ -3,8 +3,7 @@ import { useAccountItemsToClaim } from "../../models/account/hooks"
 
 export const ReadyToClaim = ({ address }: { address: string }) => {
   const { items } = useAccountItemsToClaim(address)
-  const itemsCount =
-    (items?.requests.length ?? 0) + (items?.revShareWithdraws.length ?? 0)
+  const itemsCount = items?.requests.length ?? 0
   const claimItemPrompt =
     itemsCount === 0
       ? "No items to claim"

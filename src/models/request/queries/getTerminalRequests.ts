@@ -40,10 +40,7 @@ export const getTerminalRequests = async ({
               in:
                 options.tab === TerminalRequestTypeTab.MEMBERS
                   ? [RequestVariantType.SIGNER_QUORUM]
-                  : [
-                      RequestVariantType.TOKEN_TRANSFER,
-                      RequestVariantType.SPLIT_TOKEN_TRANSFER,
-                    ],
+                  : [RequestVariantType.TOKEN_TRANSFER],
             },
           }),
       },

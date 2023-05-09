@@ -1,7 +1,6 @@
 import axios from "axios"
 import { alchemyChainIdToChainName } from "lib/constants"
 import useSWR from "swr"
-import { getSplitWithdrawEvents } from "../models/automation/queries/getSplitWithdrawEvents"
 import { TokenType } from "../models/token/types"
 
 export enum TransferDirection {
@@ -102,13 +101,9 @@ export const useAssetTransfers = (
   chainId: number,
   direction = TransferDirection.INBOUND,
 ) => {
-  const fetcher =
-    direction === TransferDirection.WITHDRAW_EVENT
-      ? getSplitWithdrawEvents
-      : alchemyFetcher
   const { isLoading, data, error } = useSWR(
     [address, chainId, direction],
-    fetcher,
+    alchemyFetcher,
   )
 
   return { isLoading, data, error }

@@ -24,11 +24,6 @@ export const ZodTransfer = z.object({
   tokenId: z.string().optional(), // ERC721 & ERC1155
 })
 
-export const ZodSplit = z.object({
-  recipient: z.string().array(),
-  percent: z.number(),
-})
-
 export const ZodFrequencyMixin = z.object({
   frequency: z.nativeEnum(FrequencyType),
   startsAt: z.number().optional(),
@@ -41,11 +36,6 @@ export const ZodSignerQuorumVariant = z.object({
   add: z.string().array(),
   remove: z.string().array(),
   setQuorum: z.number(),
-})
-
-export const ZodSplitTokenTransferVariant = z.object({
-  splits: ZodSplit.array(),
-  transfers: ZodTransfer.array(),
 })
 
 export const ZodTokenTransferVariant = z.object({

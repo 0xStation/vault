@@ -3,10 +3,7 @@ import Breakpoint from "@ui/Breakpoint"
 import { Button } from "@ui/Button"
 import Modal from "@ui/Modal"
 import { Network } from "@ui/Network"
-import { BigNumber } from "ethers"
 import { REJECTION_CALL } from "lib/constants"
-import { prepareSplitsDistributeCall } from "lib/encodings/0xsplits"
-import { prepareSplitsWithdrawCall } from "lib/transactions/0xsplits"
 import { batchCalls } from "lib/transactions/batch"
 import { RawCall } from "lib/transactions/call"
 import { callAction } from "lib/transactions/parallelProcessor"
@@ -19,8 +16,6 @@ import { usePreparedTransaction } from "../../hooks/usePreparedTransaction"
 import { ClaimableItem } from "../../models/account/types"
 import { useSetActionsPending } from "../../models/action/hooks"
 import { Action } from "../../models/action/types"
-import { RevShareWithdraw } from "../../models/automation/types"
-import { useCompleteRequestsExecution } from "../../models/request/hooks"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { TokenTransfer } from "../../models/token/types"
 import { addValues, transferId } from "../../models/token/utils"
@@ -46,10 +41,7 @@ const reduceTransfers = (transfers: TokenTransfer[]): TokenTransfer[] => {
   return Object.values(transferAcc)
 }
 
-const reduceItems = (
-  requests: RequestFrob[],
-  revShareWithdraws: RevShareWithdraw[],
-): ClaimableItem[] => {
+const reduceItems = (requests: RequestFrob[]): ClaimableItem[] => {
   return [
     ...requests.reduce(
       (acc: ClaimableItem[], request) => [
@@ -61,32 +53,12 @@ const reduceItems = (
       ],
       [],
     ),
-    ...revShareWithdraws.reduce(
-      (acc: ClaimableItem[], revShareWithdraw) => [
-        ...acc,
-        ...revShareWithdraw.splits.map((v) => ({
-          note: v.name as string,
-          transfers: [
-            {
-              token: revShareWithdraw,
-              value: addValues(v.unclaimedValue, v.undistributedValue),
-            },
-          ],
-        })),
-      ],
-      [],
-    ),
   ]
 }
 
-const genClaimCall = (
-  requests: RequestFrob[],
-  revShareWithdraws: RevShareWithdraw[],
-  recipient: string,
-): RawCall => {
+const genClaimCall = (requests: RequestFrob[], recipient: string): RawCall => {
   // default state when loading page, should not occur
-  if (requests.length === 0 && revShareWithdraws.length === 0)
-    return REJECTION_CALL
+  if (requests.length === 0) return REJECTION_CALL
 
   return batchCalls([
     // call the APPROVAL action from requests
@@ -99,34 +71,6 @@ const genClaimCall = (
         proofs: action.proofs,
       })
     }),
-    // distribute all SplitWallets with an undistributed balance
-    ...revShareWithdraws.reduce(
-      (acc: RawCall[], rsw) => [
-        ...acc,
-        ...rsw.splits
-          .filter((split) => BigNumber.from(split.undistributedValue).gt(0))
-          .map((split) =>
-            prepareSplitsDistributeCall(
-              split.address,
-              rsw.address, // tokenAddress
-              split.recipients,
-              split.distributorFee,
-              recipient,
-            ),
-          ),
-      ],
-      [],
-    ),
-    // withdraw tokens from SplitMain
-    // note: this MUST occur after the distributions above in order to claim the funds to the recipient
-    ...(revShareWithdraws.length > 0
-      ? [
-          prepareSplitsWithdrawCall(
-            recipient,
-            revShareWithdraws.map((rsw) => rsw.address),
-          ),
-        ]
-      : []),
   ])
 }
 
@@ -134,7 +78,6 @@ export const ClaimItemsDrawer = ({
   isOpen,
   setIsOpen,
   recipientAddress,
-  revShareWithdraws,
   requests,
   optimisticallyShow,
   resetBatchState,
@@ -143,12 +86,10 @@ export const ClaimItemsDrawer = ({
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   recipientAddress: string
-  revShareWithdraws: RevShareWithdraw[]
   requests: RequestFrob[]
   optimisticallyShow: (
     updatedItems: {
       requests: RequestFrob[]
-      revShareWithdraws: RevShareWithdraw[]
     },
     mutation: Promise<any>,
   ) => void
@@ -156,21 +97,18 @@ export const ClaimItemsDrawer = ({
   executionPending?: boolean
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [items, setItems] = useState<ClaimableItem[]>(
-    reduceItems(requests, revShareWithdraws),
-  )
+  const [items, setItems] = useState<ClaimableItem[]>(reduceItems(requests))
   const router = useRouter()
   const [claimCall, setClaimCall] = useState<RawCall>(
-    genClaimCall(requests, revShareWithdraws, recipientAddress),
+    genClaimCall(requests, recipientAddress),
   )
 
   useEffect(() => {
-    setItems(reduceItems(requests, revShareWithdraws))
-    setClaimCall(genClaimCall(requests, revShareWithdraws, recipientAddress))
-  }, [requests, revShareWithdraws, router.query.address])
+    setItems(reduceItems(requests))
+    setClaimCall(genClaimCall(requests, recipientAddress))
+  }, [requests, router.query.address])
 
   const { setActionsPending } = useSetActionsPending()
-  const { completeRequestsExecution } = useCompleteRequestsExecution()
   const activeUser = useStore((state) => state.activeUser)
 
   const chainId = items?.[0]?.transfers?.[0]?.token.chainId
@@ -211,13 +149,8 @@ export const ClaimItemsDrawer = ({
 
       let updatedItems: {
         requests: RequestFrob[]
-        revShareWithdraws: RevShareWithdraw[]
       } = {
         requests: updatedRequests,
-        revShareWithdraws: revShareWithdraws.map((rs) => ({
-          ...rs,
-          pendingExecution: true,
-        })),
       }
 
       optimisticallyShow(
@@ -358,7 +291,6 @@ export const ClaimItemsDrawer = ({
                   </div>
                 ))}
               </div>
-              {/* <div className="h-32"></div> */}
             </div>
             <div className="fixed bottom-0 right-0 left-0 mx-auto border-t border-gray-90 bg-black px-5 pb-6 pt-3 text-center">
               <Button
