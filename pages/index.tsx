@@ -4,7 +4,7 @@ import { useBreakpoint } from "@ui/Breakpoint/Breakpoint"
 import { Button } from "@ui/Button"
 import { LINKS, TRACKING } from "lib/constants"
 import { trackClick, trackImpression } from "lib/utils/amplitude"
-import Image from "next/legacy/image"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
@@ -75,7 +75,14 @@ function Page() {
             Group wallet for on-chain operations — raise funds and manage spend.
           </p>
           <div className="mx-auto block h-auto max-w-[80%] lg:hidden">
-            <Image src={LandingImage} alt="Landing image" />
+            <Image
+              src={LandingImage}
+              alt="Landing image"
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
+            />
           </div>
 
           <div className="mt-8 mb-10 space-y-2 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
@@ -108,7 +115,14 @@ function Page() {
           </div>
         </main>
         <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">
-          <Image src={LandingImage} alt="Landing image" />
+          <Image
+            src={LandingImage}
+            alt="Landing image"
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
+          />
         </div>
         <footer className="absolute bottom-10 left-14 hidden flex-row lg:block">
           <ul className="flex flex-row space-x-12 text-sm">

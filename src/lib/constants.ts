@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/legacy/image"
+import { StaticImageData } from "next/image"
 import { goerli, mainnet, polygon } from "wagmi/chains"
 import pfp1 from "../../public/images/pfps/group-1.png"
 import pfp2 from "../../public/images/pfps/group-2.png"

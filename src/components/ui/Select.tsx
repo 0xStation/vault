@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { cn } from "lib/utils"
-import Image from "next/legacy/image"
+import Image from "next/image"
 import * as React from "react"
 
 const Select = SelectPrimitive.Root
@@ -86,7 +86,16 @@ const SelectItem = React.forwardRef<
     >
       <span className="absolute left-2 h-3.5 w-3.5 items-center justify-center">
         {props?.url && (
-          <Image height={24} width={24} src={props?.url} alt={""} />
+          <Image
+            height={24}
+            width={24}
+            src={props?.url}
+            alt={""}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
+          />
         )}
       </span>
 

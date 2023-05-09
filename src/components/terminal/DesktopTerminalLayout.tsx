@@ -2,7 +2,7 @@ import { Network } from "@ui/Network"
 import { TerminalRequestTypeTab } from "components/core/TabBars/TerminalRequestTypeTabBar"
 import truncateString from "lib/utils"
 import { convertGlobalId } from "models/terminal/utils"
-import Image from "next/legacy/image"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
@@ -110,6 +110,10 @@ const DesktopTerminalLayout = ({
                 height={40}
                 width={40}
                 className="cursor-pointer transition-all hover:rotate-[15deg]"
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                }}
               />
             </Link>
           </section>

@@ -1,5 +1,5 @@
 import { PFP_MAP } from "lib/constants"
-import Image from "next/legacy/image"
+import Image from "next/image"
 import { useEnsAvatar } from "wagmi"
 
 interface AvatarProps {
@@ -31,6 +31,10 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
           src={ensAvatar}
           alt="Account profile picture."
           className={`rounded-full border border-gray-90 object-cover ${className}`}
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+          }}
         />
       ) : (
         <Image
@@ -40,6 +44,10 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
           }
           alt="Account profile picture. If no profile picture is set, there is a picture of a Terminal."
           className={`rounded-full border border-gray-90 object-cover ${className}`}
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+          }}
         />
       )}
     </div>

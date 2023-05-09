@@ -1,5 +1,5 @@
 import QrCodeEmptyState from "components/emptyStates/QrCodeEmptyState"
-import Image from "next/legacy/image"
+import Image from "next/image"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import useNFTAssetData from "../../hooks/useNFTAssetData"
 import { Terminal } from "../../models/terminal/types"
@@ -59,6 +59,10 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                           src={response?.symbolLogos?.[0].URI}
                           alt={"Logo for token"}
                           className="block rounded-full object-contain"
+                          style={{
+                            maxWidth: "100%",
+                            height: "auto",
+                          }}
                         />
                       ) : (
                         <span className="block h-6 w-6 rounded-full bg-gray-80"></span>
@@ -88,6 +92,10 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                       }
                       alt={response?.nft?.description}
                       className="rounded border border-gray-80 object-contain"
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                      }}
                     />
                   </div>
                   <h3 className="mt-2">{response?.nft?.title}</h3>
