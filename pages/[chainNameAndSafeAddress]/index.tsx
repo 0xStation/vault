@@ -11,7 +11,6 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
-import { TerminalReadyToClaim } from "../../src/components/claim/TerminalReadyToClaim"
 import { AccountNavBar } from "../../src/components/core/AccountNavBar"
 import CopyToClipboard from "../../src/components/core/CopyToClipboard"
 import TerminalActionsBar from "../../src/components/core/TerminalActionBar"
@@ -58,12 +57,6 @@ const options = (router: any) =>
       description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
-    },
-    {
-      label: "Automations",
-      description: "Automate NFT sales and sponsorship revenue-sharing",
-      active: true,
-      href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       label: "About",
@@ -124,7 +117,6 @@ const MobileTerminalIndexPage = () => {
           </span>
           <CopyToClipboard text={terminal?.safeAddress} />
         </div>
-        {isSigner && <TerminalReadyToClaim />}
       </section>
       <section className="px-4">
         <div className="mt-4 grid grid-cols-2 gap-2">

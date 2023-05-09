@@ -7,11 +7,7 @@ import {
 import { REJECTION_CALL, ZERO_ADDRESS, ZERO_BYTES } from "lib/constants"
 import { hashActionValues } from "lib/signatures/action"
 import { bundleCalls } from "lib/transactions/bundle"
-import {
-  ZodSignerQuorumVariant,
-  ZodSplitTokenTransferVariant,
-  ZodTokenTransferVariant,
-} from "lib/zod"
+import { ZodSignerQuorumVariant, ZodTokenTransferVariant } from "lib/zod"
 import { ActionMetadata } from "models/action/types"
 import { z } from "zod"
 import { getSafeDetails } from "../../../lib/api/safe/getSafeDetails"
@@ -26,11 +22,7 @@ const RequestWithActionArgs = z.object({
   path: z.string().array(),
   calls: z.any().array(),
   requestVariantType: z.nativeEnum(RequestVariantType),
-  meta: z.union([
-    ZodSignerQuorumVariant,
-    ZodSplitTokenTransferVariant,
-    ZodTokenTransferVariant,
-  ]),
+  meta: z.union([ZodSignerQuorumVariant, ZodTokenTransferVariant]),
   $tx: z.any().optional(), // $transaction calls give db as an arg
 })
 

@@ -14,7 +14,6 @@ import useGetTerminal from "../../hooks/terminal/useGetTerminal"
 import useFungibleTokenData from "../../hooks/useFungibleTokenData"
 import { useRequests } from "../../hooks/useRequests"
 import { isExecuted } from "../../models/request/utils"
-import { TerminalReadyToClaim } from "../claim/TerminalReadyToClaim"
 import TerminalActionBar from "../core/TerminalActionBar"
 
 type TerminalNavOption = {
@@ -42,12 +41,6 @@ const options = (router: any) =>
       description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
-    },
-    {
-      label: "Automations",
-      description: "Automate NFT sales and sponsorship revenue-sharing",
-      active: true,
-      href: `/${router.query.chainNameAndSafeAddress}/automations`,
     },
     {
       label: "About",
@@ -163,11 +156,6 @@ const DesktopTerminalLayout = ({
                 )}
               </div>
             </section>
-            {isSigner && (
-              <section className="px-4">
-                <TerminalReadyToClaim />
-              </section>
-            )}
 
             <section className="mt-6">
               <TerminalActionBar />

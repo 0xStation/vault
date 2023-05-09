@@ -1,6 +1,5 @@
 import { ActionStatus } from "@prisma/client"
 import { WaitTransactionSuccess } from "components/core/WaitTransactionSuccess"
-import { RevShareWithdraw } from "models/automation/types"
 import { useCompleteRequestExecution } from "models/request/hooks"
 import { RequestFrob } from "models/request/types"
 
@@ -12,7 +11,6 @@ export const WaitRequestClaim = ({
   optimisticallyShow: (
     updatedItems: {
       requests: RequestFrob[]
-      revShareWithdraws: RevShareWithdraw[]
     },
     fn: Promise<any>,
   ) => void
@@ -42,7 +40,6 @@ export const WaitRequestClaim = ({
             }),
           },
         ],
-        revShareWithdraws: [],
       },
       completeRequestExecution({ actionId: pendingAction.id }),
     )

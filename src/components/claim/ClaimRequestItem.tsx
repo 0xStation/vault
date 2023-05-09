@@ -1,5 +1,4 @@
 import { ActionStatus } from "@prisma/client"
-import { RevShareWithdraw } from "models/automation/types"
 import { RequestFrob, TokenTransferVariant } from "../../models/request/types"
 import { ClaimItem } from "./ClaimItem"
 import { WaitRequestClaim } from "./WaitRequestClaim"
@@ -20,7 +19,6 @@ export const ClaimRequestItem = ({
   optimisticallyShow: (
     updatedItems: {
       requests: RequestFrob[]
-      revShareWithdraws: RevShareWithdraw[]
     },
     fn: Promise<any>,
   ) => void

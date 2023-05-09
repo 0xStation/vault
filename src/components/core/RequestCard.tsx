@@ -109,14 +109,6 @@ const RequestCard = ({
               {request.variant === RequestVariantType.SIGNER_QUORUM && (
                 <RequestChangeMemberContent request={request} />
               )}
-              {request.variant === RequestVariantType.SPLIT_TOKEN_TRANSFER && (
-                <>
-                  <ArrowUpRight size={"sm"} />
-                  <span className="text-base text-gray-40">
-                    Split token stuff
-                  </span>
-                </>
-              )}
             </div>
             <div className="flex flex-row items-center justify-between text-base text-gray-40">
               <div className="flex flex-row space-x-4 text-base">

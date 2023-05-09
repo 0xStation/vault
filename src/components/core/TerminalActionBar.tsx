@@ -1,4 +1,4 @@
-import { CogIcon, PlusIcon } from "@heroicons/react/24/solid"
+import { PlusIcon } from "@heroicons/react/24/solid"
 import Breakpoint from "@ui/Breakpoint"
 import QRCode from "components/core/QrCode"
 import { addQueryParam, removeQueryParam } from "lib/utils/updateQueryParam"
@@ -20,11 +20,6 @@ const SendTokensContent = dynamic(() =>
   ),
 )
 
-const NewAutomationContent = dynamic(() =>
-  import("../pages/newAutomation/components/NewAutomationContent").then(
-    (mod) => mod.NewAutomationContent,
-  ),
-)
 const BottomDrawer = dynamic(() =>
   import("../ui/BottomDrawer").then((mod) => mod.BottomDrawer),
 )
@@ -48,27 +43,13 @@ const TerminalActionBar = () => {
     }
   }
 
-  const [newAutomationSliderOpen, setNewAutomationSliderOpen] =
-    useState<boolean>(false)
-
-  const closeNewAutomationSlider = (isOpen: boolean) => {
-    if (!isOpen) {
-      removeQueryParam(router, "automationSliderOpen")
-    }
-  }
-
   const [qrCodeOpen, setQrCodeOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (router.query.sendTokenSliderOpen) {
       setSendTokenSliderOpen(true)
-      setNewAutomationSliderOpen(false)
-    } else if (router.query.automationSliderOpen) {
-      setNewAutomationSliderOpen(true)
-      setSendTokenSliderOpen(false)
     } else {
       setSendTokenSliderOpen(false)
-      setNewAutomationSliderOpen(false)
     }
   }, [router.query])
 
@@ -84,12 +65,6 @@ const TerminalActionBar = () => {
             mutate(key)
           }}
         />
-      </RightSlider>
-      <RightSlider
-        open={newAutomationSliderOpen}
-        setOpen={closeNewAutomationSlider}
-      >
-        <NewAutomationContent />
       </RightSlider>
 
       <Breakpoint>
@@ -166,39 +141,6 @@ const TerminalActionBar = () => {
                   <ArrowUpRight />
                 </div>
                 <span className="text-sm">Send</span>
-              </div>
-            )
-          }}
-        </Breakpoint>
-
-        <Breakpoint>
-          {(isMobile) => {
-            if (isMobile) {
-              return (
-                <Link
-                  href={`/${router.query.chainNameAndSafeAddress}/automations/new`}
-                  className="block"
-                >
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white">
-                      <CogIcon className="h-6 w-6" />
-                    </div>
-                    <span className="text-sm">Automate</span>
-                  </div>
-                </Link>
-              )
-            }
-            return (
-              <div
-                className="flex cursor-pointer flex-col items-center space-y-2"
-                onClick={() => {
-                  addQueryParam(router, "automationSliderOpen", "true")
-                }}
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white hover:bg-gray-90">
-                  <CogIcon className="h-6 w-6" />
-                </div>
-                <span className="text-sm">Automate</span>
               </div>
             )
           }}

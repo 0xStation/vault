@@ -264,7 +264,7 @@ export const RequestTokensContent = () => {
               Tokens*
             </label>
             <div className="mb-3">
-              {nftError || fungibleTokenError ? (
+              {fungibleTokenError ? ( // if n is not working, show a warning msg
                 <div className=" w-full rounded bg-gray-90 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-base">
