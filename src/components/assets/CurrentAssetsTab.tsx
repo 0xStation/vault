@@ -58,7 +58,6 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                         <Image
                           src={response?.symbolLogos?.[0].URI}
                           alt={"Logo for token"}
-                          fill={true}
                           className="block rounded-full object-contain"
                         />
                       ) : (
@@ -88,7 +87,6 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
                         response?.nft?.media?.URI
                       }
                       alt={response?.nft?.description}
-                      fill={true}
                       className="rounded border border-gray-80 object-contain"
                     />
                   </div>
@@ -101,5 +99,5 @@ export const CurrentAssetsTab = ({ terminal }: { terminal: Terminal }) => {
         </>
       )}
     </TabsContent>
-  );
+  )
 }
