@@ -49,6 +49,7 @@
             "token-api/erc721/post/create",
             "token-api/erc721/put/defaultMetadata",
             "token-api/erc721/post/mint",
+            "token-api/erc721/post/grant",
             "token-api/erc721/put/individualMetadata",
             "token-api/erc721/get/tokens"
           ]
