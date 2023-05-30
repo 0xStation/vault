@@ -7,10 +7,9 @@ api: "PUT https://api.station.express/api/v1/erc721/individualMetadata"
 ### How NFT individual metadata works
 
 To support differentiated NFTs within a collection and dynamic or evolving use cases, set metadata on a per-token basis.
-This metadata can be set when [minting an NFT](/token-api/v1/erc721/post/mint) or edited retroactively through this route.
 
-When edits are made to the NFT's metadata, a blockchain transaction is made and returned to inform all apps consuming
-your NFT's metadata to refresh their caches.
+When edits are made to the NFT's metadata, our systems inform primary ecosystem apps consuming
+your NFT's metadata to refresh their caches (e.g. OpenSea).
 
 ### Body
 
