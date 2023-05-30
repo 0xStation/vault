@@ -72,15 +72,6 @@ your NFT's metadata to refresh their caches.
   Indicates whether the call was successful.
 </ResponseField>
 
-<ResponseField name="transactionHash" type="string">
-  Transaction hash for the newly created token.
-</ResponseField>
-
-<ResponseField name="transactionLink" type="string">
-  Transaction link for the newly created token, wraps `transactionHash` with the
-  appropriate URL for convenience.
-</ResponseField>
-
 <RequestExample>
 
 ```bash Example Request
@@ -116,9 +107,7 @@ curl --location --request PUT 'https://api.station.express/api/v1/erc721/default
 
 ```json Response
 {
-  "success": true,
-  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
-  "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+  "success": true
 }
 ```
 
