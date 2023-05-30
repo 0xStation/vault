@@ -1,11 +1,15 @@
 ---
 title: "Fetch Membership NFTs from the Collection"
 sidebarTitle: "Fetch NFTs"
-api: "GET https://api.station.express/api/erc721/tokens"
+api: "GET https://api.station.express/api/v1/erc721/tokens"
 description: "Read all NFT data including current owner and history."
 ---
 
 ### Query Params
+
+<ParamField body="chainId" type="number" required>
+  The id of the chain supporting the NFT. This cannot be changed after creation.
+</ParamField>
 
 <ParamField query="contractAddress" type="string" required>
   The NFT smart contract address.
@@ -72,7 +76,7 @@ description: "Read all NFT data including current owner and history."
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/erc721/tokens?contractAddress=0x67F4732266C7300cca593C814d46bee72e40659F' \
+curl --location --request POST 'https://api.station.express/api/v1/erc721/tokens?contractAddress=0x67F4732266C7300cca593C814d46bee72e40659F' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>'
 ```

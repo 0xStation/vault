@@ -46,39 +46,31 @@
     {
       "group": "API-Controlled Tokens",
       "pages": [
-        "token-api/upload",
+        "token-api/v1/upload",
         {
           "group": "Memberships (ERC-721)",
           "pages": [
-            "token-api/erc721/overview",
-            "token-api/erc721/post/create",
-            "token-api/erc721/put/defaultMetadata",
-            "token-api/erc721/post/mint",
-            "token-api/erc721/post/grant",
-            "token-api/erc721/put/individualMetadata",
-            "token-api/erc721/get/tokens"
+            "token-api/v1/erc721/overview",
+            "token-api/v1/erc721/put/defaultMetadata",
+            "token-api/v1/erc721/post/mint",
+            "token-api/v1/erc721/post/grant",
+            "token-api/v1/erc721/put/individualMetadata"
           ]
         },
         {
           "group": "Badges (ERC-1155)",
           "pages": [
-            "token-api/erc1155/overview",
-            "token-api/erc1155/post/create",
-            "token-api/erc1155/put/metadata",
-            "token-api/erc1155/post/mint"
+            "token-api/v1/erc1155/overview",
+            "token-api/v1/erc1155/put/metadata",
+            "token-api/v1/erc1155/post/mint"
           ]
         },
         {
           "group": "Points (ERC-20)",
           "pages": [
-            "token-api/erc20/overview",
-            "token-api/erc20/post/create",
-            "token-api/erc20/post/mint"
+            "token-api/v1/erc20/overview",
+            "token-api/v1/erc20/post/mint"
           ]
-        },
-        {
-          "group": "Token Holders",
-          "pages": ["token-api/holders/holders"]
         }
       ]
     }

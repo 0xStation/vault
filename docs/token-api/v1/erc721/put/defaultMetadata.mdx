@@ -1,33 +1,34 @@
 ---
-title: "Update a Badge NFT's Metadata"
-sidebarTitle: "Update Metadata"
-api: "PUT https://api.station.express/api/erc1155/metadata"
+title: "Update an NFT Collection's Default Metadata"
+sidebarTitle: "Update Default Metadata"
+api: "PUT https://api.station.express/api/v1/erc721/defaultMetadata"
 ---
 
-### How Badge NFT metadata works
+### How NFT default metadata works
 
-Each Badge will have its own unique metadata associated with its `tokenId` which should be set before minting
-any to your network. This metadata can be changed at any time with this route.
+For NFT collections that have one standard set of metadata (name, image, etc.) or support evolving metadata
+schemes, a single set of metadata can be defined at the collection-level to provide this default.
+Individual metadata can be set when [minting new NFTs](/token-api/v1/erc721/post/mint) or [editing their metadata](/token-api/v1/erc721/put/individualMetadata) directly, which will override the defaults set here.
 
-When edits are made to the NFT's metadata, a blockchain transaction is made and returned to inform all apps
-consuming your NFT's metadata to refresh their caches.
+When edits are made to the collection's default metadata, a blockchain transaction is made and returned to inform
+all apps consuming your NFT's metadata to refresh their caches.
 
 ### Body
+
+<ParamField body="chainId" type="number" required>
+  The id of the chain supporting the NFT. This cannot be changed after creation.
+</ParamField>
 
 <ParamField body="contractAddress" type="string" required>
   The NFT smart contract address to edit.
 </ParamField>
 
-<ParamField body="tokenId" type="string" required>
-  The NFT smart contract address to edit.
-</ParamField>
-
-<ParamField body="metadata" type="object" required>
-    Metadata to associate with this NFT.
+<ParamField body="defaultMetadata" type="object">
+    Default metadata to apply to every NFT in the collection, which can be overriden with token-specific metadata.
 
     <Expandable title="NFT Metadata">
 
-      <ParamField body="name" type="string" optional>
+      <ParamField body="name" type="string" required>
         Name for the NFT.
       </ParamField>
 
@@ -35,7 +36,7 @@ consuming your NFT's metadata to refresh their caches.
         Description for the NFT.
       </ParamField>
 
-      <ParamField body="mediaUrl" type="string" optional>
+      <ParamField body="mediaUrl" type="string" required>
         Url for the media content associated with the NFT.
       </ParamField>
 
@@ -80,20 +81,25 @@ consuming your NFT's metadata to refresh their caches.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request PUT 'https://api.station.express/api/erc1155/metadata' \
+curl --location --request PUT 'https://api.station.express/api/v1/erc721/defaultMetadata' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
+  "chainId": 137,
   "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-  "metadata": {
-    "name": "King Toad, ruler of Lilypod Pond",
-    "description": "Holders of Kind Toad are able to vote on high-importance decisions in the community.",
+  "defaultMetadata": {
+    "name": "Zed Run",
+    "description": "Horses run free in the metaverse.",
     "mediaUrl": "https://hosted.station.express/abc123",
-    "externalUrl": "https://frog.mafia/badge/king-toad",
+    "externalUrl": "https://zed.run/racehorse/94979",
     "traits": [
       {
-        "name": "Power",
-        "value": "Governance"
+        "name": "Breed type",
+        "value": "Elite"
+      },
+      {
+        "name": "Starting level",
+        "value": "22"
       },
       ...
     ]

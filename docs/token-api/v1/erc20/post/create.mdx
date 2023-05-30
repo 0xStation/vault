@@ -1,7 +1,7 @@
 ---
 title: "Create a new Points Collection"
 sidebarTitle: "Create a Collection"
-api: "POST https://api.station.express/api/erc20/create"
+api: "POST https://api.station.express/api/v1/erc20/create"
 ---
 
 ### How token creation works
@@ -17,8 +17,8 @@ used in other API routes.
 
 ### Body
 
-<ParamField body="network" type="string" default="polygon">
-  The name of the network for this token. This cannot be changed after creation.
+<ParamField body="chainId" type="number" required>
+  The id of the chain supporting the NFT. This cannot be changed after creation.
 </ParamField>
 
 <ParamField body="name" type="string" required>
@@ -44,13 +44,12 @@ used in other API routes.
   `transactionHash` with the appropriate URL for convenience.
 </ResponseField>
 
-<ResponseField name="contractAddress" type="string">
-  The Ethereum address this token collection contract was deployed to.
-</ResponseField>
-
 <ResponseField name="token" type="object">
   The newly created token smart contract.
   <Expandable title="Token">
+    <ResponseField name="contractAddress" type="string">
+      The Ethereum address this token collection contract was deployed to.
+    </ResponseField>
     <ResponseField name="name" type="string">
       The name of the token collection. This cannot be changed after creation.
     </ResponseField>
@@ -67,6 +66,7 @@ curl --location --request POST 'https://api.station.express/api/points/collectio
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
+    "chainId": 137,
     "name": "Racing XP",
     "symbol": "ZED.XP"
 }'

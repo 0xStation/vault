@@ -1,7 +1,7 @@
 ---
 title: "Create a new Badge NFT Collection"
 sidebarTitle: "Create a Collection"
-api: "POST https://api.station.express/api/erc1155/create"
+api: "POST https://api.station.express/api/v1/erc1155/create"
 ---
 
 ### How NFT creation works
@@ -28,8 +28,8 @@ Signals that your use case may be better fit with a Badge versus a Membership NF
 
 ### Body
 
-<ParamField body="network" type="string" default="polygon">
-  The name of the network for this token. This cannot be changed after creation.
+<ParamField body="chainId" type="number" required>
+  The id of the chain supporting the NFT. This cannot be changed after creation.
 </ParamField>
 
 <ParamField body="name" type="string" required>
@@ -55,13 +55,12 @@ Signals that your use case may be better fit with a Badge versus a Membership NF
   `transactionHash` with the appropriate URL for convenience.
 </ResponseField>
 
-<ResponseField name="contractAddress" type="string">
-  The Ethereum address this token collection contract was deployed to.
-</ResponseField>
-
 <ResponseField name="token" type="object">
   The newly created token smart contract.
   <Expandable title="Token">
+    <ResponseField name="contractAddress" type="string">
+      The Ethereum address this token collection contract was deployed to.
+    </ResponseField>
     <ResponseField name="name" type="string">
       The name of the token collection. This cannot be changed after creation.
     </ResponseField>
@@ -74,10 +73,11 @@ Signals that your use case may be better fit with a Badge versus a Membership NF
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/erc1155/create' \
+curl --location --request POST 'https://api.station.express/api/v1/erc1155/create' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
+    "chainId": 137,
     "name": "Frog Mafia Badge",
     "symbol": "RIBBIT.badge"
 }'
@@ -92,8 +92,8 @@ curl --location --request POST 'https://api.station.express/api/erc1155/create' 
   "success": true,
   "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
   "transactionLink": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
-  "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
   "token": {
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
     "name": "Frog Mafia Badge",
     "symbol": "RIBBIT.badge"
   }
