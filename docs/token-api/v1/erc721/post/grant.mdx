@@ -30,7 +30,7 @@ their mint call within the smart contract. Each signature can optionally be set 
   The NFT smart contract address to grant with.
 </ParamField>
 
-<ParamField body="toAddress" type="string" required>
+<ParamField body="recipientAddress" type="string" required>
   The address to grant an NFT to.
 </ParamField>
 
@@ -91,7 +91,7 @@ curl --location --request POST 'https://api.station.express/api/v1/erc721/grant'
 --data-raw '{
     "chainId": 137,
     "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "toAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+    "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
 }'
 ```
 
