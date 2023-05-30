@@ -37,11 +37,16 @@
     },
     {
       "group": "Getting Started",
-      "pages": ["getting-started/auth", "getting-started/networks"]
+      "pages": [
+        "getting-started/auth",
+        "getting-started/networks",
+        "getting-started/media"
+      ]
     },
     {
       "group": "API-Controlled Tokens",
       "pages": [
+        "token-api/upload",
         {
           "group": "Memberships (ERC-721)",
           "pages": [

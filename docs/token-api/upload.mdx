@@ -1,0 +1,54 @@
+---
+title: "Upload Media"
+api: "POST https://api.station.express/api/v1/upload"
+---
+
+This route assists in creating and managing the media metadata for NFTs.
+Prior to minting or updating the metadata of an NFT, upload your file here to
+receive a `mediaUrl` which you can pass into the metadata arguments for both
+Membership and Badge collections.
+
+Note that media will be not be transformed or compressed in our systems so take
+dilligence to find your preferable balance of file size contrasting quality and load speeds.
+
+### Body
+
+<Note>
+  File uploads require using the header `content-type: multipart/form-data`
+</Note>
+
+<ParamField body="media" type="file">
+  The media file to upload.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<ResponseField name="mediaUrl" type="string">
+  Url to retrieve the uploaded media file.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.station.express/api/v1/upload' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Authorization: Bearer <token>' \
+--form 'media=@<file-path>' \
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "mediaUrl": "https://..."
+}
+```
+
+</ResponseExample>
