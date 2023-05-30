@@ -1,7 +1,7 @@
 ---
 title: "Fetch Token Holders across multiple Collections"
 sidebarTitle: "Fetch by Collections"
-api: "GET https://api.station.express/api/holders"
+api: "GET https://members.station.express/api/holders"
 description: "Fetch all token holders of multiple collections, grouped by holder."
 ---
 
@@ -104,7 +104,7 @@ description: "Fetch all token holders of multiple collections, grouped by holder
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/holders?contractAddresses=[0xba767d65a7164e151783e42994bd475509f256dd]' \
+curl --location --request POST 'https://members.station.express/api/holders?contractAddresses=[0xba767d65a7164e151783e42994bd475509f256dd]' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>'
 ```

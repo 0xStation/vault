@@ -1,7 +1,7 @@
 ---
 title: "Create a new Membership NFT Collection"
 sidebarTitle: "Create a Collection"
-api: "POST https://api.station.express/api/v1/erc721/create"
+api: "POST https://members.station.express/api/v1/erc721/create"
 ---
 
 ### How NFT creation works
@@ -131,7 +131,7 @@ This contract address uniquely identifies your NFT collection and will be used i
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api.station.express/api/v1/erc721/create' \
+curl --location --request POST 'https://members.station.express/api/v1/erc721/create' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{
