@@ -28,6 +28,46 @@ distribution policy or by writing custom logic in your own systems prior to call
   The address to mint an NFT to.
 </ParamField>
 
+<ParamField body="individualMetadata" type="object" optional>
+    Individual metadata to associate with this NFT, which overrides any defaults set at the collection-level.
+
+    <Expandable title="NFT Metadata">
+
+      <ParamField body="name" type="string" optional>
+        Name for the NFT.
+      </ParamField>
+
+      <ParamField body="description" type="string" optional>
+        Description for the NFT.
+      </ParamField>
+
+      <ParamField body="mediaUrl" type="string" optional>
+        Url for the media content associated with the NFT.
+      </ParamField>
+
+      <ParamField body="externalUrl" type="string" optional>
+        Url for the external link associated with the NFT.
+      </ParamField>
+
+      <ParamField body="traits" type="Trait[]" optional>
+        Array of trait objects.
+
+        <Expandable title="Trait">
+          <ParamField body="name" type="string" required>
+            Name for the trait.
+          </ParamField>
+
+          <ParamField body="value" type="string" required>
+            Value for the trait.
+          </ParamField>
+        </Expandable>
+
+      </ParamField>
+
+    </Expandable>
+
+</ParamField>
+
 ### Response
 
 <ResponseField name="success" type="boolean">
