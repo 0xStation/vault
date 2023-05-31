@@ -9,10 +9,10 @@ description: "Memberships enable unique value attribution through NFTs (ERC-721)
   further details.
 </Info>
 
-For basic use cases, you may want to [set default metadata to apply to all NFTs](/token-api/v1/erc721/put/defaultMetadata).
-This operation can also take place in the original creation API call.
-
 Using the NFT contract address, you can [mint tokens to your network](/token-api/v1/erc721/post/mint).
+Our blockchain indexing systems will automatically pick up these operations and organize the activity.
+
+As an alternative to minting, you can also [grant tokens](/token-api/v1/erc721/post/grant) which permits recipients to claim and mint an NFT.
 Our blockchain indexing systems will automatically pick up these operations and organize the activity.
 
 For dynamic use cases, you may want to [set individual metadata per-NFT](/token-api/v1/erc721/put/individualMetadata).

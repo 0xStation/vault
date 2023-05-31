@@ -51,7 +51,6 @@
           "group": "Memberships (ERC-721)",
           "pages": [
             "token-api/v1/erc721/overview",
-            "token-api/v1/erc721/put/defaultMetadata",
             "token-api/v1/erc721/post/mint",
             "token-api/v1/erc721/post/grant",
             "token-api/v1/erc721/put/individualMetadata"
