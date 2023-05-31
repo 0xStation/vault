@@ -39,9 +39,9 @@ used in other API routes.
   Transaction hash for the newly created token collection.
 </ResponseField>
 
-<ResponseField name="transactionLink" type="string">
-  Transaction link for the newly created token collection, wraps
-  `transactionHash` with the appropriate URL for convenience.
+<ResponseField name="transactionUrl" type="string">
+  Wraps `transactionHash` with the appropriate network-specific URL for
+  convenience.
 </ResponseField>
 
 <ResponseField name="token" type="object">
@@ -80,7 +80,7 @@ curl --location --request POST 'https://members.station.express/api/points/colle
 {
   "success": true,
   "transactionHash": "0x...",
-  "transactionLink": "https://polygonscan.com/tx/0x...",
+  "transactionUrl": "https://polygonscan.com/tx/0x...",
   "token": {
     "contractAddress": "0x...",
     "name": "Racing XP",
