@@ -60,8 +60,8 @@
           "group": "Badges (ERC-1155)",
           "pages": [
             "token-api/v1/erc1155/overview",
-            "token-api/v1/erc1155/put/metadata",
-            "token-api/v1/erc1155/post/mint"
+            "token-api/v1/erc1155/post/mint",
+            "token-api/v1/erc1155/put/metadata"
           ]
         },
         {
