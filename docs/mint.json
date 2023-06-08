@@ -53,7 +53,8 @@
             "token-api/v1/erc721/overview",
             "token-api/v1/erc721/post/mint",
             "token-api/v1/erc721/post/grant",
-            "token-api/v1/erc721/put/individualMetadata"
+            "token-api/v1/erc721/put/individualMetadata",
+            "token-api/v1/erc721/get/tokens"
           ]
         },
         {

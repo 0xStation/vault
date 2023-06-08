@@ -1,8 +1,7 @@
 ---
-title: "Fetch Membership NFTs from the Collection"
+title: "Fetch Membership NFTs"
 sidebarTitle: "Fetch NFTs"
 api: "GET https://members.station.express/api/v1/erc721/tokens"
-description: "Read all NFT data including current owner and history."
 ---
 
 ### Query Params
@@ -15,68 +14,45 @@ description: "Read all NFT data including current owner and history."
   The NFT smart contract address.
 </ParamField>
 
+<ParamField query="ownerAddress" type="string" optional>
+  An NFT owner to filter on.
+</ParamField>
+
+<ParamField query="page" type="number" optional>
+  Page index to fetch, page size is `50`.
+</ParamField>
+
 ### Response
 
 <ResponseField name="success" type="boolean">
   Indicates whether the call was successful.
 </ResponseField>
 
-<ResponseField name="nfts" type="Nft[]">
+<ResponseField name="tokens" type="Nft[]">
   Array of NFT objects.
 
   <Expandable title="NFT">
-
-      <ResponseField name="holderAddress" type="string">
-        Address of the current holder.
-      </ResponseField>
-
-      <ResponseField name="holderSince" type="number">
-        UNIX Timestamp when the current holder became this token's holder.
-      </ResponseField>
 
       <ResponseField name="tokenId" type="string">
         Token id of the NFT.
       </ResponseField>
 
-      <ResponseField name="name" type="string">
-        Name of the NFT.
+      <ResponseField name="ownerAddress" type="string">
+        Address of the current owner (lower-cased).
       </ResponseField>
 
-      <ResponseField name="description" type="string">
-        Description of the NFT.
-      </ResponseField>
-
-      <ResponseField name="mediaUrl" type="string">
-        Url of the media content associated with the NFT.
-      </ResponseField>
-
-      <ResponseField name="externalUrl" type="string">
-        Url of the external link associated with the NFT.
-      </ResponseField>
-
-      <ResponseField name="traits" type="Trait[]">
-        Array of trait objects.
-
-        <Expandable title="Trait">
-          <ResponseField name="name" type="string">
-            Name for the trait.
-          </ResponseField>
-
-          <ResponseField name="value" type="string">
-            Value for the trait.
-          </ResponseField>
-        </Expandable>
-
-      </ResponseField>
-
-    </Expandable>
+  </Expandable>
 
 </ResponseField>
 
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://members.station.express/api/v1/erc721/tokens?contractAddress=0x67F4732266C7300cca593C814d46bee72e40659F' \
+curl --location 'https://members.station.express/api/v1/erc721/tokens' \
+--request GET \
+-d 'chainId=1' \
+-d 'contractAddress=0x67F4732266C7300cca593C814d46bee72e40659F' \
+-d 'ownerAddress=0xc517c83f417b73dA98647dad0FCB80af9f3b9531' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>'
 ```
@@ -88,16 +64,14 @@ curl --location --request POST 'https://members.station.express/api/v1/erc721/to
 ```json Response
 {
   "success": true,
-  "nfts": [
+  "tokens": [
     {
-      "holderAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
-      "holderSince": 1681985340,
       "tokenId": "69",
-      "name": "",
-      "description": "",
-      "mediaUrl": "",
-      "externalUrl": "",
-      "traits": []
+      "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
+    },
+    {
+      "tokenId": "420",
+      "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
     }
   ]
 }
