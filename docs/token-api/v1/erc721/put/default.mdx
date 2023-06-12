@@ -1,7 +1,7 @@
 ---
 title: "Update an NFT Collection's Default Metadata"
 sidebarTitle: "Update Default Metadata"
-api: "PUT https://members.station.express/api/v1/metadata/default"
+api: "PUT https://members.station.express/api/v1/erc721/defaultMetadata"
 ---
 
 ### How NFT default metadata works
@@ -81,7 +81,7 @@ all apps consuming your NFT's metadata to refresh their caches.
 <RequestExample>
 
 ```bash Example Request
-curl --location --request PUT 'https://members.station.express/api/v1/metadata/default' \
+curl --location --request PUT 'https://members.station.express/api/v1/erc721/defaultMetadata' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <token>' \
 --data-raw '{

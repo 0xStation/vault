@@ -1,0 +1,113 @@
+---
+title: "Permissions"
+description: "Granular and flexible logic upgrades."
+---
+
+Throughout a token’s lifespan, it needs to adapt to evolving requirements and goals. The core behavior
+of a token, the logic that manages its production, transmutation, and destruction, must be designed
+for mutability as a default to support the network’s changing needs.
+
+Conventional approaches to realize this level of flexibility converges to the notion of “upgradeable”
+contracts. Upgradeable contracts typically have one or more “implementation” contracts that are engaged
+by a “proxy” contract which canonically represents “the token,” storing the actual state of the smart
+contract (token ownership). Proxy patterns typically pair with designating a singular address, the “owner”,
+as having the highest permissions to switch these implementation contracts, modifying a token’s logic.
+While Station employs upgradeable proxy patterns and singular owners, following the [UUPS standard](https://eips.ethereum.org/EIPS/eip-1822)
+, we devised a complimentary system responsible for the predictable needs of logic changes, increasing
+specificity and flexibility, and reducing risk.
+
+## Permissions
+
+This specificity comes by differentiating the various interaction patterns tokens, and their administration,
+follow. We call these different interaction patterns “operations” and they include the familiar **mint**,
+**burn**, and **transfer** in addition to the ability to **upgrade** the token and change how to **render**
+metadata if our token is an NFT. The ruleset of operations can be changed in isolation, providing confidence
+that edits are clearly defined and not at risk of creating unexpected behavior.
+
+Constructing the logic of an operation has two parts: (1) who has **access** to execute an operation and
+(2) what **rules** apply uniformly to an operation regardless of who is making it.
+
+### 1. Operation Access
+
+A flexible access system enables multiple entities to control an operation and each entity to control multiple
+operations. Both of these are implemented by one mapping of addresses to their permitted operations.
+
+Associating permissions with addresses simultaneously supports multiple use patterns including, but not limited
+to, individual administrators, automated cloud processes, and smart contract integrations. This is possible
+because many entities can be identified by an address: personal wallets, group wallets, platform-owned wallets,
+and any smart contract. This simplicity and universality make for a powerful abstraction, enabling the
+supermajority of customization that groups need in a single design choice.
+
+These stored permissions are enforced at the beginning of any function call that involves a given operation
+by including a single solidity modifier `permitted(operation)`. For example, the mint function on our ERC-20
+token standard looks like:
+
+```solidity
+function mintTo(address account, uint256 amount) external permitted(Operation.MINT) {
+	// mint tokens...
+}
+```
+
+Any address that attempts to mint this ERC-20 token will immediately be checked as having the permission by
+this modifier and if not the execution terminates. Every function that applies some operation simply includes
+the appropriate `permitted` modifier around it to manage access control.
+
+### 2. Operation Rules
+
+Regardless of which addresses are attempting operations, uniformly applied rules clearly define how token
+ownership is constrained. The most popular rules used at time of writing enforce non-transferability, to avoid
+legal complications or reduce risk of purchaseable authority, and max ownership of one token per holder, to
+serve simple identity use cases. These additional conditions lay on top of whatever previous authentication
+is performed by token operators, and help create consistency among parallel processes for token interactions.
+For example, a smart contract that facilitates public token purchases and a trusted [Safe](https://safe.global/)
+may both have the mint permission, but both operators are still required to mint tokens to recipients that do
+not not already have a token if the max ownership rule is set.
+
+Rules are currently only enforced on token ownership changes and applied by implementing a hook function
+exposed by Open Zeppelin’s token implementations called `_afterTokenTransfer`. Whenever a token ownership
+change attempt occurs (mint, burn, or transfer), this function is called, triggering our rule-checking process.
+
+First, the rule for an operation is read from a mapping of operations to its rule address. Reading will
+return one of three values: (1) the zero address i.e. no constraints set, (2) the max address i.e. absolute
+constraint set, or (3) other address i.e. conditional constraits set. When no additional constraints are set
+(zero address), the operation is free to continue as is and will complete the ownership change. When absolute
+constraints are set (max address), the operation is prohibited from happening in all cases and rejects the
+ownership change. When conditional constraints are set (other address), the address represents the location of
+a “guard” contract to check if the ownership change is allowed.
+
+Guards adhere to a token-specific interface and return `true` if the operation is allowed or `false` if not.
+Below is an example implementation of applying rule checks on an ERC-721 token.
+
+```solidity
+// called at the end of executing internal _transfer function in token implementation
+function _afterTokenTransfer(address from, address to, uint256 tokenId) internal override {
+    address guard;
+    // mint
+    if (from == address(0)) {
+        guard = guardOf(Operation.MINT);
+    }
+    // burn
+    else if (to == address(0)) {
+        guard = guardOf(Operation.BURN);
+    }
+    // transfer
+    else {
+        guard = guardOf(Operation.TRANSFER);
+    }
+
+    require(
+        // auto-reject if max address
+        guard != MAX_ADDRESS && (
+        // auto-pass if zero address
+        guard == address(0) ||
+        // check guard if other address
+        ITokenGuard(guard).isAllowed(msg.sender, from, to, tokenId)),
+        "GUARD_REJECTION"
+    );
+}
+```
+
+All together, the combination of upgradeable proxies, permitted operators, and guarded operations create an
+intuitive and flexible token design. Our goal with GroupOS’s token standards is to create value systems that
+groups can rely on using _for_ _life_ and we believe accomodating any unpredictable need is critical in
+realizing that.

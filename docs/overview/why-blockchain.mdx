@@ -1,0 +1,75 @@
+---
+title: "Why Blockchain"
+description: "How can we better define network inclusion, activity, and permissions."
+---
+
+GroupOS provides tools to create distributed, incentivized networks. Part one of the GroupOS Protocol
+solves three basic problems of establishing a _network membership system_:
+
+1. Who is in the network
+2. What have they done
+3. What can they do
+
+**These are not unsolved problems, so how can blockchains solve them better?**
+
+It turns out that the answers to our three questions above are needed in many different places at different
+times, more specifically in the software applications we use. In your own job, if you work within a team,
+you likely need to use multiple software products to produce work, review each others work, and generally
+communicate. You may also notice that each of these places have their own systems to identify who you are,
+keep records of what you’ve done, and regulate what you can do. Fragmented data systems force replication of
+these patterns, increasing overhead for application developers and users alike. The inherent solution to
+fragmentation is consolidation, but this exposes existential risk that the chosen providers post-consolidation
+misuse their infrastructure.
+
+We believe blockchains applied here create new unique value through:
+(1) **system interoperability** and
+(2) **tyranny resistance**.
+
+### 1. System Interoperability
+
+Interoperability is the ability for multiple systems to exchange and make use of information. We achieve it by
+sharing access to and common interfaces for data. In technical terms, people often refer to “data availability”
+and “interoperability” as possessing these properties. If one app wants to retrieve data from another, it needs
+to have a guarantee that it will be available and returned. If two apps want to share data, they need to agree
+on the form and language of that data and its consistent legitimacy. If either of those constraints are
+compromised, an apps risks providing a broken experience to its users and is better off storing its own data,
+once again fragmenting. When present together though, these properties enable magical experiences where
+something you do in one app interconnects with something else in another and it “just works”.
+
+Existing digital systems create data availability by essentially replicating what blockchains have built-in:
+a network of computers that maintain copies of data and let people access their closest one. These systems are
+inherently complex and expensive which automatically filters out most teams but the largest and most resourced
+from building them, a centralizing pressure.
+
+Existing digital systems create interoperability either through few, mass-scale providers or service
+aggregators. An example of the former is how each Big Tech player has a “Login with X” button and each app
+chooses to integrate with their preferred vendors. An example of the latter is how [Plaid](https://plaid.com/)
+helps financial apps connect to any U.S. bank account by doing _all_ of the bank integrations for them. In
+either case, choosing from a few providers or one provider that manages all others applies another centralizing
+pressure.
+
+Public blockchains extend the powers of data availability and interoperabiilty to _all_ developers. As
+mentioned earlier, blockchains inherently have many nodes that maintain a copy of current state, providing
+data availability to any application building on top of them. The developer communities of these blockchains
+also converge on standard interfaces for expressing data, providing interoperability to those that adopt them.
+As an example, the most widely adopted interfaces of any blockchain ecosystem are Ethereum’s token standards:
+[ERC-20](https://eips.ethereum.org/EIPS/eip-20), [ERC-721](https://eips.ethereum.org/EIPS/eip-721), and
+[ERC-1155](https://eips.ethereum.org/EIPS/eip-1155).
+
+When we leverage standards like these, we simplify cross-app integrations out of existence and enable any
+combination of interconnectedness. This is much _much_ more expansive than the interoperability we’re used to.
+
+### 2. Tyranny Resistance
+
+Another unique benefit of blockchains is the ability to host such infrastructure in a way that is resistant to tyranny. The everyday tyranny of our products reveals itself in arbitrary account suspension, censorship, and temporarily revoked access. In the digital world, it is difficult to create systems that do not expose levels of control that are vulnerable to this abuse.
+
+---
+
+<Note>
+  **In sum**: we use public blockchains and standard data interfaces to produce
+  a single organization topology. This approach simplifies determining
+  inclusion, activity, and permissions for all other software systems, creating
+  interoperability. We also do so in a manner where networks retain control of
+  their data not before possible with centralized systems, creating tryanny
+  resistance.
+</Note>

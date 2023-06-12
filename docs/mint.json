@@ -56,15 +56,23 @@
   "navigation": [
     {
       "group": "Overview",
-      "pages": ["overview/intro"]
+      "pages": ["overview/intro", "overview/why-blockchain"]
     },
     {
-      "group": "Tokens",
-      "pages": ["token/intro", "token/module", "token/api"]
+      "group": "Token",
+      "pages": ["token/intro", "token/permissions", "token/module", "token/api"]
     },
     {
-      "group": "Memberships",
-      "pages": ["membership/intro", "membership/nft", "membership/wallet"]
+      "group": "Membership",
+      "pages": ["membership/intro"]
+    },
+    {
+      "group": "Vault",
+      "pages": ["vault/intro"]
+    },
+    {
+      "group": "Library",
+      "pages": ["library/intro"]
     },
     {
       "group": "Getting Started",
