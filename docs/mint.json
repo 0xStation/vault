@@ -26,53 +26,82 @@
   "hideFeedbackButtons": true,
   "topbarLinks": [],
   "topbarCtaButton": {
-    "name": "Get Started",
-    "url": "https://calendly.com/symmtry/chat"
+    "name": "Get started",
+    "url": "https://6vdcjqzyfj3.typeform.com/to/x3xer1Rs"
   },
-  "anchors": [],
+  "anchors": [
+    {
+      "name": "Create your own membership",
+      "url": "https://6vdcjqzyfj3.typeform.com/to/x3xer1Rs",
+      "icon": "album-collection"
+    },
+    {
+      "name": "Schedule a call",
+      "url": "https://calendly.com/symmtry/chat",
+      "icon": "face-smile",
+      "iconType": "solid"
+    },
+    {
+      "name": "Follow Station",
+      "url": "https://twitter.com/0xstation",
+      "icon": "twitter"
+    }
+  ],
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "token-api"
+    }
+  ],
   "navigation": [
     {
       "group": "Overview",
-      "pages": ["overview/intro", "overview/token-api", "overview/automations"]
+      "pages": ["overview/intro", "overview/why-blockchain"]
+    },
+    {
+      "group": "Token",
+      "pages": ["token/intro", "token/permissions", "token/module", "token/api"]
+    },
+    {
+      "group": "Membership",
+      "pages": ["membership/intro"]
+    },
+    {
+      "group": "Vault",
+      "pages": ["vault/intro"]
+    },
+    {
+      "group": "Library",
+      "pages": ["library/intro"]
     },
     {
       "group": "Getting Started",
       "pages": [
-        "getting-started/auth",
-        "getting-started/networks",
-        "getting-started/media"
+        "token-api/v1/intro",
+        "token-api/v1/getting-started/auth",
+        "token-api/v1/getting-started/networks"
       ]
     },
     {
-      "group": "API-Controlled Tokens",
+      "group": "NFT Metadata",
+      "pages": ["token-api/v1/metadata/post/uploadMedia"]
+    },
+    {
+      "group": "Memberships (ERC-721)",
       "pages": [
-        "token-api/v1/upload",
-        {
-          "group": "Memberships (ERC-721)",
-          "pages": [
-            "token-api/v1/erc721/overview",
-            "token-api/v1/erc721/post/mint",
-            "token-api/v1/erc721/post/grant",
-            "token-api/v1/erc721/put/individualMetadata",
-            "token-api/v1/erc721/get/tokens"
-          ]
-        },
-        {
-          "group": "Badges (ERC-1155)",
-          "pages": [
-            "token-api/v1/erc1155/overview",
-            "token-api/v1/erc1155/post/mint",
-            "token-api/v1/erc1155/put/metadata"
-          ]
-        },
-        {
-          "group": "Points (ERC-20)",
-          "pages": [
-            "token-api/v1/erc20/overview",
-            "token-api/v1/erc20/post/mint"
-          ]
-        }
+        "token-api/v1/erc721/post/mint",
+        "token-api/v1/erc721/post/grant",
+        "token-api/v1/erc721/put/individual",
+        "token-api/v1/erc721/get/tokens"
       ]
+    },
+    {
+      "group": "Badges (ERC-1155)",
+      "pages": ["token-api/v1/erc1155/post/mint"]
+    },
+    {
+      "group": "Points (ERC-20)",
+      "pages": ["token-api/v1/erc20/post/mint"]
     }
   ],
   "footerSocials": {

@@ -1,0 +1,14 @@
+---
+title: "Onchain Modules"
+description: "Extend token functionality with smart contracts."
+---
+
+To extend the functionality of a token, we permit other smart contracts, “modules”, to control some operations. Modules can implement any arbitrary logic, contain their own state, and be shared across tokens. Tokens can also enable any number of modules simultaneously per our Permissions system.
+
+A module can be thought of as a mini-app, ideally something tight in scope that does only one job and does it really well. This keeps responsibilities clear for improved security and without impacting convenience, because there is no limit on the number of active modules a token can have. Additionally, only strictly non-upgradeable modules are recommended, because of the potentially high stakes control they can have over a group’s token. As new versions of logic become available, atomically swapping out an old version for the new one is a single convenient transaction, even when modules require setting state.
+
+In our experience, modules are leveraged most often for defining the mint behavior of a token. For example, facilitating the purchase of a membership with a flat price in ETH. Authentication checks like gating mints also take place in a module and can implement any combination of mechanisms like ECDSA signature validation, merkle tree proofs, or a simple token-ownership read. To prevent re-entrancy attacks, place checks like these prior to calling a token’s mint function or use a [Reentrancy Guard](https://github.com/transmissions11/solmate/blob/main/src/utils/ReentrancyGuard.sol) within the module.
+
+Modules are also particularly great at integrating complex behavior because they can cleanly implement atomicity across multiple contracts. For example, incentivize your protocol post-launch with a module that makes a desired call to your contracts and if successful, will mint tokens to the user. As another example, create an organization reputation system with a module that, upon contribution, mints non-transferable ERC-20 points to a member and a non-transferable ERC-1155 NFT badge to showcase in their wallet.
+
+Station provides many options for common logic extensions with public and tested modules, and all groups are encouraged to write their own too and stretch the limits of how we can distribute value across networks. Visit our [docs](https://docs.station.express/) to learn more about writing modules and how we can assist you.

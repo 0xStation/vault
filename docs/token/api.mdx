@@ -1,0 +1,108 @@
+---
+title: "Offchain API"
+description: "Extend token functionality with cloud-wallets and exposed API interface."
+---
+
+Another path to extending the functionality of a token is through permitting cloud-managed wallets
+to control some operations. While these wallets can’t embed logic within themselves like a smart
+contract can, the offchain systems around them can abstract any logic for an onchain interaction.
+And just like before, a token can permit any number of cloud-wallets and operate in parallel with
+onchain modules.
+
+The security of these cloud-wallets is paramount which is why we’ve partnered with [Turnkey](https://turnkey.io/)
+to manage the private keys behind the scenes. Through Turnkey’s secure enclaves, Station’s offchain
+infrastrucuture is able to request signing of arbitrary bytes data. Station exposes this functionality
+to groups via a [Token API](/token-api/v1/intro) that standardizes the
+common needs of controlling token behavior from offchain events.
+
+The most popular patterns for API-control are in the production of new tokens, which can be done
+through two methods: (1) **Minting** tokens directly to individuals and (2) **Granting** tokens for
+individuals to mint themselves.
+
+### 1. Minting Tokens
+
+By “minting”, we refer to the act of putting _new_ data onchain: the ownership of a token that did not
+exist before. Using an API to mint tokens to wallets is actively “pushing” the assets to their address,
+which means your recipients don’t need to do anything to get them. This kind of distribution creates
+premium experiences where users don’t need to worry about opening a mint page link, connecting their
+wallet, and paying their own gas; users just see something new in their wallet and smile.
+
+Imagine an incentivized open-source project where contributors automatically receive new badge NFTs for
+each PR they merge. Imagine a network of marketers that receive points weekly depending on how much
+additional distribution they generate for publised content. Imagine building token incentives into your
+next application to reward and engage users.
+
+The interface to enable this all is also ridiculously simple. Here’s an example of minting ERC-721 NFTs
+where all we need to provide is a `chainId` for the token contract, paired with a `contractAddress` to
+identity the token, and a `recipientAddress` to locate where to mint to:
+
+<CodeGroup>
+
+```bash Request
+curl 'https://members.station.express/api/v1/erc721/mint' \
+--request POST \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "chainId": 137,
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+}'
+```
+
+```bash Response
+{
+	"transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+}
+```
+
+</CodeGroup>
+
+Behind the scenes, the offchain infrastructure is checking permissions for the call, requesting Turnkey
+to sign a mint transaction, and publishing the transaction through an RPC provider. The transaction gas
+cost is paid this cloud-wallet and our systems automatically replenish the balance of the network’s coin.
+At the end of the month, transaction fees are rolled up into an invoice that can be paid in the same coin
+or in fiat.
+
+### 2. Granting Tokens
+
+Compared to minting, granting does not produce a blockchain transaction and instead creates the permission
+for someone else to do the “minting”. This offloads the burden of transacting from our infrastructure and
+your application onto your users, which can take place on your own interface or on a Station-powered
+experience.
+
+Granting works by signing an [EIP-712](https://eips.ethereum.org/EIPS/eip-712) object that encodes the
+necessary parameters to prove permission to a smart contract, often one of our modules. Like when minting,
+we need to know the `chainId`, `contractAddress`, and `recipientAddress` in addition to two new fields: a
+`nonce` and an `expiration`. Nonces are a common solution to the [Signature Replay](https://solidity-by-example.org/hacks/signature-replay/)
+attack by ensuring a grant signature can only be used once. Expiration is used to indicate when a grant
+is no longer considered valid and can be set to `0` to indicate no expiration.
+
+In the Station Membership mint experience, we use granting patterns to support offchain gating conditions
+like passing a KYC check, or entering form information. We extend this ability to define your own conditions
+and ping our systems when someone is eligible to mint.
+
+<CodeGroup>
+
+```bash Request
+curl 'https://members.station.express/api/v1/erc721/grant' \
+--request POST \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "chainId": 137,
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+}'
+```
+
+```bash Response
+{
+	"grantId": "5f2e491c-6fec-4324-a539-d9ba72ef261f",
+	"signature": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+	"nonce": 420,
+	"expiration": null
+}
+```
+
+</CodeGroup>
