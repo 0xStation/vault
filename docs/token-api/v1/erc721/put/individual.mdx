@@ -104,11 +104,15 @@ curl --location --request PUT 'https://members.station.express/api/v1/erc721/ind
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
-{
-  "success": true
-}
-```
-
+  ```json Response
+  {
+    "success": true
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
 </ResponseExample>

@@ -11,9 +11,6 @@ has a unique `tokenId` which is an auto-incrementing number like a typical numer
 You can also optionally provide metadata specific to this newly minted NFT that will override any defaults
 set in the previous step.
 
-You can also pair this operation with one of our [Automations](/token-api/automations) to create an automatic
-distribution policy or by writing custom logic in your own systems prior to calling this API.
-
 ### Body
 
 <ParamField body="chainId" type="number" required>
@@ -99,13 +96,17 @@ curl --location --request POST 'https://members.station.express/api/v1/erc721/mi
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
-{
-  "success": true,
-  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
-  "transactionUrl": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
-}
-```
-
+  ```json Success
+  {
+    "success": true,
+    "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+    "transactionUrl": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
 </ResponseExample>

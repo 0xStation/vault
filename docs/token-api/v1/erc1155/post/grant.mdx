@@ -1,7 +1,7 @@
 ---
 title: "Grant Membership NFTs"
 sidebarTitle: "Grant NFTs"
-api: "POST https://members.station.express/api/v1/erc721/grant"
+api: "POST https://members.station.express/api/v1/erc1155/grant"
 ---
 
 <Note>
@@ -32,6 +32,16 @@ their mint call within the smart contract. Each signature can optionally be set 
 
 <ParamField body="recipientAddress" type="string" required>
   The address to grant an NFT to.
+</ParamField>
+
+<ParamField body="tokenId" type="string" required>
+  The unique id for the NFT within the collection. Type `string` is used to
+  natively support large numbers.
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  The amount of tokens to mint to recipient. Type `string` is used to natively
+  support large numbers.
 </ParamField>
 
 <ParamField body="expiration" type="date" optional>
@@ -73,28 +83,27 @@ their mint call within the smart contract. Each signature can optionally be set 
 <ResponseField name="success" type="boolean">
   Indicates whether the call was successful.
 </ResponseField>
-
 <ResponseField name="grantId" type="string">
   ID for the newly created grant.
 </ResponseField>
-
 <ResponseField name="signature" type="string">
   Raw bytes signature of approval for the newly created grant.
 </ResponseField>
 
 <RequestExample>
-
-```bash Example Request
-curl --location --request POST 'https://members.station.express/api/v1/erc721/grant' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <token>' \
---data-raw '{
-    "chainId": 137,
-    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
-}'
-```
-
+  ```bash Example Request
+  curl 'https://members.station.express/api/v1/erc1155/grant' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <token>' \
+  --data-raw '{
+      "chainId": 137,
+      "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+      "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+      "tokenId": "69",
+      "amount": "5"
+  }'
+  ```
 </RequestExample>
 
 <ResponseExample>

@@ -60,21 +60,25 @@ curl --location 'https://members.station.express/api/v1/erc721/tokens' \
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
-{
-  "success": true,
-  "tokens": [
-    {
-      "tokenId": "69",
-      "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
-    },
-    {
-      "tokenId": "420",
-      "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
-    }
-  ]
-}
-```
-
+  ```json Success
+  {
+    "success": true,
+    "tokens": [
+      {
+        "tokenId": "69",
+        "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
+      },
+      {
+        "tokenId": "420",
+        "ownerAddress": "0xc517c83f417b73da98647dad0fcb80af9f3b9531"
+      }
+    ]
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
 </ResponseExample>

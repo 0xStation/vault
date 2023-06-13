@@ -10,9 +10,6 @@ Once you have a Badge NFT smart contract, you can mint any number of tokens to a
 has a unique `tokenId` to identify it within the collection and all items of this `tokenId` share the same
 metadata.
 
-You can also pair this operation with one of our [Automations](/token-api/automations) to create an automatic
-distribution policy or by writing custom logic in your own systems prior to calling this API.
-
 ### Differences with Memberships (ERC-721)
 
 While minting Memberships, the unique `tokenId` associated with each NFT will auto-increment for you, but
@@ -25,18 +22,19 @@ being a attendee at the most recent event.
 <ParamField body="chainId" type="number" required>
   The id of the chain supporting the NFT. This cannot be changed after creation.
 </ParamField>
-
 <ParamField body="contractAddress" type="string" required>
   The NFT smart contract address to mint with.
 </ParamField>
-
+<ParamField body="recipientAddress" type="string" required>
+  The address to mint an NFT to.
+</ParamField>
 <ParamField body="tokenId" type="string" required>
   The unique id for the NFT within the collection. Type `string` is used to
   natively support large numbers.
 </ParamField>
-
-<ParamField body="recipientAddress" type="string" required>
-  The address to mint an NFT to.
+<ParamField body="amount" type="string" required>
+  The amount of tokens to mint to recipient. Type `string` is used to natively
+  support large numbers.
 </ParamField>
 
 ### Response
@@ -44,51 +42,42 @@ being a attendee at the most recent event.
 <ResponseField name="success" type="boolean">
   Indicates whether the call was successful.
 </ResponseField>
-
 <ResponseField name="transactionHash" type="string">
   Transaction hash for the newly created token.
 </ResponseField>
-
 <ResponseField name="transactionUrl" type="string">
   Wraps `transactionHash` with the appropriate network-specific URL for
   convenience.
 </ResponseField>
 
-<ParamField body="tokenId" type="string" required>
-  The unique id for the NFT within the collection. Type `string` is used to
-  natively support large numbers.
-</ParamField>
-
-<ParamField body="recipientAddress" type="string" required>
-  The address the NFT was minted to.
-</ParamField>
-
 <RequestExample>
-
-```bash Example Request
-curl --location --request POST 'https://members.station.express/api/v1/erc1155/mint' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <token>' \
---data-raw '{
-    "chainId": 137,
-    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
-    "tokenId": "69",
-    "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531"
-}'
-```
-
+  ```bash Example Request
+  curl 'https://members.station.express/api/v1/erc1155/mint' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <token>' \
+  --data-raw '{
+      "chainId": 137,
+      "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+      "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531",
+      "tokenId": "69",
+      "amount": "5"
+  }'
+  ```
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
-{
-  "success": true,
-  "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
-  "transactionUrl": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
-  "tokenId": "69",
-  "recipientAddress": "0xc517c83f417b73dA98647dad0FCB80af9f3b9531"
-}
-```
-
+  ```json Success
+  {
+    "success": true,
+    "transactionHash": "0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9",
+    "transactionUrl": "https://polygonscan.com/tx/0x58c789b7a59312ec0a659e165700db54af896d3e8b46e4aeecb33b32b88157c9"
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
 </ResponseExample>

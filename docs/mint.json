@@ -97,7 +97,11 @@
     },
     {
       "group": "Badges (ERC-1155)",
-      "pages": ["token-api/v1/erc1155/post/mint"]
+      "pages": [
+        "token-api/v1/erc1155/post/mint",
+        "token-api/v1/erc1155/post/grant",
+        "token-api/v1/erc1155/get/tokens"
+      ]
     },
     {
       "group": "Points (ERC-20)",

@@ -43,12 +43,16 @@ curl --location --request POST 'https://members.station.express/api/v1/upload' \
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
-{
-  "success": true,
-  "mediaUrl": "https://..."
-}
-```
-
+  ```json Success
+  {
+    "success": true,
+    "mediaUrl": "https://..."
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
 </ResponseExample>
