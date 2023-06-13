@@ -84,14 +84,16 @@
     },
     {
       "group": "NFT Metadata",
-      "pages": ["token-api/v1/metadata/post/uploadMedia"]
+      "pages": [
+        "token-api/v1/metadata/post/uploadMedia",
+        "token-api/v1/metadata/put/individual"
+      ]
     },
     {
       "group": "Memberships (ERC-721)",
       "pages": [
         "token-api/v1/erc721/post/mint",
         "token-api/v1/erc721/post/grant",
-        "token-api/v1/erc721/put/individual",
         "token-api/v1/erc721/get/tokens"
       ]
     },

@@ -1,0 +1,104 @@
+---
+title: "Update an NFT's Individual Metadata"
+sidebarTitle: "Update Individual Metadata"
+api: "PUT https://members.station.express/api/v1/metadata/individual"
+---
+
+### How NFT individual metadata works
+
+To support differentiated NFTs within a collection and dynamic or evolving use cases, set metadata on a per-token basis.
+
+When edits are made to the NFT's metadata, our systems inform primary ecosystem apps consuming
+your NFT's metadata to refresh their caches (e.g. OpenSea).
+
+### Body
+
+<ParamField body="chainId" type="number" required>
+  The id of the chain supporting the NFT. This cannot be changed after creation.
+</ParamField>
+<ParamField body="contractAddress" type="string" required>
+  The NFT smart contract address to edit.
+</ParamField>
+<ParamField body="tokenId" type="string" required>
+  The NFT smart contract address to edit.
+</ParamField>
+<ParamField body="individualMetadata" type="object" required>
+  Individual metadata to associate with this NFT, which overrides any defaults
+  set at the collection-level
+  <Expandable title="NFT Metadata">
+    <ParamField body="name" type="string" optional>
+      Name for the NFT.
+    </ParamField>
+    <ParamField body="description" type="string" optional>
+      Description for the NFT.
+    </ParamField>
+    <ParamField body="mediaUrl" type="string" optional>
+      Url for the media content associated with the NFT.
+    </ParamField>
+    <ParamField body="externalUrl" type="string" optional>
+      Url for the external link associated with the NFT.
+    </ParamField>
+    <ParamField body="traits" type="Trait[]" optional>
+      Array of trait objects.
+      <Expandable title="Trait">
+        <ParamField body="name" type="string" required>
+          Name for the trait.
+        </ParamField>
+        <ParamField body="value" type="string" required>
+          Value for the trait.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the call was successful.
+</ResponseField>
+
+<RequestExample>
+  ```bash Example Request
+  curl 'https://members.station.express/api/v1/metadata/individual' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <token>' \
+  --data-raw '{
+    "chainId": 137,
+    "contractAddress": "0x67F4732266C7300cca593C814d46bee72e40659F",
+    "tokenId": "10",
+    "individualMetadata": {
+      "name": "Zed Run",
+      "description": "Horses run free in the metaverse.",
+      "mediaUrl": "https://hosted.station.express/abc123",
+      "externalUrl": "https://zed.run/racehorse/94979",
+      "traits": [
+        {
+          "name": "Breed type",
+          "value": "Elite"
+        },
+        {
+          "name": "Starting level",
+          "value": "22"
+        },
+        ...
+      ]
+    },
+  }'
+  ```
+</RequestExample>
+
+<ResponseExample>
+  ```json Success
+  {
+    "success": true
+  }
+  ```
+  ```json Failure
+  {
+    "success": false,
+    "error": "[message]"
+  }
+  ```
+</ResponseExample>
