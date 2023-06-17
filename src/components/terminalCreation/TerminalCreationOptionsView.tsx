@@ -96,9 +96,9 @@ export const TerminalCreationOptionsView = ({
         }}
         isCloseIcon={true}
       >
-        <h2 className="font-bold">New Project</h2>
+        <h2 className="font-bold">New Vault</h2>
         <p className="mb-7 mt-3 text-white">
-          Use an existing Safe, or create a Project with a new Safe.
+          Use an existing Safe, or create a Vault with a new Safe.
         </p>
         <SelectWithLabel
           label="Chain*"
@@ -138,9 +138,9 @@ export const TerminalCreationOptionsView = ({
                 setView(VIEW.CREATE_FORM)
               }}
             >
-              <p className="font-bold">Create a Project with a new Safe</p>
+              <p className="font-bold">Create a Vault with a new Safe</p>
               <p className="text-gray">
-                An address unique to the Project will be created
+                An address unique to the Vault will be created
               </p>
             </SelectorCard>
             {safeAddresses && safeAddresses?.length > 0 ? (

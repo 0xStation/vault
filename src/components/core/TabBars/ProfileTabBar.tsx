@@ -2,7 +2,7 @@ import useStore from "../../../hooks/stores/useStore"
 import { TabBar } from "../TabBar"
 
 export enum ProfileTab {
-  TERMINALS = "projects",
+  TERMINALS = "vaults",
   REQUESTS = "proposals",
 }
 
@@ -14,7 +14,7 @@ export const ProfileTabBar = ({
   children: React.ReactNode
 }) => {
   const options = [
-    { value: ProfileTab.TERMINALS, label: "Projects" },
+    { value: ProfileTab.TERMINALS, label: "Vaults" },
     { value: ProfileTab.REQUESTS, label: "Proposals" },
   ]
 

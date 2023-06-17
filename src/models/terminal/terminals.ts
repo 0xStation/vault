@@ -45,7 +45,7 @@ export const getTerminalFromChainNameAndSafeAddress = async (
 
   let terminal = await getTerminalByChainIdAndAddress(chainId, safeAddress)
   if (!terminal) {
-    throw new Error("Project not found.")
+    throw new Error("Vault not found.")
   }
 
   return terminal

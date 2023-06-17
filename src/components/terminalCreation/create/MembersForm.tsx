@@ -67,7 +67,7 @@ const LoadingScreen = ({
         <>
           <LoadingSpinner />
           <p className="mt-8 mb-2 animate-pulse font-bold">
-            Building your Project
+            Creating your Vault
           </p>
           <p className="animate-pulse text-base">
             Please do not leave or refresh the page.
@@ -426,7 +426,7 @@ export const MembersView = ({
             disabled={isSubmitting}
             loading={isSubmitting}
           >
-            Create Project
+            Create Vault
           </Button>
           <p
             className={`mt-1 text-base  ${

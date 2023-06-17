@@ -33,11 +33,11 @@ export const RemoveSignerConfirmationDrawer = ({
   let title = `Are you sure you would like to remove
     ${ensName || truncateString(addressToBeRemoved, 8)}?`
   let subtitle =
-    "Member will be removed from the Project once the Proposal has been approved and executed."
+    "The signer will no longer be able to vote and execute on proposals once this proposal has been approved and executed."
   if (addressesAreEqual(activeUserAddress, addressToBeRemoved)) {
-    title = "Are you sure you’d like to leave the Project?"
+    title = "Are you sure you’d like remove yourself as a signer?"
     subtitle =
-      "You’ll be removed from the Project once the Proposal has been approved and executed."
+      "You’ll will no longer be able to vote and execute on proposals once this proposal has been approved and executed."
   }
   return (
     <Breakpoint>

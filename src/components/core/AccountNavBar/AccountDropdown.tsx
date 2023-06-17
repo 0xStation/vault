@@ -126,7 +126,7 @@ export const AccountNavBar = () => {
                           router.push("/project/new")
                         }}
                       >
-                        + New Project
+                        + New Vault
                       </Button>
                     )
                   } else {
@@ -148,7 +148,7 @@ export const AccountNavBar = () => {
                           setCreateTerminalSliderOpen(true)
                         }}
                       >
-                        + New Project
+                        + New Vault
                       </Button>
                     )
                   }

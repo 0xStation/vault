@@ -268,15 +268,15 @@ export const RequestTokensContent = () => {
                 <div className=" w-full rounded bg-gray-90 p-3 text-orange">
                   <ExclamationTriangleIcon className="mx-auto h-5 w-5" />
                   <p className="pt-3 text-center text-base">
-                    There was an error retrieving assets for your Project.
+                    There was an error retrieving assets for your Vault.
                     Please refresh the page or try again later.
                   </p>
                 </div>
               ) : !tokens.length ? (
                 <div className="w-full justify-center rounded bg-gray-90 p-4 text-center">
-                  <p className="font-bold">No tokens to send from Project</p>
+                  <p className="font-bold">No tokens to send from Vault</p>
                   <p className="mx-auto mb-6 max-w-[350px] pt-2 text-base">
-                    Transfer tokens to the Project address or share the address
+                    Transfer tokens to the Vault address or share the address
                     to receive tokens.
                   </p>
                   <CopyAddressButton address={address as string} />

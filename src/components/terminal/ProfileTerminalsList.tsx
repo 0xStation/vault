@@ -39,13 +39,13 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
           <EmptyState
             title={
               primaryWallet?.address === router.query.address
-                ? "Create your first Project"
-                : "No Projects"
+                ? "Create your first Vault"
+                : "No Vaults"
             }
             subtitle={
               primaryWallet?.address === router.query.address
                 ? "Start raising funds, managing spend, and splitting revenue with your collective."
-                : "This profile hasn't created or is not part of any Projects."
+                : "This profile hasn't created or is not part of any Vaults."
             }
           >
             {primaryWallet?.address === router.query.address ? (
@@ -59,7 +59,7 @@ export const ProfileTerminalsList = ({ address }: { address: string }) => {
                     }
                   }}
                 >
-                  Create a Project
+                  Create a Vault
                 </Button>
               </span>
             ) : null}
