@@ -106,7 +106,7 @@ export const ProfileRequestsList = ({ address }: { address: string }) => {
         ) : requests?.length === 0 ? (
           <div className="flex h-[calc(100%+18px)] px-4 pt-4">
             <EmptyState
-              title="No Proposals"
+              title="No proposals"
               subtitle="Proposals you created in Vaults will appear here."
             />
           </div>
