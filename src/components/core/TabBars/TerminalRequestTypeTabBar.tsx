@@ -26,7 +26,7 @@ export const TerminalRequestStatusTabBar = ({
     },
     {
       value: TerminalRequestTypeTab.MEMBERS,
-      label: "Members",
+      label: "Signers",
     },
   ] as TerminalNavOption[]
 

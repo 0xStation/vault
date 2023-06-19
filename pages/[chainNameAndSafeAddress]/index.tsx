@@ -130,7 +130,7 @@ const MobileTerminalIndexPage = () => {
           />
           <LabelCard
             boxWrap={false}
-            label="Members"
+            label="Signers"
             description={String(terminal?.signers?.length)}
           />
         </div>
