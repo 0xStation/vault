@@ -17,7 +17,7 @@ type FooterNavOption = {
   href: string
 }
 
-const { ABOUT, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
+const { GROUPOS, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
 const { EVENT_NAME, LOCATION } = TRACKING
 
 const options = (router: any) =>
