@@ -170,7 +170,7 @@ const BatchExecuteWrapper = ({
         <div className="mb-4 space-y-4">
           <div className="text-xl font-bold">
             Execute {`${approve ? "to approve" : "to reject"}`}{" "}
-            {requestsToApprove.length} Proposals
+            {requestsToApprove.length} proposals
           </div>
           <div>Your group action will be recorded on-chain.</div>
         </div>
