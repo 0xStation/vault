@@ -42,12 +42,12 @@ const options = (router: any) =>
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
-    // {
-    //   label: "About",
-    //   description: "About the Project",
-    //   active: true,
-    //   href: `/${router.query.chainNameAndSafeAddress}/details`,
-    // },
+    {
+      label: "About",
+      description: "About the Project",
+      active: true,
+      href: `/${router.query.chainNameAndSafeAddress}/details`,
+    },
   ] as TerminalNavOption[]
 
 const DesktopTerminalLayout = ({
