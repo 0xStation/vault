@@ -53,14 +53,14 @@ const options = (router: any) =>
       href: `/${router.query.chainNameAndSafeAddress}/assets`,
     },
     {
-      label: "Members",
+      label: "Signers",
       description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
     },
     {
       label: "About",
-      description: "About the Project",
+      description: "About the Group",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/details`,
     },
@@ -130,7 +130,7 @@ const MobileTerminalIndexPage = () => {
           />
           <LabelCard
             boxWrap={false}
-            label="Members"
+            label="Signers"
             description={String(terminal?.signers?.length)}
           />
         </div>

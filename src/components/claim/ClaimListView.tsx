@@ -158,7 +158,7 @@ const ClaimListView = ({ recipientAddress }: { recipientAddress: string }) => {
           <h1 className="mb-7">Claim tokens</h1>
           <EmptyState
             title="No tokens to claim"
-            subtitle="Tokens available to claim from Projects you created and collaborated with will appear here."
+            subtitle="Tokens available to claim from Vaults you created and collaborated with will appear here."
           />
         </div>
       ) : (

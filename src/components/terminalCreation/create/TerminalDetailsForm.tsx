@@ -159,7 +159,7 @@ export const TerminalDetailsForm = ({
   }
   return (
     <>
-      <h2 className="mb-[30px] font-bold">New Project</h2>
+      <h2 className="mb-[30px] font-bold">New Vault</h2>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="flex-col">
           <InputWithLabel
@@ -197,7 +197,7 @@ export const TerminalDetailsForm = ({
             label="URL"
             register={register}
             name="url"
-            placeholder="Enter a link to your project"
+            placeholder="Enter a link to your group or project's site or social"
             errors={errors}
             // TODO: abstract validation logic
             registerOptions={{

@@ -18,7 +18,7 @@ type BaseProperties = {
   flow: string
   chainId: number
   msg: string
-  name: string // Project name
+  name: string // Vault name
   quorum: number
   members: string[]
   action: string

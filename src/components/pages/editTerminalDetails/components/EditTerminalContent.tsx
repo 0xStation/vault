@@ -74,7 +74,7 @@ const EditTerminalContent = () => {
 
   return (
     <>
-      <h2 className="font-bold">Add Project Details</h2>
+      <h2 className="font-bold">Add Vault Details</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="mt-6 space-y-6"
@@ -114,7 +114,7 @@ const EditTerminalContent = () => {
           label="URL"
           register={register}
           name="url"
-          placeholder="Enter a link to your project"
+          placeholder="Enter a link to your group or project's site or social media"
           errors={errors}
           registerOptions={{
             validate: (v) =>

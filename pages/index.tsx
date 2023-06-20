@@ -17,15 +17,15 @@ type FooterNavOption = {
   href: string
 }
 
-const { ABOUT, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
+const { GROUPOS, NEWSTAND, HELP_DESK, TERMS_AND_SERVICES, TYPE_FORM } = LINKS
 const { EVENT_NAME, LOCATION } = TRACKING
 
 const options = (router: any) =>
   [
     {
-      label: "About",
+      label: "GroupOS",
       active: true,
-      href: ABOUT,
+      href: GROUPOS,
     },
     {
       label: "Newstand",
@@ -66,7 +66,7 @@ function Page() {
       <div
         className="h-screen bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(to top left, transparent 20%, black 100%), url(${LandingBackgroundImage.src})`,
+          backgroundImage: `display:hidden linear-gradient(to top left, transparent 20%, black 100%), url(${LandingBackgroundImage.src})`,
         }}
       >
         <main className="absolute top-0 right-0 z-10 mx-5 mt-12 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
@@ -90,9 +90,10 @@ function Page() {
                 setShowAuthFlow(true)
               }}
             >
-              Log in
+              Connect wallet
             </Button>
-            <Button
+            {/* Remove early access button}
+            {/* <Button
               size={isMobile ? "base" : "xl"}
               variant="unemphasized"
               fullWidth={isMobile}
@@ -104,7 +105,7 @@ function Page() {
               }}
             >
               Get early access
-            </Button>
+            </Button> */}
           </div>
         </main>
         <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">

@@ -75,7 +75,7 @@ const AwaitingExecutionview = ({
         <>
           <h2 className="font-bold">Ready to activate</h2>
           <p className="mt-1 text-center">
-            Execute to activate your Project. This action costs gas.
+            Execute to activate your Vault. This action costs gas.
           </p>
         </>
       ) : (
@@ -170,7 +170,7 @@ const AwaitingConfirmationsView = ({
           <h2 className="font-bold">A module needs to be activated</h2>
           <p className="mt-1 text-center">
             Requires {quorumDiff} more approval{quorumDiff > 1 && "s"} to
-            activate your the module and continue operating your Project.
+            activate your the module and the Vault.
           </p>
           <div className="mt-6 flex flex-row space-x-3">
             {!hasApproved && (
@@ -220,7 +220,7 @@ const UnAuthedView = ({
 }) => {
   return (
     <>
-      <h2 className="mb-6">This Project has not been activated.</h2>
+      <h2 className="mb-6">This Vault is not activated.</h2>
       {activeUserAddress ? (
         <Button
           variant="primary"
@@ -336,7 +336,7 @@ export const TerminalActivationView = ({
     },
     onError: async (data) => {
       console.error("Failed to wait for txn", data)
-      setError("Failed to activate Project.")
+      setError("Failed to activate Vault.")
       setTxnHash("")
     },
   })
@@ -466,9 +466,9 @@ export const TerminalActivationView = ({
           action: ACTION.APPROVE,
           msg: err,
         })
-        console.error("Failed to update Project: ", err)
+        console.error("Failed to update Vault: ", err)
         setApproveLoading(false)
-        setError("Failed to update Project.")
+        setError("Failed to update Vault.")
         return
       }
     } else {

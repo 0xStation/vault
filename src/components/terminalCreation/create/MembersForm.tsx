@@ -67,7 +67,7 @@ const LoadingScreen = ({
         <>
           <LoadingSpinner />
           <p className="mt-8 mb-2 animate-pulse font-bold">
-            Building your Project
+            Creating your Vault
           </p>
           <p className="animate-pulse text-base">
             Please do not leave or refresh the page.
@@ -335,7 +335,7 @@ export const MembersView = ({
         setCreateTerminalView(CREATE_TERMINAL_VIEW.DETAILS)
       }}
     >
-      <h2 className="mb-[30px] font-bold">Add members</h2>
+      <h2 className="mb-[30px] font-bold">Add signers</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
@@ -426,7 +426,7 @@ export const MembersView = ({
             disabled={isSubmitting}
             loading={isSubmitting}
           >
-            Create Project
+            Create Vault
           </Button>
           <p
             className={`mt-1 text-base  ${

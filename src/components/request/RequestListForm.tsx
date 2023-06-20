@@ -253,18 +253,16 @@ const RequestListForm = ({
         subtitle = "You've reviewed all proposals."
         break
       case TerminalRequestStatusFilter.AWAITING_OTHERS:
-        title = "No pending Proposals"
-        subtitle = "You and your collective have reviewed all proposals."
+        title = "No pending proposals"
+        subtitle = "You and your group have reviewed all proposals."
         break
       case TerminalRequestStatusFilter.CLOSED:
-        title = isSigner ? "Create your first Proposal" : "No proposals"
-        subtitle = isSigner
-          ? "Proposals enable collectives distribute tokens and manage members with more trust."
-          : "The members of this Project have not created a proposal."
+        title = isSigner ? "Create your first proposal" : "No proposals"
+        subtitle = ""
         break
       default: // default filter is OPEN
         title = "No proposals"
-        subtitle = "The members of this Project have no proposals to review."
+        subtitle = ""
         break
     }
     return (

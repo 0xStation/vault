@@ -75,7 +75,7 @@ const TerminalActionBar = () => {
                 <div className="space-y-4">
                   <h2>Add tokens</h2>
                   <p>
-                    Share tokens to the Project address or share the address to
+                    Share tokens to the Vault address or share the address to
                     receive tokens.
                   </p>
                   <QRCode value={address} size={42}></QRCode>
@@ -89,7 +89,7 @@ const TerminalActionBar = () => {
               <div className="space-y-4">
                 <h2>Add tokens</h2>
                 <p>
-                  Share tokens to the Project address or share the address to
+                  Share tokens to the Vault address or share the address to
                   receive tokens.
                 </p>
                 <QRCode value={address} size={42}></QRCode>

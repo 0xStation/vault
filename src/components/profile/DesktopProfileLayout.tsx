@@ -47,7 +47,7 @@ const DesktopProfileLayout = ({
                 <Address address={accountAddress as string} size="lg" />
               </div>
               <div className="rounded-b-xl bg-gray-90 p-4">
-                <h4 className="mb-1 text-sm text-gray">Projects</h4>
+                <h4 className="mb-1 text-sm text-gray">Vaults</h4>
                 <span>{count}</span>
               </div>
             </section>

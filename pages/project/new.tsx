@@ -26,7 +26,7 @@ export const TerminalCreationPage = () => {
   return (
     <>
       <Head>
-        <title>New Project</title>
+        <title>New Vault</title>
       </Head>
       {isMobile ? (
         <div className="px-4">

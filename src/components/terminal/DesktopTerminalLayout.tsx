@@ -37,7 +37,7 @@ const options = (router: any) =>
       href: `/${router.query.chainNameAndSafeAddress}/assets`,
     },
     {
-      label: "Members",
+      label: "Signers",
       description: "Manage who can vote and execute on proposals",
       active: true,
       href: `/${router.query.chainNameAndSafeAddress}/members`,
@@ -148,7 +148,7 @@ const DesktopTerminalLayout = ({
                 ) : (
                   <div className="h-5 w-11 animate-pulse rounded-full bg-gray" />
                 )}
-                <h4 className="mb-1 mt-4 text-sm text-gray">Members</h4>
+                <h4 className="mb-1 mt-4 text-sm text-gray">Signers</h4>
                 {terminal?.signers?.length && terminal?.signers?.length > 0 ? (
                   <span>{terminal?.signers?.length}</span>
                 ) : (

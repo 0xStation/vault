@@ -53,10 +53,10 @@ export const getSignerQuorumActionCopy = (request: RequestFrob) => {
   let change = request?.data?.meta as SignerQuorumVariant
   let copy = []
   if (change.add.length > 0) {
-    copy.push("add members")
+    copy.push("add signers")
   }
   if (change.remove.length > 0) {
-    copy.push("remove members")
+    copy.push("remove signers")
   }
   if (
     change.setQuorum !== request?.quorum ||

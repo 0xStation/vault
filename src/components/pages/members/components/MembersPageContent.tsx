@@ -70,23 +70,23 @@ const MembersPageContent = () => {
       </RightSlider>
       <div className="mt-4 w-full px-4">
         <div className="mb-6 flex flex-row items-center justify-between">
-          <h1>Members</h1>
+          <h1>Signers</h1>
           {isSigner && (
             <div className="flex flex-row">
-              <Breakpoint>
+              {/* <Breakpoint>
                 {(isMobile) => {
                   if (isMobile) {
                     return (
-                      <Button
-                        size="base"
-                        onClick={() =>
-                          router.push(
-                            `/${chainNameAndSafeAddress}/members/edit`,
-                          )
-                        }
-                      >
-                        + Add
-                      </Button>
+                      // <Button
+                      //   size="base"
+                      //   onClick={() =>
+                      //     router.push(
+                      //       `/${chainNameAndSafeAddress}/members/edit`,
+                      //     )
+                      //   }
+                      // >
+                      //   + Add
+                      // </Button>
                     )
                   }
                   return (
@@ -100,7 +100,7 @@ const MembersPageContent = () => {
                     </Button>
                   )
                 }}
-              </Breakpoint>
+              </Breakpoint> */}
 
               <Breakpoint>
                 {(isMobile) => {
