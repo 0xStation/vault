@@ -92,7 +92,8 @@ function Page() {
             >
               Log in
             </Button>
-            <Button
+            {/* Remove early access button}
+            {/* <Button
               size={isMobile ? "base" : "xl"}
               variant="unemphasized"
               fullWidth={isMobile}
@@ -104,7 +105,7 @@ function Page() {
               }}
             >
               Get early access
-            </Button>
+            </Button> */}
           </div>
         </main>
         <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">
