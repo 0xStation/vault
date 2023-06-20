@@ -1,7 +1,7 @@
 import { TabBar } from "../TabBar"
 
 export enum TerminalRequestTypeTab {
-  MEMBERS = "members",
+  MEMBERS = "signers",
   TOKENS = "tokens",
   ALL = "all",
 }

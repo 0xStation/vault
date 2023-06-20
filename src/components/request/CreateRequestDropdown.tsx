@@ -153,7 +153,7 @@ export const CreateRequestDropdown = () => {
                     <Link
                       href={`/${router.query.chainNameAndSafeAddress}/members/edit`}
                     >
-                      Edit members
+                      Edit signers
                     </Link>
                   )
                 }
@@ -163,7 +163,7 @@ export const CreateRequestDropdown = () => {
                       addQueryParam(router, "editMembersSliderOpen", "true")
                     }}
                   >
-                    Edit Members
+                    Edit signers
                   </span>
                 )
               }}
