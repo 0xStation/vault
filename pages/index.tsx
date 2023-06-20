@@ -9,7 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 // import LandingBackgroundImage from "../public/images/landing-bg.webp"
-import LandingImage from "../public/images/landing.webp"
+// import LandingImage from "../public/images/landing.webp"
 
 type FooterNavOption = {
   label: string
