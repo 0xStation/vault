@@ -335,7 +335,7 @@ export const MembersView = ({
         setCreateTerminalView(CREATE_TERMINAL_VIEW.DETAILS)
       }}
     >
-      <h2 className="mb-[30px] font-bold">Add members</h2>
+      <h2 className="mb-[30px] font-bold">Add signers</h2>
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex h-[calc(100%-120px)] flex-col"
