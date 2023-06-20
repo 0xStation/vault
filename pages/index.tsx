@@ -90,7 +90,7 @@ function Page() {
                 setShowAuthFlow(true)
               }}
             >
-              Log in
+              Connect wallet
             </Button>
             {/* Remove early access button}
             {/* <Button

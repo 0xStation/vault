@@ -217,7 +217,7 @@ export const AccountNavBar = () => {
                 setShowAuthFlow(true)
               }}
             >
-              Log in
+              Connect wallet
             </Button>
           </div>
         )}
