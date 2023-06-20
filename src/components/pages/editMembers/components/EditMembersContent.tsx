@@ -340,7 +340,7 @@ export const EditMembersContent = () => {
                   >
                     {address === activeUser?.address ? (
                       <div
-                        className={`flex flex-row ${
+                        className={`flex flex-row items-center ${
                           signersToRemove.has(address) && "opacity-70"
                         }`}
                       >
