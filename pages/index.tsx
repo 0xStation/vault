@@ -63,12 +63,12 @@ function Page() {
 
   return (
     <>
-      {/* <div
-        className="h-screen bg-cover bg-center bg-no-repeat"
+      <div
+        className="h-screen bg-cover bg-center bg-no-repeat opacity:0%"
         style={{
           backgroundImage: `linear-gradient(to top left, transparent 20%, black 100%), url(${LandingBackgroundImage.src})`,
         }}
-      > */}
+      >
         <main className="absolute top-0 right-0 z-10 mx-5 mt-12 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
           <StationLogo size={isMobile ? "mobileLanding" : "landing"} />
           <p className="mt-4 mb-8 text-sm md:text-base lg:my-0 lg:text-2xl ">
