@@ -23,9 +23,9 @@ const { EVENT_NAME, LOCATION } = TRACKING
 const options = (router: any) =>
   [
     {
-      label: "About",
+      label: "GroupOS",
       active: true,
-      href: ABOUT,
+      href: GROUPOS,
     },
     {
       label: "Newstand",
