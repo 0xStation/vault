@@ -9,7 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import LandingBackgroundImage from "../public/images/landing-bg.webp"
-// import LandingImage from "../public/images/landing.webp"
+import LandingImage from "../public/images/landing.webp"
 
 type FooterNavOption = {
   label: string
@@ -64,9 +64,9 @@ function Page() {
   return (
     <>
       <div
-        className="h-screen bg-cover bg-center bg-no-repeat opacity:0%"
+        className="h-screen bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(to top left, transparent 20%, black 100%), url(${LandingBackgroundImage.src})`,
+          backgroundImage: `display:hidden linear-gradient(to top left, transparent 20%, black 100%), url(${LandingBackgroundImage.src})`,
         }}
       >
         <main className="absolute top-0 right-0 z-10 mx-5 mt-12 lg:top-16 lg:left-14 lg:mx-0 lg:mt-0 lg:max-w-xl">
@@ -74,9 +74,9 @@ function Page() {
           <p className="mt-4 mb-8 text-sm md:text-base lg:my-0 lg:text-2xl ">
             Group wallet for on-chain operations — raise funds and manage spend.
           </p>
-          {/* <div className="mx-auto block h-auto max-w-[80%] lg:hidden">
+          <div className="mx-auto block h-auto max-w-[80%] lg:hidden">
             <Image src={LandingImage} alt="Landing image" />
-          </div> */}
+          </div>
 
           <div className="mt-8 mb-10 space-y-2 text-center lg:mb-10 lg:flex lg:flex-row lg:space-y-0 lg:px-0">
             <Button
@@ -108,9 +108,9 @@ function Page() {
             </Button> */}
           </div>
         </main>
-        {/* <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">
+        <div className="bottom absolute right-52 hidden h-[730px] w-[503px] lg:top-36 lg:block">
           <Image src={LandingImage} alt="Landing image" />
-        </div> */}
+        </div>
         <footer className="absolute bottom-10 left-14 hidden flex-row lg:block">
           <ul className="flex flex-row space-x-12 text-sm">
             {options(router).map((option, idx) => {
