@@ -323,7 +323,7 @@ export const EditMembersContent = () => {
         activeUserAddress={activeUser?.address as string}
       />
       <>
-        <h2 className="mb-[30px]">Edit members</h2>
+        <h2 className="mb-[30px]">Edit signers</h2>
         <form
           onSubmit={handleSubmit(onSubmit, onError)}
           className="flex h-[calc(100%-120px)] flex-col"

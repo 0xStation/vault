@@ -73,20 +73,20 @@ const MembersPageContent = () => {
           <h1>Signers</h1>
           {isSigner && (
             <div className="flex flex-row">
-              <Breakpoint>
+              {/* <Breakpoint>
                 {(isMobile) => {
                   if (isMobile) {
                     return (
-                      <Button
-                        size="base"
-                        onClick={() =>
-                          router.push(
-                            `/${chainNameAndSafeAddress}/members/edit`,
-                          )
-                        }
-                      >
-                        + Add
-                      </Button>
+                      // <Button
+                      //   size="base"
+                      //   onClick={() =>
+                      //     router.push(
+                      //       `/${chainNameAndSafeAddress}/members/edit`,
+                      //     )
+                      //   }
+                      // >
+                      //   + Add
+                      // </Button>
                     )
                   }
                   return (
@@ -100,7 +100,7 @@ const MembersPageContent = () => {
                     </Button>
                   )
                 }}
-              </Breakpoint>
+              </Breakpoint> */}
 
               <Breakpoint>
                 {(isMobile) => {
