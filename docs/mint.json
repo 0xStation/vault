@@ -42,6 +42,11 @@
       "iconType": "solid"
     },
     {
+      "name": "Join Discord",
+      "url": "https://discord.gg/wxDm3gXmZz",
+      "icon": "discord"
+    },
+    {
       "name": "Follow Station",
       "url": "https://twitter.com/0xstation",
       "icon": "twitter"
