@@ -37,6 +37,10 @@ const DesktopProfileLayout = ({
                 height={40}
                 width={40}
                 className="cursor-pointer transition-all hover:rotate-[15deg]"
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                }}
               />
             </Link>
           </section>

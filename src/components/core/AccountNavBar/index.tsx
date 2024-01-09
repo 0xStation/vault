@@ -15,6 +15,10 @@ export const AccountNavBar = () => {
             alt=""
             height={40}
             width={40}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
           />
         </Link>
       </div>

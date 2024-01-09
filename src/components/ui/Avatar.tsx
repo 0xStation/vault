@@ -30,8 +30,11 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
         <Image
           src={ensAvatar}
           alt="Account profile picture."
-          fill={true}
           className={`rounded-full border border-gray-90 object-cover ${className}`}
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+          }}
         />
       ) : (
         <Image
@@ -40,8 +43,11 @@ export const Avatar = ({ size = "base", address, className }: AvatarProps) => {
             PFP_MAP[(parseInt(Number(address)?.toString(), 10) % 4) as number]
           }
           alt="Account profile picture. If no profile picture is set, there is a picture of a Terminal."
-          fill={true}
           className={`rounded-full border border-gray-90 object-cover ${className}`}
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+          }}
         />
       )}
     </div>

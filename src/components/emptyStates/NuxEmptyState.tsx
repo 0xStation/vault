@@ -14,7 +14,14 @@ export const NuxEmptyState = ({
 }) => {
   return (
     <EmptyState title={title} subtitle={subtitle}>
-      <Image src={RequestImage} alt={"Request"} />
+      <Image
+        src={RequestImage}
+        alt={"Request"}
+        style={{
+          maxWidth: "100%",
+          height: "auto",
+        }}
+      />
       <div className="mx-auto mt-7">
         <Button onClick={() => onClick()}>Create</Button>
       </div>
